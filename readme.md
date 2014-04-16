@@ -5,6 +5,8 @@ Uncertainty as standard deviation and degrees of freedom are propagated through 
 
 The number of decimal digits output reflect the uncertainty of the value, so insignificant trailing digits do not clutter the display.  This is used, for example, by the SVG_plot program to label data points neatly.
 
+The uncertainty can be explicitly provided or can be implicit from the number of decimal digits from the input.
+
 Author: Paul A. Bristow
 
 [Boost license](http://www.boost.org/LICENSE_1_0.txt)
