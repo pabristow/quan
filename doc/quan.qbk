@@ -1,0 +1,88 @@
+[article Quantitation
+    [quickbook 1.7]
+    [id quan]
+    [authors [Bristow, Paul A.]]
+    [copyright 2007 to 2015  Paul A. Bristow]
+    [license
+        Distributed under the Boost Software License, Version 1.0.
+        (See accompanying file LICENSE_1_0.txt or copy at
+        [@http://www.boost.org/LICENSE_1_0.txt])
+    ]
+    [source-mode c++]
+]
+
+[/ Images]
+[/ $images is reference to a folder where images are held.]
+[def __detail__     [$images/note.png]]
+[def __note__       [$images/note.png]]
+[def __alert__       [$images/alert.png]]
+[def __tip__          [$images/tip.png]]
+[def :-)                 [$images/smiley.png]]
+
+[/ Links   ]
+[/ By Eric's convention prefix *and* suffix _ means a defined value.  But here use JM and SW double underscore prefix convention.]
+[def __boostbook__  [@http://www.boost.org/doc/html/boostbook.html BoostBook]]
+[def __docbook__    [@http://www.docbook.org/ DocBook]]
+[def __Boost_Assign [@boost:/libs/assign/doc/index.html Boost.Assign]]
+[def __inkscape [@http://www.inkscape.org/ Inkscape]]
+[def __boost [@http://www.boost.org Boost]]
+
+[/ Generating docs for compound boost::svg::svg]
+[/ Generating XML output for class boost::svg::svg]
+
+[def __svg [^[classref boost::svg::svg svg<>]]]
+[def __svg_1d_plot [^[classref boost::svg::svg_1d_plot svg_1d_plot<>]]]
+[def __svg_1d_plot_series [^[classref boost::svg::svg_1d_plot_series<>]]]
+[def __svg_2d_plot [^[classref boost::svg::svg_2d_plot svg_2d_plot<>]]]
+[def __svg_2d_plot_series [^[classref boost::svg::svg_2d_plot_series<>]]]
+
+[def __preface [link svg_plot.preface]]
+[def __howtouse [link svg_plot.howtouse  Document conventions]]
+
+[def __rationale [link quan.implementation Implementation]]
+[def __caution Boost.Quan is not (yet) an official Boost library, but remains a library under construction,
+     the code is functional, but interfaces, library structure, and function and distribution names
+     may still be changed without notice.]
+
+[section:preface Preface]
+
+[heading Preface]
+
+This is just a test.
+
+[endsect] [/section:preface Preface]
+
+[include how_to_use.qbk]
+[xinclude autodoc.xml] [/ Using Doxygen reference documentation.]
+
+[/Include the indexes (class, function and everything) ]
+'''
+   <index type="class_name">
+     <title>Class Index</title>
+   </index>
+
+    <index type="function_name">
+     <title>Function Index</title>
+    </index>
+
+   <index/>
+
+'''
+
+[important This is not (yet) an official Boost library. It was a
+[@http://code.google.com/soc/2007/boost/about.html Google Summer of Code project (2007)]
+whose mentor organization was Boost. It remains a library under construction,
+the code is quite functional, but interfaces, library structure, and names
+may still be changed without notice.
+]
+
+[note Comments and suggestions (even bugs!) to Paul.A.Bristow (at) hetp (dot) u-net (dot) com
+or Jake Voytko at jakevoytko (at) gmail (dot) com]
+
+
+[/ svg_plot.qbk
+  Copyright 2008 Jake Voytko and Paul A. Bristow 2008, 2009, 2010, 2011, 2012.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

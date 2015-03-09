@@ -1,0 +1,20 @@
+#index.idx for Quan Quickbook, Doxygen and Auto-index.
+
+#!debug "\<\w*\>"
+
+# SVG_plot Header files.
+!scan-path "boost/quan" ".*\.hpp" true
+
+# All example source files, assuming no sub-folders.
+# quan example files.
+!scan-path "libs/quan/example" ".*\.cpp" true
+
+# Allow alternative spellings colour | color, and plurals etc.
+color  \<\w*(colour|color)\w*\>
+container \<contain\w*\>
+data
+example \<example\w*\>
+Unicode \<unicode\w*\>
+uncertainty \<uncert\w*\>
+value \<\w*\value\w*\>
+vector \<\w*\vector\w*\>
