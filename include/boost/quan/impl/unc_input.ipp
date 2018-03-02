@@ -238,8 +238,8 @@ void unc_input(
       // 0x0F1 is single char in files for '+-' symbol.
       if (p == '/' || p == '|' || p == '\\' || p == 0xDD || p == 0x0F1)
       { // Skip over any separator.
-        std::char_traits<char>::int_type c = is.get(); // '/' or '|' or '\' chars.
-        if (c ==  0x0F1)
+        std::char_traits<char>::int_type c2 = is.get(); // '/' or '|' or '\' chars.
+        if (c2 ==  0x0F1)
         { // '+-' symbol, so must be both + and -.
           isPlus = true;
           isMinus = true;
@@ -249,8 +249,8 @@ void unc_input(
         if (p == '+' || p == '-')
         { // +/- and +|- both allowed (or -/+ or -|+).
           // Assume +/+ uncertainty means just + and -/-, and uncertainty just -.
-          std::char_traits<char>::int_type c = is.get(); // expect 2nd '+' or '-' char.
-          if (c == '+')
+          std::char_traits<char>::int_type cc = is.get(); // expect 2nd '+' or '-' char.
+          if (cc == '+')
           {
             isPlus = true;
             // else "*/+"
@@ -264,7 +264,7 @@ void unc_input(
               types &= ~(UNC_KNOWN | UNC_EXPLICIT | UNC_QUAN_DECIMAL | UNC_KNOWN );
             }
           }  // == '+'
-          else if (c == '-')
+          else if (cc == '-')
           {// else "*/-"
             isMinus = true;
             is >> expUnc; // Input Explicit negative uncertainty (have already consumed the - sign).

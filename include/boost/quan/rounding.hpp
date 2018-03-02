@@ -683,7 +683,7 @@ std::string round_ms(FPT v, signed int m) { /*! \brief Round floating-point v (n
     exp++;
   }
   if (m >= 0) { // May need zeros before decimal point.
-    int z = exp - s.size() + 1; // Number of significant zeros before decimal point.
+    int z = static_cast<int>(exp - s.size() + 1); // Number of significant zeros before decimal point.
     if (z > 0) { // More efficient to check if any zeros needed before calling insert?
       s.insert(sis, z, '0'); // Insert any significant zeros.
     }
@@ -919,7 +919,7 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
   //  }
   // Now have the rounded decimal digit string, but may need some zeros.
   if (sigdigits >= 0) { // May need zeros *before* decimal point.
-    int z = exp - s.size() + 1; // Number of significant zeros before decimal point.
+    int z = static_cast<int>(exp - s.size() + 1); // Number of significant zeros before decimal point.
     if (z > 0) { // More efficient to check if any zeros are needed before calling insert.
       s.insert(sis, z, '0'); // Insert any significant zeros.
     }
@@ -1346,7 +1346,7 @@ double quantile_uni(double alpha) { /*! Quantile of uniform distribution Uniform
    Wimmer & Witkovsky, Measurement Science Review, volume 2 section 1 2002, page 3, eq 6.
    \return Quantile of uniform distribution.
   */
-  static const double sqrt_3 = 1.7320508075688772935274463415058723669428052543712; // sqrt(3)
+  //static const double sqrt_3 = 1.7320508075688772935274463415058723669428052543712; // sqrt(3)
   assert(alpha >= 0.);
   assert(alpha <= 1.);
   return sqrt_3 * (2 * alpha - 1);

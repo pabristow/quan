@@ -1450,13 +1450,13 @@ public:
             { // degFree in common range 1 to 10.
               // Choose between 1 and 2 digits based on 1st digit of uncertainty.
               // Would be too big a step if most significant digit was 1 or 2.
-              std::ostringstream oss;
-              oss << std::scientific << std::setprecision (1) << uncertainty; // Assume sd positive.
-              if(oss.str()[0] == '1') // Check 1st digit before decimal point.
+              std::ostringstream oss2;
+              oss2 << std::scientific << std::setprecision (1) << uncertainty; // Assume sd positive.
+              if(oss2.str()[0] == '1') // Check 1st digit before decimal point.
               { // Would be too big a step if most significant digit was 1 or 2.
                 uncSigDigits = 2;
               }
-              else if (oss.str()[0] == '2')
+              else if (oss2.str()[0] == '2')
               {
                 uncSigDigits = 2;
               }
@@ -1512,14 +1512,14 @@ public:
         oss.precision(4); //
         //std::pair<double, double> conf_interval(double mean, double unc, double df = 1., double alpha = 0.05, distribution_type distrib = gaussian);
         double alpha = os.iword(confidenceIndex) / 1.e6; // Pick up and unscale alpha.
-        double epsilon = os.iword(roundingLossIndex) / 1.e3; // Pick up and rounding loss and unscale.
+        double epsilon2 = os.iword(roundingLossIndex) / 1.e3; // Pick up and rounding loss and unscale.
         int uncSigDigits = os.iword(setUncSigDigitsIndex);  // Pick up significant digits for uncertainty.
         if(isNoisyDigit)
         {
           uncSigDigits++;
         }
         std::pair<double, double> ci  = conf_interval(mean, uncertainty, degFree, alpha, distrib);
-        int m = round_m(epsilon, uncertainty, uncSigDigits, distrib);
+        int m = round_m(epsilon2, uncertainty, uncSigDigits, distrib);
         using boost::lexical_cast;
         oss << " <"
             << lexical_cast<double>(round_ms(ci.first, m-1)) << ", "
@@ -2074,7 +2074,10 @@ namespace std
 
 template<typename Type> // Predicate Functor modelled on STL less in functional.
 // Used below by min_element, etc.
-struct lessAbs : public std::binary_function<Type, Type, bool>
+struct lessAbs 
+#ifndef BOOST_NO_CXX98_FUNCTION_BASE
+   : public std::binary_function<Type, Type, bool>
+#endif
 { // Usage: if (lessAbs<Meas>()(lm, hm)) ...
   bool operator() (const Type& a, const Type& b) const
   { // Note const to prevent modification - must be pure function.
