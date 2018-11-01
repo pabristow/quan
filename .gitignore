@@ -2,6 +2,8 @@ doc/html/
 **/*.bat
 doc/*.pdf
 doc/autodoc.xml
+# Local short cuts
+*.lnk
 
 
 #################
