@@ -41,7 +41,7 @@ and C++ include files are in folder:
 
 */
 
-// unc.hpp
+// file unc.hpp
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -64,11 +64,11 @@ and C++ include files are in folder:
 #endif//  _MSC_VER
 
 #include <boost/math/special_functions/fpclassify.hpp>
-  //using boost::math::isnan;
-  //using boost::math::isinf;
-  //using boost::math::isfinite;
-  //using boost::math::isnormal; // isfinite and not denormalised.
-// Might instead use the std TR1 versions?
+  using boost::math::isnan;
+  using boost::math::isinf;
+  using boost::math::isfinite;
+  using boost::math::isnormal; // isfinite and not denormalised.
+// Might instead use the std TR1 versions?  But this does???
 
 #include <cstdlib>  //
 #include <cmath>   // for log, exp etc
@@ -115,7 +115,7 @@ and C++ include files are in folder:
   //using std::bad_alloc;
 
 #include <boost/quan/xiostream.hpp> // for extra manipulators, spaces.
-// These extra manipulators have been placed in std for convenience.
+// These extra manipulators have been placed in namespace std:: for convenience.
   //using std::noadjust;  // Restore to default state.
   //using std::nofixed;  // Restore to default state.
   //using std::noscientific;  // Restore to default state.
@@ -369,7 +369,7 @@ long setuFlags(std::ios_base&, long);  //!< Set specific flags = 1
 long resetuFlags(std::ios_base&, long);  //!< Reset/clear specific flags = 0
 
 // Forward declarations, defined in unc.ipp.
-class showUncFlags;  //!< Output uncertain flags to `ostream << showUncFlags `.
+class showUncFlags;  //!< Output uncertain flags to `ostream&<< showUncFlags `.
 class setAllUncFlags;  //!< Assign value to set (and/or clear) all unc flags.
 class setUncFlags;  //!< Set specific unc flags bits.
 class setMaskedUncFlags;  //!< Clear mask & then set unc flag bits.
@@ -383,33 +383,33 @@ class setRoundingLoss;  //!< Set acceptable loss due to rounding.
 class setConfidence;  //!< Set acceptable loss due to rounding.
 
 // Operator declarations, classes defined below, with constructors in unc.ipp.
-std::ostream operator<< (std::ostream, const showUncFlags&);
-std::ostream operator<< (std::ostream, const setAllUncFlags&);
-std::istream operator>> (std::istream, const setAllUncFlags&);
-std::ostream operator<< (std::ostream, const setUncFlags&);
-std::istream operator>> (std::istream, const setUncFlags&);
-std::ostream operator<< (std::ostream, const setMaskedUncFlags&);
-std::istream operator>> (std::istream, const setMaskedUncFlags&);
-std::ostream operator<< (std::ostream, const resetUncFlags&);
-std::istream operator>> (std::istream, const resetUncFlags&);
-std::ostream operator<< (std::ostream, const resetMaskedUncFlags&);
-std::istream operator>> (std::istream, const resetMaskedUncFlags&);
-std::ostream operator<< (std::ostream, const setUncWidth&);
-std::istream operator>> (std::istream, const setUncWidth&);
-std::ostream operator<< (std::ostream, const setScale&);
-std::istream operator>> (std::istream, const setScale&);
-std::ostream operator<< (std::ostream, const setUncSigDigits&);
-std::istream operator>> (std::istream, const setUncSigDigits&);
-std::ostream operator<< (std::ostream, const setRoundingLoss&);
-std::ostream operator<< (std::ostream, const setConfidence&);
-std::ostream operator<< (std::ostream, const setSigDigits&);
-std::istream operator>> (std::istream, const setSigDigits&);
+std::ostream&operator<< (std::ostream&, const showUncFlags&);
+std::ostream&operator<< (std::ostream&, const setAllUncFlags&);
+std::istream&operator>> (std::istream&, const setAllUncFlags&);
+std::ostream&operator<< (std::ostream&, const setUncFlags&);
+std::istream&operator>> (std::istream&, const setUncFlags&);
+std::ostream&operator<< (std::ostream&, const setMaskedUncFlags&);
+std::istream&operator>> (std::istream&, const setMaskedUncFlags&);
+std::ostream&operator<< (std::ostream&, const resetUncFlags&);
+std::istream&operator>> (std::istream&, const resetUncFlags&);
+std::ostream&operator<< (std::ostream&, const resetMaskedUncFlags&);
+std::istream&operator>> (std::istream&, const resetMaskedUncFlags&);
+std::ostream&operator<< (std::ostream&, const setUncWidth&);
+std::istream&operator>> (std::istream&, const setUncWidth&);
+std::ostream&operator<< (std::ostream&, const setScale&);
+std::istream&operator>> (std::istream&, const setScale&);
+std::ostream& operator<< (std::ostream&, const setUncSigDigits&);
+std::istream&operator>> (std::istream&, const setUncSigDigits&);
+std::ostream&operator<< (std::ostream&, const setRoundingLoss&);
+std::ostream&operator<< (std::ostream&, const setConfidence&);
+std::ostream&operator<< (std::ostream&, const setSigDigits&);
+std::istream&operator>> (std::istream&, const setSigDigits&);
 
 void outUncFlags(long uncflags, std::ostream);
 
 class showUncFlags
 {  // Constructor & operator<< defined in unc.ipp
-  friend std::ostream operator<< (std::ostream, const showUncFlags&);
+  friend std::ostream&operator<< (std::ostream&, const showUncFlags&);
 public:
   showUncFlags(unsigned short int);  // Definition in unc.ipp.
   unsigned short int flags;
@@ -418,7 +418,7 @@ public:
 class showUncTypes
 {  // Constructor & operator<< defined in unc.ipp
   // Usage: out << showUncTypes(unc) ...
-  friend std::ostream operator << (std::ostream, const showUncTypes&);
+  friend std::ostream&operator << (std::ostream&, const showUncTypes&);
 public:
   showUncTypes(unsigned short int);  // Definition in unc.ipp.
   unsigned short int types;
@@ -428,8 +428,8 @@ public:
 // Usage: out << setAllUncFlags(0x5a) ...
 class setAllUncFlags  // Set ALL uncertain flags (not just OR selected bits).
 {
-  friend std::ostream operator<< (std::ostream, const setAllUncFlags&);
-  friend std::istream operator>> (std::istream, const setAllUncFlags&);
+  friend std::ostream&operator<< (std::ostream&, const setAllUncFlags&);
+  friend std::istream&operator>> (std::istream&, const setAllUncFlags&);
 public:
   setAllUncFlags(int); // w) : flags(w) {}  // Constructor initialisation flags = w.
   int flags; // setAllUncFlags.flags used by operators << and >>
@@ -439,8 +439,8 @@ class setUncFlags  // Set selected uncertain flags.
 {// Usage: out << setUncFlags(0xFFFF, 0x7, 0x3) ...
   // or setUncFlags(out, 0x7);
 
-  friend std::ostream operator<< (std::ostream, const setUncFlags&);
-  friend std::istream operator>> (std::istream, const setUncFlags&);
+  friend std::ostream&operator<< (std::ostream&, const setUncFlags&);
+  friend std::istream&operator>> (std::istream&, const setUncFlags&);
 public:
   setUncFlags(int); // Constructor initialisation flags.
   int flags; // setUncFlags.flags used by operators << and >>
@@ -451,8 +451,8 @@ public:
 // or setUncFlags(out, 0x7);
 class setMaskedUncFlags
 {
-  friend std::ostream operator<< (std::ostream, const setMaskedUncFlags&);
-  friend std::istream operator>> (std::istream, const setMaskedUncFlags&);
+  friend std::ostream&operator<< (std::ostream&, const setMaskedUncFlags&);
+  friend std::istream&operator>> (std::istream&, const setMaskedUncFlags&);
 public:
   setMaskedUncFlags(int, int); // : flags(w), mask(m) {}  // Constructor initialisation flags = w.
   int flags; // setMaskedUncFlags.flags used by operators << and >>
@@ -463,8 +463,8 @@ class resetUncFlags  // Reset = 0 selected uncertain flags.
 {// Usage: out << resetUncFlags(0xFFFF, 0x7, 0x3) ...
   // or setUncFlags(out, 0x7);
 
-  friend std::ostream operator<< (std::ostream, const resetUncFlags&); // Declarations
-  friend std::istream operator>> (std::istream, const resetUncFlags&);
+  friend std::ostream&operator<< (std::ostream&, const resetUncFlags&); // Declarations
+  friend std::istream&operator>> (std::istream&, const resetUncFlags&);
 public:
   resetUncFlags(int);// w) : flags(w) {}  // Constructor initialisation flags = w.
   int flags; // setUncFlags.flags used by operators << and >>
@@ -475,8 +475,8 @@ public:
 // or setUncFlags(out, 0x7);
 class resetMaskedUncFlags
 {
-  friend std::ostream operator<< (std::ostream, const resetMaskedUncFlags&);
-  friend std::istream operator>> (std::istream, const resetMaskedUncFlags&);
+  friend std::ostream&operator<< (std::ostream&, const resetMaskedUncFlags&);
+  friend std::istream&operator>> (std::istream&, const resetMaskedUncFlags&);
 public:
   resetMaskedUncFlags(int, int); // : flags(w), mask(m) {}  // Constructor initialisation flags = w.
   int flags; // setMaskedUncFlags.flags used by operators << and >>
@@ -485,9 +485,9 @@ public:
 
 class setUncWidth // Set uncertain width.
 {
-  friend std::ostream operator<< (std::ostream, const setUncWidth&); // Declarations
-  friend std::istream operator>> (std::istream, const setUncWidth&); // Defined below.
-  // Allows ostream operator>> and << to access private member width.
+  friend std::ostream&operator<< (std::ostream&, const setUncWidth&); // Declarations
+  friend std::istream&operator>> (std::istream&, const setUncWidth&); // Defined below.
+  // Allows ostream& operator>> and << to access private member width.
 public:
   setUncWidth(int);
   int uncWidth; // setUncWidth used by operators << and >>
@@ -497,9 +497,9 @@ public:
 // Usage: out << setScale(6)  // == 10**6) ...
 class setScale  // Set uncertain scale.
 {
-  friend std::ostream operator<< (std::ostream, const setScale&); // Declarations
-  friend std::istream operator>> (std::istream, const setScale&); // Defined below.
-  // Allows ostream operator>> and << to access private member scale.
+  friend std::ostream& operator<< (std::ostream&, const setScale&); // Declarations
+  friend std::istream& operator>> (std::istream&, const setScale&); // Defined below.
+  // Allows ostream&operator>> and << to access private member scale.
 public:
   setScale(int); // n) : scale(n) {}  // Constructor - initialisation scale = n.
   int scale; // setScale.scale used by operators << and >>
@@ -509,8 +509,8 @@ public:
 // Usage via operator << : out << setSigDigits(6) ...
 class setSigDigits
 {
-  friend std::ostream operator<< (std::ostream, const setSigDigits&); // Declarations
-  friend std::istream operator>> (std::istream, const setSigDigits&);
+  friend std::ostream& operator<< (std::ostream&, const setSigDigits&); // Declarations
+  friend std::istream& operator>> (std::istream&, const setSigDigits&);
 public:
   setSigDigits(int);// w) : sigDigits(w) {}  // Constructor in unc.ipp
   // Initialisation means sigDigits = w.
@@ -532,10 +532,10 @@ public:
 */
 class setUncSigDigits
 {
-  friend std::ostream operator<< (std::ostream, const setUncSigDigits&); // Declarations
-  friend std::istream operator>> (std::istream, const setUncSigDigits&);
+  friend std::ostream& operator<< (std::ostream&, const setUncSigDigits&); // Declarations
+  friend std::istream& operator>> (std::istream&, const setUncSigDigits&);
 public:
-  setUncSigDigits(int);// w) : uncSigDigits(w) {}  // Constructor
+  setUncSigDigits(int w); // : uncSigDigits(w) {}  // Constructor.
   // Initialisation means uncSigDigits = w.
   //protected:
   int uncSigDigits_; // Set by constructor.
@@ -546,8 +546,8 @@ public:
 
 class setRoundingLoss
 {
-  friend std::ostream operator<< (std::ostream, const setRoundingLoss&); // Declarations
-  friend std::istream operator>> (std::istream, const setRoundingLoss&);
+  friend std::ostream& operator<< (std::ostream&, const setRoundingLoss&); // Declarations
+  friend std::istream& operator>> (std::istream&, const setRoundingLoss&);
 public:
   setRoundingLoss(double);// eps) : setRoundingLoss(eps) {}  // Constructor
   // Initialisation means setRoundingLoss = epsilon
@@ -560,15 +560,14 @@ public:
 
 class setConfidence
 {
-  friend std::ostream operator<< (std::ostream, const setConfidence&); // Declarations
-  friend std::istream operator>> (std::istream, const setConfidence&);
+  friend std::ostream& operator<< (std::ostream&, const setConfidence&); // Declarations
+  friend std::istream& operator>> (std::istream&, const setConfidence&);
 public:
   setConfidence(double);// alpha) : setConfidence(alpha) {}  // Constructor
   // Initialisation means setConfidence = alpha
   //protected:
   double confidence_; // Set by constructor.
 }; // class setConfidence
-
 
 /*! Uncertain number template class unc,
    using mean and uncertainty (equivalent to std deviation if pure Gaussian),
@@ -1200,7 +1199,7 @@ public:
     unsigned short int degFree = val.degFree();
     unsigned short int unc_flags = val.uncFlags();
 
-    // bools showing output requirements specified using unc additional ostream manipulators.
+    // bools showing output requirements specified using unc additional ostream&manipulators.
     // Note that these bools are NOT initialised here,
     // assuming compiler will warn if used before being initialised.
     /*

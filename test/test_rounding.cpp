@@ -23,7 +23,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)  // Boost.Test
   
 #define BOOST_TEST_MAIN
-// #define BOOST_LIB_DIAGNOSTIC "on" // Report Boost.Test library file details.
+#define BOOST_LIB_DIAGNOSTIC "on" // Report Boost.Test library file details.
 
 #include <boost/static_assert.hpp>
 
@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE(round_test_0)
 }
 
 BOOST_AUTO_TEST_CASE(round_test_1)
-{ // Round to cout tests.
+{ // Round to std::cout tests.
 
   string message("Round test: " __FILE__ );
 #ifdef __TIMESTAMP__
@@ -100,11 +100,12 @@ BOOST_AUTO_TEST_CASE(round_test_1)
   message += "."
 #endif
 
-  BOOST_MESSAGE(message);
-  BOOST_MESSAGE("double maxdigits10 is " << maxdigits10);
+  BOOST_TEST_MESSAGE(message);
+  BOOST_TEST_MESSAGE("double maxdigits10 is " << maxdigits10);
     cout << "std::numeric_limits<double>::max_exponent = " << std::numeric_limits<double>::max_exponent 
     << ", \nstd::numeric_limits<double>::max_exponent10 = " << std::numeric_limits<double>::max_exponent10 
     << ",\nstd::numeric_limits<double>::max_exponent10 -1 = "<< std::numeric_limits<double>::max_exponent10 -1 << ". " << endl;
+    // Outputs:
     //  std::numeric_limits<double>::max_exponent = 1024, 
     //  std::numeric_limits<double>::max_exponent10 = 308,
     //  std::numeric_limits<double>::max_exponent10 -1 = 307. 
@@ -135,7 +136,7 @@ BOOST_AUTO_TEST_CASE(round_test_1)
 
 BOOST_AUTO_TEST_CASE(round_f_test)
 {
-  // Removed as assume can do scaling with Boost,Units autoscaling.
+  // Removed as assume can do scaling with Boost.Units autoscaling.
   //{ // Test unc scaling to scientific and engineering powers.
   //    scaled = true;
   //    BOOST_CHECK_EQUAL(round_f(123.4567, 3), "123."); // No trailing space.
@@ -145,11 +146,12 @@ BOOST_AUTO_TEST_CASE(round_f_test)
   //    BOOST_CHECK_EQUAL(round_f(1234567890., 6), "1.23457 G");
   //    scaled = false;
   //}
+
   { // Test round_f.
     // round_f is fixed format.
     double v = 1.23456; // Value to test rounded output.
-    BOOST_CHECK_EQUAL(round_f(v, 0), ""); // With message "Trying to output zero significant digits!".
-    BOOST_CHECK_EQUAL(round_f(v, -1), ""); // With message "Trying to output -1 significant digits!".
+    BOOST_CHECK_EQUAL(round_f(v, 0), ""); // Expect message "Trying to output zero significant digits!".
+    BOOST_CHECK_EQUAL(round_f(v, -1), ""); // Expect message "Trying to output -1 significant digits!".
     BOOST_CHECK_EQUAL(round_f(v, 1), "1."); // 
     BOOST_CHECK_EQUAL(round_f(v, 2), "1.2"); // 
     BOOST_CHECK_EQUAL(round_f(v, 3), "1.23"); // 
@@ -165,7 +167,7 @@ BOOST_AUTO_TEST_CASE(round_f_test)
     BOOST_CHECK_EQUAL(round_f(v, 13), "1.234560000000"); // 
     BOOST_CHECK_EQUAL(round_f(v, 14), "1.2345600000000"); // Maximum significant digits -1
     BOOST_CHECK_EQUAL(round_f(v, 15), "1.23456000000000"); // 
-    // Message is  "Maximum significant digits is 15" - and several repeats.
+    // Output Message is  "Maximum significant digits is 15" - and several (7) repeats.
     BOOST_CHECK_EQUAL(round_f(v, 16), "1.23456000000000"); //  Maximum significant digits is 15
     BOOST_CHECK_EQUAL(round_f(v, 17), "1.23456000000000"); // Maximum significant digits is 15
     BOOST_CHECK_EQUAL(round_f(v, std::numeric_limits<double>::digits10), "1.23456000000000"); // 
@@ -393,12 +395,12 @@ BOOST_AUTO_TEST_CASE(round_e_test)  // Test round_e.
 
     d = 987.654; // 9.87654e2
 
-    BOOST_CHECK_EQUAL(round_e(d, 1), "1.e3");
+    BOOST_CHECK_EQUAL(round_e(d, 1), "1.e3"); // 1 sigdigits.
     BOOST_CHECK_EQUAL(round_e(d, 2), "9.9e2");
     BOOST_CHECK_EQUAL(round_e(d, 3), "9.88e2");
     BOOST_CHECK_EQUAL(round_e(d, 4), "9.877e2"); 
     BOOST_CHECK_EQUAL(round_e(d, 5), "9.8765e2"); 
-    BOOST_CHECK_EQUAL(round_e(d, 6), "9.87654e2"); 
+    BOOST_CHECK_EQUAL(round_e(d, 6), "9.87654e2"); // 6 sigdigits.
     BOOST_CHECK_EQUAL(round_e(d, 7), "9.876540e2"); // 11 sigdigits.
     BOOST_CHECK_EQUAL(round_e(d, 11), "9.8765400000e2"); // 11 sigdigits.
     BOOST_CHECK_EQUAL(round_e(d, 12), "9.87654000000e2"); // 12 sigdigits.
@@ -442,7 +444,7 @@ BOOST_AUTO_TEST_CASE(round_e_test)  // Test round_e.
 
 BOOST_AUTO_TEST_CASE(cdf_quantile_test)
   { // Test the calculation of CDF and quantiles for triangular and uniform distributions.
-    static const double sqrt_6 = 2.4494897427831780981972840747058913919659474804966; // sqrt(6)
+//    static const double sqrt_6 = 2.4494897427831780981972840747058913919659474804966; // sqrt(6) now a global constant.
 
     boost::math::triangular tdist(-sqrt_6, 0., +sqrt_6); // Wimmer page 23, below eq 6.
     double alpha = 0.005;

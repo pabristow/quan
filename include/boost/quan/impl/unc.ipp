@@ -134,7 +134,7 @@ const char* uncTypeWords[16] =
 /*! Output word description for each `unc_type` bit.\n
   Usage:  outUncTypes(unc.getUncTypes(), cerr); // logs to cerr.
   \param uncTypes uncertain types as a short int.
-  \param os ostream for output, default = cerr
+  \param os std::ostream for output, default = std::cerr
 */
 void outUncTypes(unsigned short int uncTypes, std::ostream& os = std::cerr)
 {// Usage:  outUncTypes(unc.getUncTypes(), cerr); // logs to cerr.
@@ -643,7 +643,7 @@ std::istream& operator>> (std::istream& is, const setSigDigits& sf)
   return is;
 }
 
-//! setUncSigDigits(int sigDigits);
+//! setUncSigDigits(int sigDigits); Constructor.
 //! Usage: `out << setUncSigDigits(3) ...`
 // has the effect `cout.iword[setUncSigDigitsIndex] = 3;`
 setUncSigDigits::setUncSigDigits(int w) // : uncSigDigits_(w)
@@ -704,8 +704,6 @@ std::istream& operator>> (std::istream& is, const setUncSigDigits& usf)
   is.iword(setUncSigDigitsIndex) = usf.uncSigDigits_;  // Set new uncSigDigits.
   return is;
 }
-
-// These all fail to link when placed here???? So left in unc.hpp until understand why.
 
 //! Squared function, notationally convenient for a^2, but overflow possible?
 //template <typename Type>

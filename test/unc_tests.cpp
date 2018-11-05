@@ -61,6 +61,13 @@
   using std::left;
   using std::right;
   using std::internal; // Initial default - neither left, right nor internal.
+  //using std::ios::lowercase;
+  //using std::ios::defaultfloat; // Initial default - neither scientific nor fixed.
+  //using std::ios::nofixed;
+  //using std::ios::noscientific;
+  //using std::ios::noadjust;
+  //using std::ios::hexbase;
+
 #include <iomanip>  // for <iomanip.h> for setw, setprecision ...
   using std::setfill;
 #include <fstream>  // for <fstream.h> for filing.
@@ -77,12 +84,6 @@
   using std::numeric_limits;
 
 #include <boost/quan/xiostream.hpp> // extra iostream manipulators like noshowbase
-  using std::lowercase;
-  using std::defaultfloat; // Initial default - neither scientific nor fixed.
-  using std::nofixed;
-  using std::noscientific;
-  using std::noadjust;
-  using std::hexbase;
 
 #include <boost/quan/unc.hpp> // Declaration of Uncertain Classes.
 
@@ -213,7 +214,7 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
 #else
   message += "."
 #endif
-  BOOST_MESSAGE(message);
+  BOOST_TEST_MESSAGE(message);
 
  //   BOOST_CHECK(zeroIndex == indexID); // Should pass?
 
@@ -253,7 +254,7 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   // Greek mu is \x0B5 for files, degree symbol is \x0B0
   // BOOST_CHECK(fin.is_open());  // No input yet?
 
-  BOOST_MESSAGE("Uncertain Class tests log. " << "                                     Expected   Was    Expected");
+  BOOST_TEST_MESSAGE("Uncertain Class tests log. " << "                                     Expected   Was    Expected");
 
   // cout.fill('0'); // to get trailing zeros.
   // cout << fixed << setprecision(17) << 12.34 << automatic << endl; // 12.34000000000000000
@@ -1374,7 +1375,7 @@ BOOST_AUTO_TEST_CASE(unc_test_setsegdigits)
 
 BOOST_AUTO_TEST_CASE(unc_test_coda)
 {
-  BOOST_MESSAGE("Uncertain Class tests log end. " << __FILE__ << ' ' <<  __TIMESTAMP__ );
+  BOOST_TEST_MESSAGE("Uncertain Class tests log end. " << __FILE__ << ' ' <<  __TIMESTAMP__ );
 
   dout << "\n""Unc Diagnostics log end. " << endl; // \x0F1 = +- on screen, but ~n in files!
 

@@ -783,19 +783,24 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
   //std::cout << "max dec " << maxDecimalDigits << std::endl; // 310
 
   /*! \note C++0X provides @c std::numeric_limits<double>::max_digits10;
-    which is maximum possibly significant,
+    which is maximum possibly significant decimal digits,
     but only @c digit10 are guaranteed to be significant,
     so limit @c sigdigits to @c digits10 (15 for IEEE 64-bit double).
+    (But may be better to allow max_digits10?)
    */
-  if (sigdigits > std::numeric_limits<FPT>::digits10) {
+  if (sigdigits > std::numeric_limits<FPT>::digits10) 
+  { // 
     std::cout << "Maximum significant digits is " << std::numeric_limits<FPT>::digits10 << std::endl;
     sigdigits = std::numeric_limits<FPT>::digits10; // digits10 (15 for double) decimal digits after the decimal point.
   }
 
-  if (sigdigits < 0) { // Must be a mistake.
+  if (sigdigits < 0) 
+  { // Must be a mistake.
     std::cout << "Trying to output " << sigdigits << " significant digits!" << std::endl;
     return "";
-  } else if (sigdigits == 0) { // Might handle zero case differently from sigdigits < 0?
+  } 
+  else if (sigdigits == 0) 
+  { // Might handle zero case differently from sigdigits < 0?
     std::cout << "Trying to output zero significant digits!" << std::endl;
     return "";
   }
@@ -933,12 +938,15 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
   //     }
   //  }
   // Now have the rounded decimal digit string, but may need some zeros.
-  if (sigdigits >= 0) { // May need zeros *before* decimal point.
-    size_t z = exp - s.size() + 1; // Number of significant zeros before decimal point.
-    if (z > 0) { // More efficient to check if any zeros are needed before calling insert.
+  if (sigdigits >= 0) 
+  { // May need zeros *before* decimal point.
+    int z = exp - static_cast<int>(s.size()) + 1; // Number of significant zeros before decimal point.
+    if (z > 0) 
+    { // More efficient to check if any zeros are needed before calling insert.
       s.insert(sis, z, '0'); // Insert any significant zeros.
     }
-  } else {// Any trailing zeros are already in the string.
+  } else 
+  {// Any trailing zeros are already in the string.
   }
 
   std::string::iterator sd = s.begin();
@@ -1059,7 +1067,8 @@ double delta(double epsilon, double gamma, distribution_type distrib = gaussian)
       if (x < (std::numeric_limits<double>::min)() * 100.) // Small value allows for approximation uncertainty.
       { // Not possible to have epsilon this small!
         threshold = x; // ???
-        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma << ", threshold is " << threshold << " for gaussian distribution." << std::endl;
+        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma 
+          << ", threshold is " << threshold << " for gaussian distribution." << std::endl;
         // For example:
         // "Epsilon 0.01 is too small for gamma rounded/unrounded ratio 0.981226, threshold is 0.99."
         return -1.; // Not sure how to signal the problem here. Throw?
@@ -1073,17 +1082,19 @@ double delta(double epsilon, double gamma, distribution_type distrib = gaussian)
       // Measurement Science Review, Vol 2, section 1, (2002), pages 1 - 7.
       threshold = 1 - epsilon; // Wimmer equation 17, page 5
       if (gamma < threshold) {
-        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma << ", threshold is " << threshold << " for uniform distribution." << std::endl;
-        return -1; // Not sure how to signal the problem here.
+        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma 
+          << ", threshold is " << threshold << " for uniform distribution." << std::endl;
+        return -1; // Not sure how to signal the problem here.  Throw?
       }
       d = sqrt_3 * (gamma + 2 * epsilon - 1); // Wimmer equation 20, page 6.
       return d;
     case triangular:
-      // Gejza Wimmer, Viktor Witkovsky, Proper rounding of the measurement result under the assumtpion of triangular distribution,
+      // Gejza Wimmer, Viktor Witkovsky, Proper rounding of the measurement result under the assumption of triangular distribution,
       // Measurement Science Review, Vol 2, section 1, (2002), pages 21 to 31.
       threshold = (1 - gamma) / (1 + gamma);
       if (epsilon < threshold) {
-        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma << ", threshold is " << threshold << " for triangular distribution." << std::endl;
+        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma 
+          << ", threshold is " << threshold << " for triangular distribution." << std::endl;
         return -1; // Not sure how to signal the problem here.
       }
       // d = sqrt(6 * (epsilon - ((1 - gamma) /(1 + gamma)))); // Wimmer equation 18, page 27.
