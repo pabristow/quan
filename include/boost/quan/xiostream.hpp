@@ -6,7 +6,7 @@
   \date Sep 2009
 */
 
-// Copyright Paul A. Bristow 2009, 2016
+// Copyright Paul A. Bristow 2009, 2016, 2018
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -18,6 +18,11 @@
  \details some provide repeating characters (spaces, bell) etc.
  Others provide output of current iostream status.
  Definitions are in xiostream.ipp
+
+ MSVC++ "Writing your own manipulators without arguments"
+
+ https://docs.microsoft.com/en-us/cpp/standard-library/writing-your-own-manipulators-without-arguments?view=vs-2017
+
 */
 
 #ifndef XIOSTREAM_HPP
@@ -105,6 +110,8 @@ public:
 private:
   int base;
 }; // class setupperbase
+
+
 
 void outIosFlags(long flags, std::ostream& os); // Show std iostream flags.
 void outFpClass(double value, std::ostream& os);  // Show Floating-point type.

@@ -1,7 +1,7 @@
 /*!
   \file 
-  \brief Testing uncertain classes using Boost Test Tool.
-  \details Class for simple Propagation of Uncertainties
+  \brief Testing uncertain classes using Boost.Test tool.
+  \details Unc Class for simple Propagation of Uncertainties
      according to a pure Gaussian model.
 */
 
@@ -27,11 +27,11 @@
 // #define UNC_TRACE // Diagnostic output.
 
 #define BOOST_TEST_MAIN // Required for int test_main() (must come FIRST).
-//#define BOOST_LIB_DIAGNOSTIC "on"// Show library file details.
+#define BOOST_LIB_DIAGNOSTIC "on"// Show library file details.
 // Linking to lib file: libboost_unit_test_framework-vc100-mt-s-1_49.lib
 
 #include <boost/config.hpp>
-#include <boost/cstdlib.hpp> // needed for boost::exit_failure;
+#include <boost/cstdlib.hpp> // needed for boost::exit_failure
 
 #include <boost/test/unit_test.hpp> // Enhanced for unit_test framework autolink,
 #include <boost/test/floating_point_comparison.hpp> // Extra test tool for FP comparison.
@@ -61,7 +61,8 @@
   using std::left;
   using std::right;
   using std::internal; // Initial default - neither left, right nor internal.
-  //using std::ios::lowercase;
+  // None of these extra works at present.
+  //using std::lowercase;
   //using std::ios::defaultfloat; // Initial default - neither scientific nor fixed.
   //using std::ios::nofixed;
   //using std::ios::noscientific;
@@ -195,16 +196,18 @@ const char diagFilename[] = "unc_diag.txt"; // diagnostic log diverted from cerr
   using std::noshowbase;
   using std::noshowpoint;
   using std::showpoint;
-
   using std::setprecision;
   using std::setw;
   using std::resetiosflags;
 
-
 BOOST_AUTO_TEST_CASE(unc_test_basic)
 { // Uncertain Class tests.
-  boost::unit_test::unit_test_log.set_threshold_level( boost::unit_test::log_messages);
-
+  using boost::unit_test::unit_test_log;
+    
+//  unit_test_log.set_threshold_level( boost::unit_test::log_messages);
+  // Boost.Test messages and fails.
+  unit_test_log.set_threshold_level(boost::unit_test::log_successful_tests);
+// Including all passes
   string message("Round to cout test: " __FILE__ );
 #ifdef __TIMESTAMP__
   message += " at " BOOST_STRINGIZE(__TIMESTAMP__);
@@ -253,7 +256,7 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   cerr << "\x0B1 \x0B5 Diagnostic cerr from " << __FILE__ << " " << __TIMESTAMP__"\n" << endl;
   // Greek mu is \x0B5 for files, degree symbol is \x0B0
   // BOOST_CHECK(fin.is_open());  // No input yet?
-
+   
   BOOST_TEST_MESSAGE("Uncertain Class tests log. " << "                                     Expected   Was    Expected");
 
   // cout.fill('0'); // to get trailing zeros.
@@ -913,20 +916,19 @@ BOOST_AUTO_TEST_CASE(unc_test_input)
   //CHECK_IN("2/3 +/-0.1", 2/3, 0.1f, 0, (VALUE_RATIONAL | UNC_KNOWN | UNC_QUAN_DECIMAL | UNC_EXPLICIT ));
   
   {
-    uncun r1;
-    istringstream isr1("2/3"); // Read from string.
-    isr1 >> r1;
-    cout << r1.value() << ' ' << r1.std_dev() << ' ' << r1.degFree() << r1.types() << ", " ;
-    outUncTypes(r1.types(), cout);
+    uncun r2;
+    istringstream isr2("2/3"); // Read from string.
+    isr2 >> r2;
+    cout << r2.value() << ' ' << r2.std_dev() << ' ' << r2.degFree() << r2.types() << ", " ;
+    outUncTypes(r2.types(), cout);
     cout << endl;
   }
-
-    {
-    uncun r1;
-    istringstream isr1("2/3+/-0.02f"); // Read from string.
-    isr1 >> r1;
-    cout << r1.value() << ' ' << r1.std_dev() << ' ' << r1.degFree() << r1.types() << ", " ;
-    outUncTypes(r1.types(), cout);
+  {
+    uncun r3;
+    istringstream isr3("2/3+/-0.02f"); // Read from string.
+    isr3 >> r3;
+    cout << r3.value() << ' ' << r3.std_dev() << ' ' << r3.degFree() << r3.types() << ", " ;
+    outUncTypes(r3.types(), cout);
     cout << endl;
   }
 
@@ -1142,12 +1144,12 @@ BOOST_AUTO_TEST_CASE(unc_test_manips)
   CHECK_USED(scientific << noplusminus << setw(20) << left << one2345,   "1.235               "); // 
   CHECK_USED(scientific << plusminus << setw(20) << left << one2345,     "1.235 +/-0.010      "); // 
   CHECK_USED(scientific << plusminus << setw(20) << right << one2345,    "      1.235 +/-0.010"); //
-  CHECK_USED(scientific << plusminus << setw(20) << noadjust << one2345, "      1.235 +/-0.010"); // == right adjust.
+ // CHECK_USED(scientific << plusminus << setw(20) << noadjust << one2345, "      1.235 +/-0.010"); // == right adjust.
   CHECK_USED(scientific << plusminus << setw(20) << showpos << one2345,  "     +1.235 +/-0.010"); // == right adjust.
   CHECK_USED(scientific << plusminus << setw(20) << showpos 
                                                 << internal << one2345,  "     +1.235 +/-0.010"); // Expect same as right.
 
-  CHECK_USED(scientific << plusminus << setw(20) << noadjust << setfill('~') << one2345, "~~~~~~1.235 +/-0.010"); // expect same as right adjust.
+ // CHECK_USED(scientific << plusminus << setw(20) << noadjust << setfill('~') << one2345, "~~~~~~1.235 +/-0.010"); // expect same as right adjust.
   CHECK_USED(scientific << plusminus << setw(20) << setfill('~') << left << one2345,     "1.235 +/-0.010~~~~~~"); // 
   CHECK_USED(scientific << plusminus << setw(20) << setfill('~') << internal << one2345, "~~~~~~1.235 +/-0.010"); 
   CHECK_USED(scientific << plusminus << setw(20) << setfill('~') << right << one2345,    "~~~~~~1.235 +/-0.010"); // Expect same as right.

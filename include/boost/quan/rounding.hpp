@@ -96,11 +96,11 @@
 //using std::fixed;
 //using std::left;
 //using std::right;
+//using std::noadjust; ???
 //using std::showpoint;
 //using std::nofixed;
 //using std::noscientific;
 //using std::defaultfloat;
-//using std::noadjust;
 //using std::scientific;
 //using std::boolalpha;
 //using std::showpos;
@@ -481,7 +481,9 @@ std::string round_e(FPT d, int sigdigits)
 } // string round_e(FPT d, unsigned int sigdigits)
 
 template<typename FPT>
-std::string round_ms(FPT v, signed int m) { /*! \brief Round floating-point v (not-exponential) to order m.  (m is the index of the rounder digit).
+std::string round_ms(FPT v, signed int m) 
+{ /*! \brief Round floating-point v (not-exponential) to order m 
+  (where m is the index of the rounder digit).
     This is variously called 'common rounding', 'round_5_up'.
     \details Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
     Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X\n
@@ -580,9 +582,9 @@ std::string round_ms(FPT v, signed int m) { /*! \brief Round floating-point v (n
    */
 
 
-  // 
-  //"...The exponent always contains at least two digits, and only as many more digits as necessary to represent the exponent. ..." C11dr §7.21.6.1 8
-  // So VS2015 is now conforming 
+  //
+  //"...The exponent always contains at least two digits, and only as many more digits as necessary to represent the exponent..." C11++ 7.21.6.1 8
+  // So VS2015 is now conforming.
 #ifdef _MSC_VER
   if ((s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 4) // e00
     && (s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 5) )// e+308
@@ -733,7 +735,8 @@ std::string round_ms(FPT v, signed int m) { /*! \brief Round floating-point v (n
 bool scaled = true; // true if want to scale value and use letter prefix to avoid >1000 or < 1 (for example 2.3 kV, not 2300 V).
 
 template <typename FPT>
-std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point value `v` (fixed, not-exponential) to `sigdigits` significant digits.
+std::string round_f(FPT v, int sigdigits) 
+{ /*! \brief Round floating-point value `v` (fixed, not-exponential) to `sigdigits` significant digits.
    This is variously called 'common rounding', 'round_5_up'.
 
   \details Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
@@ -754,7 +757,7 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
     (A compile time check would be better).
   */
 
-  // Will fail if FPT is not a floating-point type (because will not output in scientific format!).
+  // Will fail if FPT is not a floating-point type (because will not be output in scientific format!).
   BOOST_STATIC_ASSERT(boost::is_floating_point<FPT>::value);
 
   // Use Boost.Math TR1 portable functions for testing infinity, NaN and their signs.
@@ -763,7 +766,8 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
   using boost::math::isnan;
   using boost::math::isinf;
 
-  if (isnan(v)) { // Note that the most significant sign bit of NaN is recognized by using function signbit.
+  if (isnan(v)) 
+  { // Note that the most significant sign bit of NaN is recognized by using function signbit.
     return (is_neg) ? "-NaN" : "NaN";
     // 'sign' of NaNs cannot reliably and portably be tested using "x < 0"
     // because all comparisons using NaN are false - by definition.
@@ -788,23 +792,23 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
     so limit @c sigdigits to @c digits10 (15 for IEEE 64-bit double).
     (But may be better to allow max_digits10?)
    */
-  if (sigdigits > std::numeric_limits<FPT>::digits10) 
-  { // 
-    std::cout << "Maximum significant digits is " << std::numeric_limits<FPT>::digits10 << std::endl;
+  if (sigdigits > std::numeric_limits<FPT>::digits10)
+  { //
+    std::cout << "Maximum significant digits is " << std::numeric_limits<FPT>::digits10 << "!" << std::endl;
     sigdigits = std::numeric_limits<FPT>::digits10; // digits10 (15 for double) decimal digits after the decimal point.
   }
 
-  if (sigdigits < 0) 
+  if (sigdigits < 0)
   { // Must be a mistake.
     std::cout << "Trying to output " << sigdigits << " significant digits!" << std::endl;
     return "";
-  } 
-  else if (sigdigits == 0) 
+  }
+  else if (sigdigits == 0)
   { // Might handle zero case differently from sigdigits < 0?
     std::cout << "Trying to output zero significant digits!" << std::endl;
     return "";
   }
-  //else sigdigits > 0, so usable.
+  //else sigdigits > 0, so feasible.
 
   std::ostringstream ss;
   ss << std::scientific // Use scientific format to get all the value as potentially significant decimal digits.
@@ -848,7 +852,6 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
   int exp = 0;
   do
   {
-
     if (std::isdigit(*se, loc))
     {
       exp = exp * 10 + (*se - '0');
@@ -938,14 +941,14 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
   //     }
   //  }
   // Now have the rounded decimal digit string, but may need some zeros.
-  if (sigdigits >= 0) 
+  if (sigdigits >= 0)
   { // May need zeros *before* decimal point.
     int z = exp - static_cast<int>(s.size()) + 1; // Number of significant zeros before decimal point.
-    if (z > 0) 
+    if (z > 0)
     { // More efficient to check if any zeros are needed before calling insert.
       s.insert(sis, z, '0'); // Insert any significant zeros.
     }
-  } else 
+  } else
   {// Any trailing zeros are already in the string.
   }
 
@@ -1067,7 +1070,7 @@ double delta(double epsilon, double gamma, distribution_type distrib = gaussian)
       if (x < (std::numeric_limits<double>::min)() * 100.) // Small value allows for approximation uncertainty.
       { // Not possible to have epsilon this small!
         threshold = x; // ???
-        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma 
+        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma
           << ", threshold is " << threshold << " for gaussian distribution." << std::endl;
         // For example:
         // "Epsilon 0.01 is too small for gamma rounded/unrounded ratio 0.981226, threshold is 0.99."
@@ -1082,7 +1085,7 @@ double delta(double epsilon, double gamma, distribution_type distrib = gaussian)
       // Measurement Science Review, Vol 2, section 1, (2002), pages 1 - 7.
       threshold = 1 - epsilon; // Wimmer equation 17, page 5
       if (gamma < threshold) {
-        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma 
+        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma
           << ", threshold is " << threshold << " for uniform distribution." << std::endl;
         return -1; // Not sure how to signal the problem here.  Throw?
       }
@@ -1093,7 +1096,7 @@ double delta(double epsilon, double gamma, distribution_type distrib = gaussian)
       // Measurement Science Review, Vol 2, section 1, (2002), pages 21 to 31.
       threshold = (1 - gamma) / (1 + gamma);
       if (epsilon < threshold) {
-        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma 
+        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma
           << ", threshold is " << threshold << " for triangular distribution." << std::endl;
         return -1; // Not sure how to signal the problem here.
       }
@@ -1120,17 +1123,17 @@ double gamma(double rounded, double value) {
   */
   // Is this OK for negative values?  Need to check or swap so result is <= 1.
   // Use abs?
-  if (value == 0.) // 
+  if (value == 0.) //
   { // Prevent divide by zero (or very close to zero too? value denomalised?).
     return 0.;
   }
   double g = rounded / value;
-  if (g > 1.) 
+  if (g > 1.)
   { // This seems necessary for some cases???
     //std::cout << "value " << value << ", rounded " << rounded << std::endl;
     g = 1. / g;
   }
-  if (g > 1.) 
+  if (g > 1.)
   { // This seems necessary for some cases???
  //   std::cerr << "value " << value << ", rounded " << rounded << std::endl;
     //   assert(g <= 1.); // Assumes rounded < unrounded.
@@ -1140,7 +1143,7 @@ double gamma(double rounded, double value) {
 } // double gamma(double rounded, double value)
 
 int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigits = 2U, distribution_type distrib = gaussian)
-{ /*! \brief 
+{ /*! \brief
   Calculate the Wimmer rounding digit m using delta and gamma functions p 1661, equation 12.
   \details Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X.
   Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
@@ -1156,9 +1159,9 @@ int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigi
    \return m Signed position of the digit to be used for rounding,
     `m == 0` means use the units digit for rounding the tens digit.
   */
-  if ((sigma_sigdigits < 1) || (sigma_sigdigits > 4)) 
+  if ((sigma_sigdigits < 1) || (sigma_sigdigits > 4))
   { // sigma_sigdigits is too big to be plausible from the confidence interval of uncertainty.
-    sigma_sigdigits = 4; // or throw?
+    sigma_sigdigits = 4; // or throw? Or warning message?
   }
   // \boost_1_40_0\libs\math\example\chi_square_std_dev_test.cpp
 
@@ -1226,9 +1229,9 @@ int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigi
   { // <= 1% loss from rounding accepted.
     gl = 0.98972;
   }
-  if (gl > g) 
-  { 
-    std::cout << "Cannot return a rounding m because chosen epsilon " << e << " is too small!" 
+  if (gl > g)
+  {
+    std::cout << "Cannot return a rounding m because chosen epsilon " << e << " is too small!"
       << "\nsigma = " << sigma << ", sigma_rounded = " << sigma_rounded
       << "\ngamma(sigma_rounded, sigma) = " << g << ", gl = " << gl  << std::endl;
     return -9999; // Some silly number.

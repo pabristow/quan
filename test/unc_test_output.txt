@@ -1,0 +1,13 @@
+Test Output from unc_tests.cpp Tue Nov  6 14:43:15 2018
+
+setSigDigits(4) 
+setUncSigDigits(1) 
+
+Test one parameter manips to set unc width, scale, sigdigits & unc sigdigits.
+
+setSigDigits(4) 
+
+
+
+setUncWidth(10) setScale(-3) setsigdigits(5) setuncsigdigits(1) 
+Closed test output unc_tests.cpp Tue Nov  6 14:43:15 2018

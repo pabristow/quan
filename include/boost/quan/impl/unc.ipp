@@ -4,10 +4,10 @@
   \details Class for simple Propagation of Uncertainties
      according to a pure Gaussian model.
      Uncertain subroutines, manipulators & applicators.
-     but not <iomanip> because defined here (as a copy of code in Std iomanip).
+     but not <iomanip> because defined here (as a copy of code in std::iomanip).
 */
 
-// Copyright Paul A. Bristow 1998, 2012.
+// Copyright Paul A. Bristow 1998, 2012, 2018.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -64,8 +64,8 @@ void setUncDefaults(std::ios_base& os)
   os.iword(widthIndex) = -1; // ios setwidth
   os.iword(oldWidthIndex) = -1; // previous ios setwidth
   os.iword(roundingLossIndex) = 50; // 0.01 * 1000; // == 0.01
-  os.iword(confidenceIndex) = 50000; // == 0.05 * 1e6
-
+  os.iword(confidenceIndex) = 50000; // 50000 / 1000000 == 0.05
+  // 'Magic' number indexID
   os.iword(topIndex) = indexID;  // last .iword(16) == iword(0)
   // marking that all have been set to defaults.
   if (os.iword(zeroIndex) != indexID)
@@ -650,13 +650,16 @@ setUncSigDigits::setUncSigDigits(int w) // : uncSigDigits_(w)
 {
   if (w == 0)
   {
-    w = 2;  // ISO default.
+    w = 2;  // ISO default from 
+    // Uncertainty of measurement – Part 3: Guide to the expression of uncertainty in measurement (GUM:1995)
+    // ISO Guide 98 (1995) and updated version 2008.
   }
   else if (w > 3)
   {
-    w = 3;  // Limit to biggest that makes sense.
+    w = 3; // Limit to biggest number of decimal digits precision that are possibly meaningful for a standard deviation.
   }
-  // Passes negative values through to allow
+  //else if (w < 0)
+  // Pass negative values of @c w through to allow
   // an auto mode for w < 0 that chooses from degrees of freedom,
   // (can't read degfree from here).
   // From table H page 457 in Oliver & Goldsmith, confidence interval
@@ -675,13 +678,13 @@ std::ostream& operator<< (std::ostream& os, const setUncSigDigits& usf)
 //! setroundingLoss(double eps);
 //! Usage: out << setroundingLoss(0.01) ... = cout.iword[roundingLoss] = 0.01;
 setRoundingLoss::setRoundingLoss(double eps)
-{ // Constructor sets roundingLoss = parameter eps (scaled by operator<<).
+{ // Constructor sets roundingLoss = parameter eps (scaled * 1000 by operator<<).
 
    roundingloss_= eps;
 }
 std::ostream& operator<< (std::ostream& os, const setRoundingLoss& sl)
-{ //! \note Can't store `double` in a `long`, so scale up to an integer.
-  os.iword(roundingLossIndex) = static_cast<long>(sl.roundingloss_ * 1.e3);
+{ //! \note Can't store `double` in a `long`, so scale up * 1000 to an integer.
+  os.iword(roundingLossIndex) = static_cast<long>(sl.roundingloss_ * 1000);
   return os;
 }
 
@@ -693,8 +696,8 @@ setConfidence::setConfidence(double alpha)
 }
 
 std::ostream& operator<< (std::ostream& os, const setConfidence& sl)
-{ //! \note Can't store `double` in a `long`, so scale up to an integer.
-  os.iword(confidenceIndex) = static_cast<long>(sl.confidence_ * 1.e6);
+{ //! \note Can't store `double` in a `long`, so scale up by 1000000 to an integer.
+  os.iword(confidenceIndex) = static_cast<long>(sl.confidence_ * 1000000);
   return os;
 }
 

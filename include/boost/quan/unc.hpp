@@ -290,7 +290,7 @@ enum uncertainflags
   //! power10 in range -max to +max.
   autoScaled = 1 << 2,  //!< bit 2: auto = 1  with << autoscale ...
   plusMinus = 1 << 3, /*!< bit 3 = 1 means add +/- uncertainty
-  Usage: `std::cout << plusminus << u;`
+  //! Usage:  \code std::cout << plusminus << u; \endcode
   */
   addSISymbol = 1 << 4,  //!< bit 4 = 1, add suffix SI symbol G, M, k, m, u, n, p ...
   //! If one is applicable, else = 0 do nothing.
@@ -405,7 +405,7 @@ std::ostream&operator<< (std::ostream&, const setConfidence&);
 std::ostream&operator<< (std::ostream&, const setSigDigits&);
 std::istream&operator>> (std::istream&, const setSigDigits&);
 
-void outUncFlags(long uncflags, std::ostream);
+void outUncFlags(long uncflags, std::ostream&);
 
 class showUncFlags
 {  // Constructor & operator<< defined in unc.ipp
@@ -518,17 +518,18 @@ public:
 };
 
 /*! setUncSigDigits(int uncSigDigits);
-  Permits choice of number of uncertain or stddev value:\n
-  2 is the ISO recommendation.\n
-    Uncertainty of measurement -- Part 3: Guide to the expression of uncertainty in measurement (GUM:1995)\n
+  Permits choice of number of decimal digits precision to output for an uncertain or stddev value:\n
+  w = 2 is the ISO recommendation.\n
+    Uncertainty of measurement, Part 3: Guide to the expression of uncertainty in measurement (GUM:1995)\n
     ISO Guide 98 (1995) and updated version 2008.\n
   1 is more appropriate for very small degrees of freedom,
    (but it gives a big step when the value starts with 1 or 2,
-   when the difference between 1.4 (rounded to 1) and 1.6 (rounded to 2.) is a doubling.
-  3 is appropriate only for large degrees of freedoms, >= 1000.
+   when the difference between 1.4 (rounded to 1) and 1.6 (rounded to 2.) is a doubling).
+  3 is appropriate only for large degrees of freedoms >= 1000.
   \warning Values < 1 or > 3 are silently ignored.
-  -1 passes through to allow dymanic choice based on degress of freedom.
-  Usage: out << setUncSigDigits(3) ...
+  An argument value of -1 passes through to allow a dynamic 'automatic' choice
+  based on degrees of freedom of the uncertain value, example \code out << setUncSigDigits(-1) ... \endcode
+  Usage: \code out << setUncSigDigits(2) ... \endcode
 */
 class setUncSigDigits
 {
@@ -581,7 +582,9 @@ class unc : public std::char_traits<char>
 
   friend void unc_input(double& mean,  // Mean (central or most probable) value.
                    double& stdDev, // Uncertainty estimate as Standard deviation.
-                   unsigned short int& degreesOfFreedom,  // Degrees of freedome -1. (Default zero for 1 observation).
+                   unsigned short int& degreesOfFreedom,
+                   // Degrees of freedom -1. 
+                   // (Default is zero for 1 observation).
                    unsigned short int& types, // 16 Uncertain type flags showing type of value.
                    std::istream& is);
   //friend void unc_output(double value, // Mean(central or most probable) value.
@@ -1193,6 +1196,7 @@ public:
     // Changes are restored on destruction.
     std::ostringstream oss; // Build up string.
     oss.flags(os.flags()); // Copy flags to restore TODO not needed?).
+    // TODO muddle here ? - os.flags() is saved iosFlags below.
 
     double mean = val.mean();
     float uncertainty = val.deviation();
@@ -1225,7 +1229,7 @@ public:
     bool isSetSigDigits;  //!<  Use set sigdigits instead of calculate from uncertainty.
     bool isSetUncSigDigits;  //!<  Use set sigdigits instead of calculate from uncertainty.
     // Get print format requirements from std::ios flags. ****************************
-    const int iosFlags = os.flags();  // Save fmtflags in case need to restore.
+    const std::ios_base::fmtflags iosFlags = os.flags();  // Save fmtflags in case need to restore.
 
      // Width, precision, flags & fillChar data from stream os. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     std::streamsize iosWidth = os.width(); //!< \warning Width must be read BEFORE any use of os
@@ -1286,20 +1290,22 @@ public:
     }
 
     long& roundloss = os.iword(roundingLossIndex);
-    double epsilon;
+    double epsilon; // 
     if (roundloss == 0)
     { // epsilon has not been set,
       epsilon = 0.05; // so use a default.
     }
     else
-    { // Has been set by a call like `out << confidence(0.01);`.
-    // rounding loss is stored as a long, so scaled by 1000,
-      // so that 0.05 or 1% is stored as 50.
-      epsilon = roundloss / 1000.;  // `<< roundingloss(0.05)`
+    { // Has been set by a call for example: `out << roundingloss(0.05)`
+      // (cannot store rounding loss as a double because iword is an array of long int values)
+      // therefore rounding loss is stored as a long int, but scaled by * 1000,
+      // so that 0.05 or 5% is stored as 50.
+      epsilon = roundloss / 1000.; 
     }
-    //! Confidence or alpha to compute confidence interval is similarly scaled.
+
+    //! Confidence or alpha to compute confidence interval is similarly scaled, but by 1000000.
     //! Usage: `out << confidence(0.01) << ...` means 1 - confidence = 99% confidence.
- //!   double confidence = os.iword(conf) / 1000.;  // `<< confidence(0.05)` aka 95%
+    //!   double confidence = os.iword(conf) / 1000000.;  // `<< confidence(0.05)` aka 95%
 
     //int round_m(double epsilon = 0.01, double unc = 0., unsigned int uncsigdigits = 2, distribution_type distrib = gaussian);
     //void out_confidence_interval(std::pair<double, double> ci, int m, std::ostream& os = std::cout);
@@ -1308,12 +1314,12 @@ public:
     long& conf = os.iword(confidenceIndex);
     double confidence;
     if (conf <= 0)
-    { // Has not been set, so use default.
-      confidence = 0.05;  // 95% confidence.
+    { // Has not been set, or is a negative mistake?, so use default.
+      confidence = 0.05;  // 0.05 == 95% confidence.
     }
     else
     {
-      confidence = conf / 1.e6;
+      confidence = conf/ 1000000.; 
     }
     using boost::math::isfinite;
     using boost::math::isnan;
@@ -1380,7 +1386,7 @@ public:
             int m = round_m(epsilon, uncertainty, 2, distrib); // m is rounding digit index.
             if (isNoisyDigit)
             { // Move rounding digit to one less significant position.
-              m--;
+              m--; // What is become negative?
             }
             if (isShowPos)
             {
@@ -1398,7 +1404,7 @@ public:
             }
           }
           else
-          { // Uncertainty NAN or infinite, so show all possibly significant digits.
+          { // Uncertainty is NAN or infinite, so just show all possibly significant digits.
             oss << std::showpoint << std::setprecision(max_digits10) << mean;
           }
         }
@@ -1414,7 +1420,8 @@ public:
       {
          oss << ((mean < 0) ? "-inf" : (isShowPos) ? "+inf" : "inf");
       }
-      // Or could leave as native output, but MSVC format is ugly.
+      // Or could leave as native output, but MSVC format "1.#INF", "1.#QNAN", "-1.#IND" is ugly.
+      // Tests in unc_test.cpp now assume the above (std?) format rather than MSVC.
     } // Mean
 
     if (isPlusMinus && !(unc_flags & VALUE_INTEGER))
@@ -1428,14 +1435,17 @@ public:
         else
         { // Non-zero uncertainty.
           int uncSigDigits = os.iword(setUncSigDigitsIndex);
-          // Default is round to 2 sig digit - ISO rule.
-          if (uncSigDigits <= 0)
+          if (uncSigDigits == 0)
+          { // Default is round to 2 sig digit - ISO rule.
+            uncSigDigits = 2;
+          }
+          else if (uncSigDigits < 0)
           { // Automatically choose uncSigDigits based on degrees of freedom.
-            // Passed negative values through to allow
-            // an auto mode for w < 0 that chooses from degrees of freedom,
+            // Pass negative values through to allow
+            // an automatic mode for w < 0 that chooses from degrees of freedom,
             // From table H page 457 in Oliver & Goldsmith, confidence interval
             // of standard deviation is about +/- 20% at 10 degrees of freedom,
-            // and only < +/- 10% above 100 observations (needing 2 stdDev sig Digits).
+            // and only < +/- 10% above 100 observations (needing 2 sigDigits for stdDev).
             uncSigDigits = abs(uncSigDigits);
             if (degFree > 100)
             {
@@ -1450,7 +1460,7 @@ public:
               // Choose between 1 and 2 digits based on 1st digit of uncertainty.
               // Would be too big a step if most significant digit was 1 or 2.
               std::ostringstream oss_unc;
-              oss << std::scientific << std::setprecision (1) << uncertainty; // Assume sd positive.
+              oss_unc << std::scientific << std::setprecision (1) << uncertainty; // Assume sd positive.
               if(oss_unc.str()[0] == '1') // Check 1st digit before decimal point.
               { // Would be too big a step if most significant digit was 1 or 2.
                 uncSigDigits = 2;
@@ -1465,7 +1475,6 @@ public:
               }
             }
           }
-
          if (unc_flags & UNC_NOPLUS)
           {
             oss << " +0/-";
@@ -1483,6 +1492,7 @@ public:
             << std::fixed // << std::noscientific
             << std::showpoint
             << std::setprecision(uncSigDigits); // switches to e format :-(
+          // Why set precision when only appending uncertainty as a string??
           //double unc_rounded = round_sig(uncertainty, uncSigDigits);
           //oss << unc_rounded;
            //std::string round_f<FPT>(FPT v, int sigdigits);
@@ -1519,11 +1529,16 @@ public:
         }
         std::pair<double, double> ci  = conf_interval(mean, uncertainty, degFree, alpha, distrib);
         int m = round_m(epsilon_ci, uncertainty, uncSigDigits, distrib);
-        using boost::lexical_cast;
-        oss << " <"
-            << lexical_cast<double>(round_ms(ci.first, m-1)) << ", "
-            << lexical_cast<double>(round_ms(ci.second, m-1))
-            << ">";
+        //std::cout << "round_ms(ci.first, m-1)" << round_ms(ci.first, m-1)  << std::endl; 
+        //std::cout << "round_ms(ci.second, m-1)" << round_ms(ci.second, m-1) << std::endl; 
+        oss << " <" << round_ms(ci.first, m - 1) << ", " << round_ms(ci.second, m-1) << ">";
+
+// Was - but don't see why want to lexical cast to double and then get the precision of the stream?
+       // using boost::lexical_cast;
+        //oss << " <"
+        //    << lexical_cast<double>(round_ms(ci.first, m-1)) << ", "
+        //    << lexical_cast<double>(round_ms(ci.second, m-1))
+        //    << ">";
       }
       else
       { // Not possible to compute confidence limits or interval.

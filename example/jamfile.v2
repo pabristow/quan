@@ -1,0 +1,70 @@
+# \libs\quan\example\jamfile.v2
+
+# Runs quan examples.
+
+# Copyright Paul A. Bristow 2018.
+
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+# bjam command lines:
+#                    >b2 -a  # Just msvc debug
+#                    >b2 -a toolset=gcc                     # just gcc debug
+#                    >b2 -a toolset=gcc release             # just gcc release
+#                    >b2 -a toolset=msvc debug release      # both variants for msvc.
+#                    >b2 -a toolset=gcc,msvc debug release  # Both toolset and both variants.
+
+# optional redirect output > quan_examples.log
+# Run using >b2 toolset=gcc-8.1.0 or
+# b2 address-model=32,64 toolset=gcc-8.1.0,msvc-14.1
+# some link failures GCC
+# >b2 -a address-model=32,64 toolset=msvc-14.1 OK
+
+project "quan_examples"
+   : requirements
+
+  <include>. # quan/example
+  <include>../include # quan/include
+  <include>../../.. # modular-boost root
+
+  # Toolset specific requirements.
+  # GCC requirements.
+  #<toolset>gcc:<cxxflags>-std=gnu++11 # fixed-point requires C++11 library.
+  #<toolset>gcc:<cxxflags>-Wno-unused-local-typedefs
+  #<toolset>gcc:<cxxflags>-Wno-missing-braces
+  <toolset>gcc:<cxxflags>-Wno-unused-variable
+  <toolset>gcc:<cxxflags>-Wno-unused-but-set-variable
+
+  # Clang requirements.
+  #<toolset>clang:<cxxflags>-std=c++11 # fixed-point requires C++11 library.
+  # Other toolsets:
+  <toolset>darwin:<cxxflags>-Wno-missing-braces
+  <toolset>acc:<cxxflags>+W2068,2461,2236,4070
+  <toolset>intel:<cxxflags>-Qwd264,239
+  # MSVC requirements.
+  <toolset>msvc:<runtime-link>static
+  <toolset>msvc:<link>static
+  <toolset>msvc:<warnings>all
+  <toolset>msvc:<asynch-exceptions>on
+  <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
+  <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
+  <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
+  <toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS
+  <toolset>msvc:<cxxflags>/wd4996 # == #define _SCL_SECURE_NO_WARNINGS
+  #<toolset>msvc:<cxxflags>/wd4512 # assignment operator could not be generated.
+  #<toolset>msvc:<cxxflags>/wd4610
+  #<toolset>msvc:<cxxflags>/wd4510
+  #<toolset>msvc:<cxxflags>/wd4127 # conditional expression is constant
+  #<toolset>msvc:<cxxflags>/wd4701
+  #<toolset>msvc:<cxxflags>/wd4127
+  #<toolset>msvc:<cxxflags>/wd4305
+;
+test-suite "quan_examples" :
+  [ run quan_simple.cpp ]
+  [ run quan_demo.cpp ]
+;
+
+
+
+
+

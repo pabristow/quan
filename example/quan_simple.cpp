@@ -25,7 +25,7 @@ std::string versions()
   mess << "\n  MSVC version "<< BOOST_STRINGIZE(_MSC_FULL_VER) << ".";
 #endif
   mess << "\n  STL " BOOST_STDLIB;
-  mess << "\n  Boost version " << BOOST_VERSION/100000 << "." << BOOST_VERSION/100 % 1000 << "." << BOOST_VERSION % 100 << endl;
+  mess << "\n  Boost version " << BOOST_VERSION/100000 << "." << BOOST_VERSION/100 % 1000 << "." << BOOST_VERSION % 100 << std::endl;
   return mess.str();
 } // std::string versions()
 

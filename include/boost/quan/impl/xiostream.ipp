@@ -5,7 +5,7 @@
   \author Paul A. Bristow
 
 */
-// file /impl/xiostream.ipp
+// file /quan/impl/xiostream.ipp
 
 // Copyright Paul A. Bristow 2009
 
@@ -22,22 +22,51 @@
 
 #include <boost/math/special_functions/fpclassify.hpp>
 
-std::ios_base& lowercase(std::ios_base& _I)
-{ // lowercase is the inverse of std::ios_base::uppercase.
-  _I.unsetf(std::ios_base::uppercase); // Default is lowercase.
-  return _I;
-} // lowercase
+ // Naughty, but convenient, to put these extra manipulators into std namespace.
+  // Usage:  out << nofixed << noscientific << autofloat << noadjust ...
+  using std::ios_base;
 
-// Function to set base hex & showbase & uppercase too.
-// Usage: out << hexbase << ... for 1234ABCD
-// equivalent to out << hex << showbase << uppercase ...
-std::ios_base& hexbase(std::ios_base& _I)
-{
-  _I.setf(std::ios_base::hex | std::ios_base::showbase | std::ios_base::uppercase, // set bits,
-    std::ios_base::basefield | std::ios_base::showbase | std::ios_base::uppercase); // mask.
-  // Care: std::ios_base::basefield); doesn't set showbase & uppercase!
-  return _I;
-}
+  //ios_base& defaultfloat(ios_base& _I) // Now in std already.
+  //{ // Neither fixed nor scientific. This is the initialized default.
+  //	_I.unsetf(ios_base::floatfield);
+  //	// Equivalent to out << nofixed << noscientific
+  //	return _I;
+  //}
+
+	ios_base& lowercase(std::ios_base& _I)
+	{ // lowercase is the inverse of std::ios_base::uppercase.
+		_I.unsetf(std::ios_base::uppercase); // Default is lowercase.
+		return _I;
+	} // lowercase
+
+	// Function to set base hex & showbase & uppercase too.
+	// Usage: out << hexbase << ... for 1234ABCD
+	// equivalent to out << hex << showbase << uppercase ...
+	ios_base& hexbase(std::ios_base& _I)
+	{
+		_I.setf(std::ios_base::hex | std::ios_base::showbase | std::ios_base::uppercase, // set bits,
+			std::ios_base::basefield | std::ios_base::showbase | std::ios_base::uppercase); // mask.
+		// Care: std::ios_base::basefield); doesn't set showbase & uppercase!
+		return _I;
+	}
+
+  std::ios_base& noadjust(ios_base& _I)
+  { // Neither left, right nor internal. This is the initialized default.
+    _I.unsetf(std::ios_base::adjustfield);
+    return _I;
+  }
+
+  std::ios_base& nofixed(ios_base& _I)
+  { // no fixed. This is the initialized default for this flag.
+    _I.unsetf(std::ios_base::floatfield);
+    return _I;
+  }
+
+  std::ios_base& noscientific(ios_base& _I)
+  { // No scientific. This is the initialized default for this flag.
+    _I.unsetf(std::ios_base::floatfield);
+    return _I;
+  }
 
 // Manipulator template.
 // Copy of template for manipulator (from std iomanip)
@@ -319,7 +348,7 @@ std::ostream& FPclass(std::ostream& os, double value)
 
 void outFpClass(double value, std::ostream& os = std::cerr)
 // Usage: outFpClass(x, std::cerr);
-{  // Custom outputs for NaN, inf ... (rather than default 1#IND ...)
+{  // Custom outputs for NaN, inf ... (rather than MSVC default 1#IND ...)
 
   if (boost::math::isfinite(value))
   {
