@@ -1210,7 +1210,7 @@ public:
       \var bool isNoisyDigit
       \brief Add an extra 'noisy' guard digit to reduce risk of information loss.
     */
-    bool isNoisyDigit;  //!<
+    bool isNoisyDigit;  //!< Add an extra 'noisy' digit to values output.
     bool isDegFree;  //!<  Append degrees of freedom.
     bool isPlusMinus; //!< Uncertainty as +/- is required too (but ignore if value is exact or integer).
     bool isUppercase; //!< Exponential format is, for example, 1E6 else 1e6.
@@ -1306,6 +1306,7 @@ public:
     //! Confidence or alpha to compute confidence interval is similarly scaled, but by 1000000.
     //! Usage: `out << confidence(0.01) << ...` means 1 - confidence = 99% confidence.
     //!   double confidence = os.iword(conf) / 1000000.;  // `<< confidence(0.05)` aka 95%
+    // Care: NOT /1000000 but floating-point /1000000. !
 
     //int round_m(double epsilon = 0.01, double unc = 0., unsigned int uncsigdigits = 2, distribution_type distrib = gaussian);
     //void out_confidence_interval(std::pair<double, double> ci, int m, std::ostream& os = std::cout);
@@ -1326,7 +1327,7 @@ public:
     using boost::math::isinf;
 
     double intpart;
-    int max_digits10 = std::numeric_limits<double>::digits10 * 3010/10000;
+    int max_digits10 = 2 + std::numeric_limits<double>::digits * 3010/10000;
     // std::numeric_limits<double>::max_digits10))
     if (boost::math::isfinite(mean))
     {
@@ -1567,6 +1568,10 @@ public:
     return os;
   } // friend ostream& operator<< (ostream& os, const unc<is_correlated>& val)
 
+  //! stream input of uncertain values.
+  //! Uses @c unc_input function to obtain value and any or all other members of an uncertain class.
+  //! \param is @c std::istream to get input.
+  //! \param ud uncertain class in which to store.
   friend std::istream& operator>> (std::istream& is, unc<is_correlated>& ud)
   {
     double mean;
@@ -1580,7 +1585,10 @@ public:
     return is;
   }
 
-  // Math functions for uncertain class.
+  //! Math functions for uncertain class.
+  //! \brief ceiling function to get the nearest integer above.
+  //! \param arg Uncertain value.
+  //! \returns integral, exact and rational value above @c arg with zero uncertainty and maximum possible degrees of freedom.
   friend unc<is_correlated> ceil(unc<is_correlated> arg)
   {
     arg.value_ = ceil(arg.value_);

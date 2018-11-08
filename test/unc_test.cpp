@@ -202,9 +202,11 @@ BOOST_AUTO_TEST_CASE(unc_test)
   //using std::ios::noscientific;
   //using std::ios::noadjust;
   //using std::ios::hexbase;
-
  
-  unit_test_log.set_threshold_level(boost::unit_test::log_successful_tests);
+  // https://www.boost.org/doc/libs/release/libs/test/doc/html/boost_test/test_output/logging_api/log_ct_log_level.html
+   unit_test_log.set_threshold_level(boost::unit_test::log_successful_tests); // Works OK.
+ // #define BOOST_TEST_LOG_LEVEL success
+  // or parameter --log_level=success
 
   string message("Round to std::cout test: " __FILE__ );
 #ifdef __TIMESTAMP__
@@ -553,9 +555,9 @@ BOOST_AUTO_TEST_CASE(unc_test)
     // max_digits10 used for zero (for which a case could be made),
     // Unable to see why at present, but other cases may be flawed too.
 
-    // now 0.0000 rather than 0.00000000000000000
+    // now 0.0000 rather than 0.00000000000000000  Nov 2018
 
-    uncun zeroMaybe(0., numeric_limits<float>::quiet_NaN() );
+    uncun zeroMaybe(0., numeric_limits<float>::quiet_NaN() ); // uncertainty is NaN
     CHECK_USED(zeroMaybe, "0.00000000000000000");  // 0.00000000000000000
 
     CHECK_USED(setSigDigits(5) << setsigdigits << zeroMaybe, "0.00000"); // 
