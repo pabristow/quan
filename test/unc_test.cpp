@@ -24,10 +24,8 @@
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #endif
 
-// #define UNC_TRACE // #define for diagnostic output from uncertain classes.
-
 #define BOOST_TEST_MAIN // Required for int test_main() (must come FIRST).
-#define BOOST_LIB_DIAGNOSTIC "on"// Show library file details, for example:
+//#define BOOST_LIB_DIAGNOSTIC "on"// Show library file details, for example:
 // Linking to lib file: libboost_unit_test_framework-vc141-mt-gd-x64-1_69.lib
 // Linking to lib file: libboost_math_c99-vc141-mt-gd-x64-1_69.lib
 // Linking to lib file: libboost_math_c99f-vc141-mt-gd-x64-1_69.lib 
@@ -43,6 +41,13 @@
 #include <boost/test/floating_point_comparison.hpp> // Extra test tool for FP comparison.
   using boost::unit_test::test_suite;
   using boost::unit_test::unit_test_log;
+
+// https://www.boost.org/doc/libs/release/libs/test/doc/html/boost_test/test_output/logging_api/log_ct_log_level.html
+//boost::unit_test::unit_test_log.set_threshold_level(boost::unit_test::log_successful_tests); // Works OK. 
+//boost::unit_test::unit_test_log.set_threshold_level(boost::unit_test::log_successful_tests); //
+//#define BOOST_TEST_LOG_LEVEL success
+// or parameter --log_level=success in run command-line
+// "$(TargetDir)$(TargetName).exe" --result_code=yes --report_level=detailed --catch_system_errors=no  --build_info=yes  --log_level=success
 
 // Classes for simple propagation of Uncertainties according to a pure Gaussian model.
 
@@ -68,19 +73,19 @@
   using std::right;
   using std::internal; // Initial default - neither left, right nor internal.
 #include <iomanip>  // for <iomanip.h> for setw, setprecision ...
-  using std::setfill;
+  //using std::setfill;
 #include <fstream>  // for <fstream.h> for filing.
   using std::ofstream;
   using std::ifstream;
 #include <string>  // for C++ Std strings
   using std::basic_string;
   using std::string;
-#include <sstream> // for o & istringstream
+#include <sstream> // for C++ std::stringstreams.
   using std::istringstream;
   using std::ostringstream;
   using std::stringstream;
 #include <limits>
-  using std::numeric_limits;
+ // using std::numeric_limits;
 
 #include <boost/quan/xiostream.hpp> // extra iostream manipulators like noshowbase
   //using std::lowercase;
@@ -90,11 +95,12 @@
   //using std::noadjust;
   //using std::hexbase;
 
-#include <boost/quan/unc.hpp> // Declaration of Uncertain Classes.
+// #define UNC_TRACE // #define for diagnostic output from uncertain classes.
 
+#include <boost/quan/unc.hpp> // Declaration of Uncertain Classes.
 #include <boost/quan/unc_init.hpp>
 
-  // Check using manips output expected string result, for example:
+ // Check using manips output expected string result, for example:
 // CHECK(hex << showbase << setw(10) << i, "       0xf")
 // CHECK(scientific << setw(20) << d, "       1.234568e+001");
 // Note: sets uncertain defaults (& oss has ios defaults too).
@@ -131,8 +137,8 @@
   std::istringstream iss(in_string);\
   setUncDefaults(iss);\
   iss >> r;\
-  BOOST_CHECK_CLOSE_FRACTION(r.value(), value, numeric_limits<double>::epsilon());\
-  BOOST_CHECK_CLOSE_FRACTION(r.std_dev(), sd, numeric_limits<float>::epsilon());\
+  BOOST_CHECK_CLOSE_FRACTION(r.value(), value,std::numeric_limits<double>::epsilon());\
+  BOOST_CHECK_CLOSE_FRACTION(r.std_dev(), sd,std::numeric_limits<float>::epsilon());\
   BOOST_CHECK_EQUAL(r.deg_free(), df);\
   BOOST_CHECK_EQUAL(r.types(), types);\
 } // #define	CHECK_IN(in, value, sd, df, types)
@@ -148,29 +154,35 @@
   BOOST_CHECK_EQUAL(ss.str().length(), static_cast<size_type>(ss.iword(usedIndex)));\
   uncun r;\
   ss >> r;\
-  BOOST_CHECK_CLOSE_FRACTION(r.value(), value, numeric_limits<double>::epsilon());\
-  BOOST_CHECK_CLOSE_FRACTION(r.std_dev(), sd, numeric_limits<float>::epsilon());\
+  BOOST_CHECK_CLOSE_FRACTION(r.value(), value,std::numeric_limits<double>::epsilon());\
+  BOOST_CHECK_CLOSE_FRACTION(r.std_dev(), sd,std::numeric_limits<float>::epsilon());\
   BOOST_CHECK_EQUAL(r.deg_free(), df);\
   BOOST_CHECK_EQUAL(r.types(), types);\
 }// #define	CHECK_OUT_IN(manips, result)
 
-  BOOST_AUTO_TEST_CASE(unc_test_iword)
-  { // Uncertain Class iword checks.
-// Integrity check on iword begin and end no longer needed in CHECK.
-    std::ostringstream oss_iword_check;
-    setUncDefaults(oss_iword_check);
-    BOOST_CHECK_EQUAL(oss_iword_check.iword(topIndex), indexID); 
-    BOOST_CHECK_EQUAL(oss_iword_check.iword(0), indexID); 
-    BOOST_CHECK_EQUAL(oss_iword_check.iword(topIndex), indexID); 
-    BOOST_CHECK_EQUAL(oss_iword_check.iword(0), indexID);
-  } // unc_test_iword
+// These test cases are automatically registered by using BOOST_AUTO_TEST_CASE.
 
-// This test case is automatically registered by using BOOST_AUTO_TEST_CASE.
+BOOST_AUTO_TEST_CASE(unc_test_iword)
+{ // Uncertain Class iword checks.
+  // Integrity check on iword begin and end no longer needed in CHECK.
+  std::ostringstream oss_iword_check;
+  setUncDefaults(oss_iword_check);
+  BOOST_CHECK_EQUAL(oss_iword_check.iword(topIndex), indexID); 
+  BOOST_CHECK_EQUAL(oss_iword_check.iword(0), indexID); 
+  BOOST_CHECK_EQUAL(oss_iword_check.iword(topIndex), indexID); 
+  BOOST_CHECK_EQUAL(oss_iword_check.iword(0), indexID);
+} // unc_test_iword
+
 BOOST_AUTO_TEST_CASE(unc_test)
 { // Uncertain Class tests.
+
+  BOOST_STATIC_ASSERT_MSG((std::numeric_limits<double>::is_iec559 == true), "Must be IEC559/IEEE754 floating point");	// IEC559/IEEE754 floating point ONLY.
+  // Set Boost.Test log level
+  // boost::unit_test::unit_test_log.set_threshold_level(boost::unit_test::log_messages); // log_successful_tests, log_warnings, log_all_errors  see unit_test_log.ipp
+
   using std::istream;
   using std::ostream;
-  using std::ios_base;
+ // using std::ios_base;
   using std::char_traits;
   using std::cout;
   using std::cerr;
@@ -202,13 +214,8 @@ BOOST_AUTO_TEST_CASE(unc_test)
   //using std::ios::noscientific;
   //using std::ios::noadjust;
   //using std::ios::hexbase;
- 
-  // https://www.boost.org/doc/libs/release/libs/test/doc/html/boost_test/test_output/logging_api/log_ct_log_level.html
-   unit_test_log.set_threshold_level(boost::unit_test::log_successful_tests); // Works OK.
- // #define BOOST_TEST_LOG_LEVEL success
-  // or parameter --log_level=success
 
-  string message("Round to std::cout test: " __FILE__ );
+  std::string message("Round to std::cout test: " __FILE__ );
 #ifdef __TIMESTAMP__
   message += " at " BOOST_STRINGIZE(__TIMESTAMP__);
 #endif
@@ -218,7 +225,6 @@ BOOST_AUTO_TEST_CASE(unc_test)
   message += "."
 #endif
   BOOST_TEST_MESSAGE(message);
-  BOOST_STATIC_ASSERT_MSG((numeric_limits<double>::is_iec559 == true), "Must be IEC559/IEEE754 floating point");	// IEC559/IEEE754 floating point.
   
   //________________________________________________________________________________________________________________________________
   {
@@ -252,11 +258,11 @@ BOOST_AUTO_TEST_CASE(unc_test)
   BOOST_CHECK_EQUAL(std::cout.flags(), 0x201); 
   BOOST_CHECK_EQUAL(std::cout.flags(), std::ios_base::skipws | std::ios_base::dec);
   BOOST_CHECK_EQUAL(std::cout.fill(), ' '); // fill char is space.
-  BOOST_CHECK_EQUAL(std::cout.flags() & ios_base::floatfield, 0);
-  BOOST_CHECK_EQUAL(std::cout.flags() & ios_base::adjustfield, 0);
-  BOOST_CHECK_EQUAL(std::cout.flags() & ios_base::adjustfield, (int)!(ios_base::left | ios_base::right | ios_base::internal));
-  BOOST_CHECK_EQUAL(std::cout.flags() & ios_base::showbase, 0); // no showbase.
-  BOOST_CHECK_EQUAL(std::cout.flags() & ios_base::boolalpha, 0); // no boolapha.
+  BOOST_CHECK_EQUAL(std::cout.flags() & std::ios_base::floatfield, 0);
+  BOOST_CHECK_EQUAL(std::cout.flags() & std::ios_base::adjustfield, 0);
+  BOOST_CHECK_EQUAL(std::cout.flags() & std::ios_base::adjustfield, (int)!(std::ios_base::left | std::ios_base::right | std::ios_base::internal));
+  BOOST_CHECK_EQUAL(std::cout.flags() & std::ios_base::showbase, 0); // no showbase.
+  BOOST_CHECK_EQUAL(std::cout.flags() & std::ios_base::boolalpha, 0); // no boolapha.
 
   // Basic checks on re-initialisation of ios and unc using.
   void setiosDefaults(std::ostream&); // &
@@ -282,7 +288,7 @@ BOOST_AUTO_TEST_CASE(unc_test)
   setUncDefaults(oss);	
   //outFmtFlags(oss.flags());
   //outUncFlags(oss);
-  BOOST_CHECK_EQUAL(oss.rdstate(), ios_base::goodbit);
+  BOOST_CHECK_EQUAL(oss.rdstate(), std::ios_base::goodbit);
   BOOST_CHECK_EQUAL(init_flags, oss.flags()); // Check now same as when initialised = skipws & dec.
   BOOST_CHECK_EQUAL(oss.precision(), 6);
   BOOST_CHECK_EQUAL(oss.fill(), ' ');
@@ -307,9 +313,9 @@ BOOST_AUTO_TEST_CASE(unc_test)
 
   { // Similar checks for unc type.
     uncun nine94(9.94, 0.1f); // 
-    uncun nine95B(_nextafter(9.95, numeric_limits<double>::min()), 0.1f); // Just below 9.95.
+    uncun nine95B(_nextafter(9.95, std::numeric_limits<double>::min()), 0.1f); // Just below 9.95.
     uncun nine95(9.95, 0.1f); // Nearest representable to 9.95.
-    uncun nine95A(_nextafter(9.95, numeric_limits<double>::max()), 0.1f); // Just after 9.95.
+    uncun nine95A(_nextafter(9.95, std::numeric_limits<double>::max()), 0.1f); // Just after 9.95.
     uncun nine96(9.96, 0.1f); // 
     CHECK(nine94, "9.94");  // Should round down up to 9.94. 
     CHECK(nine95B, "9.95");  // Should NOT round up to 10. 
@@ -365,7 +371,6 @@ BOOST_AUTO_TEST_CASE(unc_test)
     BOOST_CHECK_EQUAL(std::cout.iword(confidenceIndex), 0.076 * 1000000);
   }
 
-
   {
     // Check auto mode of selecting number uncertainty significant digits output.
     // Check effect of 1st digit '1' or '2',
@@ -384,39 +389,44 @@ BOOST_AUTO_TEST_CASE(unc_test)
     uncun uu3(12.34, 3.3f);
     CHECK(plusminus << setUncSigDigits(-1) << uu3, "12. +/-3."); // Just 1 digit is enough.
     uncun uu31(12.34, 0.11f);
-    CHECK(adddegfree << plusminus << setUncSigDigits(-1) << uu31, "12.34 +/-0.11 (1)"); // 
+    CHECK(adddegfree << plusminus << setUncSigDigits(-1) << uu31, "12.34 +/-0.11 (0)"); // 
     uncun uu32(12.34, 0.23f); 
-    CHECK(adddegfree << plusminus << setUncSigDigits(-1) << uu32, "12.3 +/-0.23 (1)"); // 
+    CHECK(adddegfree << plusminus << setUncSigDigits(-1) << uu32, "12.3 +/-0.23 (0)"); // 
     uncun uu33(12.34, 0.34f); 
-    CHECK(adddegfree << plusminus << setUncSigDigits(-1) << uu33, "12.3 +/-0.3 (1)"); // 
+    CHECK(adddegfree << plusminus << setUncSigDigits(-1) << uu33, "12.3 +/-0.3 (0)"); // 
     uncun uu34(12.36, 0.36f); 
-    CHECK(adddegfree << plusminus << setUncSigDigits(-1) << uu34, "12.4 +/-0.4 (1)"); // both rounded up.
+    CHECK(adddegfree << plusminus << setUncSigDigits(-1) << uu34, "12.4 +/-0.4 (0)"); // both rounded up.
 
     // Check specified UncSigDigits.
-    CHECK(adddegfree << plusminus << setUncSigDigits(0) << uu34, "12.4 +/-0.36 (1)"); // both rounded up.
-    CHECK(adddegfree << plusminus << setUncSigDigits(2) << uu34, "12.4 +/-0.36 (1)"); // both rounded up.
-    CHECK(adddegfree << plusminus << setUncSigDigits(3) << uu34, "12.4 +/-0.360 (1)"); // both rounded up.
-    CHECK(adddegfree << plusminus << setUncSigDigits(4) << uu34, "12.4 +/-0.360 (1)"); // both rounded up.
+    CHECK(adddegfree << plusminus << setUncSigDigits(0) << uu34, "12.4 +/-0.36 (0)"); // both rounded up.
+    CHECK(adddegfree << plusminus << setUncSigDigits(2) << uu34, "12.4 +/-0.36 (0)"); // both rounded up.
+    CHECK(adddegfree << plusminus << setUncSigDigits(3) << uu34, "12.4 +/-0.360 (0)"); // both rounded up.
+    CHECK(adddegfree << plusminus << setUncSigDigits(4) << uu34, "12.4 +/-0.360 (0)"); // both rounded up.
 
     // Check effect of increased degrees of freedom.
-    uncun uu4(12.34, 0.1f); // Default 1 degree of freedom.
-    uncun uu5(12.34, 0.1f, 20U);
-    uncun uu6(12.34, 0.1f, 200U);
-    CHECK(adddegfree << plusminus << setUncSigDigits(-1) << uu4, "12.34 +/-0.10 (1)"); // 
+    uncun uu4(12.34, 0.1f); // Default 1 observation means 0 degrees of freedom.
+    uncun uu5(12.34, 0.1f, 20U);  // 20 degrees of freedom.
+    uncun uu6(12.34, 0.1f, 200U); // 200 degrees of freedom.
+    CHECK(adddegfree << plusminus << setUncSigDigits(-1) << uu4, "12.34 +/-0.10 (0)"); // 
     CHECK(adddegfree << plusminus << setUncSigDigits(-1) << uu5, "12.34 +/-0.10 (20)"); // 
     CHECK(adddegfree << plusminus << setUncSigDigits(-1) << uu6, "12.34 +/-0.100 (200)"); // 
 
-    // Check effect of max degrees of freedom.
+    // Check effect of zero degrees of freedom.
     uncun udfzero(1.2, 0.01f, 0);
-    CHECK(adddegfree << udfzero, "1.200 (0?)");
+    CHECK(adddegfree << udfzero, "1.200 (0)");
 
+    // Check effect of max degrees of freedom.
     uncun udfmax(1.2, 0.01f, std::numeric_limits<unsigned short int>::max());
     CHECK(adddegfree << udfmax, "1.200 (?)");
   }
 
-  { // Check Wimmer Example 5(i) and (ii)
+  { // Check rounding Wimmer Examples 5(i) and (ii)
 
     setUncDefaults(cout);
+
+    // check addlimits
+    uncun uu(123.456, std::numeric_limits<float>::quiet_NaN());
+    CHECK(addlimits << uu, "123.45600000000000 < ? >"); // Undefined uncertainty, so can't compute confidence limits.
 
     uncun uw51(127.835, 15.287f);
     //cout << plusminus << uw51 << endl; // Using default rounding loss.
@@ -426,6 +436,9 @@ BOOST_AUTO_TEST_CASE(unc_test)
     //cout << "Default confidenceIndex " << std::cout.iword(confidenceIndex) / 1000000.  << endl;
     // Default confidenceIndex 0.05
     CHECK(plusminus << uw51, "130. +/-15."); // Using defaults.
+    CHECK(plusminus << uw51, "130. +/-15."); // Using defaults.
+
+
 
     // Wimmer 5(ia) specifies rounding epsilon = 0.01 and confidence alpha = 0.05 & round unc to 2 digits.
     CHECK(plusminus << setUncSigDigits(2) << setConfidence(0.05) << setRoundingLoss(0.01) << uw51, "128. +/-15.");
@@ -474,13 +487,13 @@ BOOST_AUTO_TEST_CASE(unc_test)
   { // Test one parameter manips to set unc width, scale, sigdigits & unc sigdigits.
     //cout << "\nTest one parameter manips to set unc width, scale, sigdigits & unc sigdigits.\n";
     setUncDefaults(cout);	// Resets stream's format flags to default.
-    cout << resetiosflags(ios_base::basefield | ios_base::adjustfield | ios_base::floatfield
-    | ios_base::showpos | ios_base::showpoint | ios_base::uppercase | ios_base::showbase )
+    cout << resetiosflags(std::ios_base::basefield | std::ios_base::adjustfield | std::ios_base::floatfield
+    | std::ios_base::showpos | std::ios_base::showpoint | std::ios_base::uppercase |std::ios_base::showbase )
     << endl;
     setiosDefaults(cout); // &
     setUncDefaults(cout);
     // Test for the default values.
-    BOOST_CHECK_EQUAL(std::cout.flags(), ios_base::skipws | ios_base::dec);
+    BOOST_CHECK_EQUAL(std::cout.flags(), std::ios_base::skipws | std::ios_base::dec);
     BOOST_CHECK_EQUAL(std::cout.iword(oldUncSigDigitsIndex), -1);
     BOOST_CHECK_EQUAL(std::cout.iword(sigDigitsIndex), 3);  // default = 3.
     BOOST_CHECK_EQUAL(std::cout.iword(uncSigDigitsIndex), 2);  // default = 2.
@@ -512,41 +525,43 @@ BOOST_AUTO_TEST_CASE(unc_test)
     cout << setScale(-3) << flush; //  setScale(-3) 
     BOOST_CHECK_EQUAL(std::cout.iword(setScaleIndex), -3);
   }
-  { // cout <<	"\nNative method of display of floating point infinity & Not a Number\n";
+  { // Check uncertain value set to floating-point infinity & NotaNumber
+    
+    // std::cout <<	"\nMSVC method of display of floating point infinity & Not a Number\n";
     // MSVC outputs for non-finite
-    //CHECK(numeric_limits<double>::infinity(), "1.#INF");
-    //CHECK(-numeric_limits<double>::infinity(), "-1.#INF");
-    //CHECK(numeric_limits<float>::quiet_NaN() , "1.#QNAN");
-    //CHECK(-numeric_limits<float>::quiet_NaN() , "-1.#IND");
-    // 
-    CHECK(numeric_limits<double>::infinity(), "inf");
-    CHECK(-numeric_limits<double>::infinity(), "-inf");
-    CHECK(numeric_limits<float>::quiet_NaN() , "nan");
-    CHECK(-numeric_limits<float>::quiet_NaN() , "-nan(ind)");
+    //CHECK(std::numeric_limits<double>::infinity(), "1.#INF");
+    //CHECK(-std::numeric_limits<double>::infinity(), "-1.#INF");
+    //CHECK(std::numeric_limits<float>::quiet_NaN() , "1.#QNAN");
+    //CHECK(-std::numeric_limits<float>::quiet_NaN() , "-1.#IND");
+
+    CHECK(std::numeric_limits<double>::infinity(), "inf");
+    CHECK(-std::numeric_limits<double>::infinity(), "-inf");
+    CHECK(std::numeric_limits<float>::quiet_NaN() , "nan");
+    CHECK(-std::numeric_limits<float>::quiet_NaN() , "-nan(ind)");
 
     // Uncertain type Infinite value - known exactly.
-    uncun infinite(numeric_limits<double>::infinity(), 0.f);  // Exact plus infinity.
+    uncun infinite(std::numeric_limits<double>::infinity(), 0.f);  // Exact plus infinity.
     CHECK_USED(infinite, "inf");
     CHECK_USED(plusminus << infinite, "inf +/-0");
 
-    uncun infiniteUK(numeric_limits<double>::infinity(), 0.1f);  // unknown plus infinity.
+    uncun infiniteUK(std::numeric_limits<double>::infinity(), 0.1f);  // unknown plus infinity.
     CHECK_USED(plusminus << infiniteUK, "inf +/-0.10");
 
-    uncun exactNaN(numeric_limits<double>::quiet_NaN(), 0.f); // Exact NaN.
+    uncun exactNaN(std::numeric_limits<double>::quiet_NaN(), 0.f); // Exact NaN.
     CHECK_USED(exactNaN, "NaN");
     CHECK_USED(plusminus << exactNaN, "NaN +/-0");
 
     // NaN with known uncertainty.
-    uncun NaNknown(numeric_limits<double>::quiet_NaN(), 0.02f);
+    uncun NaNknown(std::numeric_limits<double>::quiet_NaN(), 0.02f);
     CHECK_USED(NaNknown, "NaN");
     CHECK_USED(plusminus << NaNknown, "NaN +/-0.020");
-    uncun NaNknown2(numeric_limits<double>::quiet_NaN(), 0.3f);
+    uncun NaNknown2(std::numeric_limits<double>::quiet_NaN(), 0.3f);
     CHECK_USED(plusminus << NaNknown2, "NaN +/-0.30");
 
-    uncun undefined_uncertain = uncun(numeric_limits<double>::quiet_NaN(), 0.1f);
+    uncun undefined_uncertain = uncun(std::numeric_limits<double>::quiet_NaN(), 0.1f);
     CHECK_USED(plusminus << undefined_uncertain, "NaN +/-0.10");
 
-    uncun NaNUnknown(numeric_limits<double>::quiet_NaN(), numeric_limits<float>::quiet_NaN()); // NaN of NaN uncertainty.
+    uncun NaNUnknown(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<float>::quiet_NaN()); // NaN of NaN uncertainty.
     CHECK_USED(plusminus << NaNUnknown, "NaN +/-?");
 
     // Known Values with *unknown uncertainty*.
@@ -555,9 +570,7 @@ BOOST_AUTO_TEST_CASE(unc_test)
     // max_digits10 used for zero (for which a case could be made),
     // Unable to see why at present, but other cases may be flawed too.
 
-    // now 0.0000 rather than 0.00000000000000000  Nov 2018
-
-    uncun zeroMaybe(0., numeric_limits<float>::quiet_NaN() ); // uncertainty is NaN
+    uncun zeroMaybe(0., std::numeric_limits<float>::quiet_NaN() ); // uncertainty is NaN
     CHECK_USED(zeroMaybe, "0.00000000000000000");  // 0.00000000000000000
 
     CHECK_USED(setSigDigits(5) << setsigdigits << zeroMaybe, "0.00000"); // 
@@ -567,21 +580,21 @@ BOOST_AUTO_TEST_CASE(unc_test)
     CHECK_USED(plusminus << zeroMaybe, "0.00000000000000000 +/-?");
     CHECK_USED(plusminus << zeroMaybe, "0.00000000000000000 +/-?");
   
-    uncun postwoMaybe(+2., numeric_limits<float>::quiet_NaN());  // +1.234 with unknown uncertainty.
+    uncun postwoMaybe(+2.,std::numeric_limits<float>::quiet_NaN());  // +1.234 with unknown uncertainty.
     //cout << postwoMaybe << endl;
     CHECK_USED(postwoMaybe, "2.0000000000000000"); 
-    uncun posonetwoMaybe(+1.234, numeric_limits<float>::quiet_NaN());  // +1.234 with unknown uncertainty.
+    uncun posonetwoMaybe(+1.234,std::numeric_limits<float>::quiet_NaN());  // +1.234 with unknown uncertainty.
     //cout << posonetwoMaybe << endl;
     CHECK_USED(posonetwoMaybe, "1.2340000000000000"); 
 
-    uncun negtwoMaybe(-2.2, numeric_limits<float>::quiet_NaN());  // -2.2 with unknown uncertainty.
+    uncun negtwoMaybe(-2.2,std::numeric_limits<float>::quiet_NaN());  // -2.2 with unknown uncertainty.
     CHECK_USED(negtwoMaybe, "-2.2000000000000002"); 
     CHECK_USED(plusminus << negtwoMaybe, "-2.2000000000000002 +/-?") 
     // Fails here on release version.
-    uncun twoMaybe(+2.2, numeric_limits<float>::quiet_NaN());  // +2.2 with unknown uncertainty.
+    uncun twoMaybe(+2.2,std::numeric_limits<float>::quiet_NaN());  // +2.2 with unknown uncertainty.
     CHECK_USED(twoMaybe, "2.2000000000000002"); 
     CHECK_USED(plusminus << twoMaybe, "2.2000000000000002 +/-?") 
-    uncun infUnknown(9.8, numeric_limits<float>::infinity() );  // value with infinite uncertainty.
+    uncun infUnknown(9.8,std::numeric_limits<float>::infinity() );  // value with infinite uncertainty.
     CHECK_USED(infUnknown, "9.8000000000000007"); 
     CHECK_USED(plusminus << infUnknown, "9.8000000000000007 +/-inf");
 

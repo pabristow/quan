@@ -583,14 +583,14 @@ class unc : public std::char_traits<char>
   friend void unc_input(double& mean,  // Mean (central or most probable) value.
                    double& stdDev, // Uncertainty estimate as Standard deviation.
                    unsigned short int& degreesOfFreedom,
-                   // Degrees of freedom -1. 
+                   // Degrees of freedom -1. ???
                    // (Default is zero for 1 observation).
                    unsigned short int& types, // 16 Uncertain type flags showing type of value.
                    std::istream& is);
   //friend void unc_output(double value, // Mean(central or most probable) value.
   //                  float stdDev, // Uncertainty estimate as Standard deviation.
   //                  unsigned short int degFree, // Degrees of freedom.
-  //                  unsigned short int uncTypes, //  16 Uncertain type flagsshowing type of value.
+  //                  unsigned short int uncTypes, //  16 Uncertain type flags showing type of value.
   //                  std::ostream& os);  // Output stream, default std::cout.
 
   // using char_traits<char>::int_type; // Derivation from public \c std::char_traits<char> needed for \c int_type.
@@ -684,7 +684,7 @@ public:
     }
   } // void std_dev (float unc)
 
-  //! \param df Number of degrees of degrees of freedom, usually = number of observations -1.
+  //! \param df Number of degrees-of-freedom, usually = number of observations -1.
   void deg_free (short unsigned int df)
   {
     degFree_ = df;
@@ -717,7 +717,7 @@ public:
     // Ignore warning C4520: 'unc<1>' : multiple default constructors specified
     // (because they will be the same default values).
     const float unc = 0.0f,  // Default value exact.
-    const short unsigned int df = 1,  // df means observations = 1.
+    const short unsigned int df = 0,  // df = 0 means observations = 1.
     const short unsigned int uncTypeFlags = UNC_KNOWN | UNC_EXPLICIT| DEG_FREE_EXACT | DEG_FREE_KNOWN) // unc type flags.
     : value_(val), uncertainty_(unc), degFree_(df), unctypes_(uncTypeFlags)
   {
@@ -768,12 +768,14 @@ public:
         if (!is_correlated) // NOT correlated case.
         { // Error! Throw? Or set uncertainty to zero?
           unctypes_ &= ~UNC_KNOWN;
-          std::cerr << "Negative uncertainty " << unc << ", Value " << val << "!" << std::endl;
-          // uncertainty_ = 0.0f; or NaN?
+          std::cerr << "Warning: Negative uncertainty " << unc << ", Value " << val << "!" << std::endl;
+          uncertainty_ = std::numeric_limits<float>::quiet_NaN();
         }
         else // is correlated.
-        { // But CAN have negative uncertainty for correlated case.
-          std::cout << "Negative uncertainty for correlated case is not yet implemented." << std::endl;
+        { // But CAN have negative uncertainty for correlated case,
+          // but not implemented yet.
+          std::cout << "Warning: Negative uncertainty for correlated case is not yet implemented." << std::endl;
+          uncertainty_ = std::numeric_limits<float>::quiet_NaN();
         }
         if (unctypes_ && (UNC_NOPLUS | UNC_NOMINUS | UNC_QUAN_DECIMAL | UNC_QUAN_BINARY | UNC_UNIFORM | UNC_TRIANGULAR | UNC_EXPLICIT) != 0)
         { // Any uncertainty specifier bit means uncertainty is known.
@@ -784,15 +786,15 @@ public:
       { // Check for a valid uncertainty, but type parameter is exact.
         if (uncertainty_ != 0.f)
         {
-          std::cout << "Value " << value_ << " flagged as exact, but uncertainty " <<  uncertainty_ << " is not zero!" << std::endl;
-          uncertainty_ = 0.f;  // Override any unc provided.
-          // This indicates a programmer logic error!
+          std::cout << "Warning: Value " << value_ << " flagged as exact, but uncertainty " <<  uncertainty_ << " is not zero!" << std::endl;
+          uncertainty_ = 0.f;  // Override any erroneous uncertainty provided.
+          // This indicates a user programmer logic error!
         }
         if (degFree_ != 0)
         {
-          std::cout << "Value " << value_ << " flagged as exact, but degfree " << degFree_ << " is not zero!" << std::endl;
-          degFree_ = 0;  // Override any degfree provided.
-          // This indicates a programmer logic error!
+          std::cout << "Warning: Value " << value_ << " flagged as exact, but degfree " << degFree_ << " is not zero!" << std::endl;
+          degFree_ = 0;  // Override any erroneous degfree provided.
+          // This indicates a user programmer logic error!
         }
       } //
     } // unc finite check
@@ -813,7 +815,7 @@ public:
   unc(
     const int ivalue = 0, // Default value integer zero.
     const float unc = 0.0f,  // Exact.
-    const short unsigned int df = 1,  // means observations = 1.
+    const short unsigned int df = 0,  // means observations = 1.
     const short unsigned int uncTypeFlags =  // unc type flags.
       DEG_FREE_DEF | // See also constructor from double.
       VALUE_INTEGER | VALUE_RATIONAL |  // If integer, must be rational too.
@@ -998,12 +1000,12 @@ public:
     { // Uncorrelated so Propagation of Uncertainty rules apply.
       // Barry N Taylor & Chris E Kuyatt, NIST Technical note 1297 (1994),
       // Guidelines for Evaluating & Expressing the Uncertainty of Measurements.
-      // http:// physics.nist.gov/pubs/guidelines.appa.html
+      // http://physics.nist.gov/pubs/guidelines.appa.html
       // 'Combined uncertainty' Appendix A formula A-3 = "sqrt(sum of squares)"
       double comb_uncertainty = sqrtSumSqrs(uncertainty_, ud.uncertainty_);
       degFree_ =  // Welch-Satterthwaite - see NIST Appendix A3 & Appendix B-1.
         // Effective degrees of freedom <= - see Eq B-2, so use floor function.
-        static_cast<unsigned short>( // Degrees of freedom must be integer by definition.
+        static_cast<unsigned short>( // Degrees of freedom must be integer by (some) definition.
         floor(
         pow4<double>(comb_uncertainty)/
         (pow4<double>(uncertainty_)/degFree_ + pow4<double>(ud.uncertainty_) / ud.degFree_))
@@ -1516,7 +1518,7 @@ public:
 
     if(isConfidenceInterval)
     { // Want to append confidence interval as <1.23, 2.34>.
-      if (boost::math::isfinite(mean) && boost::math::isfinite(uncertainty) && degFree >= 1)
+      if (boost::math::isfinite(mean) && boost::math::isfinite(uncertainty) && degFree >= 0)
       { // Possible to compute confidence limits or interval in < > angle brackets.
         std::streamsize osp = os.precision();
         oss.precision(4); //
@@ -1555,7 +1557,7 @@ public:
       }
       else if (degFree == 0u)
       {
-         oss << " (0?)";
+         oss << " (0)"; // 1 observation.
 
       }
       else

@@ -1023,7 +1023,9 @@ enum distribution_type { /*! \brief Distribution type, encoded into two bits in 
   undefined = 3 //!< `unc_types` bit 11 and bit 12 == '11' == 3.
 };
 
-double delta(double epsilon, double gamma, distribution_type distrib = gaussian) { /*! \brief Calculate Wimmer delta function using equation 24, p 1664.
+double delta(double epsilon, double gamma, distribution_type distrib = gaussian) 
+{ /*!
+    \brief Calculate Wimmer delta function using equation 24, p 1664.
     \details Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
     Measurement Science and Technology, 11 (2000) pages 1659-1665.
     ISSN 0957-0233 S0957-233(00)13838-X.\n
@@ -1109,7 +1111,8 @@ double delta(double epsilon, double gamma, distribution_type distrib = gaussian)
   } // switch
 } // double delta(double epsilon, double gamma, distribution_type distrib = gaussian)
 
-double gamma(double rounded, double value) {
+double gamma(double rounded, double value) 
+{
   /*! \brief Calculate Wimmer gamma rounded/unrounded function p 1664.
   \details
     Compute a measure of information loss from rounding @c value to @c rounded.
@@ -1125,7 +1128,11 @@ double gamma(double rounded, double value) {
   // Use abs?
   if (value == 0.) //
   { // Prevent divide by zero (or very close to zero too? value denomalised?).
-    return 0.;
+    return 1.;
+   // return 0.; was but g = caused 
+    // annot return a rounding m because chosen epsilon 0.05 is too small!
+    //sigma = 0, sigma_rounded = 0
+    //  gamma(sigma_rounded, sigma) = 0, gl = 0.90175
   }
   double g = rounded / value;
   if (g > 1.)
@@ -1217,13 +1224,17 @@ int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigi
   // Check against limits in table 1, page 1662.
   double gl;
   double e = epsilon;
-  if (e >= 0.1) { // <= 10% loss from rounding accepted.
+  if (e >= 0.1)
+  { // <= 10% loss from rounding accepted.
     gl = 0.81271;
-  } else if (e >= 0.05) {
+  } else if (e >= 0.05) 
+  {
     gl = 0.90175;
-  } else if (e >= 0.02) {
+  } else if (e >= 0.02)
+  {
     gl = 0.95951;
-  } else if (e >= 0.01) {
+  } else if (e >= 0.01)
+  {
     gl = 0.97954;
   } else
   { // <= 1% loss from rounding accepted.
@@ -1270,7 +1281,8 @@ std::string round_ue(double v, double sigma, double epsilon = 0.01, unsigned int
   return r;
 } // string round_ue(double v, double unc, double epsilon = 0.01, unsigned int sigdigits = 2U)
 
-std::pair<double, double> conf_interval(double mean, double sigma, double df = 1., double alpha = 0.05, distribution_type distrib = gaussian) { /*!
+std::pair<double, double> conf_interval(double mean, double sigma, double df = 1., double alpha = 0.05, distribution_type distrib = gaussian)
+{ /*!
     \brief Calculate confidence interval for chosen alpha confidence level and chosen distribution type.
     \details Uses confidence interval equations from:\n
        Gejza Wimmer, Viktor Witkovsky, Tomas Duby
@@ -1363,7 +1375,8 @@ std::pair<double, double> conf_interval(double mean, double sigma, double df = 1
   return ci;
 } // std::pair<double, double> conf_interval(double value, double unc, double alpha = 0.05)
 
-double cdf_uni(double z) { /*! Cumulative distribution Function of uniform distribution Un(-sqrt_3, + sqrt_3),
+double cdf_uni(double z)
+{ /*! Cumulative distribution Function of uniform distribution Un(-sqrt_3, + sqrt_3),
    with an expectation of mean zero and variance unity.
     Gejza Wimmer & Victor Witkovsky, Measurement Science Review, volume 2 section 1 2002, page 3, equation 5.
    \return Cumulative distribution Function of uniform distribution.
@@ -1378,7 +1391,8 @@ double cdf_uni(double z) { /*! Cumulative distribution Function of uniform distr
   return (z + sqrt_3) / (2 * sqrt_3);
 } // double cdf_uni(double z)
 
-double quantile_uni(double alpha) { /*! Quantile of uniform distribution Uniform(-sqrt_3, + sqrt_3), expectation or mean zero and variance unity.
+double quantile_uni(double alpha) 
+{ /*! Quantile of uniform distribution Uniform(-sqrt_3, + sqrt_3), expectation or mean zero and variance unity.
    Wimmer & Witkovsky, Measurement Science Review, volume 2 section 1 2002, page 3, eq 6.
    \return Quantile of uniform distribution.
   */
@@ -1412,7 +1426,9 @@ double cdf_tri(double z) { /*! Cumulative distribution function CDF of triangula
   }
 } // double cdf_tri(double z)
 
-double quantile_tri(double alpha) { /*! Quantile or Inverse of cumulative distribution function CDF of triangular distribution.
+double quantile_tri(double alpha) 
+{ 
+  /*! Quantile or Inverse of cumulative distribution function CDF of triangular distribution.
   Gejza Wimmer, Viktor Witkovsky, Tomas Duby,
   Proper rounding of the measurement result under the assumption of triangular distribution,
   Measurement Science Review, Vol 2, section 1, (2002), page 24, equation 8.
@@ -1482,7 +1498,9 @@ void out_value_df_limits(double mean, double unc, int degfree = 1, std::ostream&
   */
   std::streamsize osp = os.precision(); // Save to restore.
 
+  // Uses function round_m to round to position m.
   int round_m(double epsilon, double unc, unsigned int sigdigits, distribution_type t);
+  // Defaults are:
   // int round_m(double epsilon = 0.01, double unc = 0., unsigned int uncsigdigits = 2U, distribution_type distrib = gaussian)
 
   double e = 0.01;
@@ -1490,6 +1508,7 @@ void out_value_df_limits(double mean, double unc, int degfree = 1, std::ostream&
 
   std::pair<double, double> ci;
   ci = conf_interval(mean, unc, degfree);
+// Above is missing degrees of freedom included in unc type.
 
   os.precision(2); // Uncertainty always rounded to 2 decimal digits.
   double unc_rounded = round_sig(unc, 2); // Round to 2 significant digit - ISO rules.
@@ -1497,9 +1516,12 @@ void out_value_df_limits(double mean, double unc, int degfree = 1, std::ostream&
   // and/or if degress of freedom > 100.
   os << round_ms(mean, m) << " +/- " << unc_rounded;
   os.precision(6); //
+
+  // Why is lexical_cast used here?
   using boost::lexical_cast;
   os << " <" << lexical_cast<double>(round_ms(ci.first, m - 1)) << ", "
           << lexical_cast<double>(round_ms(ci.second, m - 1)) << ">";
+
   os.precision(osp); // Restore saved.
 } // void out_value_limits
 

@@ -27,18 +27,48 @@
 // #define UNC_TRACE // Diagnostic output.
 
 #define BOOST_TEST_MAIN // Required for int test_main() (must come FIRST).
-#define BOOST_LIB_DIAGNOSTIC "on"// Show library file details.
-// Linking to lib file: libboost_unit_test_framework-vc100-mt-s-1_49.lib
+// #define BOOST_LIB_DIAGNOSTIC "on"// Show library file details.
+// Linking to lib file: 
+// Linking to lib file: libboost_unit_test_framework-vc141-mt-gd-x64-1_69.lib
+// Linking to lib file: libboost_math_c99-vc141-mt-gd-x64-1_69.lib
+// Linking to lib file: libboost_math_c99f-vc141-mt-gd-x64-1_69.lib 
+// Linking to lib file: libboost_math_c99l-vc141-mt-gd-x64-1_69.lib
+// Linking to lib file: libboost_math_tr1-vc141-mt-gd-x64-1_69.lib
+// Linking to lib file: libboost_math_tr1f-vc141-mt-gd-x64-1_69.lib
+// Linking to lib file: libboost_math_tr1l-vc141-mt-gd-x64-1_69.lib
 
 #include <boost/config.hpp>
-#include <boost/cstdlib.hpp> // needed for boost::exit_failure
+#include <boost/cstdlib.hpp> // For boost::exit_failure
 
 #include <boost/test/unit_test.hpp> // Enhanced for unit_test framework autolink,
 #include <boost/test/floating_point_comparison.hpp> // Extra test tool for FP comparison.
   using boost::unit_test::test_suite;
   using boost::unit_test::unit_test_log;
 
-// Classes for simple propagation of Uncertainties according to a pure Gaussian model.
+// Change log level to record warnings & errors.  See:
+// https://www.boost.org/doc/libs/release/libs/test/doc/html/boost_test/test_output/logging_api/log_ct_log_level.html
+// unit_test_log.set_threshold_level(boost::unit_test::log_successful_tests); // Works OK.
+//#define BOOST_TEST_LOG_LEVEL success
+// or parameter --log_level=success in run command-line
+// "$(TargetDir)$(TargetName).exe" --result_code=yes --report_level=detailed --catch_system_errors=no  --build_info=yes  --log_level=success
+
+// unit_test_log.set_log_threshold(boost::unit_test::log_successful_tests); 
+// Messages like: info: check numeric_limits<double>::is_iec559 == true has passed
+// unit_test_log.set_threshold_level(boost::unit_test::log_all_errors);
+// Messages like: error : in "unc_test_input": check r1.deg_free() == 0 has failed [1 != 0]
+//  unit_test_log.set_threshold_level(boost::unit_test::log_messages);  // log_level needed to display messages from BOOST_TEST_MESSAGE(message); 
+
+// messages is not a valid enumeration value name for parameter log_level.
+// log_level
+//  Specifies the logging level of the test execution.
+//  --log_level=<all|success|test_suite|unit_scope|message|warning|error|cpp_exception|system_error|fatal_error|nothing>
+//  -l <all|success|test_suite|unit_scope|message|warning|error|cpp_exception|system_error|fatal_error|nothing>
+
+// Use unc_tests_2.exe --help
+// or  unc_tests_2.exe --help=<parameter name>
+// for detailed help on Boost.Test parameters.
+
+// Test of Classes for simple propagation of Uncertainties according to a pure Gaussian model.
 
 #include <cmath>   // for <math.h>
 #include <iostream>
@@ -219,25 +249,17 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
 #endif
   BOOST_TEST_MESSAGE(message);
 
- //   BOOST_CHECK(zeroIndex == indexID); // Should pass?
-
-
   // BOOST_CHECK(lout.is_open());
   //   unc_tests.cpp(235): info: check lout.is_open() passed
   // unit_test_log.set_stream(lout); // Switch to log file.
   // BOOST_TEST_MESSAGE(message); 
 
-  BOOST_CHECK(numeric_limits<double>::is_iec559 == true);	// IEC559/IEEE754 floating point.
+  BOOST_CHECK(numeric_limits<double>::is_iec559 == true);	// IEC559/IEEE754 floating point ONLY.
 
-  // Change log level to record warnings & errors.
-  // unit_test_log.set_log_threshold(boost::unit_test::log_successful_tests);
-  unit_test_log.set_threshold_level(boost::unit_test::log_all_errors);
-  //unit_test_log::instance().set_threshold_level(test_suite);
-  //unit_test_log::instance().set_threshold_level(messages); // user messages
-  // Prepare to send log to a file instead of cout.
 
-  cout << "\x0F1 Uncertain Class Test output to " << outFilename << ' '
-    << __FILE__ << ' ' <<  __TIMESTAMP__ << endl;
+  // Prepare to send log to a file instead of std::cout.
+  std::cout << "\x0F1 Uncertain Class Test output to " << outFilename << ' '
+    << __FILE__ << ' ' <<  __TIMESTAMP__ << std::endl;
   // +- symbol on screen cout = dec 177, hex F1 but shows ~n in files?
   // BUT is messy because in file codeset +- symbol \x0B1 176!
 
@@ -249,8 +271,8 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   //BOOST_CHECK(lout.is_open());
   //lout << "Unc " << logFilename << " opened." << endl;
   BOOST_CHECK(dout.is_open());
-  dout << "Unc Diagnostics logged to " << diagFilename << " from " << __FILE__ << " " << __TIMESTAMP__"\n"<< endl;
-  cout << "Unc Diagnostics logged to " << diagFilename  << endl; // \x0F1 on screen but ~n in files.
+  dout << "Unc Diagnostics logged to file " << diagFilename << " from " << __FILE__ << " " << __TIMESTAMP__"\n"<< endl;
+  cout << "Unc Diagnostics logged to file " << diagFilename  << endl; // \x0F1 on screen but ~n in files.
   cerr.rdbuf(dout.rdbuf());	// cerr = dout;  // Switch cerr to diagnostic log.
   // dout << "Diagnostic cerr from " << __FILE__ << " " << __TIMESTAMP__"\n" << endl;
   cerr << "\x0B1 \x0B5 Diagnostic cerr from " << __FILE__ << " " << __TIMESTAMP__"\n" << endl;
@@ -259,21 +281,22 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
    
   BOOST_TEST_MESSAGE("Uncertain Class tests log. " << "                                     Expected   Was    Expected");
 
-  // cout.fill('0'); // to get trailing zeros.
-  // cout << fixed << setprecision(17) << 12.34 << automatic << endl; // 12.34000000000000000
+  // std::cout.fill('0'); // to get trailing zeros to show max_digits10 (== 17 for 64-bit double), for example.
+  // std::cout << std::fixed << std::setprecision(17) << 12.34 << automatic << endl; // 12.34000000000000000
   // gives 17 digits (2 digits plus 15 trailing zeros AFTER decimal point).
 
-  //________________________________________________________________________________________________________________________________
+  //________________________________________________________________________________________________
   {
     // Some floating point comparison examples, with two tolerances, just wide enough, and too tight.
   double fp1 = 1.;
   double fp2 = 1.00001;
-  BOOST_CHECK_CLOSE(fp1, fp2, 0.00100001); // Wide tolerance info: test fp1 ~= fp2 passed.
-  // difference between fp1{1} and fp2{1.00001} exceeds 0.001% (0.00001 * 100 = 0.001%)
-  // Note that BOOST_CHECK_CLOSE(fp1, fp2, 0.001); // just fails, but 0.001000001 passes.
+  BOOST_CHECK_CLOSE_FRACTION(fp1, fp2, 0.0000100001); // Wide tolerance info: test fp1 ~= fp2 passed.
+  // difference between fp1{1} and fp2{1.00001} exceeds 0.00001 (0.00001)
+  // Note that 
+  // BOOST_CHECK_CLOSE_FRACTION(fp1, fp2, 0.00001); // just fails, but 0.001000001 passes.
 
-  // BOOST_CHECK_CLOSE(fp1, fp2, 0.0000000001); // Tight tolerance so should fail [1 !~= 1.00001 (+/-1e-010)].
-  // error in "call_test_main": difference between fp1{1} and fp2{1.00001} exceeds 1e-010%
+  // BOOST_CHECK_CLOSE_FRACTION(fp1, fp2, 0.000000000001); // Very tight tolerance, so should fail [1 !~= 1.00001 (+/-1e-012)].
+  // error : in "unc_test_basic": difference{1e-05} between fp1{1} and fp2{1.0000100000000001} exceeds 9.9999999999999998e-13
   }
 
   setUncDefaults(fout); // Should set the indexID values too.
@@ -613,10 +636,9 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     uncun u0(0.); // Construct from double zero (default unc, df, & flags)
     BOOST_CHECK_EQUAL(u0.value(), 0.);
     BOOST_CHECK_EQUAL(u0.std_dev(), 0.f);
-    BOOST_CHECK_EQUAL(u0.deg_free(), 1);
+    BOOST_CHECK_EQUAL(u0.deg_free(), 0); 
     BOOST_CHECK(u0.types() & VALUE_ZERO); // Should still be flagged as zero.
     CHECK(u0, "0"); // Expect 0 because is exact and isInteger zero because zero uncertainty.
- 
    }
    {
    uncun u0(0, 0);  // Exact Zero, using constructor from int zero.
@@ -645,7 +667,7 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     uncun z(0);  // Exact Zero, using constructor from integer.
     BOOST_CHECK_EQUAL(z.value(), 0.); // value
     BOOST_CHECK_EQUAL(z.std_dev(), 0.f);// std_dev
-    BOOST_CHECK_EQUAL(z.deg_free(), 1); // deg_free
+    BOOST_CHECK_EQUAL(z.deg_free(), 0); // deg_free
     BOOST_CHECK(z.types() & VALUE_ZERO); // Is zero.
     BOOST_CHECK(z.types() & VALUE_INTEGER); // Is integer.
     CHECK_USED(z, "0"); // Exact zero.
@@ -664,6 +686,8 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
  {
     uncun unity(1); // Exact unity constructed from integer.
     BOOST_CHECK(unity.types() & VALUE_INTEGER); // Check IS recognised as integer.
+    BOOST_CHECK(unity.types() & VALUE_EXACT); // And is exact (sd == 0).
+    std::cout << "unity = " << unity << std::endl;
     CHECK_USED(unity, "1");  // No decimal point for integer.
 // CHECK_USED(showpoint << unity, "1."); // DO show decimal point for integer value but only if showpoint.
 // But this would imply all the setprecision (6) trailing zeros!  showpoint is MAD!
@@ -682,9 +706,9 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     // Show "+/-0" if requested for real exact, for example: "2.54 +/-0".
     // But NOT for integer, so, for example, just "1" and never "1 +/-0".
 
-    uncun ud(1., 0.f);  // Exact Unity from double.
+    uncun ud(1., 0.f);  // Exact Unity from double unity.
     BOOST_CHECK(!(ud.types() & VALUE_ZERO)); // Should NOT be flagged as zero.
-    BOOST_CHECK(ud.types() & VALUE_EXACT); // Should be flagged as zero.
+    BOOST_CHECK(ud.types() & VALUE_EXACT); // Should be flagged as exact.
     BOOST_CHECK(!(ud.types() & VALUE_INTEGER)); // but NOT integer.
     
     uncun negud(-1., 0.f);  // Exact Minus negative Unity from double.
@@ -703,14 +727,19 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     CHECK_USED(u0,"0.00000000000000"); // All 15 guaranteed decimal digits.
     u0.std_dev(0.0000000000000001f);
     CHECK_USED(u0, "0.00000000000000"); // All 17 significant decimal digits.
-    uncun exact(1., 1.f, 2, VALUE_EXACT);  // Exact Unity from double with sd and df.
+
+    // Example of contradictory arguments for contructor.
+    uncun exact(1., 1.f, 2, VALUE_EXACT);  // *Exact* Unity-from-double but with non-zero uncertainty and non-zero df.
     // This should signal a conflict in the constructor!
+    // Which it does with:
+    // std::cout << "Value " << value_ << " flagged as exact, but uncertainty " <<  uncertainty_ << " is not zero!"
+    // line 787 unc.hpp
     BOOST_CHECK(exact.types() & VALUE_EXACT); // Should still be flagged as exact.
-    BOOST_CHECK_EQUAL(exact.value(), 1.); // value
+    BOOST_CHECK_EQUAL(exact.value(), 1.); // double value == 1.
     BOOST_CHECK_EQUAL(exact.std_dev(), 0.f);//  StdDeviation should be over-ridden by VALUE_EXACT.
-    // "Value 1 flagged as exact, but uncertainty 1 is not zero!"
+    // Error message: "Value 1 flagged as exact, but uncertainty 1 is not zero!"
     BOOST_CHECK_EQUAL(exact.deg_free(), 0); // deg_free should be overwritten by VALUE_EXACT.
-    // "Value 1 flagged as exact, but degfree 2 is not zero!"
+    // Error message: "Value 1 flagged as exact, but degfree 2 is not zero!"
 
     uncun iminus1(-1); // Exact minus 1 from integer -1 value.
     BOOST_CHECK(iminus1.types() & VALUE_INTEGER); // Check IS recognised as integer.
@@ -858,7 +887,7 @@ BOOST_AUTO_TEST_CASE(unc_test_input)
   // zero integer rational uncKnown noPlus noMinus at end of read.
   uncun r1;
   //outUncTypes(r1.types(), cout);
-  istringstream isr1("0"); // Read from integer.
+  std::istringstream isr1("0"); // Read from integer.
   isr1 >> r1;
   BOOST_CHECK_EQUAL(r1.value(), 0.);
   BOOST_CHECK_CLOSE_FRACTION(r1.value(), 0., std::numeric_limits<double>::epsilon());
@@ -932,15 +961,11 @@ BOOST_AUTO_TEST_CASE(unc_test_input)
     cout << endl;
   }
 
-
   // Exponent value and uncertainty.
   CHECK_IN("12.e1 +/-0.1", 12., 0.1f, 0, (UNC_KNOWN | UNC_QUAN_DECIMAL | UNC_EXPLICIT));
   CHECK_IN("12. +/-0.1e-1", 12., 0.01f, 0, (UNC_KNOWN | UNC_QUAN_DECIMAL | UNC_EXPLICIT));
   CHECK_IN("12.e1 +/-0.1e-1", 12., 0.01f, 0, (UNC_KNOWN | UNC_QUAN_DECIMAL | UNC_EXPLICIT));
 
-  /*
-
-  */
   // #define	CHECK_OUT_IN(manips, result, value, sd, df, types)
 } //  BOOST_AUTO_TEST_CASE(unc_test_input)
 
@@ -950,7 +975,7 @@ BOOST_AUTO_TEST_CASE(unc_test_unity2)
   // Check get and set functions.
   BOOST_CHECK_EQUAL(one.value(), 1.); // value
   BOOST_CHECK_EQUAL(one.std_dev(), 0.f); // std_dev
-  BOOST_CHECK_EQUAL(one.deg_free(), 1); // deg_free
+  BOOST_CHECK_EQUAL(one.deg_free(), 0); // deg_free = 0 means 1 observation.
   BOOST_CHECK(!(one.types() & VALUE_ZERO));  // Check not zero.
   BOOST_CHECK(!(one.types() & VALUE_INTEGER)); // Check NOT recognised as integer.
   // Because constructed from double should not be integer.
@@ -988,8 +1013,8 @@ BOOST_AUTO_TEST_CASE(unc_test_unity2)
   realOne.std_dev(0.001f);
   CHECK_USED(plusminus << realOne, "1.0000 +/-0.0010");
   realOne.std_dev(0.075f);
-  CHECK_USED(plusminus << realOne, "1.00 +/-0.075"); // Note rounding because df = 1
-  BOOST_CHECK_EQUAL(realOne.deg_free(), 1); // deg_free
+  CHECK_USED(plusminus << realOne, "1.00 +/-0.075"); // Note rounding because df = 0
+  BOOST_CHECK_EQUAL(realOne.deg_free(), 0); // deg_free = 0 means 1 observation.
   realOne.deg_free(11); // Increase degfree.
   BOOST_CHECK_EQUAL(realOne.deg_free(), 11); // Check has increased.
   CHECK_USED(plusminus << realOne, "1.00 +/-0.075"); // Note NO rounding because df = 10
@@ -1006,7 +1031,7 @@ BOOST_AUTO_TEST_CASE(unc_test_123)
   uncun onetwothree(1.23); // Exact from double, 
   BOOST_CHECK_EQUAL(onetwothree.value(), 1.23);
   BOOST_CHECK_EQUAL(onetwothree.std_dev(), 0.f);
-  BOOST_CHECK_EQUAL(onetwothree.deg_free(), 1);
+  BOOST_CHECK_EQUAL(onetwothree.deg_free(), 0); // deg_free = 0 means 1 observation.
   BOOST_CHECK(!(onetwothree.types() & VALUE_ZERO));
   BOOST_CHECK(!(onetwothree.types() & VALUE_INTEGER));
   CHECK_USED(onetwothree, "1.23");
@@ -1095,7 +1120,7 @@ BOOST_AUTO_TEST_CASE(unc_test_rounding)
 
 BOOST_AUTO_TEST_CASE(unc_test_big)
 {
-  uncun bigish(1e14, 2e12f); // Not bigger than maxdigits10 limit 1 and 15 zeros, small unc.
+  uncun bigish(1e14, 2e12f); // Not bigger than maxdigits_10 limit 1 and 15 zeros, small unc 2e12f.
   CHECK_USED(bigish, "100000000000000.");  //
   uncun bigish2(1.23456789e14, 2e12f); // 
   CHECK_USED(bigish2, "123000000000000.");  //  Show some non-zero digits.
@@ -1104,11 +1129,16 @@ BOOST_AUTO_TEST_CASE(unc_test_big)
 
   // Check on too big values.
   uncun big(1e39, 2e36f); // Bigger than exponent limit.
-  //cout << big << endl;
-  CHECK_USED(big, "1e+039");  // Default exp format, precision 6 total decimal digits.
+  std::cout << big << endl;
+  // was
+  // CHECK_USED(big, "1e+039");  // Default exp format, precision 6 total decimal digits.
+  CHECK_USED(big, "1e+39");  // MSVC now std compliant?
+  // Default exp format, precision 6 total decimal digits.
 
   uncun bigSI(1e25, 2.f); // Bigger than SI exponent limit.
-  CHECK_USED(bigSI, "1e+025");  // // Default exp format, precision 6
+ // was CHECK_USED(bigSI, "1e+025");  // // Default exp format, precision 6
+  CHECK_USED(bigSI, "1e+25");  // // Default exp format, precision 6
+
   // Some very big integers and exacts.
   uncun million = uncun(1000000);  // Exact integer million 1000000
   CHECK_USED(million, "1000000"); // integer.
@@ -1300,11 +1330,19 @@ BOOST_AUTO_TEST_CASE(unc_test_set_manips)
 } // BOOST_AUTO_TEST_CASE(unc_test_set_manips)
 
 BOOST_AUTO_TEST_CASE(unc_test_more_naninf)
-{ // 	"\nNative method of display of floating point infinity & Not a Number\n";
-  CHECK(numeric_limits<double>::infinity(), "1.#INF");
-  CHECK(-numeric_limits<double>::infinity(), "-1.#INF");
-  CHECK(numeric_limits<float>::quiet_NaN() , "1.#QNAN");
-  CHECK(-numeric_limits<float>::quiet_NaN() , "-1.#IND");
+{  // Check uncertain value set to floating-point infinity & NotaNumber.
+
+  // std::cout <<	"\nMSVC method of display of floating point infinity & Not a Number\n";
+  // MSVC outputs for non-finite
+  //CHECK(std::numeric_limits<double>::infinity(), "1.#INF");
+  //CHECK(-std::numeric_limits<double>::infinity(), "-1.#INF");
+  //CHECK(std::numeric_limits<float>::quiet_NaN() , "1.#QNAN");
+  //CHECK(-std::numeric_limits<float>::quiet_NaN() , "-1.#IND");
+
+  CHECK(std::numeric_limits<double>::infinity(), "inf");
+  CHECK(-std::numeric_limits<double>::infinity(), "-inf");
+  CHECK(std::numeric_limits<float>::quiet_NaN() , "nan");
+  CHECK(-std::numeric_limits<float>::quiet_NaN() , "-nan(ind)");
 
   // Uncertain type Infinite value - known exactly.
   uncun infinite(numeric_limits<double>::infinity(), 0.f);  // Exact plus infinity.
@@ -1765,5 +1803,11 @@ Build FAILED.
 
 Time Elapsed 00:00:08.71
 ========== Rebuild All: 0 succeeded, 1 failed, 0 skipped ==========
+
+*/
+
+/*
+
+
 
 */
