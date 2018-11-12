@@ -24,8 +24,12 @@
 [def __boostbook__  [@http://www.boost.org/doc/html/boostbook.html BoostBook]]
 [def __docbook__    [@http://www.docbook.org/ DocBook]]
 [def __Boost_Assign [@boost:/libs/assign/doc/index.html Boost.Assign]]
-[def __inkscape [@http://www.inkscape.org/ Inkscape]]
 [def __boost [@http://www.boost.org Boost]]
+[def __boost [@http://www.boost.org Boost]]
+[def __standard_deviation [@https://en.wikipedia.org/wiki/Standard_deviation standard deviation]]
+[def __corrected_standard_deviation [https://en.wikipedia.org/wiki/Standard_deviation#Corrected_sample_standard_deviation corrected standard deviation]]
+def __confidence_interval [@https://en.wikipedia.org/wiki/Confidence_interval confidence interval]]
+
 
 [/def __svg [^[classref boost::svg::svg svg<>]]]
 [/def __svg_1d_plot [^[classref boost::svg::svg_1d_plot svg_1d_plot<>]]]
@@ -45,8 +49,12 @@
 [section:preface Preface]
 
 [heading Preface]
+[def __unc [^[classref boost::quan::unc unc<>]]]
 
-This is just a test change for merge.
+__unc
+
+[def __uncun [^[classref boost::quan::uncun uncun<>]]]
+
 
 [endsect] [/section:preface Preface]
 
@@ -64,10 +72,102 @@ The number of decimal digits output reflect the uncertainty of the value,
 so insignificant trailing digits do not clutter the display.
 This is used, for example, by the SVG_plot program to label data points neatly.
 
-The uncertainty can be explicitly provided as a standard deviation ,
+The uncertainty can be explicitly provided as a standard deviation,
 or can be implicit from the number of decimal digits from the input.
+This is assumed to be the __corrected_standard_deviation using N as the number of samples-1
 
 [endsect] [/ section:introduction Introduction]
+
+[section:uncertain Uncertain types]
+
+
+[section:comparison Comparison between uncertainty values]
+
+Using the confidence interval or limits computed from uncertainty as stadard deviation and degrees of freedom,
+comparison operators are provided to assess if the values are statistically unequal
+when the confidence limits do not overlap at all, or otherwise approximately equal.
+
+[endsect] [/section:comparison Comparison between uncertainy values]
+
+
+[endsect] [/section:uncertain Uncertain types]
+
+[section:measurements Meas types]
+
+Another class `Meas` is built on top of the `Uncun` types to provide more optional metadata:
+
+* An indentification `std::string`.
+
+* A time_and_data_stamp in Boost or C++ Standard internal format.
+
+* An order of a sequence of measurements.
+
+[endsect] [/section:measurements Meas types]
+
+
+[section:examples Examples]
+
+TODO
+
+[endsect] [/section:examples Examples]
+
+[section:rationale Rationale and Implementation]
+
+[h5:data_structure Data Structure]
+
+The C++ types used are chosen are a compromise between size and speed.
+
+[h5:value value element]
+
+The data value `double` using the most common 64-bit IEEE representation is sufficient precision (about 15 decimal digits) for almost all physical measurements.,
+even including [@https://en.wikipedia.org/wiki/Physical_constant physical constants] like the speed of light.
+
+The `double` range of 10[super]308 is also sufficient for most uses,
+except perhaps astronomy, but units like light years are already widely used to avoid the need for much larger exponents.
+
+It is convenient to use the _IEEE non-finite representations of __NaN and __infinity,
+to show missing values and ifinite values.
+
+[h5:uncertainty Uncertainty as standard deviation]
+
+A convenient and popular measure of uncertainty is __standard_deviation.
+
+`float` precision is sufficient for uncertainty if the value has `double` precision.
+
+It is convenient to use the _IEEE non-finite representations of __NaN and __infinity to indicate
+that information about uncertainty is missing or infinite.
+
+[h5:df degrees of freedom]
+
+In order to compute __confidence_interval (also known as confidence limits),
+it is also necessary to know the degrees or freedom number of samples.
+
+Since this cannot be negative, it is convenient to use an unsigned type,
+and a 16-bit `short int` provides a maximum of 65534 samples;
+In any computations, the difference between this any large value is insignificant.
+
+One could use a `float` type, usually 32-bit, which would allow fractional degrees of freedom to be stored,
+but which would entail at least twice the space.
+(A C++ standard floating-point type that uses only 16 bits is not yet widely available).
+
+It is important to remember that what is stored and propagated is degrees of freedom rather than
+the number of samples.  The output as 1.23 +/- 0.05 (9) may suggest 9 samples, but must be read as 10 samples.
+Degrees of freedome is zero for just one sample.
+
+[h5:unc_types Flags that hold other information about the uncertain value]
+
+It was also found convenient to store other information about the uncertain value, for example, if it is exact.
+
+This can be used in comparisons and computation of confidence intervals.
+
+These flags are stored as bits in a 16-bit integer.
+
+In total, the entire uncertain class fits neatly into two 64-bit, a total of 128-bit,
+using storage space economically, likely to be valuable when very large arrays of values
+are collected from measurement devices.
+
+
+[endsect] [/section:rationale Rationale and Implementation]
 
 [xinclude autodoc.xml] [/ Using Doxygen reference documentation.]
 
