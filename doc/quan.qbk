@@ -27,9 +27,16 @@
 [def __boost [@http://www.boost.org Boost]]
 [def __boost [@http://www.boost.org Boost]]
 [def __standard_deviation [@https://en.wikipedia.org/wiki/Standard_deviation standard deviation]]
-[def __corrected_standard_deviation [https://en.wikipedia.org/wiki/Standard_deviation#Corrected_sample_standard_deviation corrected standard deviation]]
-def __confidence_interval [@https://en.wikipedia.org/wiki/Confidence_interval confidence interval]]
-
+[def __corrected_standard_deviation [@https://en.wikipedia.org/wiki/Standard_deviation#Corrected_sample_standard_deviation corrected standard deviation]]
+[def __confidence_interval [@https://en.wikipedia.org/wiki/Confidence_interval confidence interval]]
+[def __normal_distrib [link math_toolkit.dist_ref.dists.normal_dist Normal Distribution]]
+[def __trigangular_distrib [link math_toolkit.dist_ref.dists.trigangular_dist Trigangular Distribution]]
+[def __uniform_t_distrib [link math_toolkit.dist_ref.dists.uniform_dist Uniform Distribution]]
+[def __students_t_distrib [link math_toolkit.dist_ref.dists.students_t_dist Students t Distribution]]
+[def __float_distance [@boost:/libs/math/doc/html/math_toolkit/next_float/float_distance.html Boost.Math float_distance]]
+[def __ulp [@http://en.wikipedia.org/wiki/Unit_in_the_last_place  Unit in the last place (ULP)]]
+[def __short_float [@http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2016.pdf N2016 short float type]]
+[def __ULP [@https://en.wikipedia.org/wiki/Unit_in_the_last_place Unit in the Last Place]]
 
 [/def __svg [^[classref boost::svg::svg svg<>]]]
 [/def __svg_1d_plot [^[classref boost::svg::svg_1d_plot svg_1d_plot<>]]]
@@ -45,6 +52,56 @@ def __confidence_interval [@https://en.wikipedia.org/wiki/Confidence_interval co
 [def __caution Boost.Quan is not (yet) an official Boost library, but remains a library under construction,
      the code is functional, but interfaces, library structure, and function and distribution names
      may still be changed without notice.]
+
+[/import ../../../tools/auto_index/include/auto_index_helpers.qbk]
+[/ Must be first included file!]
+
+
+[def __ceilR '''&#x2309;''']
+[def __ceilL '''&#2308;''']
+[def __floorR '''&#x230B;''']
+[def __floorL '''&#x230A;''']
+[def __infin '''&#8734;''']
+[def __integral '''&#8747;''']
+[def __aacute '''&#225;''']
+[def __eacute '''&#233;''']
+[def __quarter '''&#x00BC;''']
+[def __nearequal '''&#x224A;''']
+[def __spaces '''&#x2000;&#x2000;'''] [/ two spaces - useful for an indent.]
+
+[/ Unicode and color]
+[def __tick [role aligncenter [role green \u2714]]] [/ u2714 is a HEAVY CHECK MARK tick (2713 check
+mark)]
+[def __cross [role aligncenter [role red \u2718]]] [/ u2718 is a heavy cross]
+[def __star [role aligncenter [role red \u2736]]] [/ 6-point star]
+
+[/ Some composite templates]
+[template super[x]'''<superscript>'''[x]'''</superscript>''']
+[template sub[x]'''<subscript>'''[x]'''</subscript>''']
+[template floor[x]'''&#x230A;'''[x]'''&#x230B;''']
+[template floorlr[x][lfloor][x][rfloor]]
+[template ceil[x] '''&#x2308;'''[x]'''&#x2309;''']
+
+[template equation[name]  '''<inlinemediaobject>
+<imageobject role="html">
+<imagedata fileref="../equations/'''[name]'''.svg"></imagedata>
+</imageobject>
+<imageobject role="print">
+<imagedata fileref="../equations/'''[name]'''.svg"></imagedata>
+</imageobject>
+</inlinemediaobject>''']
+
+[template graph[name]  '''<inlinemediaobject>
+<imageobject role="html">
+<imagedata align="center" fileref="../graphs/'''[name]'''.svg"></imagedata>
+</imageobject>
+<imageobject role="print">
+<imagedata align="center" fileref="../graphs/'''[name]'''.svg"></imagedata>
+</imageobject>
+</inlinemediaobject>''']
+
+
+[import html4_symbols.qbk]
 
 [section:preface Preface]
 
@@ -78,7 +135,38 @@ This is assumed to be the __corrected_standard_deviation using N as the number o
 
 [endsect] [/ section:introduction Introduction]
 
+
+
 [section:uncertain Uncertain types]
+
+[section:values Observed, measured or computed values]
+
+[endsect] [/section:values Observed, measured or computed values]
+
+
+[section:uncertainty Uncertainty, recorded as standard deviation]
+
+[endsect] [/section:uncertainty Uncertainty, recorded as standard deviation]
+
+[section:degrees_of_freedom Degrees of freedom and number of observations or samples]
+
+The number of samples of observations is recorded as the number of samples less one.
+
+[warning The output of uncertain types as "1.23 +/- 0.05 (9)" may suggest 9 samples,
+but must be read as 10 samples. Degrees of freedom is zero for just one sample.]
+[endsect] [/section:degrees_of_freedom Degrees of freedom and number of observations or samples]
+
+[section:other_info Other information about the observation]
+
+Other information about the measurement or observation can be recorded by setting or clearing one of the 16 status bits.
+A simple example is if the value is exact or 'by definition' (or to be treated as exact).
+
+A typical example is the conversion between inch and centimeter which is exactly 2.54.
+
+
+
+[endsect] [/section:other_info Other information about the observation]
+
 
 
 [section:comparison Comparison between uncertainty values]
@@ -122,7 +210,7 @@ The C++ types used are chosen are a compromise between size and speed.
 The data value `double` using the most common 64-bit IEEE representation is sufficient precision (about 15 decimal digits) for almost all physical measurements.,
 even including [@https://en.wikipedia.org/wiki/Physical_constant physical constants] like the speed of light.
 
-The `double` range of 10[super]308 is also sufficient for most uses,
+The `double` range of 10 [super 308] is also sufficient for most uses,
 except perhaps astronomy, but units like light years are already widely used to avoid the need for much larger exponents.
 
 It is convenient to use the _IEEE non-finite representations of __NaN and __infinity,
@@ -151,8 +239,8 @@ but which would entail at least twice the space.
 (A C++ standard floating-point type that uses only 16 bits is not yet widely available).
 
 It is important to remember that what is stored and propagated is degrees of freedom rather than
-the number of samples.  The output as 1.23 +/- 0.05 (9) may suggest 9 samples, but must be read as 10 samples.
-Degrees of freedome is zero for just one sample.
+the number of samples.  The output as "1.23 +/- 0.05 (9)" may suggest 9 samples, but must be read as 10 samples.
+Degrees of freedom is zero for just one sample.
 
 [h5:unc_types Flags that hold other information about the uncertain value]
 
