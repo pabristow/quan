@@ -18,7 +18,8 @@
 # Run using >b2 toolset=gcc-8.1.0 or
 # b2 address-model=32,64 toolset=gcc-8.1.0,msvc-14.1
 # some link failures GCC
-# >b2 -a address-model=32,64 toolset=msvc-14.1 OK
+
+# >b2 -a -j8 -a address-model=32,64 toolset=msvc-14.1,gcc-8.1.0 > quan_examples_13Nov2018.log
 
 project "quan_examples"
    : requirements
@@ -59,9 +60,11 @@ project "quan_examples"
   #<toolset>msvc:<cxxflags>/wd4127
   #<toolset>msvc:<cxxflags>/wd4305
 ;
+
 test-suite "quan_examples" :
   [ run quan_simple.cpp ]
   [ run quan_demo.cpp ]
+  [ run demo_decor_printer.cpp ]
 ;
 
 

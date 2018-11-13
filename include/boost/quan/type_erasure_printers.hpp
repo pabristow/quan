@@ -55,173 +55,178 @@ namespace boost {
   }  // namespace type_erasure
 } // namespace boost
 
-
-/*! 
+/*!
   abstract_printer - An abstract base class for formatting sequences.
   A 'template' that is inherited to implement the examples of actual printers defined below.
-  
+
   //! \tparam Range must be a Forward Range whose elements can be printed to `ostream os`.
   //! \param r Container to be printed, for example, a C array, std::vector, std::list ...
   //! \param os  `std::ostream` for printing, for example @c std::cout.
- 
-  This version reverses the order of arguments to the @c print function, putting the range to be printed first,
-  and the ostream last so that 
+
+  This version reverses the order of arguments to the @c print function, 
+  putting the range to be printed first,
+  and the ostream last so that a default @c std::cout can be used.
  */
 
+template< class CharT = char, class Traits = std::char_traits<char> >
 class abstract_printer
 {
 public:
-  // print - write a sequence to a std::ostream in a manner specific to the derived class.
-  //
-  // Requires: Range must be a Forward Range whose elements can be printed to os.
-  template<class CharT, class Traits, class Range>
-  void print(std::basic_ostream<CharT, Traits>& os, const Range& r) const {
-    // Capture the arguments
-    typename boost::range_iterator<const Range>::type
-      first(boost::begin(r)),
-      last(boost::end(r));
-    tuple<requirements, _os&, _iter, _iter> args(os, first, last);
-    // and forward to the real implementation
-    do_print(get<0>(args), get<1>(args), get<2>(args));
-  }
-  virtual ~abstract_printer() {}
+    //! \tparam Range must be a Forward Range whose elements can be printed to `ostream os`.
+    //! \param r Container to be printed, for example, a C array, std::vector, std::list ...
+    //! \param os  `std::ostream` for printing, for example @c std::cout.
+
+    template<class Range, class CharT, class Traits>
+    void print(const Range& r, std::basic_ostream<CharT, Traits>& os = std::cout) const
+    {
+        // Capture the print arguments.
+        // Range iterators.
+        typename boost::range_iterator<const Range>::type
+            first(boost::begin(r)),
+            last(boost::end(r));
+        // Assemble requirements into tuple: range pair of iterators and ostream.
+        tuple<requirements, _iter, _iter, _os&> args(first, last, os);
+        // and forward to the real implementation.
+        do_print(get<0>(args), get<1>(args), get<2>(args));
+        // get<0>() is first, get<1>() is last,  get<2>() is ostream.
+    }
+    virtual ~abstract_printer() {}
 protected:
-  // define the concept requirements of the arguments of
-  // print and typedef the any types.
-  typedef boost::mpl::vector<
-    base_and_derived<std::ios_base, _os>,
-    ostreamable<_os, _t>,
-    ostreamable<_os, const char*>,
-    forward_iterator<_iter, const _t&>,
-    same_type<_t, forward_iterator<_iter, const _t&>::value_type>
-  > requirements;
-  typedef boost::type_erasure::any<requirements, _os&> ostream_type;
-  typedef boost::type_erasure::any<requirements, _iter> iterator_type;
-  
-  // do_print - This method must be implemented by derived classes.
-  virtual void do_print(
-    ostream_type os, iterator_type first, iterator_type last) const = 0;
+  // Define the requirements in an mpl::vector for containers to be printed.
+    typedef boost::mpl::vector<
+        base_and_derived<std::ios_base, _os>, // _os must derive from std::ios_base.
+        ostreamable<_os, _t>, // type _t must be ostreamable.
+        ostreamable<_os, const char*>, // C string must be ostreamable.
+        forward_iterator<_iter, const _t&>, // t range must have forward iterator.
+        same_type<_t, forward_iterator<_iter, const _t&>::value_type> // _t's type value and iterator must match.
+    > requirements;
+
+    // Use type_erasure::any to enforce the requirements onto ostream and iterator.
+    typedef boost::type_erasure::any<requirements, _os&> ostream_type;
+    typedef boost::type_erasure::any<requirements, _iter> iterator_type;
+    // Declare the pure virtual function `do_print` that is defined in all real printers.
+    virtual void do_print(iterator_type first, iterator_type last, ostream_type os) const = 0;
 }; // class abstract_printer
 
-// separator_printer - writes the elements of a sequence
-//   separated by a fixed string.  For example, if
-//   the separator is ", " separator_printer produces
-//   a comma separated list.
-class separator_printer : public abstract_printer {
-public:
-  explicit separator_printer(const std::string& sep) : separator(sep) {}
-protected:
-  virtual void do_print(
-    ostream_type os, iterator_type first, iterator_type last) const {
-    if(first != last) {
-      os << *first;
-      ++first;
-      for(; first != last; ++first) {
-        os << separator.c_str() << *first;
-      }
-    }
-  }
-private:
-  std::string separator;
-}; //  class separator_printer
-
-// column_separator_printer - like separator_printer, but
-//   also inserts a line break after every n elements.
-class column_separator_printer : public abstract_printer {
-public:
-  column_separator_printer(const std::string& sep, std::size_t num_columns)
-    : separator(sep),
-    cols(num_columns)
-  {}
-protected:
-  virtual void do_print(
-    ostream_type os, iterator_type first, iterator_type last) const {
-    std::size_t count = 0;
-    for(; first != last; ++first) {
-      os << *first;
-      boost::type_erasure::any<requirements, _iter> temp = first;
-      ++temp;
-      if(temp != last) {
-        os << separator.c_str();
-      }
-      if(++count % cols == 0) {
-        os << "\n";
-      }
-    }
-  }
-private:
-  std::string separator;
-  std::size_t cols;
-}; // column_separator_printer
-
-// aligned_column_printer - formats a sequence in columns
-//   reading down.  For example, given the sequence
-//   { 1, 2, 3, 4, 5 }, aligned_column_printer might print
-//   1   4
-//   2   5
-//   3
-class aligned_column_printer : public abstract_printer {
-public:
-  aligned_column_printer(std::size_t column_width, std::size_t num_columns)
-    : width(column_width),
-    cols(num_columns)
-  {}
-protected:
-  virtual void do_print(
-    ostream_type os, iterator_type first, iterator_type last) const
-  {
-    if(first == last) return;
-    std::vector<iterator_type> column_iterators;
-
-    // find the tops of the columns
-    std::size_t count = 0;
-    for(iterator_type iter = first; iter != last; ++iter) {
-      ++count;
-    }
-    std::size_t rows = (count + cols - 1) / cols;
-    count = 0;
-    for(iterator_type iter = first; iter != last; ++iter) {
-      if(count % rows == 0) {
-        column_iterators.push_back(iter);
-      }
-      ++count;
-    }
-
-    iterator_type last_col = column_iterators.back();
-
-    // print the full rows
-    while(column_iterators.back() != last) {
-      for(std::vector<iterator_type>::iterator
-        iter = column_iterators.begin(),
-        end = column_iterators.end(); iter != end; ++iter)
-      {
-        static_cast<std::ios_base&>(os).width(width);
-        os << **iter;
-        ++*iter;
-      }
-      os << "\n";
-    }
-
-    // print the rows that are missing the last column
-    column_iterators.pop_back();
-    if(!column_iterators.empty()) {
-      while(column_iterators.back() != last_col) {
-        for(std::vector<iterator_type>::iterator
-          iter = column_iterators.begin(),
-          end = column_iterators.end(); iter != end; ++iter)
-        {
-          static_cast<std::ios_base&>(os).width(width);
-          os << **iter;
-          ++*iter;
-        }
-        os << "\n";
-      }
-    }
-  }
-private:
-  std::size_t width;
-  std::size_t cols;
-}; // aligned_column_printer
+//// separator_printer - writes the elements of a sequence
+////   separated by a fixed string.  For example, if
+////   the separator is ", " separator_printer produces
+////   a comma separated list.
+//class separator_printer : public abstract_printer {
+//public:
+//  explicit separator_printer(const std::string& sep) : separator(sep) {}
+//protected:
+//  virtual void do_print(
+//    ostream_type os, iterator_type first, iterator_type last) const {
+//    if(first != last) {
+//      os << *first;
+//      ++first;
+//      for(; first != last; ++first) {
+//        os << separator.c_str() << *first;
+//      }
+//    }
+//  }
+//private:
+//  std::string separator;
+//}; //  class separator_printer
+//
+//// column_separator_printer - like separator_printer, but
+////   also inserts a line break after every n elements.
+//class column_separator_printer : public abstract_printer {
+//public:
+//  column_separator_printer(const std::string& sep, std::size_t num_columns)
+//    : separator(sep),
+//    cols(num_columns)
+//  {}
+//protected:
+//  virtual void do_print(
+//    ostream_type os, iterator_type first, iterator_type last) const {
+//    std::size_t count = 0;
+//    for(; first != last; ++first) {
+//      os << *first;
+//      boost::type_erasure::any<requirements, _iter> temp = first;
+//      ++temp;
+//      if(temp != last) {
+//        os << separator.c_str();
+//      }
+//      if(++count % cols == 0) {
+//        os << "\n";
+//      }
+//    }
+//  }
+//private:
+//  std::string separator;
+//  std::size_t cols;
+//}; // column_separator_printer
+//
+//// aligned_column_printer - formats a sequence in columns
+////   reading down.  For example, given the sequence
+////   { 1, 2, 3, 4, 5 }, aligned_column_printer might print
+////   1   4
+////   2   5
+////   3
+//class aligned_column_printer : public abstract_printer {
+//public:
+//  aligned_column_printer(std::size_t column_width, std::size_t num_columns)
+//    : width(column_width),
+//    cols(num_columns)
+//  {}
+//protected:
+//  virtual void do_print(
+//    ostream_type os, iterator_type first, iterator_type last) const
+//  {
+//    if(first == last) return;
+//    std::vector<iterator_type> column_iterators;
+//
+//    // find the tops of the columns
+//    std::size_t count = 0;
+//    for(iterator_type iter = first; iter != last; ++iter) {
+//      ++count;
+//    }
+//    std::size_t rows = (count + cols - 1) / cols;
+//    count = 0;
+//    for(iterator_type iter = first; iter != last; ++iter) {
+//      if(count % rows == 0) {
+//        column_iterators.push_back(iter);
+//      }
+//      ++count;
+//    }
+//
+//    iterator_type last_col = column_iterators.back();
+//
+//    // print the full rows
+//    while(column_iterators.back() != last) {
+//      for(std::vector<iterator_type>::iterator
+//        iter = column_iterators.begin(),
+//        end = column_iterators.end(); iter != end; ++iter)
+//      {
+//        static_cast<std::ios_base&>(os).width(width);
+//        os << **iter;
+//        ++*iter;
+//      }
+//      os << "\n";
+//    }
+//
+//    // print the rows that are missing the last column
+//    column_iterators.pop_back();
+//    if(!column_iterators.empty()) {
+//      while(column_iterators.back() != last_col) {
+//        for(std::vector<iterator_type>::iterator
+//          iter = column_iterators.begin(),
+//          end = column_iterators.end(); iter != end; ++iter)
+//        {
+//          static_cast<std::ios_base&>(os).width(width);
+//          os << **iter;
+//          ++*iter;
+//        }
+//        os << "\n";
+//      }
+//    }
+//  }
+//private:
+//  std::size_t width;
+//  std::size_t cols;
+//}; // aligned_column_printer
 
 // Fully specialized for const std::pair<const int, double>&
 //std::ostream& operator<< (std::ostream& os, const std::pair<const int, double>& p)
@@ -289,8 +294,11 @@ struct ostreamable<Os, std::pair<T1, T2> >
   \param suf suffix at the end of each row (default newline).
   \param term string to terminate the last row.
 */
+template<char> class CharT;
 
-class decor_printer : public abstract_printer
+
+template<class CharT, class Traits = std::char_traits<char> >
+class decor_printer : public abstract_printer<>
 {
 public:
     explicit decor_printer(
@@ -314,7 +322,7 @@ public:
 protected:
   // Print all items in rows.
     // was virtual void do_print(iterator_type first, iterator_type last, ostream_type os) const
-    virtual void do_print(ostream_type os, iterator_type first, iterator_type last) const
+    virtual void do_print(iterator_type first, iterator_type last, ostream_type os = std::cout) const
     {
         os << prefix.c_str();
         std::size_t count = 0;

@@ -130,6 +130,7 @@ and C++ include files are in folder:
 #include <boost/static_assert.hpp>
 BOOST_STATIC_ASSERT (std::numeric_limits<double>::is_iec559); // Assume IEEE 754 ONLY.
 // == _STATIC_ASSERT (numeric_limits<double>::is_iec559); // and MS STATIC assert.
+// TODO use_MSG version here.
 
 #include <boost/io/ios_state.hpp>
 #include <boost/units/io.hpp>

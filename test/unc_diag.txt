@@ -1,6 +1,6 @@
-Unc Diagnostics logged to unc_diag.txt from unc_tests.cpp Tue Nov  6 14:43:15 2018
+Unc Diagnostics logged to file unc_diag.txt from unc_tests.cpp Fri Nov  9 14:24:00 2018
 
-± µ Diagnostic cerr from unc_tests.cpp Tue Nov  6 14:43:15 2018
+± µ Diagnostic cerr from unc_tests.cpp Fri Nov  9 14:24:00 2018
 
 
      	

@@ -49,7 +49,7 @@
 #include <algorithm>  // for sort, copy, swap ...
 #include <numeric> // for accumulate... 
 #include <locale> 
-#include <ctime>  // C time.h defines time_t time(time_t* timer);
+//#include <ctime>  // C time.h defines time_t time(time_t* timer);
 #include <cassert> // for testing only.
 
 // using std::ofstream;

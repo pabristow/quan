@@ -57,10 +57,9 @@ test-suite "quan_tests" :
    [ run test_once_unc.cpp ../../test/build//boost_unit_test_framework ../../math/build//boost_math_tr1 ../../math/build//boost_math_c99 ]
    [ run unc_test.cpp ../../test/build//boost_unit_test_framework ../../math/build//boost_math_tr1 ../../math/build//boost_math_c99 ]
    [ run unc_tests.cpp ../../test/build//boost_unit_test_framework ../../math/build//boost_math_tr1 ../../math/build//boost_math_c99 ]
-   [ run meas_test.cpp ../../test/build//boost_unit_test_framework ../../math/build//boost_math_tr1 ../../math/build//boost_math_c99 ]
-   [ run meas_test2.cpp ../../test/build//boost_unit_test_framework ../../math/build//boost_math_tr1 ../../math/build//boost_math_c99 ]
+   [ run test_meas_basic.cpp ../../test/build//boost_unit_test_framework ../../math/build//boost_math_tr1 ../../math/build//boost_math_c99 ]
+   [ run meas_test_1.cpp ../../test/build//boost_unit_test_framework ../../math/build//boost_math_tr1 ../../math/build//boost_math_c99 ]
+   [ run meas_test_2.cpp ../../test/build//boost_unit_test_framework ../../math/build//boost_math_tr1 ../../math/build//boost_math_c99 ]
    [ run test_autoprefix_units.cpp ../../test/build//boost_unit_test_framework ../../math/build//boost_math_tr1 ../../math/build//boost_math_c99 ]
-   [ run test_meas2_basic.cpp ../../test/build//boost_unit_test_framework ../../math/build//boost_math_tr1 ../../math/build//boost_math_c99 ]
-
 ;
 
