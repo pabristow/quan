@@ -66,16 +66,30 @@ namespace boost {
   This version reverses the order of arguments to the @c print function, 
   putting the range to be printed first,
   and the ostream last so that a default @c std::cout can be used.
- */
-template< class CharT = char, class Traits = std::char_traits<char> >
+  \code
+    line_printer.print(da, std::cout);
+    line_printer.print(da); 
+  \endcode
+  The template arguments for abstract_printer do not seem to be used,
+  and cause errors using GCC
+    "declaration of template parameter 'CharT' shadows template parameter"
+  if the same names CharT and Traits are used in Print function.
+
+  No need for a concrete printer inheriting from abstract_print to append <>
+
+*/
+
+//template< class CharT, class Traits>
+//template< class CharT = char, class Traits = std::char_traits<char> >
+
 class abstract_printer
 {
 public:
-
-    template<class Range, class CharT_ = char, class Traits_ = std::char_traits<char> >
-    void print(const Range& r, std::basic_ostream<CharT_, Traits_>& os = std::cout) const
+    // SW version was template<class Range, class CharT_ = char, class Traits_ = std::char_traits<char> > see note above.
+    template<class Range, class CharT = char, class Traits = std::char_traits<char> >
+    void print(const Range& r, std::basic_ostream<CharT, Traits>& os = std::cout) const
     {
-        // Capture the print arguments.
+        // Capture the print arguments, Range to print, and ostream to output.
         // Range iterators.
         typename boost::range_iterator<const Range>::type
             first(boost::begin(r)),
@@ -101,13 +115,13 @@ protected:
     // Use type_erasure::any to enforce the requirements onto ostream and iterator.
     typedef boost::type_erasure::any<requirements, _os&> ostream_type;
     typedef boost::type_erasure::any<requirements, _iter> iterator_type;
-    // Declare the pure virtual function `do_print` that is defined in all real printers.
+    // Declare the pure virtual function `do_print` that is defined in all real printers,
+    // for example decor_printer below.
     virtual void do_print(iterator_type first, iterator_type last, ostream_type os) const = 0;
 }; // class abstract_printer
 
-
-template<class CharT = char, class Traits = std::char_traits<char> >
-class decor_printer : public abstract_printer<>
+//template<class CharT = char, class Traits = std::char_traits<char> >
+class decor_printer : public abstract_printer // <> needed if a template
 {
 public:
   explicit decor_printer(
@@ -169,170 +183,73 @@ private:
 //   separated by a fixed string.  For example, if
 //   the separator is ", " separator_printer produces
 //   a comma separated list.
-template<class CharT = char, class Traits = std::char_traits<char> >
-class separator_printer : public abstract_printer<>
-{
-public:
-  explicit separator_printer(const std::string& sep = " ") : separator(sep) {}
-protected:
-  virtual void do_print(
-   iterator_type first, iterator_type last, ostream_type os = std::cout) const
-  {
-    if(first != last) 
-    {
-      os << *first;
-      ++first;
-      for(; first != last; ++first) 
-      {
-        os << separator.c_str() << *first;
-      }
-    }
-  }
-private:
-  std::string separator;
-}; //  class separator_printer
-
-//// column_separator_printer - like separator_printer, but
-////   also inserts a line break after every n elements.
-//class column_separator_printer : public abstract_printer {
+//template<class CharT = char, class Traits = std::char_traits<char> >
+//class separator_printer : public abstract_printer<>
+//{
 //public:
-//  column_separator_printer(const std::string& sep, std::size_t num_columns)
-//    : separator(sep),
-//    cols(num_columns)
-//  {}
+//  explicit separator_printer(const std::string& sep = " ") : separator(sep) {}
 //protected:
 //  virtual void do_print(
-//    ostream_type os, iterator_type first, iterator_type last) const {
-//    std::size_t count = 0;
-//    for(; first != last; ++first) {
+//   iterator_type first, iterator_type last, ostream_type os = std::cout) const
+//  {
+//    if(first != last) 
+//    {
 //      os << *first;
-//      boost::type_erasure::any<requirements, _iter> temp = first;
-//      ++temp;
-//      if(temp != last) {
-//        os << separator.c_str();
-//      }
-//      if(++count % cols == 0) {
-//        os << "\n";
+//      ++first;
+//      for(; first != last; ++first) 
+//      {
+//        os << separator.c_str() << *first;
 //      }
 //    }
 //  }
 //private:
 //  std::string separator;
-//  std::size_t cols;
-//}; // column_separator_printer
+//}; //  class separator_printer
 //
-//// aligned_column_printer - formats a sequence in columns
-////   reading down.  For example, given the sequence
-////   { 1, 2, 3, 4, 5 }, aligned_column_printer might print
-////   1   4
-////   2   5
-////   3
-//class aligned_column_printer : public abstract_printer {
-//public:
-//  aligned_column_printer(std::size_t column_width, std::size_t num_columns)
-//    : width(column_width),
-//    cols(num_columns)
-//  {}
-//protected:
-//  virtual void do_print(
-//    ostream_type os, iterator_type first, iterator_type last) const
-//  {
-//    if(first == last) return;
-//    std::vector<iterator_type> column_iterators;
 //
-//    // find the tops of the columns
-//    std::size_t count = 0;
-//    for(iterator_type iter = first; iter != last; ++iter) {
-//      ++count;
-//    }
-//    std::size_t rows = (count + cols - 1) / cols;
-//    count = 0;
-//    for(iterator_type iter = first; iter != last; ++iter) {
-//      if(count % rows == 0) {
-//        column_iterators.push_back(iter);
-//      }
-//      ++count;
-//    }
+//// Fully specialized for const std::pair<const int, double>&
+////std::ostream& operator<< (std::ostream& os, const std::pair<const int, double>& p)
+////{ /*! Output a pair of values.
+////     \details For example: "1.23 , 3.45".
+////   */
+////  os << p.first << ", " << p.second;
+////  return os;
+////} // std::ostream& operator<<
 //
-//    iterator_type last_col = column_iterators.back();
+//// But more useful is just providing the two template version:
 //
-//    // print the full rows
-//    while(column_iterators.back() != last) {
-//      for(std::vector<iterator_type>::iterator
-//        iter = column_iterators.begin(),
-//        end = column_iterators.end(); iter != end; ++iter)
-//      {
-//        static_cast<std::ios_base&>(os).width(width);
-//        os << **iter;
-//        ++*iter;
-//      }
-//      os << "\n";
-//    }
-//
-//    // print the rows that are missing the last column
-//    column_iterators.pop_back();
-//    if(!column_iterators.empty()) {
-//      while(column_iterators.back() != last_col) {
-//        for(std::vector<iterator_type>::iterator
-//          iter = column_iterators.begin(),
-//          end = column_iterators.end(); iter != end; ++iter)
-//        {
-//          static_cast<std::ios_base&>(os).width(width);
-//          os << **iter;
-//          ++*iter;
-//        }
-//        os << "\n";
-//      }
-//    }
-//  }
-//private:
-//  std::size_t width;
-//  std::size_t cols;
-//}; // aligned_column_printer
-
-// Fully specialized for const std::pair<const int, double>&
-//std::ostream& operator<< (std::ostream& os, const std::pair<const int, double>& p)
-//{ /*! Output a pair of values.
-//     \details For example: "1.23 , 3.45".
+//template <typename T1, typename T2>
+//std::ostream& operator<< (std::ostream& os, const std::pair<T1, T2>& p)
+//{ /*! Output a pair of values with space as delimiter.
+//     \details For example: "1.23 3.45".
 //   */
-//  os << p.first << ", " << p.second;
+//  os << p.first << " " << p.second;
 //  return os;
-//} // std::ostream& operator<<
-
-// But more useful is just providing the two template version:
-
-template <typename T1, typename T2>
-std::ostream& operator<< (std::ostream& os, const std::pair<T1, T2>& p)
-{ /*! Output a pair of values with space as delimiter.
-     \details For example: "1.23 3.45".
-   */
-  os << p.first << " " << p.second;
-  return os;
-} // std::ostream& operator<< (std::ostream& os, const std::pair<T1, T2>& p)
-
-// Or can use a version defined elsewhere, for example, in namespace my_detail?
-
-//  using my_detail::operator<<;
-
-// Partial specialization of struct ostreamable for pair<const int, double>:
-//template<class Os>
-//struct ostreamable<Os, std::pair<const int, double> >
+//} // std::ostream& operator<< (std::ostream& os, const std::pair<T1, T2>& p)
+//
+//// Or can use a version defined elsewhere, for example, in namespace my_detail?
+//
+////  using my_detail::operator<<;
+//
+//// Partial specialization of struct ostreamable for pair<const int, double>:
+////template<class Os>
+////struct ostreamable<Os, std::pair<const int, double> >
+////{
+////    static void apply(Os& out, const std::pair<const int, double>& arg)
+////    {
+////      out << arg;
+////   }
+////};
+//
+//// Partial specialization of struct ostreamable for pair<T1, T2>:
+//template<class Os, typename T1, typename T2>
+//struct ostreamable<Os, std::pair<T1, T2> >
 //{
-//    static void apply(Os& out, const std::pair<const int, double>& arg)
+//    static void apply(Os& out, const std::pair<T1, T2>& arg)
 //    {
 //      out << arg;
 //   }
 //};
-
-// Partial specialization of struct ostreamable for pair<T1, T2>:
-template<class Os, typename T1, typename T2>
-struct ostreamable<Os, std::pair<T1, T2> >
-{
-    static void apply(Os& out, const std::pair<T1, T2>& arg)
-    {
-      out << arg;
-   }
-};
 
 /*!
  Outputs items in a specified number of columns across rows with a separator (often comma and/or space(s)),
