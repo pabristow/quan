@@ -67,28 +67,25 @@ namespace boost {
   putting the range to be printed first,
   and the ostream last so that a default @c std::cout can be used.
  */
-
 template< class CharT = char, class Traits = std::char_traits<char> >
 class abstract_printer
 {
 public:
-    //! \tparam Range must be a Forward Range whose elements can be printed to `ostream os`.
-    //! \param r Container to be printed, for example, a C array, std::vector, std::list ...
-    //! \param os  `std::ostream` for printing, for example @c std::cout.
 
-    template<class Range, class CharT, class Traits>
-    void print(const Range& r, std::basic_ostream<CharT, Traits>& os = std::cout) const
+    template<class Range, class CharT_ = char, class Traits_ = std::char_traits<char> >
+    void print(const Range& r, std::basic_ostream<CharT_, Traits_>& os = std::cout) const
     {
         // Capture the print arguments.
         // Range iterators.
         typename boost::range_iterator<const Range>::type
             first(boost::begin(r)),
             last(boost::end(r));
-        // Assemble requirements into tuple: range pair of iterators and ostream.
+        // Assemble requirements into tuple: range pair of iterators, and ostream (last).
         tuple<requirements, _iter, _iter, _os&> args(first, last, os);
         // and forward to the real implementation.
         do_print(get<0>(args), get<1>(args), get<2>(args));
-        // get<0>() is first, get<1>() is last,  get<2>() is ostream.
+        // get<0>() is first, get<1>() is last,  get<2>() is ostream in SW version.
+        // get<0>() is ostream,  get<1>() is range.first,   get<2>() is range.last,
     }
     virtual ~abstract_printer() {}
 protected:
@@ -108,28 +105,93 @@ protected:
     virtual void do_print(iterator_type first, iterator_type last, ostream_type os) const = 0;
 }; // class abstract_printer
 
-//// separator_printer - writes the elements of a sequence
-////   separated by a fixed string.  For example, if
-////   the separator is ", " separator_printer produces
-////   a comma separated list.
-//class separator_printer : public abstract_printer {
-//public:
-//  explicit separator_printer(const std::string& sep) : separator(sep) {}
-//protected:
-//  virtual void do_print(
-//    ostream_type os, iterator_type first, iterator_type last) const {
-//    if(first != last) {
-//      os << *first;
-//      ++first;
-//      for(; first != last; ++first) {
-//        os << separator.c_str() << *first;
-//      }
-//    }
-//  }
-//private:
-//  std::string separator;
-//}; //  class separator_printer
-//
+
+template<class CharT = char, class Traits = std::char_traits<char> >
+class decor_printer : public abstract_printer<>
+{
+public:
+  explicit decor_printer(
+    std::size_t num_columns = 0,
+    std::size_t wid = 0,
+    const std::string& pre = "\n",
+    const std::string& sep = " ",
+    const std::string& suf = "\n",
+    const std::string& term = "\n\n")
+    :
+    cols(num_columns), width(wid), prefix(pre), separator(sep),  suffix(suf), terminator(term)
+  { /*! Constructor.\n
+    Usage: for example: ``3, 10, "double testd[] = {\n    ", ", ", "\n    ", "\n  };\n\n"``
+    3 columns with width 10, prefix "double testd[] = {\n    ", separator string comma space,
+    suffix (newline at the end of a column),
+    and a terminator string "\n\n  };\n\n".\n
+    Defaults are provided for all parameters, so can construct: `my_default_printer decor_printer;`\n
+    that places all items on one line or row with space between items, and a final newline.
+    */
+  }
+protected:
+  // Print all items in rows.
+  // was virtual void do_print(iterator_type first, iterator_type last, ostream_type os) const
+  virtual void do_print(iterator_type first, iterator_type last, ostream_type os = std::cout) const
+  {
+    os << prefix.c_str();
+    std::size_t count = 0;
+    for(; first != last; ++first)
+    {
+      if (width > 0)
+      {
+        static_cast<std::ios_base&>(os).width(width);
+      }
+      os << *first;
+      boost::type_erasure::any<requirements, _iter> temp = first;
+      ++temp;
+      if(temp != last)
+      {
+        os << separator.c_str();
+      }
+      ++count;
+      if((cols != 0) && (count % cols == 0))
+      { // Last column.
+        os << suffix.c_str(); // Usually newline at end of a row.
+      }
+    }
+    os << terminator.c_str(); // Perhaps useful to have a terminating newline?
+  }
+private:
+  std::size_t cols; // Set by constructor, number of columns (default 10).
+  std::size_t width; // Set by constructor, optional column width (default zero).
+  std::string prefix; // Set by constructor, for example, "{ ".
+  std::string separator; // Set by constructor, for example, ", ".
+  std::string suffix; // Set by constructor, for example "\n".
+  std::string terminator; // Set by constructor, for example, "}\n".
+}; // class decor_column_printer
+
+// separator_printer - writes the elements of a sequence
+//   separated by a fixed string.  For example, if
+//   the separator is ", " separator_printer produces
+//   a comma separated list.
+template<class CharT = char, class Traits = std::char_traits<char> >
+class separator_printer : public abstract_printer<>
+{
+public:
+  explicit separator_printer(const std::string& sep = " ") : separator(sep) {}
+protected:
+  virtual void do_print(
+   iterator_type first, iterator_type last, ostream_type os = std::cout) const
+  {
+    if(first != last) 
+    {
+      os << *first;
+      ++first;
+      for(; first != last; ++first) 
+      {
+        os << separator.c_str() << *first;
+      }
+    }
+  }
+private:
+  std::string separator;
+}; //  class separator_printer
+
 //// column_separator_printer - like separator_printer, but
 ////   also inserts a line break after every n elements.
 //class column_separator_printer : public abstract_printer {
@@ -294,67 +356,9 @@ struct ostreamable<Os, std::pair<T1, T2> >
   \param suf suffix at the end of each row (default newline).
   \param term string to terminate the last row.
 */
-template<char> class CharT;
+//template<char> class CharT;
 
 
-template<class CharT, class Traits = std::char_traits<char> >
-class decor_printer : public abstract_printer<>
-{
-public:
-    explicit decor_printer(
-      std::size_t num_columns = 0,
-      std::size_t wid = 0,
-      const std::string& pre = "\n",
-      const std::string& sep = " ",
-      const std::string& suf = "\n",
-      const std::string& term = "\n\n")
-      :
-    cols(num_columns), width(wid), prefix(pre), separator(sep),  suffix(suf), terminator(term)
-    { /*! Constructor.\n
-       Usage: for example: ``3, 10, "double testd[] = {\n    ", ", ", "\n    ", "\n  };\n\n"``
-       3 columns with width 10, prefix "double testd[] = {\n    ", separator string comma space,
-       suffix (newline at the end of a column),
-       and a terminator string "\n\n  };\n\n".\n
-       Defaults are provided for all parameters, so can construct: `my_default_printer decor_printer;`\n
-       that places all items on one line or row with space between items, and a final newline.
-      */
-    }
-protected:
-  // Print all items in rows.
-    // was virtual void do_print(iterator_type first, iterator_type last, ostream_type os) const
-    virtual void do_print(iterator_type first, iterator_type last, ostream_type os = std::cout) const
-    {
-        os << prefix.c_str();
-        std::size_t count = 0;
-        for(; first != last; ++first)
-        {
-            if (width > 0)
-            {
-              static_cast<std::ios_base&>(os).width(width);
-            }
-            os << *first;
-            boost::type_erasure::any<requirements, _iter> temp = first;
-            ++temp;
-            if(temp != last)
-            {
-              os << separator.c_str();
-            }
-            ++count;
-            if((cols != 0) && (count % cols == 0))
-            { // Last column.
-                os << suffix.c_str(); // Usually newline at end of a row.
-            }
-        }
-        os << terminator.c_str(); // Perhaps useful to have a terminating newline?
-    }
-private:
-    std::size_t cols; // Set by constructor, number of columns (default 10).
-    std::size_t width; // Set by constructor, optional column width (default zero).
-    std::string prefix; // Set by constructor, for example, "{ ".
-    std::string separator; // Set by constructor, for example, ", ".
-    std::string suffix; // Set by constructor, for example "\n".
-    std::string terminator; // Set by constructor, for example, "}\n".
-}; // class decor_column_printer
 //
 //} // namespace type_erasure
 //} // namespace boost
