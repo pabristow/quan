@@ -255,32 +255,36 @@ private:
   std::string terminator_; // Set by constructor, for example, "}\n".
 }; // class decor_column_printer
 
-// separator_printer - writes the elements of a sequence
-//   separated by a fixed string.  For example, if
-//   the separator is ", " separator_printer produces
-//   a comma separated list.
-//template<class CharT = char, class Traits = std::char_traits<char> >
-//class separator_printer : public abstract_printer<>
-//{
-//public:
-//  explicit separator_printer(const std::string& sep = " ") : separator(sep) {}
-//protected:
-//  virtual void do_print(
-//   iterator_type first, iterator_type last, ostream_type os = std::cout) const
-//  {
-//    if(first != last) 
-//    {
-//      os << *first;
-//      ++first;
-//      for(; first != last; ++first) 
-//      {
-//        os << separator.c_str() << *first;
-//      }
-//    }
-//  }
-//private:
-//  std::string separator;
-//}; //  class separator_printer
+/*!
+ separator_printer - writes the elements of a sequence
+   separated by a fixed string.  For example, if
+   the separator is ", " separator_printer produces
+   a comma separated list.
+*/
+
+class separator_printer : public abstract_printer
+{
+public:
+  explicit separator_printer(const std::string& sep = " ") // Default single space.
+    : separator(sep) {}
+protected:
+  virtual const separator_printer& do_print(
+   iterator_type first, iterator_type last, ostream_type os = std::cout) const
+  {
+    if(first != last) 
+    {
+      os << *first;
+      ++first;
+      for(; first != last; ++first) 
+      {
+        os << separator.c_str() << *first;
+      }
+    }
+    return *this;
+  }
+private:
+  std::string separator;
+}; //  class separator_printer
 //
 //
 //// Fully specialized for const std::pair<const int, double>&

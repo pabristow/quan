@@ -78,6 +78,8 @@ int main()
   default_printer.width(2); 
   default_printer.layout("{\n|", ", ", "|\n|", "|\n").print(da); // 
 
+   separator_printer space_printer;
+   space_printer.print(da);
 
 
   /*
