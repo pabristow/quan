@@ -86,6 +86,26 @@ namespace boost {
     decor_printer line_printer;
   \endcode
 
+  Outputs items in a specified number of columns across rows with a separator (often comma and/or space(s)),
+  and a suffix (usually newline) every `num_column`s items.\n
+  Usage: `decor_printer simple_printer(3, 0, "\n", ", ", "\n", "\n");`\n
+  Provide a container to be printed: `double da[] = {1., 2., 3., 4., 5., 6.};`\n
+  Print to std::cout using: `simple_printer.print(std::cout, da);` \n
+  Output:\n
+  1, 2, 3,\n
+  4, 5, 6,\n
+  7, 8, 9,\n
+  10, 11, 12\n
+  The order of parameters is chosen to try to allow use of the defaults as much as possible,
+  including all defaults placing all items on one line or row separated by spaces.
+
+  \param num_columns number of columns (default 0, so all items are on the same line or row).
+  \param width ostream width to use to each items (default 0 so that columns may be jagged).
+  \param pre string to be output before the first column,
+  (default newline which ensures that the first item is at the left margin).
+  \param sep string to separate (or delimit) items on each row (default space).
+  \param suf suffix at the end of each row (default newline).
+  \param term string to terminate the last row.
 */
 
 class abstract_printer
@@ -138,7 +158,7 @@ public:
     const std::string& suf = "\n",
     const std::string& term = "\n\n")
     :
-    cols(num_columns), width(wid), prefix(pre), separator(sep),  suffix(suf), terminator(term)
+    cols_(num_columns), column_width_(wid), prefix_(pre), separator_(sep),  suffix_(suf), terminator_(term)
   { /*! Constructor.\n
     Usage: for example: ``3, 10, "double testd[] = {\n    ", ", ", "\n    ", "\n  };\n\n"``
     3 columns with width 10, prefix "double testd[] = {\n    ", separator string comma space,
@@ -149,41 +169,90 @@ public:
     that places all items on one line or row with space between items, and a final newline.
     */
   }
+
+  const decor_printer& layout(const std::string& prefix, const std::string& separator, const std::string& suffix, const std::string& terminator)
+  {
+    prefix_ = prefix;
+    separator_ = separator;
+    suffix_ = suffix;
+    terminator_ = terminator;
+    return *this; // Try to make make chainable.
+  }
+
+  const decor_printer& columns(const std::size_t columns)
+  {
+    cols_ = columns;
+    return *this; // Make chainable.
+   // return const_cast<decor_printer&>(*this); // Make chainable. fails: const decor_printer &decor_printer::width(const size_t)': cannot convert 'this' pointer from 'const decor_printer' to 'decor_printer &'
+  }
+
+  const decor_printer& width(const std::size_t w)
+  {
+    column_width_ = w;
+    //return *this; // decor_printer* const this to make chainable.
+     return *this ; // decor_printer* const this to make chainable.
+   // error C2662:
+    // 'const decor_printer &decor_printer::width(const size_t)': cannot convert 'this' pointer from 'const decor_printer' to 'decor_printer &'
+/*!
+ Outputs items in a specified number of columns across rows with a separator (often comma and/or space(s)),
+ and a suffix (usually newline) every `num_column`s items.\n
+ Usage: `decor_printer simple_printer(3, 0, "\n", ", ", "\n", "\n");`\n
+ Provide a container to be printed: `double da[] = {1., 2., 3., 4., 5., 6.};`\n
+ Print to std::cout using: `simple_printer.print(std::cout, da);` \n
+ Output:\n
+ 1, 2, 3,\n
+ 4, 5, 6,\n
+ 7, 8, 9,\n
+ 10, 11, 12\n
+ The order of parameters is chosen to try to allow use of the defaults as much as possible,
+ including all defaults placing all items on one line or row separated by spaces.
+
+  \param num_columns number of columns (default 0, so all items are on the same line or row).
+  \param width ostream width to use to each items (default 0 so that columns may be jagged).
+  \param pre string to be output before the first column,
+  (default newline which ensures that the first item is at the left margin).
+  \param sep string to separate (or delimit) items on each row (default space).
+  \param suf suffix at the end of each row (default newline).
+  \param term string to terminate the last row.
+*/
+  }
 protected:
+
   // Print all items in rows.
   virtual const decor_printer& do_print(iterator_type first, iterator_type last, ostream_type os = std::cout) const
   {
-    os << prefix.c_str();
+    os << prefix_.c_str();
     std::size_t count = 0;
     for(; first != last; ++first)
     {
-      if (width > 0)
+      if (column_width_ > 0)
       {
-        static_cast<std::ios_base&>(os).width(width);
+        static_cast<std::ios_base&>(os).width(column_width_);
       }
       os << *first;
       boost::type_erasure::any<requirements, _iter> temp = first;
       ++temp;
       if(temp != last)
       {
-        os << separator.c_str();
+        os << separator_.c_str();
       }
       ++count;
-      if((cols != 0) && (count % cols == 0))
+      if((cols_ != 0) && (count % cols_ == 0))
       { // Last column.
-        os << suffix.c_str(); // Usually newline at end of a row.
+        os << suffix_.c_str(); // Usually newline at end of a row.
       }
     }
-    os << terminator.c_str(); // Perhaps useful to have a terminating newline?
-    return *this; // must return const decor_printer&  because *this is const.
+    os << terminator_.c_str(); // Perhaps useful to have a terminating newline?
+    return *this; // must return const decor_printer&* const this  because *this is const?
   }
+
 private:
-  std::size_t cols; // Set by constructor, number of columns (default 10).
-  std::size_t width; // Set by constructor, optional column width (default zero).
-  std::string prefix; // Set by constructor, for example, "{ ".
-  std::string separator; // Set by constructor, for example, ", ".
-  std::string suffix; // Set by constructor, for example "\n".
-  std::string terminator; // Set by constructor, for example, "}\n".
+  std::size_t cols_; // Set by constructor, number of columns (default 10).
+  std::size_t column_width_; // Set by constructor, optional column width (default zero).
+  std::string prefix_; // Set by constructor, for example, "{ ".
+  std::string separator_; // Set by constructor, for example, ", ".
+  std::string suffix_; // Set by constructor, for example "\n".
+  std::string terminator_; // Set by constructor, for example, "}\n".
 }; // class decor_column_printer
 
 // separator_printer - writes the elements of a sequence
@@ -258,27 +327,5 @@ private:
 //   }
 //};
 
-/*!
- Outputs items in a specified number of columns across rows with a separator (often comma and/or space(s)),
- and a suffix (usually newline) every `num_column`s items.\n
- Usage: `decor_printer simple_printer(3, 0, "\n", ", ", "\n", "\n");`\n
- Provide a container to be printed: `double da[] = {1., 2., 3., 4., 5., 6.};`\n
- Print to std::cout using: `simple_printer.print(std::cout, da);` \n
- Output:\n
- 1, 2, 3,\n
- 4, 5, 6,\n
- 7, 8, 9,\n
- 10, 11, 12\n
- The order of parameters is chosen to try to allow use of the defaults as much as possible,
- including all defaults placing all items on one line or row separated by spaces.
-
-  \param num_columns number of columns (default 0, so all items are on the same line or row).
-  \param width ostream width to use to each items (default 0 so that columns may be jagged).
-  \param pre string to be output before the first column,
-  (default newline which ensures that the first item is at the left margin).
-  \param sep string to separate (or delimit) items on each row (default space).
-  \param suf suffix at the end of each row (default newline).
-  \param term string to terminate the last row.
-*/
 
 #endif // ifndef BOOST_TYPE_ERASURE_DECOR_PRINTERS

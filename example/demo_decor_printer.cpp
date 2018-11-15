@@ -59,6 +59,27 @@ int main()
   // Output to some other std::ostream, for example, std::cerr or a file.
   my_comma_printer.print(da, std::cerr);  // 1,2,3,4,5,6,7,8,9,10,11,12
 
+  decor_printer default_printer;
+  default_printer.width(0); 
+  default_printer.columns(0); // OK
+  //default_printer.columns(0).width(2); // Fail:
+  //default_printer.width(2).columns(0); // Both Fail, so both functions are wrong in same way.
+
+  default_printer.columns(5).print(da); // OK
+  //default_printer.columns(1).print(da); OK One row!
+  default_printer.width(5).print(da); // OK
+
+  // default_printer.print(da).width(7); // 'width': is not a member of 'abstract_printer'
+  //default_printer.width(5).columns(5).print(da); // 'const decor_printer &decor_printer::columns(const size_t)': cannot convert 'this' pointer from 'const decor_printer' to 'decor_printer &'
+  //default_printer.width(0).columns(7); // the object has type qualifiers that are not compatible with the member function "decor_printer::columns"	decor_printer	I:\modular-boost\libs\quan\example\demo_decor_printer.cpp	68	
+  default_printer.layout("{\n|", ", ", "|\n|", "|\n"); // 
+  default_printer.print(da); // 
+
+  default_printer.width(2); 
+  default_printer.layout("{\n|", ", ", "|\n|", "|\n").print(da); // 
+
+
+
   /*
 
   1 2 3 4 5 6 7 8 9 10 11 12
