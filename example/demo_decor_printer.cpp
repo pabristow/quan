@@ -78,8 +78,17 @@ int main()
   default_printer.width(2); 
   default_printer.layout("{\n|", ", ", "|\n|", "|\n").print(da); // 
 
-   separator_printer space_printer;
-   space_printer.print(da);
+   separator_printer space_printer; // using default separator paramenter.
+   space_printer.print(da); // 1 2 3 4 5 6 7 8 9 10 11 12
+   std::cout << std::endl;
+   separator_printer comma_printer(","); // Chosen separator parameter is comma.
+   comma_printer.print(da); // 1,2,3,4,5,6,7,8,9,10,11,12
+   separator_printer counting_printer(",", 1); // Chosen separator parameter is comma. 1 repeat
+   counting_printer.print(da);
+   std::cout << std::endl;
+   counting_printer.count(2).print(da); // 1,,2,,3,,4,,5,,6,,7,,8,,9,,10,,11,,12
+   // counting_printer.print(da).count(2); // error C2039: 'count': is not a member of 'abstract_printer', so won't chain like this.
+
 
 
   /*

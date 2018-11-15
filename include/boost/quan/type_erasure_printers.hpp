@@ -265,8 +265,15 @@ private:
 class separator_printer : public abstract_printer
 {
 public:
-  explicit separator_printer(const std::string& sep = " ") // Default single space.
-    : separator(sep) {}
+  explicit separator_printer(const std::string& sep = " ", const int n = 1) // Default single space.
+    : separator_(sep), count_(n) {}
+
+  const separator_printer& count(const int n)
+  {
+    do_count(n);
+    return *this; // Make chainable.
+  }
+
 protected:
   virtual const separator_printer& do_print(
    iterator_type first, iterator_type last, ostream_type os = std::cout) const
@@ -277,14 +284,29 @@ protected:
       ++first;
       for(; first != last; ++first) 
       {
-        os << separator.c_str() << *first;
+        int c = count_;
+        while (c > 0)
+        {
+          os << separator_.c_str();
+          c--;
+        }
+        os << *first;
       }
     }
-    return *this;
+    return *this; // Make chainable.
   }
+
+  virtual const separator_printer& do_count(const int count)  // must NOT be const!
+  {
+    count_ = count; // Must be modifyable lvalue.
+    return *this; // Make chainable.
+  }
+
 private:
-  std::string separator;
+  std::string separator_;
+  int count_;
 }; //  class separator_printer
+
 //
 //
 //// Fully specialized for const std::pair<const int, double>&
