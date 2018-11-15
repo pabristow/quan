@@ -8,6 +8,11 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 // Copy of <libs/type_erasure/example/print_sequence.cpp>  Boost Release 1.69 Nov 2018
+// https://www.boost.org/doc/libs/release/doc/html/boost_typeerasure.html
+// A polymorphic range formatter
+// https://www.boost.org/doc/libs/release/doc/html/boost_typeerasure/examples.html#boost_typeerasure.examples.print_sequence
+// print_sequence.cpp
+// https://www.boost.org/doc/libs/release/libs/type_erasure/example/print_sequence.cpp
 
 #include <boost/type_erasure/any.hpp>
 #include <boost/type_erasure/iterator.hpp>
@@ -70,36 +75,38 @@ namespace boost {
     line_printer.print(da, std::cout);
     line_printer.print(da); 
   \endcode
-  The template arguments for abstract_printer do not seem to be used,
+  The (added) template arguments for abstract_printer do not seem to be used,
   and cause errors using GCC
     "declaration of template parameter 'CharT' shadows template parameter"
   if the same names CharT and Traits are used in Print function.
 
   No need for a concrete printer inheriting from abstract_print to append <>
+  so can write 
+  \code
+    decor_printer line_printer;
+  \endcode
 
 */
-
-//template< class CharT, class Traits>
-//template< class CharT = char, class Traits = std::char_traits<char> >
 
 class abstract_printer
 {
 public:
-    // SW version was template<class Range, class CharT_ = char, class Traits_ = std::char_traits<char> > see note above.
     template<class Range, class CharT = char, class Traits = std::char_traits<char> >
-    void print(const Range& r, std::basic_ostream<CharT, Traits>& os = std::cout) const
+    const abstract_printer& print(const Range& r, std::basic_ostream<CharT, Traits>& os = std::cout) const
     {
-        // Capture the print arguments, Range to print, and ostream to output.
+        // Capture the print arguments, Range of items to print, and ostream where to output.
         // Range iterators.
         typename boost::range_iterator<const Range>::type
             first(boost::begin(r)),
             last(boost::end(r));
-        // Assemble requirements into tuple: range pair of iterators, and ostream (last).
+        // Assemble requirements into tuple: range pair of iterators (first argument),
+        // and ostream (last argument so that it can have a default of std::cout).
         tuple<requirements, _iter, _iter, _os&> args(first, last, os);
         // and forward to the real implementation.
         do_print(get<0>(args), get<1>(args), get<2>(args));
-        // get<0>() is first, get<1>() is last,  get<2>() is ostream in SW version.
+        // (get<0>() is first, get<1>() is last,  get<2>() is ostream in SW version.)
         // get<0>() is ostream,  get<1>() is range.first,   get<2>() is range.last,
+        return *this; // function must return const abstract_printer& because *this is const.
     }
     virtual ~abstract_printer() {}
 protected:
@@ -116,16 +123,15 @@ protected:
     typedef boost::type_erasure::any<requirements, _os&> ostream_type;
     typedef boost::type_erasure::any<requirements, _iter> iterator_type;
     // Declare the pure virtual function `do_print` that is defined in all real printers,
-    // for example decor_printer below.
-    virtual void do_print(iterator_type first, iterator_type last, ostream_type os) const = 0;
+    // for example, see decor_printer below.
+    virtual const abstract_printer& do_print(iterator_type first, iterator_type last, ostream_type os) const = 0;
 }; // class abstract_printer
 
-//template<class CharT = char, class Traits = std::char_traits<char> >
-class decor_printer : public abstract_printer // <> needed if a template
+class decor_printer : public abstract_printer
 {
 public:
-  explicit decor_printer(
-    std::size_t num_columns = 0,
+  explicit decor_printer( // All the defaults:
+    std::size_t num_columns = 0, 
     std::size_t wid = 0,
     const std::string& pre = "\n",
     const std::string& sep = " ",
@@ -138,14 +144,14 @@ public:
     3 columns with width 10, prefix "double testd[] = {\n    ", separator string comma space,
     suffix (newline at the end of a column),
     and a terminator string "\n\n  };\n\n".\n
-    Defaults are provided for all parameters, so can construct: `my_default_printer decor_printer;`\n
+    Defaults are provided for all parameters, so can construct:
+      `my_default_printer decor_printer;`\n
     that places all items on one line or row with space between items, and a final newline.
     */
   }
 protected:
   // Print all items in rows.
-  // was virtual void do_print(iterator_type first, iterator_type last, ostream_type os) const
-  virtual void do_print(iterator_type first, iterator_type last, ostream_type os = std::cout) const
+  virtual const decor_printer& do_print(iterator_type first, iterator_type last, ostream_type os = std::cout) const
   {
     os << prefix.c_str();
     std::size_t count = 0;
@@ -169,6 +175,7 @@ protected:
       }
     }
     os << terminator.c_str(); // Perhaps useful to have a terminating newline?
+    return *this; // must return const decor_printer&  because *this is const.
   }
 private:
   std::size_t cols; // Set by constructor, number of columns (default 10).
@@ -273,10 +280,5 @@ private:
   \param suf suffix at the end of each row (default newline).
   \param term string to terminate the last row.
 */
-//template<char> class CharT;
 
-
-//
-//} // namespace type_erasure
-//} // namespace boost
 #endif // ifndef BOOST_TYPE_ERASURE_DECOR_PRINTERS
