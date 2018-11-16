@@ -1,0 +1,14 @@
+[section:typeerased_printers  Type-erased Printers]
+
+Printers that are able to print range of any __builtin C++ or _UDT type in neat layouts
+are based on `print_sequence.cpp` by Steven Watanabe described at
+
+[@https://www.boost.org/doc/libs/release/doc/html/boost_typeerasure.html Boost.Typeerasure]
+
+// A polymorphic range formatter
+// https://www.boost.org/doc/libs/release/doc/html/boost_typeerasure/examples.html#boost_typeerasure.examples.print_sequence
+
+
+
+
+[endsect] [/section:typeerased_printers  Type-erased Printers]

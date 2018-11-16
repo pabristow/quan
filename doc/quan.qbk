@@ -102,6 +102,7 @@ mark)]
 
 
 [import html4_symbols.qbk]
+[import typeerased_printers.qbk]
 
 [section:preface Preface]
 

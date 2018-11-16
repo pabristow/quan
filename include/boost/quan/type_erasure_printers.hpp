@@ -8,6 +8,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 // Copy of <libs/type_erasure/example/print_sequence.cpp>  Boost Release 1.69 Nov 2018
+//but modified for more features and order of parameters.
 // https://www.boost.org/doc/libs/release/doc/html/boost_typeerasure.html
 // A polymorphic range formatter
 // https://www.boost.org/doc/libs/release/doc/html/boost_typeerasure/examples.html#boost_typeerasure.examples.print_sequence
@@ -30,6 +31,8 @@
 #ifndef BOOST_TYPE_ERASURE_DECOR_PRINTERS
 #define BOOST_TYPE_ERASURE_DECOR_PRINTERS
 
+
+// Functions for use by type erasure to check requirements of ostreamable and iterators.
 using namespace boost::type_erasure;
 
 struct _t : placeholder {};
@@ -114,7 +117,7 @@ public:
     template<class Range, class CharT = char, class Traits = std::char_traits<char> >
     const abstract_printer& print(const Range& r, std::basic_ostream<CharT, Traits>& os = std::cout) const
     {
-        // Capture the print arguments, Range of items to print, and ostream where to output.
+        // Capture the print arguments, Range of items to print, and ostream to where to output.
         // Range iterators.
         typename boost::range_iterator<const Range>::type
             first(boost::begin(r)),
@@ -158,19 +161,31 @@ public:
     Defaults are provided for all parameters, so can construct:
       `my_default_printer decor_printer;`\n
     that places all items on one line or row with space between items, and a final newline.
+     \param prefix @c std::string to prefix the whole sequence of Range items, default newline.
+     \param separator @c std::string to separator items (but not the last item), default space.
+     \param suffix @c std::string at the end of each row, default newline.
+     \param terminator @c std::string to output after the final sequence of items, default two newlines. 
     */
   explicit decor_printer( // All the defaults:
-    std::size_t num_columns = 0,
-    std::size_t wid = 0,
+    int num_columns = 0,
+    int wid = 0,
     const std::string& pre = "\n",
     const std::string& sep = " ",
     const std::string& suf = "\n",
     const std::string& term = "\n\n")
     :
-    cols_(num_columns), column_width_(wid), prefix_(pre), separator_(sep),  suffix_(suf), terminator_(term)
+    columns_(num_columns), column_width_(wid), prefix_(pre), separator_(sep),  suffix_(suf), terminator_(term)
   {
   }
 
+  //! Set all the four layout parameters, prefix, separator, suffix, and terminator.
+  //! This function is chained from the printer, for example: default_printer.layout("{\n|", ", ", "|\n|", "|\n");
+  //! which in turn may be chained to print  default_printer.layout("{\n|", ", ", "|\n|", "|\n").print(da);
+  //!
+  //! \param prefix @c std::string to prefix the whole sequence of Range items, default newline.
+  //! \param separator @c std::string to separator items (but not the last item), default space.
+  //! \param suffix @c std::string at the end of each row, default newline.
+  //! \param terminator @c std::string to output after the final sequence of items, default two newlines. 
   const decor_printer& layout(const std::string& prefix, const std::string& separator, const std::string& suffix, const std::string& terminator)
   {
     prefix_ = prefix;
@@ -180,16 +195,50 @@ public:
     return *this; // Make chainable.
   }
 
-  decor_printer& columns(const std::size_t columns)
+  //! Set the prefix at the start of the sequence.
+  //! \param prefix prefix string.
+  decor_printer& prefix(const std::string& prefix = "\n")
   {
-    cols_ = columns;
+    prefix_ = prefix;
+    return *this; // Make chainable.
+  }  //! Set the separator for items in the sequence.
+  //! \param separator separator string.
+  decor_printer& separator(const std::string& separator = " ")
+  {
+    separator_ = separator;
     return *this; // Make chainable.
   }
 
-  decor_printer& width(const std::size_t w)
+  //! Set the suffix for columns in the sequence.
+  //! \param suffix separator string.
+  //! function is chainable, for example: 
+  decor_printer& suffix(const std::string& suffix = "\n")
+  {
+    suffix_ = suffix;
+    return *this; // Make chainable.
+  }
+
+  //! Set the final string to terminate the whole sequence.
+  decor_printer& terminator(const std::string& terminator = "\n\n")
+  {
+    terminator_ = terminator;
+    return *this; // Make chainable.
+  }
+
+  //! For this printer, set the number of items to form a column, default 0 meaning not split into columns.
+  //!  \param columns number of items in each column.
+  decor_printer& columns(const int columns)
+  {
+    columns_ = columns;
+    return *this; // Make chainable.
+  }
+
+  //! For this printer, set the width of items in a column, padded with the iostream padding character, default is 0 meaning no padding.
+  //! \param width width for each item.
+  decor_printer& width(const int w)
   {
     column_width_ = w;
-     return *this ; // decor_printer* const this to make chainable.
+     return *this ; // Make chainable.
 /*!
  Outputs items in a specified number of columns across rows with a separator (often comma and/or space(s)),
  and a suffix (usually newline) every `num_column`s items.\n
@@ -204,7 +253,7 @@ public:
  The order of parameters is chosen to try to allow use of the defaults as much as possible,
  including all defaults placing all items on one line or row separated by spaces.
 
-  \param num_columns number of columns (default 0, so all items are on the same line or row).
+  \param columns number of columns (default 0, so all items are on the same line or row).
   \param width ostream width to use to each items (default 0 so that columns may be jagged).
   \param pre string to be output before the first column,
   (default newline which ensures that the first item is at the left margin).
@@ -234,7 +283,7 @@ protected:
         os << separator_.c_str();
       }
       ++count;
-      if((cols_ != 0) && (count % cols_ == 0))
+      if((columns_ != 0) && (count % columns_ == 0))
       { // Last column.
         os << suffix_.c_str(); // Usually newline at end of a row.
       }
@@ -244,8 +293,8 @@ protected:
   }
 
 private:
-  std::size_t cols_; // Set by constructor, number of columns (default 10).
-  std::size_t column_width_; // Set by constructor, optional column width (default zero).
+  int columns_; // Set by constructor, number of columns (default 10).
+  int column_width_; // Set by constructor, optional column width (default zero).
   std::string prefix_; // Set by constructor, for example, "{ ".
   std::string separator_; // Set by constructor, for example, ", ".
   std::string suffix_; // Set by constructor, for example "\n".
