@@ -22,7 +22,7 @@
 // https://www.boost.org/doc/libs/release/doc/html/boost_typeerasure/examples.html#boost_typeerasure.examples.print_sequence
 // print_sequence.cpp
 
-// 
+//
 #include <boost/quan/type_erasure_printers.hpp>
 
 //#include         <boost/quan/type_erasure_printer.hpp>
@@ -34,7 +34,7 @@ int main()
   double da[] = {1., 2., 3., 4., 5., 6., 7., 8., 9., 10., 11., 12. };
 
   // Simple separator printer, based on Steven Watanabe's Boost.Type_erasur example.
-  //separator_printer<> my_default_printer; 
+  //separator_printer<> my_default_printer;
   //my_default_printer.print(da); // 1 2 3 4 5 6 7 8 9 10 11 12
   //std::cout << std::endl;
   //separator_printer<> my_comma_printer(",");
@@ -60,23 +60,15 @@ int main()
   my_comma_printer.print(da, std::cerr);  // 1,2,3,4,5,6,7,8,9,10,11,12
 
   decor_printer default_printer;
-  default_printer.width(0); 
+  default_printer.width(0);
   default_printer.columns(0); // OK
-  //default_printer.columns(0).width(2); // Fail:
-  //default_printer.width(2).columns(0); // Both Fail, so both functions are wrong in same way.
-
-  default_printer.columns(5).print(da); // OK
-  //default_printer.columns(1).print(da); OK One row!
+  default_printer.columns(0).width(2);
+  default_printer.columns(1).print(da); // OK
   default_printer.width(5).print(da); // OK
-
-  // default_printer.print(da).width(7); // 'width': is not a member of 'abstract_printer'
-  //default_printer.width(5).columns(5).print(da); // 'const decor_printer &decor_printer::columns(const size_t)': cannot convert 'this' pointer from 'const decor_printer' to 'decor_printer &'
-  //default_printer.width(0).columns(7); // the object has type qualifiers that are not compatible with the member function "decor_printer::columns"	decor_printer	I:\modular-boost\libs\quan\example\demo_decor_printer.cpp	68	
-  default_printer.layout("{\n|", ", ", "|\n|", "|\n"); // 
-  default_printer.print(da); // 
-
-  default_printer.width(2); 
-  default_printer.layout("{\n|", ", ", "|\n|", "|\n").print(da); // 
+  default_printer.layout("{\n|", ", ", "|\n|", "|\n"); //
+  default_printer.print(da); //
+  default_printer.width(2);
+  default_printer.layout("{\n|", ", ", "|\n|", "|\n").print(da); //
 
    separator_printer space_printer; // using default separator paramenter.
    space_printer.print(da); // 1 2 3 4 5 6 7 8 9 10 11 12
@@ -87,7 +79,8 @@ int main()
    counting_printer.print(da);
    std::cout << std::endl;
    counting_printer.count(2).print(da); // 1,,2,,3,,4,,5,,6,,7,,8,,9,,10,,11,,12
-   // counting_printer.print(da).count(2); // error C2039: 'count': is not a member of 'abstract_printer', so won't chain like this.
+   counting_printer.width(99).print(da); // OK
+   counting_printer.count(3).width(99).print(da); //
 
 
 
@@ -114,12 +107,12 @@ int main()
   Autorun J:\Cpp\quan\MSVC\x64\Release\decor_printer.exe
   1 2 3 4 5 6 7 8 9 10 11 12
   1,2,3,4,5,6,7,8,9,10,11,12
-  
+
   1 2 3 4 5 6 7 8 9 10 11 12
-  
-  
+
+
   1 2 3 4 5 6 7 8 9 10 11 12
-  
+
   1,2,3,4,5,6,7,8,9,10,11,12
 
 */

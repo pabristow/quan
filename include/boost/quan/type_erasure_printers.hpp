@@ -68,12 +68,12 @@ namespace boost {
   //! \param r Container to be printed, for example, a C array, std::vector, std::list ...
   //! \param os  `std::ostream` for printing, for example @c std::cout.
 
-  This version reverses the order of arguments to the @c print function, 
+  This version reverses the order of arguments to the @c print function,
   putting the range to be printed first,
   and the ostream last so that a default @c std::cout can be used.
   \code
     line_printer.print(da, std::cout);
-    line_printer.print(da); 
+    line_printer.print(da);
   \endcode
   The (added) template arguments for abstract_printer do not seem to be used,
   and cause errors using GCC
@@ -81,7 +81,7 @@ namespace boost {
   if the same names CharT and Traits are used in Print function.
 
   No need for a concrete printer inheriting from abstract_print to append <>
-  so can write 
+  so can write
   \code
     decor_printer line_printer;
   \endcode
@@ -150,16 +150,7 @@ protected:
 class decor_printer : public abstract_printer
 {
 public:
-  explicit decor_printer( // All the defaults:
-    std::size_t num_columns = 0, 
-    std::size_t wid = 0,
-    const std::string& pre = "\n",
-    const std::string& sep = " ",
-    const std::string& suf = "\n",
-    const std::string& term = "\n\n")
-    :
-    cols_(num_columns), column_width_(wid), prefix_(pre), separator_(sep),  suffix_(suf), terminator_(term)
-  { /*! Constructor.\n
+   /*! Constructor.\n
     Usage: for example: ``3, 10, "double testd[] = {\n    ", ", ", "\n    ", "\n  };\n\n"``
     3 columns with width 10, prefix "double testd[] = {\n    ", separator string comma space,
     suffix (newline at the end of a column),
@@ -168,6 +159,16 @@ public:
       `my_default_printer decor_printer;`\n
     that places all items on one line or row with space between items, and a final newline.
     */
+  explicit decor_printer( // All the defaults:
+    std::size_t num_columns = 0,
+    std::size_t wid = 0,
+    const std::string& pre = "\n",
+    const std::string& sep = " ",
+    const std::string& suf = "\n",
+    const std::string& term = "\n\n")
+    :
+    cols_(num_columns), column_width_(wid), prefix_(pre), separator_(sep),  suffix_(suf), terminator_(term)
+  {
   }
 
   const decor_printer& layout(const std::string& prefix, const std::string& separator, const std::string& suffix, const std::string& terminator)
@@ -176,23 +177,19 @@ public:
     separator_ = separator;
     suffix_ = suffix;
     terminator_ = terminator;
-    return *this; // Try to make make chainable.
+    return *this; // Make chainable.
   }
 
-  const decor_printer& columns(const std::size_t columns)
+  decor_printer& columns(const std::size_t columns)
   {
     cols_ = columns;
     return *this; // Make chainable.
-   // return const_cast<decor_printer&>(*this); // Make chainable. fails: const decor_printer &decor_printer::width(const size_t)': cannot convert 'this' pointer from 'const decor_printer' to 'decor_printer &'
   }
 
-  const decor_printer& width(const std::size_t w)
+  decor_printer& width(const std::size_t w)
   {
     column_width_ = w;
-    //return *this; // decor_printer* const this to make chainable.
      return *this ; // decor_printer* const this to make chainable.
-   // error C2662:
-    // 'const decor_printer &decor_printer::width(const size_t)': cannot convert 'this' pointer from 'const decor_printer' to 'decor_printer &'
 /*!
  Outputs items in a specified number of columns across rows with a separator (often comma and/or space(s)),
  and a suffix (usually newline) every `num_column`s items.\n
@@ -268,21 +265,26 @@ public:
   explicit separator_printer(const std::string& sep = " ", const int n = 1) // Default single space.
     : separator_(sep), count_(n) {}
 
-  const separator_printer& count(const int n)
-  {
-    do_count(n);
+  separator_printer& count(const int n)
+  { // 
+    count_ = n;
     return *this; // Make chainable.
   }
 
+  separator_printer& width(const int n)
+  {
+    width_ = n;
+    return *this; // Make chainable.
+  }
 protected:
   virtual const separator_printer& do_print(
    iterator_type first, iterator_type last, ostream_type os = std::cout) const
   {
-    if(first != last) 
+    if(first != last)
     {
       os << *first;
       ++first;
-      for(; first != last; ++first) 
+      for(; first != last; ++first)
       {
         int c = count_;
         while (c > 0)
@@ -296,15 +298,22 @@ protected:
     return *this; // Make chainable.
   }
 
-  virtual const separator_printer& do_count(const int count)  // must NOT be const!
-  {
-    count_ = count; // Must be modifyable lvalue.
-    return *this; // Make chainable.
-  }
+  //virtual const separator_printer& do_set_count(const int count)
+  //{
+  //  count_ = count;
+  //  return *this; // Make chainable.
+  //}
+
+  //virtual const separator_printer& do_set_width(const int width)
+  //{
+  //  width_ = width;
+  //  return *this; // Make chainable.
+  //}
 
 private:
   std::string separator_;
-  int count_;
+  int count_;  // 
+  int width_;
 }; //  class separator_printer
 
 //
