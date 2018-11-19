@@ -46,9 +46,7 @@
 
 [def __preface [link svg_plot.preface]]
 [def __howtouse [link svg_plot.howtouse  Document conventions]]
-
 [def __rationale [link quan.implementation Implementation]]
-
 [def __caution Boost.Quan is not (yet) an official Boost library, but remains a library under construction,
      the code is functional, but interfaces, library structure, and function and distribution names
      may still be changed without notice.]

@@ -1,14 +1,33 @@
 [section:typeerased_printers  Type-erased Printers]
 
-Printers that are able to print range of any __builtin C++ or _UDT type in neat layouts
-are based on `print_sequence.cpp` by Steven Watanabe described at
 
-[@https://www.boost.org/doc/libs/release/doc/html/boost_typeerasure.html Boost.Typeerasure]
+[@https://en.wikipedia.org/wiki/Type_erasure Type erasure] is a way to ignore the normal C++ type checking.
+It can be used here to print a variety of containers much more safely with checks that the container is compatible with `range`
+and is `outstreamable`.
+
+Printers here that are able to print a range (usually all) of a container of any __builtin C++ or _UDT type
+are based on `print_sequence.cpp` by Steven Watanabe described at
+[@https://www.boost.org/doc/libs/release/doc/html/boost_typeerasure.html Boost.Typeerasure].
 
 // A polymorphic range formatter
 // https://www.boost.org/doc/libs/release/doc/html/boost_typeerasure/examples.html#boost_typeerasure.examples.print_sequence
 
+It is then very easy to `stream` to any file, display or printer with great flexibility for neat layouts.
 
+The file to #include is `type_erasure_printers.hpp`.
+It provides an `abstract_printer`that uses `type_erasure::any` to enforce the requirements onto ostream and iterator
+but is modified to place the `std::ostream` parameter *after* the Range of the container
+so that a default of `std::cout` can be provided.
 
+A `decor_printer` function inherits from this `abstract_printer` which has constructors and functions to
+allow four strings used for layout: prefix, separator, suffix and terminator,
+and functions to optionally control the number and width of columns.
 
 [endsect] [/section:typeerased_printers  Type-erased Printers]
+
+[/ typeerased_printers.qbk
+  Copyright Paul A. Bristow 2008, 2009, 2010, 2011, 2012 2018.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

@@ -1,4 +1,4 @@
-// Boost.TypeErasure A decor printer.
+// Boost.TypeErasure A 'decoration' decor printer.
 //
 // Copyright 2011 Steven Watanabe
 // Copyright 2012 Paul A. Bristow
