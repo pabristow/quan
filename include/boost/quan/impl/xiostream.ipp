@@ -22,6 +22,8 @@
 
 #include <boost/math/special_functions/fpclassify.hpp>
 
+namespace std {
+
  // Naughty, but convenient, to put these extra manipulators into std namespace.
   // Usage:  out << nofixed << noscientific << autofloat << noadjust ...
   using std::ios_base;
@@ -33,22 +35,22 @@
   //	return _I;
   //}
 
-	ios_base& lowercase(std::ios_base& _I)
-	{ // lowercase is the inverse of std::ios_base::uppercase.
-		_I.unsetf(std::ios_base::uppercase); // Default is lowercase.
-		return _I;
-	} // lowercase
+  ios_base& lowercase(std::ios_base& _I)
+  { // lowercase is the inverse of std::ios_base::uppercase.
+    _I.unsetf(std::ios_base::uppercase); // Default is lowercase.
+    return _I;
+  } // lowercase
 
-	// Function to set base hex & showbase & uppercase too.
-	// Usage: out << hexbase << ... for 1234ABCD
-	// equivalent to out << hex << showbase << uppercase ...
-	ios_base& hexbase(std::ios_base& _I)
-	{
-		_I.setf(std::ios_base::hex | std::ios_base::showbase | std::ios_base::uppercase, // set bits,
-			std::ios_base::basefield | std::ios_base::showbase | std::ios_base::uppercase); // mask.
-		// Care: std::ios_base::basefield); doesn't set showbase & uppercase!
-		return _I;
-	}
+  // Function to set base hex & showbase & uppercase too.
+  // Usage: out << hexbase << ... for 1234ABCD
+  // equivalent to out << hex << showbase << uppercase ...
+  ios_base& hexbase(std::ios_base& _I)
+  {
+    _I.setf(std::ios_base::hex | std::ios_base::showbase | std::ios_base::uppercase, // set bits,
+      std::ios_base::basefield | std::ios_base::showbase | std::ios_base::uppercase); // mask.
+    // Care: std::ios_base::basefield); doesn't set showbase & uppercase!
+    return _I;
+  }
 
   std::ios_base& noadjust(ios_base& _I)
   { // Neither left, right nor internal. This is the initialized default.
@@ -71,148 +73,89 @@
 // Manipulator template.
 // Copy of template for manipulator (from std iomanip)
 // Usage:  omanip<int>setw(int);
-template<typename T> class omanip  // Manipulator for ostream.
-{
-  // friend std::ostream& operator<< (std::ostream&, const omanip<T>&);
-public:
-  omanip(std::ostream&(*f)(std::ostream&, T), T v) : func(f), val(v)
+  template<typename T> class omanip  // Manipulator for ostream.
   {
-  }
-private:
-  std::ostream&(*func)(std::ostream&, T);  // Function like setw.
-  T val;  // Parameter like width.
-}; // class omanip
-// Could also provide an istream version for operator >>
+    // friend std::ostream& operator<< (std::ostream&, const omanip<T>&);
+  public:
+    omanip(std::ostream&(*f)(std::ostream&, T), T v) : func(f), val(v)
+    {
+    }
+  private:
+    std::ostream&(*func)(std::ostream&, T);  // Function like setw.
+    T val;  // Parameter like width.
+  }; // class omanip
+  // Could also provide an istream version for operator >>
 
-// Applicator is a class that stores a pointer to a function that takes
-// a reference to an std::ios_base (or derived translator) argument, and
-// an argument of the type for which the applicator is parameterized.
-// Applicator classes have the function call operator overloaded
-// so as to simulate a function call with the argument of the parameter type.
-// Use, for example: oapp<int> spaces(_spaces);  // allows << spaces(5) ...
-// where function is std::ostream& _spaces(std::ostream&, int);
+  // Applicator is a class that stores a pointer to a function that takes
+  // a reference to an std::ios_base (or derived translator) argument, and
+  // an argument of the type for which the applicator is parameterized.
+  // Applicator classes have the function call operator overloaded
+  // so as to simulate a function call with the argument of the parameter type.
+  // Use, for example: oapp<int> spaces(_spaces);  // allows << spaces(5) ...
+  // where function is std::ostream& _spaces(std::ostream&, int);
 
-// Global ostream applicator using template oapp instantiated for type int,
-// & initialised with the address of function with one int parameter.
-// Possible to use oapp<int> spaces(_spaces);  which allows << spaces(5) ...
-// but instead spaces, stars & chars done a simpler way, see S Teale p 181-3.
-template<typename T> class oapp  // Applicator for ostream.
-{
-public:
-  oapp(std::ostream&(*f)(std::ostream&, T)) : func(f)
+  // Global ostream applicator using template oapp instantiated for type int,
+  // & initialised with the address of function with one int parameter.
+  // Possible to use oapp<int> spaces(_spaces);  which allows << spaces(5) ...
+  // but instead spaces, stars & chars done a simpler way, see S Teale p 181-3.
+  template<typename T> class oapp  // Applicator for ostream.
   {
+  public:
+    oapp(std::ostream&(*f)(std::ostream&, T)) : func(f)
+    {
+    };
+    omanip<T> operator()(T v)
+    {
+      return omanip<T>(func, v);
+    }
+  private:
+    std::ostream&(*func)(std::ostream&, T);
+  }; // class oapp
+
+  // Template Manipulator Inserter <<
+  template<typename T> std::ostream& operator<< (std::ostream& os, const omanip<T>& m)
+  {
+    (*m.func)(os, m.val);
+    return os;
   };
-  omanip<T> operator()(T v)
-  {
-    return omanip<T>(func, v);
-  }
-private:
-  std::ostream&(*func)(std::ostream&, T);
-}; // class oapp
 
-// Template Manipulator Inserter <<
-template<typename T> std::ostream& operator<< (std::ostream& os, const omanip<T>& m)
-{
-  (*m.func)(os, m.val);
-  return os;
-};
+  // C++ Std Parameterless manipulators not used.
+  // std::ostream& operator<<(std::ostream& (*)(std::ostream&) );
+  // See \include\ostream for manipulator template eg endl
+  // & instantiations of endl, ends, flush near end of file.
+  // only narrow char instantiated here, may need wide version too.
 
-// C++ Std Parameterless manipulators not used.
-// std::ostream& operator<<(std::ostream& (*)(std::ostream&) );
-// See \include\ostream for manipulator template eg endl
-// & instantiations of endl, ends, flush near end of file.
-// only narrow char instantiated here, may need wide version too.
+  //  Manipulator with no arguments which inserts into ostream.
+  //  See MSVC++ 7 "Writing your own manipulators without arguments".
+  //  No class derivation nor macros.
+  //  Relies on std::ostream defining overloading of operator<< to accept
+  //  function type, for example, std::ostream& bold(std::ostream&); declared in unc.h
+  //  inline std::ostream& ostream::operator<<(std::ostream& (__cdecl * _f)(std::ostream&)) { (*_f)(*this); return *this; }
+  //  inline std::ostream& ostream::operator<<(std::ios_base& (__cdecl * _f)(std::ios_base& )) { (*_f)(*this); return *this; }
+  //  Usage: cout << "regular" << bold << "now bold" << endl;
+  // std::ostream& bold(std::ostream& os)  // perhaps inline
+  // {
+  //  return os << '\033' << '[';  // Use if have ANSI terminal emulation.
+  // }
 
-//  Manipulator with no arguments which inserts into ostream.
-//  See MSVC++ 7 "Writing your own manipulators without arguments".
-//  No class derivation nor macros.
-//  Relies on std::ostream defining overloading of operator<< to accept
-//  function type, for example, std::ostream& bold(std::ostream&); declared in unc.h
-//  inline std::ostream& ostream::operator<<(std::ostream& (__cdecl * _f)(std::ostream&)) { (*_f)(*this); return *this; }
-//  inline std::ostream& ostream::operator<<(std::ios_base& (__cdecl * _f)(std::ios_base& )) { (*_f)(*this); return *this; }
-//  Usage: cout << "regular" << bold << "now bold" << endl;
-// std::ostream& bold(std::ostream& os)  // perhaps inline
-// {
-//  return os << '\033' << '[';  // Use if have ANSI terminal emulation.
-// }
+  // Manipulators like dec, oct, dec ... see \include\std::ios_base
+  // Parameterless manipulators like dec, hex ...
+  // std::ios_base& (*)(std::ios_base&)
+  // Pointer to function taking std::ios_base reference argument
+  // & returning std::ios_base reference.
+  // These apply to both istream and ostream.
+  //
+  // std::ostream& (*)(std::ostream&)  and istream& (*)(istream&)
+  // Pointer to function taking ostream (or istream) reference argument
+  // & returning ostream (or istream) reference, but NOT BOTH.
+  // Inserters and extractors:
+  // std::ostream& operator<<( std::ios_base&(*)(std::ios_base&) )
+  // istream& operator<<( std::ios_base&(*)(std::ios_base&) )
+  // Eg std::ios_base& dec(std::ios_base& s){s.setf(std::ios_base::dec, std::ios_base::basefield);}
 
-// Manipulators like dec, oct, dec ... see \include\std::ios_base
-// Parameterless manipulators like dec, hex ...
-// std::ios_base& (*)(std::ios_base&)
-// Pointer to function taking std::ios_base reference argument
-// & returning std::ios_base reference.
-// These apply to both istream and ostream.
-//
-// std::ostream& (*)(std::ostream&)  and istream& (*)(istream&)
-// Pointer to function taking ostream (or istream) reference argument
-// & returning ostream (or istream) reference, but NOT BOTH.
-// Inserters and extractors:
-// std::ostream& operator<<( std::ios_base&(*)(std::ios_base&) )
-// istream& operator<<( std::ios_base&(*)(std::ios_base&) )
-// Eg std::ios_base& dec(std::ios_base& s){s.setf(std::ios_base::dec, std::ios_base::basefield);}
+} // namespace std;
 
-spaces::spaces(int n) : num(n)
-{ // Constructor.
-}
 
-std::ostream& operator<< (std::ostream& os, const spaces& s)
-{
-  for (int i = s.num; i > 0; i--) os << ' ';
-  return os;
-}
-
-tabs::tabs(int n) : num(n)
-{ // Constructor.
-}
-
-std::ostream& operator<< (std::ostream& os, const tabs& s)
-{
-  for (int i = s.num;  i > 0; i--) os << '\t';
-  return os;
-}
-
-stars::stars(int n) : num(n)
-{ // Constructor.
-}
-
-std::ostream& operator<< (std::ostream& os, const stars& s)
-{
-  for (int i = s.num; i > 0; i--) os << '*';
-  return os;
-}
-
-// Two parameter manipulator chars (not using template, as spaces)
-// Usage: << chars(5,'_') ...  for 5 underlines.
-chars::chars(int n, char c) : num(n) , character(c)
-{ // Constructor.
-}
-
-std::ostream& operator<< (std::ostream& os, const chars& s)
-{
-  for (int i = s.num;  i > 0; i--) os << s.character;
-  return os;
-}
-
-/*
-// Manipulator to set specified base and to show base letter O or X uppercase.
-// Usage: out << setupperbase(16) ...
-setupperbase::setupperbase(int b) : base(b)
-{ // Constructor.
-}
-
-std::ostream& operator<< (std::ostream& os, const setupperbase& s)
-{
-  os.setf(static_cast<std::ios_base::fmtflags>
-  (
-     std::ios_base::showbase | std::ios_base::uppercase |
-    ( 16 == s.base ? 1 :  // std::ios_base::hex :std::ios_base::oct;
-       8 == s.base ? std::ios_base::oct : std::ios_base::dec),
-          // default dec if not 8 or 16
-      std::ios_base::basefield | std::ios_base::showbase | std::ios_base::uppercase )  // mask
-    );
-  return os;
-} // std::ostream& operator<< (std::ostream& os, const setupperbase& s)
-*/
 void outIOstates(std::ios_base::iostate rdState, std::ostream& os, const char* term)
 { // Usages:
   // Default logs cout iostate to cerr, for example "IOstate: good", or "IOstate: fail"

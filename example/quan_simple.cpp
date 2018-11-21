@@ -47,7 +47,7 @@ std::string versions()
 
 int main()
 {
-  std::cout << std::endl;
+ std::cout << std::endl;
 
   std::cout << versions() << std::endl;
   setUncDefaults(std::cout);
