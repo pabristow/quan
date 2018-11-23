@@ -81,7 +81,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_floating_point.hpp> // is_floating_point trait
 #include <boost/concept_check.hpp>
-#include "boost/quan/xiostream.hpp" // Extra std items, defaultfloat & fixed.
+#include <boost/quan/impl/xiostream.hpp> // Extra std items, defaultfloat & fixed.
 //#include "boost/quan/si_units.hpp"
 //#include "libs/quan/src/si_units.cpp"
 
@@ -503,6 +503,11 @@ std::string round_ms(FPT v, signed int m)
     \param m Signed digit position to round.
     \return `std::string` decimal digit string of rounded value.
   */
+
+  //void outFmtFlags(std::ios_base::fmtflags, std::ostream&, const char*); // in xiostream.hpp
+  //void outFmtFlags(std::ios_base::fmtflags fmtFlags = std::cout.flags(), std::ostream& os = std::cerr, const char* term = ". ")
+
+
   BOOST_STATIC_ASSERT(boost::is_floating_point<FPT>::value);
   // Will fail if FPT is not a floating-point type (because will not output in scientific format!).
 
@@ -583,13 +588,16 @@ std::string round_ms(FPT v, signed int m)
 
 
   //
-  //"...The exponent always contains at least two digits, and only as many more digits as necessary to represent the exponent..." C11++ 7.21.6.1 8
-  // So VS2015 is now conforming.
+  //"...The exponent always contains at least two digits, 
+  // and only as many more digits as necessary to represent the exponent..." C11++ 7.21.6.1 8
+  // So VS2015 is now conforming, but only for C++11.
 #ifdef _MSC_VER
   if ((s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 4) // e00
-    && (s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 5) )// e+308
-  { // for double == 22 (would be 23 if value was negative, but we are only dealing with abs value).
+    && (s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 5) ) // e+308
+  { // for double == 22 (would be 23 if value was negative, but here we are only dealing with abs value).
     // 1.23000000000000000e+00
+  // was  outFmtFlags(ss.flags());
+    using boost::quan::outFmtFlags;
     outFmtFlags(ss.flags());
     std::cout << "\n" << v << ", " << m << ", " << s << ", "
             << s.size() << ", " << std::numeric_limits<FPT>::digits10 // for floating-point this is the number of digits in the mantissa. 16
@@ -1276,6 +1284,7 @@ std::string round_ue(double v, double sigma, double epsilon = 0.01, unsigned int
     \return Decimal digit `std::string` containing rounded value.
   */
   //int round_m(double epsilon, double unc, unsigned int sigdigits, distribution_type t);
+
   int m = round_m(epsilon, sigma, sigdigits, gaussian);
   std::string r = round_ms(v, m);
   return r;

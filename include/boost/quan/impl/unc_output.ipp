@@ -42,7 +42,7 @@
  // using std::stringstream;
 
 namespace boost {
-  namespace uncertain {
+  namespace quad {
   /*!
     \brief Output to stream given value as a decimal digit string,
     rounding properly using the uncertainty information in stdDev,
@@ -103,10 +103,11 @@ namespace boost {
       // Check iwords are setup correctly.
       if ((os.iword(zeroIndex) != indexID) || (os.iword(topIndex) != indexID))
       { // iwords are corrupt!
-        cerr << "\n!!! unc_output: " "iword corrupt!" << endl;
-        using boost::uncertain::outUncValues;
-        outUncValues(os, cerr);  // Log all the iword values to cerr.
-        os << "?????" << endl;
+        cerr << "\n!!! unc_output: " "iword corrupt!\n" 
+          " function `setUncDefaults(os)` has not been called for this std::stream os?" << endl;
+        //using boost::quad::outUncValues; // in unc.ipp
+        outUncValues(os, std::cerr);  // Log all the iword values to std::cerr.
+        os << "??? !" << endl;
         throw std::bad_alloc(); // Or which other exception?
         // This means the function `setUncDefaults(os)` has not been called for the stream os!
         return; // int notOK might be better?
@@ -540,14 +541,13 @@ namespace boost {
       // Field width reverts to its default behavior, width = 0
       // (the necessary width) after one field has been printed,
       // so must be last item before a ';' to be read.  Not ideal!!
-      // os.width = savedWidth; // Restoring width is pointless.
+      // os.width = savedWidth; // Restoring width is pointless, it has been set to zero.
       os.flags(iosFlags);  // Restore ios flags.
     } // void unc_output(double value, float stdDev,
-    // unsigned short int degFree, unsigned short int uncTypes, ostream& os);
+      // unsigned short int degFree, unsigned short int uncTypes, ostream& os);
 
-
-  } // namespace boost
-} // namespace uncertain
+  } // namespace quan
+} // namespace boost
 
 #endif // BOOST_UNCERTAIN_OUTPUT_IPP
 

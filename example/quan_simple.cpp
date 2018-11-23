@@ -5,51 +5,30 @@
 
 // Copyright Paul A. Bristow 1998, 2012, 2018.
 
-#include <boost/version.hpp> // macros BOOST_COMPILER, BOOST_VERSION, BOOST_STDLIB etc
+#include <boost/quan/impl/versions.hpp> // macros BOOST_COMPILER, BOOST_VERSION, BOOST_STDLIB etc
+
 #include <boost/quan/unc.hpp>
-#include <boost/quan/unc_init.hpp>
+
+//#include <boost/quan/impl/xiostream.hpp>
 
 #include <iostream>
 
-//! Create a std::string containing boost and platform versions.
-std::string versions()
-{
-  std::stringstream mess;
-  mess << "Program: " __FILE__  << "\n";
-  #ifdef __TIMESTAMP__
-  mess << __TIMESTAMP__;
-  #endif
-  mess << "\nBuildInfo:\n" "  Platform " << BOOST_PLATFORM;
-  mess << "\n  Compiler " BOOST_COMPILER;
-  #ifdef _MSC_FULL_VER
-    mess << "\n  MSVC version "<< BOOST_STRINGIZE(_MSC_FULL_VER) << ".";
-  #endif
-
-  #ifdef __GNUC__
-  // mess << __GNUC__ << '.' << __GNUC_MINOR__ <<'.' 
-    mess << "GCC 
-    #ifdef __cplusplus
-      mess << " C++ ";
-    #else
-      mess << " C ";
-    #endif
-    version " << __VERSION__ ;
-  #endif
-
-  #ifdef __clang__
-    mess << "clang " << __clang_major__ << '.' << __clang_minor__ << '.' __GNUC_PATCHLEVEL__;
-  #endif
-
-  mess << "\n  STL " BOOST_STDLIB;
-  mess << "\n  Boost version " << BOOST_VERSION/100000 << "." << BOOST_VERSION/100 % 1000 << "." << BOOST_VERSION % 100 << std::endl;
-  return mess.str();
-} // std::string versions()
-
 int main()
 {
- std::cout << std::endl;
+  std::cout << std::endl;
+ // using boost::quan::spaces;
+  using namespace boost::quan;
+  std::cout << "|" << spaces(10) << "|" << std::endl; // |          |
+  std::cout << "|" << stars(10) << "|" << std::endl; // |**********|
+  std::cout << "|" << chars(10, '!') << "|" << std::endl; // |!!!!!!!!!!|
 
-  std::cout << versions() << std::endl;
+
+  using boost::quan::setUncDefaults;
+  using boost::quan::uncun;
+  using boost::quan::uncertainflags;
+  using boost::quan::plusminus;
+
+  std::cout << version_info() << std::endl;
   setUncDefaults(std::cout);
   uncun u(1.23, 0.45F);
   std::cout << "URealCorr u(1.23, 0.45); = " << u << plusminus << std::endl;
