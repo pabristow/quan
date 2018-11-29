@@ -220,38 +220,44 @@ void outUncFlags(long uncFlags, std::ostream& os = std::cerr)
 // flex - width just enough to display, suitable for non-tables,
 // or firm to fit into a set width, suitable for tables,
 // & similarly for scale and autoscale flag bits.
-// Note all lowercase to match convention of hex, oct ...
+// Note all are @b lowercase to match convention of hex, oct ...
 
+//! Use a width just enough to display, suitable for free-flowing non-tabular output.
 std::ios_base& flexform(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) &= ~firm;  // clear bit 0 = 0 to mean flex.
   return iostr;
 }
 
+//! Use a width just enough to display, suitable for tables.
 std::ios_base& firmform(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) |= firm;  // set bit 0 = 1 to mean firm not flex.
   return iostr;
 }
 
+//! Scale by a factor of 10 set using function @c setScale.
 std::ios_base& scale(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) |= setScaled;  // set bit 1 = 1 to mean scaled.
   return iostr;
 }
 
+//! Do not scale.  this is the default.
 std::ios_base& noscale(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) &= ~setScaled;  // clear bit 1 = 0 to mean not scaled.
   return iostr;
 }
 
+//! Autoscale values by factors of 1000 to make values fit into range 1. to 999.999...
 std::ios_base& autoscale(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) |= autoScaled;  // set bit 2 = 1 to mean auto.
   return iostr;
 }
 
+//! Do not autoscale values. 
 std::ios_base& noautoscale(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) &= ~autoScaled;  // clear bit 2 = 0 to mean fixed.
@@ -270,12 +276,14 @@ std::ios_base& noplusminus(std::ios_base& iostr)
   return iostr;
 }
 
+//! Add an SI symbol like g, s, N, l.
 std::ios_base& addsisymbol(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) |= addSISymbol;  // set bit 4 = 1 to add SI symbol.
   return iostr;
 }
 
+//! Do not add an SI symbol.  This is the default.
 std::ios_base& nosisymbol(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) &= ~addSISymbol;  // clear bit 4 = 0 for no SI symbol.
@@ -283,7 +291,7 @@ std::ios_base& nosisymbol(std::ios_base& iostr)
 }
 
 std::ios_base& addsiprefix(std::ios_base& iostr)
-{ // Prefix (like kilo) used rather than Symbol (like k) if both SI prefix & symbol set.
+{ //!< Prefix (like kilo) used rather than Symbol (like k) if both SI prefix & symbol set.
   iostr.iword(uncFlagsIndex) |= addSIPrefix;  // set bit 5 = 1 to add SI prefix
   return iostr;
 }
@@ -294,12 +302,17 @@ std::ios_base& nosiprefix(std::ios_base& iostr)
   return iostr;
 }
 
+//! Add an extra 'noisy' decimal digit.
+//! This is useful to avoid quantization when input by other systems.
+//! May be needed to achieve correct round-tripping.
 std::ios_base& addnoisyDigit(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) |= noisyDigit;  // set bit 6 = 1 to add noisy digit
   return iostr;
 }
 
+//! Do not add an extra 'noisy' decimal digit.
+//! This is the normal state and do not add any digits that probably do not contain useful information.
 std::ios_base& nonoisyDigit(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) &= ~noisyDigit;  // clear bit 6 = 0 for NO noisy digit.
@@ -307,19 +320,19 @@ std::ios_base& nonoisyDigit(std::ios_base& iostr)
 }
 
 std::ios_base& autosigdigits(std::ios_base& iostr)
-{ // Use auto (calculated from uncertainty) not sig digits stored with `<< setSigDigits(6)` for value.
+{ //!< Use auto (calculated from uncertainty) not sig digits stored with `<< setSigDigits(6)` for value.
   iostr.iword(uncFlagsIndex) &= ~useSetSigDigits;  // clear bit 7 = 0 for auto sigdigits.
   return iostr;
 }
 
 std::ios_base& setsigdigits(std::ios_base& iostr)
-{ // Use sig digits stored with `<< setSigDigits(6)` for value (not calculated from uncertainty).
+{ //<! Use sig digits stored with `<< setSigDigits(6)` for value (not calculated from uncertainty).
   iostr.iword(uncFlagsIndex) |= useSetSigDigits;  // set bit 7 = 1 to use set sigdigits.
   return iostr;
 }
 
 std::ios_base& autouncsigdigits(std::ios_base& iostr)
-{ // Calculate stdDev sig digits from uncertainty.
+{ //!< Calculate stdDev sig digits from uncertainty.
   iostr.iword(uncFlagsIndex) &= ~useSetUncSigDigits;  // clear bit 8 = 0 for auto unc sigdigits.
   return iostr;
 }
@@ -330,28 +343,32 @@ std::ios_base& setuncsigdigits(std::ios_base& iostr)
   return iostr;
 }
 
+//! Add number of degrees of freedom to output, for example: (99).
 std::ios_base& adddegfree(std::ios_base& iostr)
-{  // Add degrees of freedom as `(99)`.
+{ 
   iostr.iword(uncFlagsIndex) |= degfree;  // set bit 9 = 1 to mean show degrees of freedom.
   return (iostr);
 }
 
+//! Do not add number of degrees of freedom.
 std::ios_base& nodegfree(std::ios_base& iostr)
-{ // Do not add degrees of freedom
+{
   iostr.iword(uncFlagsIndex) &= ~degfree;  // clear bit 9 = 0 to mean no degrees of freedom.
   return (iostr);
 }
 
+//! Show replicates or observations (but only if > 1).
 std::ios_base& addreplicates(std::ios_base& iostr)
-{ // Show replicates (but only if if > 1).
+{
   iostr.iword(uncFlagsIndex) |= replicates;  // set bit 0xA = 1 to mean replicates > 1.
   return (iostr);
 }
 
+//! Do NOT show replicates or observations.
+//! BUT still show degrees of freedom if required.
 std::ios_base& noreplicates(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) &= ~replicates;  // clear bit 0xA = 0 to mean no replicates.
-  // BUT still show degrees of freedom if required.
   return (iostr);
 }
 
@@ -468,7 +485,9 @@ std::ostream& operator<< (std::ostream& os, const showUncFlags& uf)
   return os; // Make chainable.
 } // ostream& operator<< (ostream& os, const showUncFlags&)
 
-  //long& uncFlags = os.iword(uncFlagsIndex);
+//! Set uncertain type flags for output @c std::ostream.
+//! \returns previous uncertain flags state.
+//! Usage: \code long& uncFlags = os.iword(uncFlagsIndex); \endcode
 std::ostream& operator<< (std::ostream& os, const setAllUncFlags& sf)
 {
   os.iword(oldUncFlagsIndex) = os.iword(uncFlagsIndex);  // Save all old flags.
@@ -476,6 +495,9 @@ std::ostream& operator<< (std::ostream& os, const setAllUncFlags& sf)
   return os;
 }
 
+//! Set uncertain type flags for input @c std::istream.
+//! \returns previous uncertain flags state.
+//! Usage: \code long& uncFlags = os.iword(uncFlagsIndex); \endcode
 std::istream& operator>> (std::istream& is, const setAllUncFlags& sf)
 {
   is.iword(oldUncFlagsIndex) = is.iword(uncFlagsIndex);  // Save all old flags.
@@ -483,6 +505,9 @@ std::istream& operator>> (std::istream& is, const setAllUncFlags& sf)
   return is;
 }
 
+//! Set some uncertain type flags using OR for output @c std::ostream.
+//! \returns previous uncertain flags state.
+//! Usage: \code long& uncFlags = os.iword(uncFlagsIndex); \endcode
 std::ostream& operator<< (std::ostream& os, const setUncFlags& sf)
 {
   os.iword(oldUncFlagsIndex) = os.iword(uncFlagsIndex);  // Save all oldflags.
@@ -490,6 +515,9 @@ std::ostream& operator<< (std::ostream& os, const setUncFlags& sf)
   return os;
 }
 
+//! Set some uncertain type flags using mask for output @c std::ostream.
+//! \returns previous uncertain flags state.
+//! Usage: \code long& uncFlags = os.iword(uncFlagsIndex); \endcode
 std::ostream& operator<< (std::ostream& os, const setMaskedUncFlags& sf)
 {
   os.iword(oldUncFlagsIndex) = os.iword(uncFlagsIndex);  // Save all flags.
@@ -498,6 +526,19 @@ std::ostream& operator<< (std::ostream& os, const setMaskedUncFlags& sf)
   return os;
 }
 
+////! Set uncertain type flags for output @c std::ostream.
+////! \returns previous uncertain flags state.
+////! Usage: \code long& uncFlags = os.iword(uncFlagsIndex); \endcode
+//std::istream& operator>> (std::istream& is, const setAllUncFlags& sf)
+//{
+//  is.iword(oldUncFlagsIndex) = is.iword(uncFlagsIndex);  // Save all old flags.
+//  is.iword(uncFlagsIndex) = sf.flags_;  // Set all flags.
+//  return is;
+//}
+
+//! ReSet or clear uncertain type flags for output @c std::ostream.
+//! \returns previous uncertain flags state.
+//! Usage: \code long& uncFlags = os.iword(uncFlagsIndex); \endcode
 std::istream& operator>> (std::istream& is, const setMaskedUncFlags& sf)
 {
   is.iword(oldUncFlagsIndex) = is.iword(uncFlagsIndex);  // Save all flags.
@@ -506,6 +547,9 @@ std::istream& operator>> (std::istream& is, const setMaskedUncFlags& sf)
   return is;
 }
 
+//! ReSet (clear) uncertain type flags for output @c std::ostream.
+//! \returns previous uncertain flags state.
+//! Usage: \code long& uncFlags = os.iword(uncFlagsIndex); \endcode
 std::ostream& operator<< (std::ostream& os, const resetUncFlags& sf)
 {
   os.iword(oldUncFlagsIndex) = os.iword(uncFlagsIndex);  // Save previous.
@@ -513,6 +557,9 @@ std::ostream& operator<< (std::ostream& os, const resetUncFlags& sf)
   return os;
 }
 
+//! ReSet (clear) uncertain type flags for input @c std::istream.
+//! \returns previous uncertain flags state.
+//! Usage: \code long& uncFlags = os.iword(uncFlagsIndex); \endcode
 std::istream& operator>> (std::istream& is, const resetUncFlags& sf)
 {
   is.iword(oldUncFlagsIndex) = is.iword(uncFlagsIndex);  // Save previous.
@@ -520,7 +567,9 @@ std::istream& operator>> (std::istream& is, const resetUncFlags& sf)
   return is;
 }
 
-
+//! ReSet (clear) uncertain type flags using mask for output @c std::ostream.
+//! \returns previous uncertain flags state.
+//! Usage: \code long& uncFlags = os.iword(uncFlagsIndex); \endcode
 std::ostream& operator<< (std::ostream& os, const resetMaskedUncFlags& sf)
 {
   os.iword(oldUncFlagsIndex) = os.iword(uncFlagsIndex);  // Save all flags.
@@ -529,6 +578,10 @@ std::ostream& operator<< (std::ostream& os, const resetMaskedUncFlags& sf)
   return os;
 }
 
+
+//! ReSet (clear) uncertain type flags using mask for input @c std::istream.
+//! \returns @c istream.
+//! Usage: \code long& uncFlags = os.iword(uncFlagsIndex); \endcode
 std::istream& operator>> (std::istream& is, const resetMaskedUncFlags& sf)
 {
   is.iword(oldUncFlagsIndex) = is.iword(uncFlagsIndex);  // Save all flags.
@@ -537,6 +590,7 @@ std::istream& operator>> (std::istream& is, const resetMaskedUncFlags& sf)
   return is;
 }
 
+//! Save and then set a new uncertain width for output stream @c os.
 std::ostream& operator<< (std::ostream& os, const setUncWidth& sw)
 {
   os.iword(oldUncWidthIndex) = os.iword(uncWidthIndex);  // Save old.
@@ -544,6 +598,7 @@ std::ostream& operator<< (std::ostream& os, const setUncWidth& sw)
   return os;
 }
 
+//! Save and then set a new uncertain width for input stream @c is.
 std::istream& operator>> (std::istream& is, const setUncWidth& sw)
 {
   is.iword(oldUncWidthIndex) = is.iword(uncWidthIndex);  // Save old.
@@ -551,6 +606,7 @@ std::istream& operator>> (std::istream& is, const setUncWidth& sw)
   return is;
 }
 
+//! Save and then set a new set scale for output stream @c 0s.
 std::ostream& operator<< (std::ostream& os, const setScale& sc)
 { //
   os.iword(oldScaleIndex) = os.iword(setScaleIndex);  // Save old.
@@ -558,6 +614,7 @@ std::ostream& operator<< (std::ostream& os, const setScale& sc)
   return os;
 }
 
+//! Save and then set a new set scale for input stream @c is.
 std::istream& operator>> (std::istream& is, const setScale& sc)
 {
   is.iword(oldScaleIndex) = is.iword(setScaleIndex);  // Save old.
@@ -565,13 +622,19 @@ std::istream& operator>> (std::istream& is, const setScale& sc)
   return is;
 }
 
-/*! setSigDigits(int sigDigits);
+/*! 
 \brief Set the number of significant digits that can be used.
-(If required by `<< sigfiged` then use set sigDigits value, or noSigfiged to @b NOT use sigDigits).
-// Usage: `out << setSigDigits(5) << setsigdigits ...`
-// & either `<< setsigdigits` to use set sigDigits value, or ` << nosetsigdigits` to not use the set sigDigits.
+If required by setting\n
+  \code << sigfiged \endcode 
+\n then use set sigDigits value,
+(or noSigfiged to @b NOT use sigDigits).
+Usage: \code out << setSigDigits(5) << setsigdigits ... \endcode
+& either\n
+\code << setsigdigits \endcode
+\n to use set sigDigits value, or\n
+\code << nosetsigdigits \endcode
+\n to not use the set sigDigits.
 */
-
 std::ostream& operator<< (std::ostream& os, const setSigDigits& sf)
 {
   os.iword(oldSigDigitsIndex) = os.iword(setSigDigitsIndex);  // Save previous.
@@ -579,6 +642,7 @@ std::ostream& operator<< (std::ostream& os, const setSigDigits& sf)
   return os;
 }
 
+//! Save and then set a new sigDigits for input stream @c is.
 std::istream& operator>> (std::istream& is, const setSigDigits& sf)
 {
   is.iword(oldSigDigitsIndex) = is.iword(setSigDigitsIndex);  // Save previous.
@@ -587,6 +651,7 @@ std::istream& operator>> (std::istream& is, const setSigDigits& sf)
 }
 
 
+//! Save and then set a new unc sigDigits  for output stream @c 0s.
 std::ostream& operator<< (std::ostream& os, const setUncSigDigits& usf)
 {
   os.iword(oldUncSigDigitsIndex) = os.iword(setUncSigDigitsIndex); // Save previous.
@@ -594,6 +659,7 @@ std::ostream& operator<< (std::ostream& os, const setUncSigDigits& usf)
   return os;
 }
 
+//! Save and then set a new rouding for input stream @c is.
 std::ostream& operator<< (std::ostream& os, const setRoundingLoss& sl)
 { //! \note Can't store `double` in a `long`, so scale up * 1000 to an integer.
   os.iword(roundingLossIndex) = static_cast<long>(sl.roundingloss_ * 1000);
@@ -601,12 +667,14 @@ std::ostream& operator<< (std::ostream& os, const setRoundingLoss& sl)
 }
 
 
+//! Save and then set a new confidence for output stream @c 0s.
 std::ostream& operator<< (std::ostream& os, const setConfidence& sl)
 { //! \note Can't store `double` in a `long`, so scale up by 1000000 to an integer.
   os.iword(confidenceIndex) = static_cast<long>(sl.confidence_ * 1000000);
   return os;
 }
 
+//! Save and then set a new setUncSigDigits for input stream @c is.
 std::istream& operator>> (std::istream& is, const setUncSigDigits& usf)
 {
   is.iword(oldUncSigDigitsIndex) = is.iword(setUncSigDigitsIndex); // Save previous.
@@ -615,11 +683,12 @@ std::istream& operator>> (std::istream& is, const setUncSigDigits& usf)
 }
 
 
+//! \return zero if no uncertainty information is available (for built-in double, float, or long double).
+//! because will match the explicit specializations below.
+// or will is just fail to compile because it has no uncertainty element and member function std_dev().
 template <class T>
 double unc_of(T v)
-{ //! \return zero if no uncertainty information is available (for built-in double, float, or long double).
-  //! because will match the explicit specializations below.
-  // or will is just fail to compile because it has no uncertainty element and member function std_dev().
+{ 
   return v.std_dev();
 }
 

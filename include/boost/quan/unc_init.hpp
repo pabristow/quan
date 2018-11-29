@@ -3,7 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Copyright Paul A. Bristow 1998, 2012.
+// Copyright Paul A. Bristow 1998, 2012, 2018.
 
 /*!
   \file
@@ -16,7 +16,7 @@
 #ifndef BOOST_QUAN_UNC_INIT
 #define BOOST_QUAN_UNC_INIT
 
-//  <boost/quan/unc_init.hpp> #included by unc.hpp
+//  <boost/quan/unc_init.hpp> is #included by unc.hpp
 
 #include <ios> // for ios_base.
 
@@ -26,33 +26,34 @@
 // 2nd call of xalloc() returns 1 so ios_base.iword(1) used for uncFlags,
 // 3rd calls returns 2, so iosword(2) used for sigDigits ...
 // Order of assignment must ensure these match enum uncindex (if used).
-const long zeroIndex = std::ios_base::xalloc(); // 1st iword[0] to hold a 'magic' id.
+const long zeroIndex = std::ios_base::xalloc(); //!< 1st iword[0] to hold a 'magic' id.
 
-const long uncFlagsIndex = std::ios_base::xalloc(); // long& uncFlags = iword(1)
-const long oldUncFlagsIndex = std::ios_base::xalloc(); // long& olduncFlags = iword(2)
-const long sigDigitsIndex = std::ios_base::xalloc(); // sigDigits = iword(3)
-const long oldSigDigitsIndex = std::ios_base::xalloc(); // oldsigDigits = iword(4)
-const long setSigDigitsIndex = std::ios_base::xalloc(); // setsigDigits = iword(5)
-const long uncSigDigitsIndex = std::ios_base::xalloc(); // setUncSigDigitsIndex = iword(6)
-const long setUncSigDigitsIndex = std::ios_base::xalloc(); // setUncSigDigitsIndex = iword(7)
-const long oldUncSigDigitsIndex = std::ios_base::xalloc(); // oldUncSigDigitsIndex = iword(8)
-const long scaleIndex = std::ios_base::xalloc(); // scale = iword(9)
-const long oldScaleIndex = std::ios_base::xalloc(); // oldScale = iword(10)
-const long setScaleIndex = std::ios_base::xalloc(); // setScale = iword(11)
-const long uncWidthIndex = std::ios_base::xalloc(); // uncWidth = iword(12)
-const long oldUncWidthIndex = std::ios_base::xalloc(); // oldUncwidth = iword(13)
-const long oldUncSetWidthIndex = std::ios_base::xalloc(); // oldUncSetWidth = iword(14)
-const long usedIndex = std::ios_base::xalloc(); // used = iword(15)
-const long oldUncUsedIndex = std::ios_base::xalloc(); // oldUsed = iword(16)
-const long widthIndex = std::ios_base::xalloc(); // width = iword(17)
-const long oldWidthIndex = std::ios_base::xalloc(); // oldWidth = iword(18)
-const long roundingLossIndex = std::ios_base::xalloc(); // roundingLoss = iword(19)
-const long confidenceIndex = std::ios_base::xalloc(); // roundingLoss = iword(20)
+const long uncFlagsIndex = std::ios_base::xalloc(); //!< long& uncFlags = iword(1)
+const long oldUncFlagsIndex = std::ios_base::xalloc(); //!< long& olduncFlags = iword(2)
+const long sigDigitsIndex = std::ios_base::xalloc(); //!< sigDigits = iword(3)
+const long oldSigDigitsIndex = std::ios_base::xalloc(); //!< oldsigDigits = iword(4)
+const long setSigDigitsIndex = std::ios_base::xalloc(); //!< setsigDigits = iword(5)
+const long uncSigDigitsIndex = std::ios_base::xalloc(); //!< setUncSigDigitsIndex = iword(6)
+const long setUncSigDigitsIndex = std::ios_base::xalloc(); //!< setUncSigDigitsIndex = iword(7)
+const long oldUncSigDigitsIndex = std::ios_base::xalloc(); //!< oldUncSigDigitsIndex = iword(8)
+const long scaleIndex = std::ios_base::xalloc(); //!< scale = iword(9)
+const long oldScaleIndex = std::ios_base::xalloc(); //!< oldScale = iword(10)
+const long setScaleIndex = std::ios_base::xalloc(); //!< setScale = iword(11)
+const long uncWidthIndex = std::ios_base::xalloc(); //!< uncWidth = iword(12)
+const long oldUncWidthIndex = std::ios_base::xalloc(); //!< oldUncwidth = iword(13)
+const long oldUncSetWidthIndex = std::ios_base::xalloc(); //!< oldUncSetWidth = iword(14)
+const long usedIndex = std::ios_base::xalloc(); //!< used = iword(15)
+const long oldUncUsedIndex = std::ios_base::xalloc(); //!< oldUsed = iword(16)
+const long widthIndex = std::ios_base::xalloc(); //!< width = iword(17)
+const long oldWidthIndex = std::ios_base::xalloc(); //!< oldWidth = iword(18)
+const long roundingLossIndex = std::ios_base::xalloc(); //!< roundingLoss = iword(19)
+const long confidenceIndex = std::ios_base::xalloc(); //!< roundingLoss = iword(20)
 
-const long topIndex = std::ios_base::xalloc(); // long& topIndex = iword(21] == iword(0] check!
+const long topIndex = std::ios_base::xalloc(); //!< long& topIndex = iword(21] == iword(0] check!
 
 extern const long indexID;  // 'Magic' value defined in unc_init.hpp.
-bool isIndexed = true; // Above indexes have been initialised.
+//! Set true if above indexes have been initialised so that the iword array can be safely used.
+bool isIndexed = true; 
 
 #endif // BOOST_QUAN_UNC_INIT
 

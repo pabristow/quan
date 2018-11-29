@@ -96,7 +96,8 @@ and C++ include files are in folder:
   //using std::setw;
   //using std::resetiosflags;
 #include <limits> // numeric_limits
-  BOOST_STATIC_ASSERT_MSG (std::numeric_limits<double>::is_iec559, "Only IEEE754 floating-point implemented!"); // Assume IEEE 754 ONLY.
+  // Temporary disable to get Doxygen warning free.
+//  BOOST_STATIC_ASSERT_MSG (std::numeric_limits<double>::is_iec559, "Only IEEE754 floating-point implemented!"); // Assume IEEE 754 ONLY.
 
 #include <algorithm>
   //using std::max;
@@ -112,26 +113,26 @@ and C++ include files are in folder:
   //using std::bad_alloc;
 #include <cmath>   // for math functions log, exp etc
   
-// Forward declarations.
 
 namespace boost { 
 namespace quan
 {
+// Forward declarations.
 
 //template <bool is_correlated = false> // Default is uncertainties that are NOT correlated.
 //class unc;
 
 // Two actual uncertain floating-point types for the user:
 
-typedef unc<false> uncun;  //! Uncertainties are NOT correlated.
 //! Uncorrelated is the normal case when uncertainties add.
+typedef unc<false> uncun;  //! Uncertainties are NOT correlated.
 
-typedef unc<true> unccorr;   //! Uncertainties ARE correlated.
 //! This is the unusual case where the sum must be exact,
 //! so the uncertainties are subtracted.
 //! Example: two blocks which fit into a box perfectly.
 //! So if both have an uncertainties, they must cancel when the uncertainties are added.
 //! Also applies to items like concentrations which must add up to 100% or unity.
+typedef unc<true> unccorr;   //! Uncertainties ARE correlated.
 
 // Obselete - now implemented directly as operator <<
 //void unc_output(double value, // Mean or most likely value.
@@ -140,15 +141,18 @@ typedef unc<true> unccorr;   //! Uncertainties ARE correlated.
 //                    unsigned short int uncTypes, // 16 Uncertain type flags.
 //                    ostream& os);  // Output stream, default std::cout.
 
-
+//! Input uncertain value with uncertainty information standard deviation, degrees of freedom and uncertain types
+//! from a @C std::istream.
 void unc_input(double& mean,  // mean (central or most probable) value.
                    double& stdDev,
                    unsigned short int& degreesOfFreedom,  // 1 observation.
                    unsigned short int& uncTypes,
                    std::istream& is);
 
-//template<typename correlated> std::ostream& operator<< (std::ostream& os, const unc<false>& u);
-//template<typename correlated> std::ostream& operator<< (std::ostream& os, const unc<false>& u);
+//! Output for case where error are correlated.
+template<typename correlated> std::ostream& operator<< (std::ostream&, const unc<true>&);
+template<typename correlated> std::ostream& operator<< (std::ostream&, const unc<true>&);
+
 // Need to declare so that can make a friend (in unc), and thus access private data value_ etc.
 // See http://www.parashift.com/c++-faq-lite/templates.html#faq-35.16
 // This avoids failure to instantiate these operators, and thus link failures.
@@ -211,9 +215,10 @@ public:
   unsigned short int types_;
 };
 
-// setAllUncflags(int flags, int mask);
-// Usage: out << setAllUncFlags(0x5a) ...
-class setAllUncFlags  // Set ALL uncertain flags (not just OR selected bits).
+//! Set ALL uncertain flags (not just OR selected bits).
+//! setAllUncflags(int flags, int mask);
+//! Usage: \code out << setAllUncFlags(0x5a) ...  \endcode
+class setAllUncFlags 
 {
   friend std::ostream&operator<< (std::ostream&, const setAllUncFlags&);
   friend std::istream&operator>> (std::istream&, const setAllUncFlags&);
@@ -224,10 +229,11 @@ public:
   int flags_; // setAllUncFlags.flags used by operators << and >>
 };
 
-class setUncFlags  // Set selected uncertain flags.
-{// Usage: out << setUncFlags(0xFFFF, 0x7, 0x3) ...
-  // or setUncFlags(out, 0x7);
-
+//! Set selected uncertain flags
+//! Usage: \code  out << setUncFlags(0xFFFF, 0x7, 0x3) ... \endcode via operator <<
+//! or setUncFlags(out, 0x7);
+class setUncFlags
+{
   friend std::ostream&operator<< (std::ostream&, const setUncFlags&);
   // friend std::istream&operator>> (std::istream&, const setUncFlags&); // not implemented yet.
 public:
@@ -236,9 +242,9 @@ public:
     int flags_; // setUncFlags.flags used by operators << and >>
 };
 
-// setMaskedUncflags(int flags, int mask);
-// Usage: out << setMaskedUncFlags(0xFFFF, 0x7, 0x3) ...
-// or setUncFlags(out, 0x7);
+//! setMaskedUncflags(int flags, int mask);
+//! Usage: \code out << setMaskedUncFlags(0xFFFF, 0x7, 0x3) ... \endcode 
+//! or setUncFlags(out, 0x7);
 class setMaskedUncFlags
 {
   friend std::ostream&operator<< (std::ostream&, const setMaskedUncFlags&);
@@ -249,9 +255,11 @@ public:
   int mask;  // Selected bits to deal with by zeroing before setting flags.
 };
 
-class resetUncFlags  // Reset = 0 selected uncertain flags.
-{// Usage: out << resetUncFlags(0xFFFF, 0x7, 0x3) ...
-  // or setUncFlags(out, 0x7);
+//!  Reset = 0 (or clear) selected uncertain flags.
+//! Usage: \code out << resetUncFlags(0xFFFF, 0x7, 0x3) ... \endcode 
+//! or setUncFlags(out, 0x7)
+class resetUncFlags 
+{;
 
   friend std::ostream&operator<< (std::ostream&, const resetUncFlags&); // Declarations
   friend std::istream&operator>> (std::istream&, const resetUncFlags&);
@@ -260,9 +268,9 @@ public:
   int flags; // setUncFlags.flags used by operators << and >>
 };
 
-// setMaskedUncflags(int flags, int mask);
-// Usage: out << resetMaskedUncFlags(0xFFFF, 0x7, 0x3) ...
-// or setUncFlags(out, 0x7);
+//! setMaskedUncflags(int flags, int mask);
+//! Usage: \code out << resetMaskedUncFlags(0xFFFF, 0x7, 0x3) ... \endcode
+//! or setUncFlags(out, 0x7);
 class resetMaskedUncFlags
 {
   friend std::ostream&operator<< (std::ostream&, const resetMaskedUncFlags&);
@@ -273,7 +281,9 @@ public:
   int mask;  // Selected bits to deal with by zeroing before setting flags.
 };
 
-class setUncWidth // Set uncertain width.
+//! Set uncertain width.
+//! Usage: \code out << setWidth(18) .. \endcode to set the output field width to 18
+class setUncWidth
 {
   friend std::ostream&operator<< (std::ostream&, const setUncWidth&); // Declarations
   friend std::istream&operator>> (std::istream&, const setUncWidth&); // Defined below.
@@ -283,8 +293,9 @@ public:
   int uncWidth; // setUncWidth used by operators << and >>
 };
 
-// setScale(int scale);
-// Usage: out << setScale(6)  // == 10**6) ...
+//! Set a power-of-ten scaling factor for value to be output.
+//! Used by @c operator<< and @c operator >>
+//! Usage: \code out << setScale(6)  // == 10**6) ... \endcode
 class setScale  // Set uncertain scale.
 {
   friend std::ostream& operator<< (std::ostream&, const setScale&); // Declarations
@@ -295,8 +306,10 @@ public:
   int scale; // setScale.scale used by operators << and >>
 };
 
-// Usage via class: setSigDigits(int sigDigits);
-// Usage via operator << : out << setSigDigits(6) ...
+//! Set the number of significant decimal digits for the value to be output.
+//! \param sigDigits  number of decimal significant digits for the value to be output
+//! Usage via class:  \code setSigDigits(int sigDigits); \endcode 
+//! Usage via operator << : \code out << setSigDigits(6) ... \endcode 
 class setSigDigits
 {
   friend std::ostream& operator<< (std::ostream&, const setSigDigits&); // Declarations
@@ -317,7 +330,7 @@ public:
   3 is appropriate only for large degrees of freedoms >= 1000.
   \warning Values < 1 or > 3 are silently ignored.
   An argument value of -1 passes through to allow a dynamic 'automatic' choice
-  based on degrees of freedom of the uncertain value, example \code out << setUncSigDigits(-1) ... \endcode\n
+  based on degrees of freedom of the uncertain value, example \code out << setUncSigDigits(-1) ... \endcode \n
   Usage: \code out << setUncSigDigits(2) ... \endcode
 */
 class setUncSigDigits
@@ -355,7 +368,7 @@ public:
 class setRoundingLoss
 {
   friend std::ostream& operator<< (std::ostream&, const setRoundingLoss&); // Declarations
-  friend std::istream& operator>> (std::istream&, const setRoundingLoss&);
+ // friend std::istream& operator>> (std::istream&, const setRoundingLoss&); // Not implemented (not useful?)
 public:
   setRoundingLoss(double eps) : roundingloss_(eps) {}  // Constructor sets roundingLoss = parameter eps (scaled * 1000 by operator<<)
   double roundingloss_; // Set by constructor.
@@ -363,11 +376,11 @@ public:
 
 
 //! setConfidence(double alpha);
-//! Usage: out << setConfidence(0.01) ... = cout.iword[confidence] = 0.01;
+//! Usage: \code out << setConfidence(0.01) ... = cout.iword[confidence] = 0.01; \endcode
 class setConfidence
 {
   friend std::ostream& operator<< (std::ostream&, const setConfidence&); // Declarations
-  friend std::istream& operator>> (std::istream&, const setConfidence&);
+  //friend std::istream& operator>> (std::istream&, const setConfidence&); // Not implemented (not useful?)
 public:
   setConfidence(double alpha) : confidence_(alpha) {}    // Constructor sets confidence = parameter alpha (scaled by operator<<).
   double confidence_; // Set by constructor.

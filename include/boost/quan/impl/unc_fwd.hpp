@@ -1,5 +1,3 @@
-// file unc_fwd.hpp
-
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -8,6 +6,8 @@
 // Copyright Paul A. Bristow 2018.
 
 //! Forward declarations for uncertain class files.
+
+// file unc_fwd.hpp
 
 #ifndef BOOST_UNC_FWD_HPP
 #define BOOST_UNC_FWD_HPP
@@ -26,28 +26,22 @@ namespace boost {
                                //! Uncorrelated is the normal case when uncertainties add.
 
     typedef unc<true> unccorr;   //! Uncertainties ARE correlated.
-                                 //! This is the unusual case where the sum must be exact,
-                                 //! so the uncertainties are subtracted.
-                                 //! Example: two blocks which fit into a box perfectly.
-                                 //! So if both have an uncertainties, they must cancel when the uncertainties are added.
-                                 //! Also applies to items like concentrations which must add up to 100% or unity.
+    //! This is the unusual case where the sum must be exact,
+    //! so the uncertainties are subtracted.
+    //! Example: two blocks which fit into a box perfectly.
+    //! So if both have an uncertainties, they must cancel when the uncertainties are added.
+    //! Also applies to items like concentrations which must add up to 100 percent or unity.
 
-                                 // Obselete - now implemented directly as operator <<
-                                 //void unc_output(double value, // Mean or most likely value.
-                                 //                    float stdDev, // Standard deviation.
-                                 //                    unsigned short int degFree, // Degrees of freedom.
-                                 //                    unsigned short int uncTypes, // 16 Uncertain type flags.
-                                 //                    ostream& os);  // Output stream, default std::cout.
+    void unc_input(double&,  // mean (central or most probable) value.
+      double&, // standard deviation.
+      unsigned short int& ,  // degreesOfFreedom degrees of freedom, zero if just 1 observation.
+      unsigned short int&,  // uncTypes uncertain types, zero, exact ...
+      std::istream&); // is input stream
 
-
-    void unc_input(double& mean,  // mean (central or most probable) value.
-      double& stdDev,
-      unsigned short int& degreesOfFreedom,  // 1 observation.
-      unsigned short int& uncTypes,
-      std::istream& is);
-
-    void outUncValues(std::ostream&, std::ostream&); // Output uncertain values (defined in unc.ipp.
-    void setUncDefaults(std::ios_base&); // Set Unc class defaults for std::stream os.
+ // Output uncertain values.
+    void outUncValues(std::ostream&, std::ostream&);
+ // Set Unc class defaults for std::stream os.  
+    void setUncDefaults(std::ios_base&);
 
                                          //! macros for 16 type bits used by unc uncTypes. Bit set == 1 == true means a positive attribute.
     enum unc_types
@@ -96,8 +90,10 @@ namespace boost {
 
     extern const char* uncTypeWords[];
 
+    
+    //! uncertain flags that control of output of uncertain values, similar to @c std::ios flags.
     enum uncertainflags
-    {  //! \enum uncertainflags Control of printing uncertain values, similar to ios flags.
+    {
       defaults = 0, //!< Default.
       firm = 1 << 0,  //!< bit 0: == 0 == false means flex, or firm == 1 == true.
       setScaled = 1 << 1, //!< bit 1 Set scaled == 1 or not scaled == 0.
@@ -174,8 +170,10 @@ namespace boost {
                                               //std::ios_base& noreplicates(std::ios_base&);  //!< Do not add degrees of freedom or replicates >1.
 
                                               /*! Functions to change uncertain flags on specified ios_base.
-                                              Usage: \code f = uFlags(out); f = uFlags(out, 0xFF);
-                                              f = setuFlags(out, 0xFF); f = resetuFlags(out, 0xFF);
+                                              Usage:\n
+                                              \code
+                                                f = uFlags(out); f = uFlags(out, 0xFF);
+                                                f = setuFlags(out, 0xFF); f = resetuFlags(out, 0xFF);
                                               \endcode
                                               */
     long uFlags(std::ios_base&);  //!< Returns current uncertain flags.
@@ -204,7 +202,7 @@ namespace boost {
     std::ostream&operator<< (std::ostream&, const setAllUncFlags&);
     std::istream&operator>> (std::istream&, const setAllUncFlags&);
     std::ostream&operator<< (std::ostream&, const setUncFlags&);
-    std::istream&operator>> (std::istream&, const setUncFlags&);
+   // std::istream&operator>> (std::istream&, const setUncFlags&);
     std::ostream&operator<< (std::ostream&, const setMaskedUncFlags&);
     std::istream&operator>> (std::istream&, const setMaskedUncFlags&);
     std::ostream&operator<< (std::ostream&, const resetUncFlags&);
@@ -226,8 +224,6 @@ namespace boost {
     void outIOstates(std::ios_base::iostate, std::ostream& , const char*); 
     void outUncFlags(long, std::ostream&); // long of flags bit set like "add_+/-", "add_noisy",  
     void outUncTypes(unsigned short int, std::ostream&); // Output name of 16 bits for uncertain types like "exact" if EXACT.
-
-
 
   } //   namespace quan
 } // namespace boost

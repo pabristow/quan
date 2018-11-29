@@ -123,13 +123,17 @@ std::ostream& operator<< (std::ostream& os, const stars& s)
 }
 
 //! Manipulator class with int repeat count & character chars.
-//! Usage: << chars(5,'_') ...  for 5 underlines.
+//! Usage: \code << chars(5,'_') ... \endcode 
+//! \n for 5 underlines.
 class chars 
 { 
   friend std::ostream& operator<< (std::ostream&, const chars&);
 public:
+  //! Constructor.
+  //! \param n number of times to output the character.
+  //! \param c character to output n times.
   chars(int n, char c) : num(n) , character(c)
-  { // Constructor.
+  {
   }
 private:
   int num;
@@ -137,22 +141,27 @@ private:
 };
 
 //! Manipulator for repeated count & specified character chars.
-//! Usage: << chars(5,'_') ...  for 5 underlines.
+//! Usage: \code << chars(5,'_') ... \endcode for 5 underlines.
 //! \param os std::ostream for output.
-//! \param chars to output.
+//! \param s function to so output.
 std::ostream& operator<< (std::ostream& os, const chars& s)
 {
-  for (int i = s.num;  i > 0; i--) os << s.character;
-  return os;
+  for (int i = s.num; i > 0; i--)
+  {
+    os << s.character;
+  }
+  return os; // Make chainable.
 }
 
 //! Class for Manipulator to set specified base and to show base letter O or X uppercase.
-//! Usage: out << setupperbase(16) ...
+//! Usage: \code out << setupperbase(16) ... \endcode
 class setupperbase
 {
   friend std::ostream& operator<< (std::ostream&, const setupperbase&);
- // friend std::istream& operator>> (std::istream&, const setupperbase&);
+ // friend std::istream& operator>> (std::istream&, const setupperbase&); Not yet implemented.
 public:
+  //! Constructor.
+  //! \param b base 2?, 8, 10 or 16.
   setupperbase(int b) : base(b)
   { // Constructor.
   }
@@ -162,17 +171,17 @@ private:
 
 //! Manipulator to set specified base and to show base letter O or X uppercase.
 //! Usage: out << setupperbase(16) ...
-//! \param os std::ostream for output.
-//! \param setupperbase base required: 8, 10 or 16
+//! \param os @c std::ostream for output.
+//! \param s setupperbase base required: 2?, 8, 10 or 16.
 std::ostream& operator<< (std::ostream& os, const setupperbase& s)
 {
   os.setf(static_cast<std::ios_base::fmtflags>
     (
       std::ios_base::showbase | std::ios_base::uppercase |
-      ( 16 == s.base ? 1 :  // std::ios_base::hex :std::ios_base::oct;
+      ( 16 == s.base ? 1 :  // std::ios_base::hex : std::ios_base::oct;
         8 == s.base ? std::ios_base::oct : std::ios_base::dec),
       // default dec if not 8 or 16
-      std::ios_base::basefield | std::ios_base::showbase | std::ios_base::uppercase )  // mask
+      std::ios_base::basefield | std::ios_base::showbase | std::ios_base::uppercase )  // fmtfield mask.
   );
   return os;
 } // std::ostream& operator<< (std::ostream& os, const setupperbase& s)
@@ -193,15 +202,16 @@ namespace std
   //	return _I;
   //}
 
+  //! lowercase is the inverse of @c std::ios_base::uppercase.
   ios_base& lowercase(std::ios_base& _I)
-  { // lowercase is the inverse of std::ios_base::uppercase.
+  {
     _I.unsetf(std::ios_base::uppercase); // Default is lowercase.
     return _I;
   } // lowercase
 
-    // Function to set base hex & showbase & uppercase too.
-    // Usage: out << hexbase << ... for 1234ABCD
-    // equivalent to out << hex << showbase << uppercase ...
+  //! Function to set base hex & showbase & uppercase too.
+  //! Usage: out << hexbase << ... for 1234ABCD
+  //! equivalent to out << hex << showbase << uppercase ...
   ios_base& hexbase(std::ios_base& _I)
   {
     _I.setf(std::ios_base::hex | std::ios_base::showbase | std::ios_base::uppercase, // set bits,
@@ -210,27 +220,30 @@ namespace std
     return _I;
   }
 
+  //! Output adjustment neither left, right nor internal. This is the initialized default.
   std::ios_base& noadjust(ios_base& _I)
-  { // Neither left, right nor internal. This is the initialized default.
+  {
     _I.unsetf(std::ios_base::adjustfield);
     return _I;
   }
 
+  //! no fixed. This is the initialized default for this flag.
   std::ios_base& nofixed(ios_base& _I)
-  { // no fixed. This is the initialized default for this flag.
+  {
     _I.unsetf(std::ios_base::floatfield);
     return _I;
   }
 
+  //! No scientific. This is the initialized default for this flag.
   std::ios_base& noscientific(ios_base& _I)
-  { // No scientific. This is the initialized default for this flag.
+  {
     _I.unsetf(std::ios_base::floatfield);
     return _I;
   }
 
-  // Manipulator template.
-  // Copy of template for manipulator (from std iomanip)
-  // Usage:  omanip<int>setw(int);
+  //! Manipulator template.
+  //! Copy of template for manipulator (from std iomanip)
+  //! Usage:  omanip<int>setw(int);
   template<typename T> class omanip  // Manipulator for ostream.
   {
     // friend std::ostream& operator<< (std::ostream&, const omanip<T>&);
@@ -244,24 +257,31 @@ namespace std
   }; // class omanip
      // Could also provide an istream version for operator >>
 
-     // Applicator is a class that stores a pointer to a function that takes
-     // a reference to an std::ios_base (or derived translator) argument, and
-     // an argument of the type for which the applicator is parameterized.
-     // Applicator classes have the function call operator overloaded
-     // so as to simulate a function call with the argument of the parameter type.
-     // Use, for example: oapp<int> spaces(_spaces);  // allows << spaces(5) ...
-     // where function is std::ostream& _spaces(std::ostream&, int);
+  /*!
+  \brief Applicator class.
+  \details
+     Applicator is a class that stores a pointer to a function that takes
+     a reference to an std::ios_base (or derived translator) argument, and
+     an argument of the type for which the applicator is parameterized.
+     Applicator classes have the function call operator overloaded
+     so as to simulate a function call with the argument of the parameter type.
+     Use, for example: oapp<int> spaces(_spaces);  // allows << spaces(5) ...
+     where function is std::ostream& _spaces(std::ostream&, int);
 
-     // Global ostream applicator using template oapp instantiated for type int,
-     // & initialised with the address of function with one int parameter.
-     // Possible to use oapp<int> spaces(_spaces);  which allows << spaces(5) ...
-     // but instead spaces, stars & chars done a simpler way, see S Teale p 181-3.
+     Global ostream applicator using template oapp instantiated for type int,
+     & initialised with the address of function with one int parameter.
+     Possible to use oapp<int> spaces(_spaces);  which allows << spaces(5) ...
+     but instead spaces, stars & chars done a simpler way, see S Teale p 181-3.
+
+     \tparam T type to be output.
+  */
   template<typename T> class oapp  // Applicator for ostream.
   {
   public:
     oapp(std::ostream&(*f)(std::ostream&, T)) : func(f)
     {
     };
+    //! @c operator() just calls manipulator function.
     omanip<T> operator()(T v)
     {
       return omanip<T>(func, v);
@@ -270,7 +290,7 @@ namespace std
     std::ostream&(*func)(std::ostream&, T);
   }; // class oapp
 
-     // Template Manipulator Inserter <<
+  //! Template Manipulator ostream Inserter <<
   template<typename T> std::ostream& operator<< (std::ostream& os, const omanip<T>& m)
   {
     (*m.func)(os, m.val);
@@ -365,8 +385,9 @@ void outIOstates(std::ios_base::iostate rdstate = std::cout.rdstate(), std::ostr
   os.flags(savedflags); // Restore.
 }  // outIOstates
 
+ //! Descriptions of meaning of each bit in st::ios_base::fmtflags.
 const char* fmtFlagWords[16] =
-{ // Descriptions of meaning of each bit in st::ios_base::fmtflags.
+{
   "skipws", "unitbuf", "uppercase","showbase","showpoint","showpos","left","right",
   "internal","dec","oct","hex","scientific","fixed","boolalpha", "?"
   /*
@@ -435,10 +456,11 @@ std::ostream& showformat(std::ostream& os)
   return os;
 } // showformat
 
-//! Return state and flags to same as when initialised.
+//! Return stream state and flags to same as when initialised.
 //! Would like to use std::ios_base::init, but is protected.
-//! \param os @c std::ostream for output.
-//! See also setUncDefaults
+//! \param os @c std::ostream for output, @c std::cout, std::cerr ...
+//! Usage: \code setiosDefaults(std::cout); \endcode
+//! \sa setUncDefaults.
 void setiosDefaults(std::ostream& os)
 { 
   using std::ios_base;
@@ -452,8 +474,8 @@ void setiosDefaults(std::ostream& os)
   os.flags(std::ios_base::dec | std::ios_base::skipws); // All others are zero (cleared bits).
 } // setiosDefaults(std::ostream& os)
 
-//! Usage: outFpClass(x, std::cerr);
-//! Custom outputs for NaN, inf ... (rather than MSVC default 1#IND ...)
+//! Usage: \code outFpClass(x, std::cerr); \endcode
+//! Custom outputs for NaN, inf ... (rather than MSVC default 1\#IND ...)
 //! \param value floating-point type to output string for not normal classes.
 //! \param os @c std::ostream to which Nan or inf string should be output.
 //!  TODO this shoudl be templated on value and should also check that is a FP type?
