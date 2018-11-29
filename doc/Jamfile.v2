@@ -1,4 +1,5 @@
-# jamfile.v2 for Quan Quickbook Documentation and index using Doxygen
+# jamfile.v2 for Quan library
+# Quickbook Documentation and auto-index using Doxygen
 
 # Copyright Paul A. Bristow 2013, 2014
 
@@ -10,8 +11,11 @@
 # so spaces or newlines BEFORE ; and : and AFTER too.
 # (because : and ; are keywords!)
 
-# SVG plot documentation as html and pdf from Quickbook, using Doxygen.
-# AND auto-indexing.
+# Quan documentation as html and pdf from Quickbook, using Doxygen,
+# AND Boost auto-indexing.
+
+# run with b2 -a --enable-index > quan_docs_29Nov2018.log
+
 
 # project boost/doc ;
 
@@ -65,7 +69,6 @@ else
    ECHO "Building the Quan docs with automatic index generation disabled. To get an AutoIndex, try building with --enable-index." ;
 }
 
-
 xml quan
   :
     quan.qbk
@@ -74,15 +77,20 @@ xml quan
 
 doxygen autodoc
   :
-    [ glob ../../../boost/quan/*.*pp ]
-   # [ glob ../../../boost/quan/*.hpp ]
-    [ glob ../../../boost/quan/detail/*.hpp ]
-   #     [ glob ../../../boost/quan/detail/axis_plot_frame.hpp ]
+    [ glob ../../../boost/quan/unc.hpp ]
+    [ glob ../../../boost/quan/unc_init.hpp ]
+    [ glob ../../../boost/quan/impl/unc_input.hpp ]
+    [ glob ../../../boost/quan/impl/unc_output.hpp ]
+    [ glob ../../../boost/quan/impl/unc_io.hpp ]
+    [ glob ../../../boost/quan/impl/xiostream.hpp ]
+    [ glob ../../../boost/quan/impl/unc_fwd.hpp ]
+    [ glob ../../../boost/quan/impl/pows.hpp ]
+
 
   :
     #<doxygen:param>INPUT="filename1 directoryname2" # Separate with spaces.
     # But also see paths specified above.
-    <doxygen:param>RECURSIVE=YES # Search subdirectories as well.
+    <doxygen:param>RECURSIVE=NO # YES to Search subdirectories as well.
     # <doxygen:param>STRIP_FROM_PATH=I:/ # Strip this from full path name.
     <doxygen:param>TAB_SIZE=2
     # <doxygen:param>EXTRACT_ALL=YES
@@ -128,11 +136,11 @@ doxygen autodoc
     <doxygen:param>WARN_IF_DOC_ERROR=YES # If WARN_IF_DOC_ERROR is set to YES, Doxygen will generate warnings for
     # potential errors in the documentation.
     <doxygen:param>WARN_LOGFILE=../../../libs/quan/doc/doxywarnings.log # Specific log file - ideally this should be empty!
-    <doxygen:param>EXCLUDE="../../../boost/quan/svg_fwd.hpp ../../../boost/quan/stylesheet.hpp"
+    <doxygen:param>EXCLUDE="../../../boost/quan/unc_fwd.hpp ../../../boost/quan/stylesheet.hpp"
     # Exclude to avoid warnings about file(s) undocumented.
     # Note: no commas required but need quotes if more than one file.
 
-    <xsl:param>"boost.doxygen.reftitle=Boost.Quan plot C++ Reference"
+    <xsl:param>"boost.doxygen.reftitle=Boost.Quan Uncertain values library C++ Reference"
 ;
     #<doxygen:param>"PREDEFINED=\"BOOST_DEDUCED_TYPENAME=typename\" "
 # See Doxygen configuration for detailed explanation of these options
@@ -216,7 +224,6 @@ boostbook standalone
 
   # Use local preference for syntax coloring.
   <format>pdf:<xsl:param>html.stylesheet=boostbook.css
-
 
   <dependency>autodoc
   <dependency>html

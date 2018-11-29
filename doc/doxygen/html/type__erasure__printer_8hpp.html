@@ -9,7 +9,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
   <!-- Add your title here ! -->
-  <title>Boost.quan Tue Nov 6 2018 11:38:56 Boost.Quan </title>
+  <title>Boost.quan Thu Nov 29 2018 12:21:21 Boost.Quan </title>
   <!-- Add your custom stylesheet here ! -->
   <link href="../quan_doxygen.css" rel="stylesheet" type="text/css"/>
   <!-- Note that this overrides any stylesheet specified in doxyfile setting HTML_STYLESHEET="mystylesheet.css" ! -->
@@ -45,7 +45,7 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_c8984f1860c11f62f47abb6761e46c1e.html">boost</a></li><li class="navelem"><a class="el" href="dir_4baf1f16fad9013cc36af3b788525552.html">quan</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1878a3f4746a95c6aad317458cc7ef80.html">boost</a></li><li class="navelem"><a class="el" href="dir_a7fa3627d3ee0b823f6055a0425355ec.html">quan</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -62,12 +62,12 @@ $(function() {
 <code>#include &lt;boost/type_erasure/operators.hpp&gt;</code><br />
 <code>#include &lt;boost/type_erasure/tuple.hpp&gt;</code><br />
 <code>#include &lt;boost/type_erasure/same_type.hpp&gt;</code><br />
-<code>#include &lt;boost/type_erasure/callable.hpp&gt;</code><br />
 <code>#include &lt;boost/range/begin.hpp&gt;</code><br />
 <code>#include &lt;boost/range/end.hpp&gt;</code><br />
 <code>#include &lt;boost/range/iterator.hpp&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;iomanip&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 </div>
 <p><a href="type__erasure__printer_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -83,9 +83,15 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboost_1_1type__erasure_1_1concept__interface_3_01base__and__derived_3_01_t_00_01_u_01_4_00_01_base_00_01_u_01_4.html">boost::type_erasure::concept_interface&lt; base_and_derived&lt; T, U &gt;, Base, U &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboost_1_1type__erasure_1_1ostreamable_3_01_os_00_01std_1_1pair_3_01_t1_00_01_t2_01_4_01_4.html">boost::type_erasure::ostreamable&lt; Os, std::pair&lt; T1, T2 &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classabstract__printer.html">abstract_printer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classabstract__printer.html">abstract_printer&lt; CharT, Traits &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseparator__printer.html">separator_printer</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcolumn__separator__printer.html">column_separator_printer</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaligned__column__printer.html">aligned_column_printer</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structostreamable_3_01_os_00_01std_1_1pair_3_01_t1_00_01_t2_01_4_01_4.html">ostreamable&lt; Os, std::pair&lt; T1, T2 &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdecor__printer.html">decor_printer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -99,10 +105,45 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:af2c1c5add0ee5d9fd1b9e971c7d7ebe2"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename T2 &gt; </td></tr>
-<tr class="memitem:af2c1c5add0ee5d9fd1b9e971c7d7ebe2"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1type__erasure.html#af2c1c5add0ee5d9fd1b9e971c7d7ebe2">boost::type_erasure::operator&lt;&lt;</a> (std::ostream &amp;os, const std::pair&lt; T1, T2 &gt; &amp;p)</td></tr>
-<tr class="separator:af2c1c5add0ee5d9fd1b9e971c7d7ebe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f0682110a2f2a71eba8b24dfbcd94e8"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename T2 &gt; </td></tr>
+<tr class="memitem:a6f0682110a2f2a71eba8b24dfbcd94e8"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="type__erasure__printer_8hpp.html#a6f0682110a2f2a71eba8b24dfbcd94e8">operator&lt;&lt;</a> (std::ostream &amp;os, const std::pair&lt; T1, T2 &gt; &amp;p)</td></tr>
+<tr class="separator:a6f0682110a2f2a71eba8b24dfbcd94e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a6f0682110a2f2a71eba8b24dfbcd94e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f0682110a2f2a71eba8b24dfbcd94e8">&#9670;&nbsp;</a></span>operator&lt;&lt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T1 , typename T2 &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream&amp; operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::pair&lt; T1, T2 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>p</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Output a pair of values with space as delimiter.</p>
+<p>For example: "1.23 3.45".</p>
+
+<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00238">238</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- custom Doxygen footer quan_doxygen_footer.html  -->-
 <!-- Copyright 2012 Paul A. Bristow -->
@@ -120,7 +161,7 @@ Functions</h2></td></tr>
       <!-- Change copyright to YOUR name (and affiliation, if any) below:  -->
      <p>Copyright © 2018 Paul A. Bristow</p>
       <!-- 2018 becomes the current year, for example 2010, so claims copyright for a range of years, 2009 - 2010. -->
-     <p>Doxygen Documentation generated by&nbsp;<a href="http://www.doxygen.org/index.html"> <img src="doxygen.png" alt="doxygen logo" align="middle" border="0"/> 1.8.14</a>, Revised at Tue Nov 6 2018 11:38:56</p>
+     <p>Doxygen Documentation generated by&nbsp;<a href="http://www.doxygen.org/index.html"> <img src="doxygen.png" alt="doxygen logo" align="middle" border="0"/> 1.8.14</a>, Revised at Thu Nov 29 2018 12:21:21</p>
   </address>
   </tr>
 </tbody>

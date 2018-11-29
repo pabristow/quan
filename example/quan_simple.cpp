@@ -9,26 +9,26 @@
 
 #include <boost/quan/unc.hpp>
 
-//#include <boost/quan/impl/xiostream.hpp>
-
 #include <iostream>
 
 int main()
 {
-  std::cout << std::endl;
+  std::cout << "quan_simple.cpp" << std::endl;
+  std::cout << version_info() << std::endl;
+
  // using boost::quan::spaces;
   using namespace boost::quan;
   std::cout << "|" << spaces(10) << "|" << std::endl; // |          |
   std::cout << "|" << stars(10) << "|" << std::endl; // |**********|
   std::cout << "|" << chars(10, '!') << "|" << std::endl; // |!!!!!!!!!!|
-
+  std::cout << "|" << tabs(2) << "t" << tabs(2) << "t" << tabs(2) << "|" << std::endl; // |		t		t		|
+  
 
   using boost::quan::setUncDefaults;
   using boost::quan::uncun;
   using boost::quan::uncertainflags;
   using boost::quan::plusminus;
 
-  std::cout << version_info() << std::endl;
   setUncDefaults(std::cout);
   uncun u(1.23, 0.45F);
   std::cout << "URealCorr u(1.23, 0.45); = " << u << plusminus << std::endl;

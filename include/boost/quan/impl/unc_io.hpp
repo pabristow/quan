@@ -4,7 +4,6 @@
   \details Class for simple Propagation of Uncertainties
      according to a pure Gaussian model.
      Uncertain subroutines, manipulators & applicators.
-     but not <iomanip> because defined here (as a copy of code in std::iomanip).
 */
 
 // Copyright Paul A. Bristow 1998, 2012, 2018.
@@ -389,25 +388,25 @@ std::ios_base& nolimits(std::ios_base& iostr)
 
 // Two overloaded uFlags functions, like ios_base setf.
 // Two overloaded uFlags functions, like ios_base setf.
-//! \str @c std::stream having uncertainty flgas in iword.
+//! \param stream @c std::stream having uncertainty flags in `ios::iword`.
 //! \returns current uFlags uncertainty flags. 
-long uFlags(std::ios_base& str)
+long uFlags(std::ios_base& stream)
 {
-  return str.iword(uncFlagsIndex);  // Return streams current unc flags.
+  return stream.iword(uncFlagsIndex);  // Return streams current unc flags.
   // Unlike ios_base member function fmtflags ios_base::flags(),
   // these need to know their ios_base.
 }
 
 // Two overloaded uFlags functions, like ios_base setf.
-//! \str @c std::stream having uncertainty flgas in iword.
+//! \param stream @c std::stream having uncertainty flgas in iword.
 //! \param flags New uncertainty flags to set.
 //! \returns current uFlags uncertainty flags. 
 
-long uFlags(std::ios_base& str, long flags) // Assign new & return old.
+long uFlags(std::ios_base& stream, long flags) // Assign new & return old.
 {
   // lock();  may be required for multitasking (MT defined).
-  long oldflags = str.iword(uncFlagsIndex);  // Save to return
-  str.iword(uncFlagsIndex) = flags;  // Assign all bits.
+  long oldflags = stream.iword(uncFlagsIndex);  // Save to return
+  stream.iword(uncFlagsIndex) = flags;  // Assign all bits.
   // unlock();
   return oldflags;  // Previous flags.
 } // uFlags

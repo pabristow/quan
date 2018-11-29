@@ -9,7 +9,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
   <!-- Add your title here ! -->
-  <title>Boost.quan Tue Nov 6 2018 11:38:56 Boost.Quan </title>
+  <title>Boost.quan Thu Nov 29 2018 13:03:33 Boost.Quan </title>
   <!-- Add your custom stylesheet here ! -->
   <link href="../quan_doxygen.css" rel="stylesheet" type="text/css"/>
   <!-- Note that this overrides any stylesheet specified in doxyfile setting HTML_STYLESHEET="mystylesheet.css" ! -->
@@ -52,13 +52,20 @@ $(function() {
 
 <p>This is the complete list of members for <a class="el" href="classdecor__printer.html">decor_printer</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="classdecor__printer.html#a0014cd817b065017226ee8cc9600e0bb">decor_printer</a>(std::size_t num_columns=0, std::size_t wid=0, const std::string &amp;pre=&quot;\, const std::string &amp;sep=&quot; &quot;, const std::string &amp;suf=&quot;\&quot;, const std::string &amp;term=&quot;\&quot;)</td><td class="entry"><a class="el" href="classdecor__printer.html">decor_printer</a></td><td class="entry"><span class="mlabel">explicit</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classdecor__printer.html#a587339830ce1cca4ce22f3f57d0ac96c">do_print</a>(iterator_type first, iterator_type last, ostream_type os) const</td><td class="entry"><a class="el" href="classdecor__printer.html">decor_printer</a></td><td class="entry"><span class="mlabel">protected</span><span class="mlabel">virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classabstract__printer.html#a6fb84707c736c900c19dbb29cb4f21d9">iterator_type</a> typedef</td><td class="entry"><a class="el" href="classabstract__printer.html">abstract_printer&lt;&gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classabstract__printer.html#aa8251f5b4776858ce72565d69b9adaa1">ostream_type</a> typedef</td><td class="entry"><a class="el" href="classabstract__printer.html">abstract_printer&lt;&gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classabstract__printer.html#a9beee0603985735b7aa050f820945757">print</a>(const Range &amp;r, std::basic_ostream&lt; char, std::char_traits&lt; char &gt; &gt; &amp;os=std::cout) const</td><td class="entry"><a class="el" href="classabstract__printer.html">abstract_printer&lt;&gt;</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="classabstract__printer.html#acb1016e67d1bf4fca6faf9dda940a8aa">requirements</a> typedef</td><td class="entry"><a class="el" href="classabstract__printer.html">abstract_printer&lt;&gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classabstract__printer.html#ae27777f5bf734ac18892ff87b1f85ea0">~abstract_printer</a>()</td><td class="entry"><a class="el" href="classabstract__printer.html">abstract_printer&lt;&gt;</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classdecor__printer.html#a9bff693fcdbd1ceaeda25864a378201d">columns</a>(const int num_columns)</td><td class="entry"><a class="el" href="classdecor__printer.html">decor_printer</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classdecor__printer.html#a83e79ad39a62c72becd2ea10fc6dda79">decor_printer</a>(int num_columns=0, int width=0, const std::string &amp;prefix=&quot;\, const std::string &amp;separator=&quot; &quot;, const std::string &amp;suffix=&quot;\&quot;, const std::string &amp;terminator=&quot;\\&quot;)</td><td class="entry"><a class="el" href="classdecor__printer.html">decor_printer</a></td><td class="entry"><span class="mlabel">explicit</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classdecor__printer.html#a4bf003b25d8c6ba8c0d3700f93867d0a">do_print</a>(iterator_type first, iterator_type last, ostream_type os=std::cout) const</td><td class="entry"><a class="el" href="classdecor__printer.html">decor_printer</a></td><td class="entry"><span class="mlabel">protected</span><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classabstract__printer.html#a53c0dacd02be234c15400819878fdaa4">iterator_type</a> typedef</td><td class="entry"><a class="el" href="classabstract__printer.html">abstract_printer</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classdecor__printer.html#a0434d4b58032d2971bd298f3bc1a92b5">layout</a>(const std::string &amp;prefix, const std::string &amp;separator, const std::string &amp;suffix, const std::string &amp;terminator)</td><td class="entry"><a class="el" href="classdecor__printer.html">decor_printer</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classabstract__printer.html#a95e4c4f423c77d8c7b71ecf5b3bd1e72">ostream_type</a> typedef</td><td class="entry"><a class="el" href="classabstract__printer.html">abstract_printer</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classdecor__printer.html#af0676328dce44c1be48ab30ecde9ca8e">prefix</a>(const std::string &amp;prefix=&quot;\)</td><td class="entry"><a class="el" href="classdecor__printer.html">decor_printer</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classabstract__printer.html#a585b32d917428b335b05fa6612b6fd1d">print</a>(const Range &amp;r, std::basic_ostream&lt; CharT, Traits &gt; &amp;os=std::cout) const</td><td class="entry"><a class="el" href="classabstract__printer.html">abstract_printer</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classabstract__printer.html#a2ae18d1e09743838d0108e79f64a050a">requirements</a> typedef</td><td class="entry"><a class="el" href="classabstract__printer.html">abstract_printer</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classdecor__printer.html#a7545f0ddd0fccfdd412dbaf690e81eef">separator</a>(const std::string &amp;separator=&quot; &quot;)</td><td class="entry"><a class="el" href="classdecor__printer.html">decor_printer</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classdecor__printer.html#ab7e09c7b54a6894f43b45d635f8fafac">suffix</a>(const std::string &amp;suffix=&quot;\)</td><td class="entry"><a class="el" href="classdecor__printer.html">decor_printer</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classdecor__printer.html#afbf6777890a9013120ea3279353e6104">terminator</a>(const std::string &amp;terminator=&quot;\&quot;)</td><td class="entry"><a class="el" href="classdecor__printer.html">decor_printer</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classdecor__printer.html#aeb68514dbc4c95352da5ef673bc7893c">width</a>(const int width)</td><td class="entry"><a class="el" href="classdecor__printer.html">decor_printer</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classabstract__printer.html#abb9431b11386297841bb5d5cd592c286">~abstract_printer</a>()</td><td class="entry"><a class="el" href="classabstract__printer.html">abstract_printer</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
 <!-- custom Doxygen footer quan_doxygen_footer.html  -->-
 <!-- Copyright 2012 Paul A. Bristow -->
@@ -76,7 +83,7 @@ $(function() {
       <!-- Change copyright to YOUR name (and affiliation, if any) below:  -->
      <p>Copyright © 2018 Paul A. Bristow</p>
       <!-- 2018 becomes the current year, for example 2010, so claims copyright for a range of years, 2009 - 2010. -->
-     <p>Doxygen Documentation generated by&nbsp;<a href="http://www.doxygen.org/index.html"> <img src="doxygen.png" alt="doxygen logo" align="middle" border="0"/> 1.8.14</a>, Revised at Tue Nov 6 2018 11:38:56</p>
+     <p>Doxygen Documentation generated by&nbsp;<a href="http://www.doxygen.org/index.html"> <img src="doxygen.png" alt="doxygen logo" align="middle" border="0"/> 1.8.14</a>, Revised at Thu Nov 29 2018 13:03:33</p>
   </address>
   </tr>
 </tbody>

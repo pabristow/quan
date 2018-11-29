@@ -150,6 +150,20 @@ protected:
     virtual const abstract_printer& do_print(iterator_type first, iterator_type last, ostream_type os) const = 0;
 }; // class abstract_printer
 
+
+/*!
+   Outputs items in a specified number of columns across rows with a separator (often comma and/or space(s)),
+   and a suffix (usually newline) every `num_column`s items.\n
+   Usage: `decor_printer simple_printer(3, 0, "\n", ", ", "\n", "\n");`\n
+   Provide a container to be printed: `double da[] = {1., 2., 3., 4., 5., 6.};`\n
+   Print to std::cout using: `simple_printer.print(std::cout, da);` \n
+   Output:\n
+   1, 2, 3,\n
+   4, 5, 6,\n
+   7, 8, 9,\n
+   10, 11, 12\n
+*/
+
 class decor_printer : public abstract_printer
 {
 public:
@@ -165,16 +179,20 @@ public:
      \param separator @c std::string to separator items (but not the last item), default space.
      \param suffix @c std::string at the end of each row, default newline.
      \param terminator @c std::string to output after the final sequence of items, default two newlines. 
-    */
+     \param num_columns Number of columns of output.  If <= 0 then will not be split into columns.
+     \param width Width of the column (in number of characters).
+   The order of parameters is chosen to try to allow use of the defaults as much as possible,
+   including all defaults placing all items on one line or row separated by spaces.
+*/
   explicit decor_printer( // All the defaults:
     int num_columns = 0,
-    int wid = 0,
-    const std::string& pre = "\n",
-    const std::string& sep = " ",
-    const std::string& suf = "\n",
-    const std::string& term = "\n\n")
+    int width = 0,
+    const std::string& prefix = "\n",
+    const std::string& separator = " ",
+    const std::string& suffix = "\n",
+    const std::string& terminator = "\n\n")
     :
-    columns_(num_columns), column_width_(wid), prefix_(pre), separator_(sep),  suffix_(suf), terminator_(term)
+    columns_(num_columns), column_width_(width), prefix_(prefix), separator_(separator),  suffix_(suffix), terminator_(terminator)
   {
   }
 
@@ -226,41 +244,20 @@ public:
   }
 
   //! For this printer, set the number of items to form a column, default 0 meaning not split into columns.
-  //!  \param columns number of items in each column.
-  decor_printer& columns(const int columns)
+  //!  \param num_columns Number of items in each column.
+  decor_printer& columns(const int num_columns)
   {
-    columns_ = columns;
+    columns_ = num_columns;
     return *this; // Make chainable.
   }
 
-  //! For this printer, set the width of items in a column, padded with the iostream padding character, default is 0 meaning no padding.
-  //! \param width width for each item.
-  decor_printer& width(const int w)
+  //! For this printer, set the @c ostream width of items in a column, padded with the @c iostream padding character,
+  //! default width is 0, meaning no padding, and so columns may be jagged.
+  //! \param width Column width for each item.
+  decor_printer& width(const int width)
   {
-    column_width_ = w;
-     return *this ; // Make chainable.
-/*!
- Outputs items in a specified number of columns across rows with a separator (often comma and/or space(s)),
- and a suffix (usually newline) every `num_column`s items.\n
- Usage: `decor_printer simple_printer(3, 0, "\n", ", ", "\n", "\n");`\n
- Provide a container to be printed: `double da[] = {1., 2., 3., 4., 5., 6.};`\n
- Print to std::cout using: `simple_printer.print(std::cout, da);` \n
- Output:\n
- 1, 2, 3,\n
- 4, 5, 6,\n
- 7, 8, 9,\n
- 10, 11, 12\n
- The order of parameters is chosen to try to allow use of the defaults as much as possible,
- including all defaults placing all items on one line or row separated by spaces.
-
-  \param columns number of columns (default 0, so all items are on the same line or row).
-  \param width ostream width to use to each items (default 0 so that columns may be jagged).
-  \param pre string to be output before the first column,
-  (default newline which ensures that the first item is at the left margin).
-  \param sep string to separate (or delimit) items on each row (default space).
-  \param suf suffix at the end of each row (default newline).
-  \param term string to terminate the last row.
-*/
+    column_width_ = width;
+    return *this ; // Make chainable.
   }
 protected:
 

@@ -74,10 +74,6 @@ and C++ include files are in folder:
   using boost::math::sign;
   using boost::math::copysign;
 
-#include <boost/quan/impl/unc_fwd.hpp> // Forward declarations.
-#include <boost/quan/unc_init.hpp> // Defines indexes to xalloc iword(index) variables.
-  // Must be first?
-#include <boost/quan/rounding.hpp> // Rounding functions.
 #include <boost/quan/impl/xiostream.hpp> // for extra manipulators, spaces.
   // These extra manipulators have been placed in namespace std:: for convenience.
   //using std::noadjust;  // Restore to default state.
@@ -87,38 +83,14 @@ and C++ include files are in folder:
   //using std::hexbase;
   //using std::lowercase;
 
-#include <boost/quan/impl/pows.hpp>
-
-//#include <boost/quan/impl/unc_io.hpp> // More functions.
-//#include <boost/quan/impl/unc_output.hpp>
-//#include <boost/quan/impl/unc_input.hpp>
+#include <boost/quan/impl/unc_fwd.hpp> // Forward declarations.
+#include <boost/quan/unc_init.hpp> // Defines indexes to xalloc iword(index) variables.
+  // Must be first?
+#include <boost/quan/rounding.hpp> // Rounding functions.
+#include <boost/quan/impl/pows.hpp> // power functions.
 
 #include <cstdlib>  //
 #include <iostream> //
-  //using std::istream;
-  //using std::ostream;
-  //using std::ios_base;
-  //using std::char_traits;
-  //using std::cout;
-  //using std::cerr;
-  //using std::cin;
-  //using std::endl;
-  //using std::flush;
-  //using std::ws;
-  //using std::streamsize;
-  //using std::boolalpha;
-  //using std::dec;
-  //using std::hex;
-  //using std::showbase;
-  //using std::fixed;
-  //using std::scientific;
-  //using std::right;
-  //using std::showpos;
-  //using std::noshowpos;
-  //using std::noshowbase;
-  //using std::noshowpoint;
-  //using std::showpoint;
-
 #include <iomanip>  //
   //using std::setprecision;
   //using std::setw;
@@ -183,7 +155,6 @@ void unc_input(double& mean,  // mean (central or most probable) value.
 // May need for input operator>> too.
 // template<typename correlated> std::istream& operator>> (std::istream& is, const unc<false>& u);
 // friend istream& operator>> (istream& is, UReal<correlated>& u)
-
 
 // SI units from CRC Handbook of Chemistry & Physics 76th edition 1995,
 // ISBN 08493 0476-8 page 1-22.
@@ -258,7 +229,7 @@ class setUncFlags  // Set selected uncertain flags.
   // or setUncFlags(out, 0x7);
 
   friend std::ostream&operator<< (std::ostream&, const setUncFlags&);
-  friend std::istream&operator>> (std::istream&, const setUncFlags&);
+  // friend std::istream&operator>> (std::istream&, const setUncFlags&); // not implemented yet.
 public:
   setUncFlags(int flags) : flags_(flags)
   {}  // Constructor initialises flags_. 
@@ -338,7 +309,7 @@ public:
 /*! setUncSigDigits(int uncSigDigits);
   Permits choice of number of decimal digits precision to output for an uncertain or stddev value:\n
   w = 2 is the ISO recommendation.\n
-    Uncertainty of measurement, Part 3: Guide to the expression of uncertainty in measurement (GUM:1995)\n
+    Uncertainty of measurement, Part 3: Guide to the expression of uncertainty in measurement, GUM 1995\n
     ISO Guide 98 (1995) and updated version 2008.\n
   1 is more appropriate for very small degrees of freedom,
    (but it gives a big step when the value starts with 1 or 2,
@@ -359,7 +330,7 @@ public:
     if (w == 0)
     {
       w = 2;  // ISO default from 
-              // Uncertainty of measurement – Part 3: Guide to the expression of uncertainty in measurement (GUM:1995)
+              // Uncertainty of measurement Part 3: Guide to the expression of uncertainty in measurement (GUM:1995)
               // ISO Guide 98 (1995) and updated version 2008.
     }
     else if (w > 3)

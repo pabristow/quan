@@ -9,7 +9,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
   <!-- Add your title here ! -->
-  <title>Boost.quan Tue Nov 6 2018 11:38:56 Boost.Quan </title>
+  <title>Boost.quan Thu Nov 29 2018 13:03:33 Boost.Quan </title>
   <!-- Add your custom stylesheet here ! -->
   <link href="../quan_doxygen.css" rel="stylesheet" type="text/css"/>
   <!-- Note that this overrides any stylesheet specified in doxyfile setting HTML_STYLESHEET="mystylesheet.css" ! -->
@@ -45,7 +45,7 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_c8984f1860c11f62f47abb6761e46c1e.html">boost</a></li><li class="navelem"><a class="el" href="dir_4baf1f16fad9013cc36af3b788525552.html">quan</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1878a3f4746a95c6aad317458cc7ef80.html">boost</a></li><li class="navelem"><a class="el" href="dir_a7fa3627d3ee0b823f6055a0425355ec.html">quan</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -67,7 +67,7 @@ $(function() {
 <code>#include &lt;boost/static_assert.hpp&gt;</code><br />
 <code>#include &lt;boost/type_traits/is_floating_point.hpp&gt;</code><br />
 <code>#include &lt;boost/concept_check.hpp&gt;</code><br />
-<code>#include &quot;<a class="el" href="xiostream_8hpp_source.html">boost/quan/xiostream.hpp</a>&quot;</code><br />
+<code>#include &lt;boost/quan/impl/xiostream.hpp&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;iomanip&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
@@ -144,9 +144,9 @@ Functions</h2></td></tr>
 <tr class="separator:a37724e4d6b6192c723c3a29b05e4b258"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae61cc9ca92a356b6f0f41b7dedde97ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rounding_8hpp.html#ae61cc9ca92a356b6f0f41b7dedde97ba">out_confidence_interval</a> (std::pair&lt; double, double &gt; ci, int m, std::ostream &amp;os=std::cout)</td></tr>
 <tr class="separator:ae61cc9ca92a356b6f0f41b7dedde97ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a825c7ffc5fb77bab53f8b1ccb3553804"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rounding_8hpp.html#a825c7ffc5fb77bab53f8b1ccb3553804">out_value_limits</a> (double mean, double <a class="el" href="classunc.html">unc</a>, std::pair&lt; double, double &gt; ci, int m, std::ostream &amp;os=std::cout)</td></tr>
+<tr class="memitem:a825c7ffc5fb77bab53f8b1ccb3553804"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rounding_8hpp.html#a825c7ffc5fb77bab53f8b1ccb3553804">out_value_limits</a> (double mean, double unc, std::pair&lt; double, double &gt; ci, int m, std::ostream &amp;os=std::cout)</td></tr>
 <tr class="separator:a825c7ffc5fb77bab53f8b1ccb3553804"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00b2c294d95479926fb08f1a0f61c7fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rounding_8hpp.html#a00b2c294d95479926fb08f1a0f61c7fc">out_value_df_limits</a> (double mean, double <a class="el" href="classunc.html">unc</a>, int <a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fdaac97fd648aedffb05975e58a9531eee9">degfree</a>=1, std::ostream &amp;os=std::cout)</td></tr>
+<tr class="memitem:a00b2c294d95479926fb08f1a0f61c7fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rounding_8hpp.html#a00b2c294d95479926fb08f1a0f61c7fc">out_value_df_limits</a> (double mean, double unc, int degfree=1, std::ostream &amp;os=std::cout)</td></tr>
 <tr class="separator:a00b2c294d95479926fb08f1a0f61c7fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -180,7 +180,7 @@ Variables</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01013">1013</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01024">1024</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -267,7 +267,7 @@ Based on:<br />
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>CDF of triangular distribution.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01388">1388</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01414">1414</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -288,7 +288,7 @@ Based on:<br />
 </div><div class="memdoc">
 <p>Cumulative distribution Function of uniform distribution Un(-sqrt_3, + sqrt_3), with an expectation of mean zero and variance unity. Gejza Wimmer &amp; Victor Witkovsky, Measurement Science Review, volume 2 section 1 2002, page 3, equation 5. </p><dl class="section return"><dt>Returns</dt><dd>Cumulative distribution Function of uniform distribution.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01363">1363</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01387">1387</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -335,8 +335,7 @@ Based on:<br />
         </tr>
       </table>
 </div><div class="memdoc">
-<p><br />
-Calculate confidence interval for chosen alpha confidence level and chosen distribution type.</p>
+<p>Calculate confidence interval for chosen alpha confidence level and chosen distribution type.</p>
 <p>Uses confidence interval equations from:<br />
  Gejza Wimmer, Viktor Witkovsky, Tomas Duby Measurement Science and Technolology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X. Proper rounding of the measurement result under the assumption of gaussian distribution,<br />
  Confidence interval equation 6, p 1660.</p>
@@ -361,7 +360,7 @@ Calculate confidence interval for chosen alpha confidence level and chosen distr
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Confidence interval upper and lower limits as a <code>std::pair</code> of <code>double</code>.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01270">1270</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01293">1293</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -420,7 +419,7 @@ Measurement Science Review, Vol 2, section 1, (2002), pages 21 to 31.<br />
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Approximation of Wimmer delta function using equation 24, p 1664, for normal distribution, and similar for triangular and uniform. Returns -1 if epsilon is too 'tight' so must be increased for delta to be calculated. Throwing an exception might be better here&gt;</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01023">1023</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01034">1034</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -460,7 +459,7 @@ Measurement Science Review, Vol 2, section 1, (2002), pages 21 to 31.<br />
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ratio rounded / value, a measure of loss of information caused by rounding.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01109">1109</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01122">1122</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -584,7 +583,7 @@ For example: &lt;97.8725, 157.798&gt;</p>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01430">1430</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01458">1458</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -635,7 +634,7 @@ For example: &lt;97.8725, 157.798&gt;</p>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01472">1472</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01500">1500</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -693,7 +692,7 @@ For example: &lt;97.8725, 157.798&gt;</p>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01449">1449</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01477">1477</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -721,7 +720,7 @@ For example: &lt;97.8725, 157.798&gt;</p>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Quantile or Inverse of cumulative distribution function CDF.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01412">1412</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01438">1438</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -742,7 +741,7 @@ For example: &lt;97.8725, 157.798&gt;</p>
 </div><div class="memdoc">
 <p>Quantile of uniform distribution Uniform(-sqrt_3, + sqrt_3), expectation or mean zero and variance unity. Wimmer &amp; Witkovsky, Measurement Science Review, volume 2 section 1 2002, page 3, eq 6. </p><dl class="section return"><dt>Returns</dt><dd>Quantile of uniform distribution.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01378">1378</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01403">1403</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -763,7 +762,7 @@ For example: &lt;97.8725, 157.798&gt;</p>
 </div><div class="memdoc">
 <p>round value v to 1 digit after decimal point, using 1st digit to round. </p>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01001">1001</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01012">1012</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -784,7 +783,7 @@ For example: &lt;97.8725, 157.798&gt;</p>
 </div><div class="memdoc">
 <p>round value v to 2 digit2 after decimal point, using 2nd digit to round. </p>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01005">1005</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01016">1016</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -805,7 +804,7 @@ For example: &lt;97.8725, 157.798&gt;</p>
 </div><div class="memdoc">
 <p>round value v to 3 digit2 after decimal point, using 3rd digit to round. </p>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01009">1009</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01020">1020</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -922,7 +921,7 @@ C++0X provides <code>std::numeric_limits&lt;double&gt;::max_digits10</code>; whi
 <li></li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l00736">736</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l00746">746</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -978,7 +977,7 @@ If degrees_of_freedom &lt;= 2, then 1, else if degrees_of_freedom &gt; 1000, the
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>m Signed position of the digit to be used for rounding, <code>m == 0</code> means use the units digit for rounding the tens digit.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01142">1142</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01160">1160</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -1039,12 +1038,12 @@ template&lt;typename FPT &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Round floating-point v (not-exponential) to order m. (m is the index of the rounder digit). This is variously called 'common rounding', 'round_5_up'.</p>
+<p>Round floating-point v (not-exponential) to order m (where m is the index of the rounder digit). This is variously called 'common rounding', 'round_5_up'.</p>
 <p>Gejza Wimmer, Viktor Witkovsky, Tomas Duby<br />
-Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X<br />
-Proper rounding of the measurement results under normality assumptions.<br />
-Uncertainty of measurement &ndash; Part 3: Guide to the expression of uncertainty in measurement (GUM:1995)<br />
-ISO Guide 98 (1995) and updated version 2008.<br />
+ Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X<br />
+ Proper rounding of the measurement results under normality assumptions.<br />
+ Uncertainty of measurement &ndash; Part 3: Guide to the expression of uncertainty in measurement (GUM:1995)<br />
+ ISO Guide 98 (1995) and updated version 2008.<br />
 <br />
  </p><dl class="section note"><dt>Note</dt><dd><code>m</code> is the index of the rounder digit, that is the just insignificant digit used to decide if the m+1th digit is to be rounded up or left as is. So <code>m == 0</code> means that the rounder digit is the units digits, used to round the tens digit, <code>m == +1</code> the rounder is the tens digit, and the rounded digit is the hundreds digit <code>m == -1</code> rounder is the tenths digit (0.1), rounding the hundredths digit (0.01).</dd></dl>
 <p>(Other authors specify the nth digit to be significant, where n = m + 1).</p>
@@ -1090,7 +1089,7 @@ ISO Guide 98 (1995) and updated version 2008.<br />
 </div><div class="memdoc">
 <p>round value v to d digits after decimal point, using d+1 digit to round. </p>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l00995">995</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01006">1006</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -1220,7 +1219,7 @@ template&lt;typename FPT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Decimal digit <code>std::string</code> containing rounded value.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01251">1251</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l01273">1273</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -1253,7 +1252,7 @@ template&lt;typename FPT &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l00733">733</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="rounding_8hpp_source.html#l00743">743</a> of file <a class="el" href="rounding_8hpp_source.html">rounding.hpp</a>.</p>
 
 </div>
 </div>
@@ -1274,7 +1273,7 @@ template&lt;typename FPT &gt; </div>
       <!-- Change copyright to YOUR name (and affiliation, if any) below:  -->
      <p>Copyright © 2018 Paul A. Bristow</p>
       <!-- 2018 becomes the current year, for example 2010, so claims copyright for a range of years, 2009 - 2010. -->
-     <p>Doxygen Documentation generated by&nbsp;<a href="http://www.doxygen.org/index.html"> <img src="doxygen.png" alt="doxygen logo" align="middle" border="0"/> 1.8.14</a>, Revised at Tue Nov 6 2018 11:38:56</p>
+     <p>Doxygen Documentation generated by&nbsp;<a href="http://www.doxygen.org/index.html"> <img src="doxygen.png" alt="doxygen logo" align="middle" border="0"/> 1.8.14</a>, Revised at Thu Nov 29 2018 13:03:33</p>
   </address>
   </tr>
 </tbody>

@@ -1,4 +1,4 @@
-/*! \file unc_print.cpp
+/*! 
   \brief Output of uncertain values.
   \details Definitions of unc_input declarations in unc.hpp.\n
     Outline:
@@ -20,6 +20,7 @@
     Output degrees of freedom, if required.
 
     Record width used etc.
+  \file
 */
 
 // Copyright Paul A. Bristow 2009, 2012, 2018.
@@ -28,6 +29,8 @@
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+// file unc_output.hpp
 
 #ifndef BOOST_UNCERTAIN_OUTPUT_IPP
 #define BOOST_UNCERTAIN_OUTPUT_IPP

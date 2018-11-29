@@ -37,6 +37,9 @@
 [def __ulp [@http://en.wikipedia.org/wiki/Unit_in_the_last_place  Unit in the last place (ULP)]]
 [def __short_float [@http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2016.pdf N2016 short float type]]
 [def __ULP [@https://en.wikipedia.org/wiki/Unit_in_the_last_place Unit in the Last Place]]
+[def __NaN [@http://en.wikipedia.org/wiki/NaN NaN]]
+[def __infinity [@https://en.wikipedia.org/wiki/Floating-point_arithmetic#Special_values infinity]]
+[def __IEEE [@https://en.wikipedia.org/wiki/IEEE_754 IEEE_754 floating-point]]
 
 [/def __svg [^[classref boost::svg::svg svg<>]]]
 [/def __svg_1d_plot [^[classref boost::svg::svg_1d_plot svg_1d_plot<>]]]
@@ -53,7 +56,6 @@
 
 [/import ../../../tools/auto_index/include/auto_index_helpers.qbk]
 [/ Must be first included file!]
-
 
 [def __ceilR '''&#x2309;''']
 [def __ceilL '''&#2308;''']
@@ -206,8 +208,9 @@ The C++ types used are chosen are a compromise between size and speed.
 
 [h5:value value element]
 
-The data value `double` using the most common 64-bit IEEE representation is sufficient precision (about 15 decimal digits) for almost all physical measurements.,
-even including [@https://en.wikipedia.org/wiki/Physical_constant physical constants] like the speed of light.
+The data value `double` using the most common 64-bit ___IEEE representation is sufficient precision (about 15 decimal digits)
+for almost all physical measurements., even including
+[@https://en.wikipedia.org/wiki/Physical_constant physical constants] like the speed of light.
 
 The `double` range of 10 [super 308] is also sufficient for most uses,
 except perhaps astronomy, but units like light years are already widely used to avoid the need for much larger exponents.
@@ -220,6 +223,10 @@ to show missing values and ifinite values.
 A convenient and popular measure of uncertainty is __standard_deviation.
 
 `float` precision is sufficient for uncertainty if the value has `double` precision.
+
+But a possible objection is that using only `float` precision is that
+the [*range] of the value is reduced to near that of the standard_deviation; usually about 1e38.
+It might be better to store as the normalized relative standard deviation, the standard deviation / value?
 
 It is convenient to use the _IEEE non-finite representations of __NaN and __infinity to indicate
 that information about uncertainty is missing or infinite.
@@ -237,9 +244,9 @@ One could use a `float` type, usually 32-bit, which would allow fractional degre
 but which would entail at least twice the space.
 (A C++ standard floating-point type that uses only 16 bits is not yet widely available).
 
-It is important to remember that what is stored and propagated is degrees of freedom rather than
+[note It is important to remember that what is stored and propagated is degrees of freedom rather than
 the number of samples.  The output as "1.23 +/- 0.05 (9)" may suggest 9 samples, but must be read as 10 samples.
-Degrees of freedom is zero for just one sample.
+Degrees of freedom is zero for just one sample.]
 
 [h5:unc_types Flags that hold other information about the uncertain value]
 

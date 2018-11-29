@@ -22,7 +22,7 @@
 namespace boost {
   namespace quan {
 
-    using boost::quan::unc_types; // enum unc_types
+  //  using boost::quan::unc_types; // enum unc_types
 
 /*!
 	// Inputs uncertainty as value, (implicitly exact, std deviation = 0).
@@ -30,7 +30,7 @@ namespace boost {
       // (1.0 implies 1. +|- 0.5 and sd of 0.5,
       // 1.00 implies 1. +|- 0.05 and sd of 0.05)
 
-      // & optionally degrees of freedom [(<short int>)] like (99)
+      // & optionally degrees of freedom [(\<short int\>)] like (99)
       // Used by istream& operator>> (istream&, unc<is_correlated>&)
 */
     void unc_input(

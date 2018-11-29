@@ -8,6 +8,11 @@
 
 //  pows.hpp
 
+//! helper function for integeral powers.  Not sure how useful.
+
+// TODO these are all vulnerable to overflow?  especially pow4  Cne we reformulate their use to avoid this?
+// would using pow function with integer power be possible/better?
+
 #ifndef BOOST_QUAN_POWS
 #define BOOST_QUAN_POWS
 
