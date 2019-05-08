@@ -15,7 +15,7 @@
 # AND Boost auto-indexing.
 
 # run with b2 -a --enable-index > quan_docs_29Nov2018.log
-
+# May need to remove old html contents.
 
 # project boost/doc ;
 
@@ -85,8 +85,6 @@ doxygen autodoc
     [ glob ../../../boost/quan/impl/xiostream.hpp ]
     [ glob ../../../boost/quan/impl/unc_fwd.hpp ]
     [ glob ../../../boost/quan/impl/pows.hpp ]
-
-
   :
     #<doxygen:param>INPUT="filename1 directoryname2" # Separate with spaces.
     # But also see paths specified above.
