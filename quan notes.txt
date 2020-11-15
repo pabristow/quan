@@ -15,4 +15,8 @@ http://www.av8n.com/physics/uncertainty.htm#sec-crank3
 
  and didn't finally build svg_plot docs.
 
+ 15Nov2020 17:38  Now building docs OK.
+
+
+
 
