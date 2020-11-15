@@ -2,6 +2,7 @@ doc/html/
 **/*.bat
 doc/*.pdf
 doc/autodoc.xml
+**/*.bak
 
 
 #################
