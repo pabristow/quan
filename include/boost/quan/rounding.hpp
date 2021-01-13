@@ -39,20 +39,7 @@
     Measurement Science Review, Vol 2, section 1, (2002), pages 21 to 31.\n
  */
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4127) // conditional expression is constant.
-#pragma warning(disable: 4180) // qualifier applied to function type has no meaning; ignored.
-//#  pragma warning(disable: 4702) // unreachable code.
-//#  pragma warning(disable: 4511) // copy constructor could not be generated.
-//#  pragma warning(disable: 4512) // assignment operator could not be generated.
-//#  pragma warning(disable: 4521) // alignment of a member was sensitive to packing.
-//#  pragma warning(disable: 4121) // alignment of a member was sensitive to packing.
-//#  pragma warning(disable: 4100) // unreferenced formal parameter.
-//#  pragma warning(disable: 4701) // local variable may be used without having been initialized.
-//#  pragma warning(disable: 4189) // local variable is initialized but not referenced.
-//#  pragma warning(disable: 4996) // '' was declared deprecated.
-#endif
-
+#include <cmath>
 // using std::floor;
 // using std::pow;
 // using std::log10;
@@ -574,7 +561,7 @@ std::string round_ms(FPT v, signed int m) { /*! \brief Round floating-point v (n
    */
 
 //#ifdef _MSC_VER
-//  if (s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 5) // exponent sign,  
+//  if (s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 5) // exponent sign,
 //  { // for double == 21 (would be 23 if value was negative, but we are only dealing with abs value).
 //    // 1.23000000000000000e+00
 //    outFmtFlags(ss.flags());
@@ -1192,7 +1179,8 @@ int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigi
   } else { // // <= 1% loss from rounding accepted.
     gl = 0.98972;
   }
-  if (gl > g) {
+  if (gl > g)
+  { // Example: Cannot return a rounding m because epsilon 0.05 is too small!
     std::cout << "Cannot return a rounding m because epsilon " << e << " is too small!" << std::endl;
     return -9999;
   }
