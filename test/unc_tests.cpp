@@ -34,7 +34,7 @@
 #include <boost/cstdlib.hpp> // needed for boost::exit_failure;
 
 #include <boost/test/unit_test.hpp> // Enhanced for unit_test framework autolink,
-#include <boost/test/floating_point_comparison.hpp> // Extra test tool for FP comparison.
+#include <boost/test/tools/floating_point_comparison.hpp> // Extra test tool for FP comparison.
   using boost::unit_test::test_suite;
   using boost::unit_test::unit_test_log;
 
@@ -77,12 +77,11 @@
   using std::numeric_limits;
 
 #include <boost/quan/xiostream.hpp> // extra iostream manipulators like noshowbase
-  using std::lowercase;
   using std::defaultfloat; // Initial default - neither scientific nor fixed.
-  using std::nofixed;
-  using std::noscientific;
-  using std::noadjust;
-  using std::hexbase;
+ // using std::nofixed;
+//  using std::noscientific;
+//  using std::noadjust;
+//  using std::hexbase;
 
 #include <boost/quan/unc.hpp> // Declaration of Uncertain Classes.
 
@@ -213,7 +212,7 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
 #else
   message += "."
 #endif
-  BOOST_MESSAGE(message);
+  BOOST_TEST_MESSAGE(message);
 
  //   BOOST_CHECK(zeroIndex == indexID); // Should pass?
 
@@ -253,7 +252,7 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   // Greek mu is \x0B5 for files, degree symbol is \x0B0
   // BOOST_CHECK(fin.is_open());  // No input yet?
 
-  BOOST_MESSAGE("Uncertain Class tests log. " << "                                     Expected   Was    Expected");
+  BOOST_TEST_MESSAGE("Uncertain Class tests log. " << "                                     Expected   Was    Expected");
 
   // cout.fill('0'); // to get trailing zeros.
   // cout << fixed << setprecision(17) << 12.34 << automatic << endl; // 12.34000000000000000
@@ -1378,7 +1377,7 @@ BOOST_AUTO_TEST_CASE(unc_test_setsegdigits)
 
 BOOST_AUTO_TEST_CASE(unc_test_coda)
 {
-  BOOST_MESSAGE("Uncertain Class tests log end. " << __FILE__ << ' ' <<  __TIMESTAMP__ );
+  BOOST_TEST_MESSAGE("Uncertain Class tests log end. " << __FILE__ << ' ' <<  __TIMESTAMP__ );
 
   dout << "\n""Unc Diagnostics log end. " << endl; // \x0F1 = +- on screen, but ~n in files!
 

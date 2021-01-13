@@ -22,6 +22,13 @@ http://www.av8n.com/physics/uncertainty.htm#sec-crank3
 
  13Jan2021 17:14 parameters sigma etc are zero???  But why?
 
+ jamfile writtem for quan/unc tests but many errors.
+
+ But commit work so far.
+
+
+
+
 
 
 
