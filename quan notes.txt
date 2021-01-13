@@ -16,6 +16,13 @@ http://www.av8n.com/physics/uncertainty.htm#sec-crank3
  and didn't finally build svg_plot docs.
 
  15Nov2020 17:38  Now building docs OK.
+ 13Jan2021 14:00 Cannot return a rounding m because epsilon 0.05 is too small!
+
+ in I:\boost\libs\quan\include\boost\quan\rounding.hpp
+
+ 13Jan2021 17:14 parameters sigma etc are zero???  But why?
+
+
 
 
 

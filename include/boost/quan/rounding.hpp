@@ -1,6 +1,6 @@
 /*!
   \file
-  \brief Common rounding
+  \brief Common rounding and 'proper' rounding.
   \details
     http://www.diycalculator.com/popup-m-round.shtml#A3
     all rounding types, including round-to-half and asymmetric and symmetric versions.\n
@@ -111,25 +111,25 @@
 //using std::numeric_limits;
 
 #include <locale>
-// default loc for isdigit
+// default locale for isdigit
 
 BOOST_STATIC_ASSERT(std::numeric_limits<double>::is_iec559); // Assume IEEE 754 ONLY.
 // _STATIC_ASSERT (numeric_limits<double>::is_iec559); // and MS STATIC assert.
-// Might also work by checking that std::numeric_limits is specialized?
 
+// Might also work by checking that just std::numeric_limits is specialized?
+// This might allow some embedded systems to use this software.
 BOOST_STATIC_ASSERT(std::numeric_limits<double>::is_specialized); //
 
 #ifdef BOOST_NO_CXX11_NUMERIC_LIMITS
-// No support for std::numeric_limits<double>::max_digits10,
+// No support for std::numeric_limits<double>::max_digits10, so compute max_digits10
 const unsigned int maxdigits10 = 2 + std::numeric_limits<double>::digits * 3010 / 10000;
 #else
 // std::numeric_limits<double>::max_digits10; IS supported.
-// Any noisy or guard digits needed to display any difference are included in max_digits10.
+// Any noisy or guard digits needed to display a one-bit difference are included in max_digits10.
 const unsigned int maxdigits10 = std::numeric_limits<double>::max_digits10;
 #endif
 
-// Explicit specialization for pair of doubles.
-
+// Explicit specialization for output of a pair of doubles.
 std::ostream& operator<<(std::ostream& os, std::pair<double, double>& p)
 { /*! Output a pair of `double`s, using < > angle brackets and comma separator, using current stream's precision..
   \details Explicit specialization for `std::pair` for `double`s.\n
@@ -140,24 +140,11 @@ std::ostream& operator<<(std::ostream& os, std::pair<double, double>& p)
   return os << "<" << p.first << ", " << p.second << '>'; // Angle bracketed, separated by comma & space.
 }
 
-// Explicit specialization for pair of const doubles.
-
-std::ostream& operator<<(std::ostream& os, const std::pair<double, double>& p)
-{ /*! Output a pair of `double`s, using \< \> angle brackets and comma separator, using current stream's precision..
-  \details Explicit specialization for @b `const` `std::pair` for `double`s.\n
-  For example: \<97.8725, 157.798\>
-
-  \param p Pair of @c double to be output to stream os.
-  \param os @c std::ostream for string output.
-  */
-  return os << "<" << p.first << ", " << p.second << '>'; // Angle bracketed, separated by comma & space.
-}
-
 // Two rounding algorithms returning double values (not strings).
 template<typename FPT> FPT round_sig(FPT v, int n); // v rounded to n significant decimal digits.
 template<typename FPT> FPT round_to_n(FPT v, int p); // Round value v to p decimal digits *after the decimal point*.
 
-// Rounding algorithms returning strings.
+// Two rounding algorithms returning strings.
 template<typename FPT> std::string round_f(FPT v, int sigdigits); // Round fixed (not-exponential) to sigdigits decimal digits to string.
 //template<typename FPT> std::string round_e(FPT v, int sigdigits); // Round fixed (exponential) to sigdigits decimal digits to string.
 // Not yet implemented?
@@ -757,7 +744,7 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
   //std::cout << "max dec " << maxDecimalDigits << std::endl; // 310
 
   /*! \note C++0X provides @c std::numeric_limits<double>::max_digits10;
-    which is maximum possibly significant,
+    which is maximum number of possibly significant digits,
     but only @c digit10 are guaranteed to be significant,
     so limit @c sigdigits to @c digits10 (15 for IEEE 64-bit double).
    */
@@ -768,7 +755,7 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
 
   if (sigdigits < 0) { // Must be a mistake.
     std::cout << "Trying to output " << sigdigits << " significant digits!" << std::endl;
-    return "";
+    return "";  // Or throw?
   } else if (sigdigits == 0) { // Might handle zero case differently from sigdigits < 0?
     std::cout << "Trying to output zero significant digits!" << std::endl;
     return "";
@@ -1096,14 +1083,15 @@ double gamma(double rounded, double value) {/*! \brief Calculate Wimmer gamma ro
   return g;
 } // double gamma(double rounded, double value)
 
-int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigits = 2U, distribution_type distrib = gaussian) { /*! \brief Calculate the Wimmer rounding digit m using delta and gamma functions p 1661, equation 12.
+int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigits = 2U, distribution_type distrib = gaussian) 
+{ /*! \brief Calculate the Wimmer rounding digit m using delta and gamma functions p 1661, equation 12.
   \details Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X.
   Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
   Proper rounding of the measurement results under normality assumptions.
 
   \param epsilon Rounding loss (as fraction) accepted (default is 0.01 or 1%).
-  \param sigma Uncertainty as standard deviation.
-  \param sigma_sigdigits Number of significant decimal digits
+  \param sigma Uncertainty as standard deviation, for example 0.01.
+  \param sigma_sigdigits Number of significant decimal digits (default = 2)
   for uncertainty to be rounded (range 1 to 4, default = 2), depending on degrees of freedom.\n
   If degrees_of_freedom <= 2, then 1, else if degrees_of_freedom > 1000, then 3 else default = 2.
   \param distrib Type of distribution (default gaussian, or triangular or uniform).
@@ -1111,10 +1099,12 @@ int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigi
    \return m Signed position of the digit to be used for rounding,
     `m == 0` means use the units digit for rounding the tens digit.
   */
-  if ((sigma_sigdigits < 1) || (sigma_sigdigits > 4)) { // sigma_sigdigits is too big to be plausible from the confidence interval of uncertainty.
+  if ((sigma_sigdigits < 1) || (sigma_sigdigits > 4))
+  { // sigma_sigdigits is too big to be plausible from the confidence interval of uncertainty.
     sigma_sigdigits = 4; // or throw?
   }
-  // \boost_1_40_0\libs\math\example\chi_square_std_dev_test.cpp
+  // https://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/dist_ref/dists/chi_squared_dist.html
+  // https://www.boost.org/doc/libs/release/libs/math/example/chi_square_std_dev_test.cpp
 
   //Confidence level (two-sided) =  0.0500000
   //Standard Deviation           =  1.0000000
@@ -1145,23 +1135,19 @@ int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigi
   //    100000         0.9956         1.0044
   //   1000000         0.9986         1.0014
 
-  // and in Owen L. Davies and Peter L. Goldsmith, Statistical Methods in Research and production, ISBN 0 05 002437, p 457 (1972)
+  // and in Owen L. Davies and Peter L. Goldsmith, Statistical Methods in Research and production, ISBN 0 05 002437, p 457 (1972).
 
   // So for 2 observations, the uncertainty might be 30 times, or half the central estimate,
   // meaning that a second digit is not likely to be significant.
-  // But for the more common several degrees of freedom,
-  // a second digit might be significant.
+  // But for the more common several degrees of freedom, a second digit might be significant.
   // So the ISO GUM pragmatically states that 2 significant decimal digits should be used for the standard uncertainty.
   // It only when 1000 observations are available (and there are no problems with drift)
   // a fractional relative standard deviation of uncertainty is about 0.05
   // and that 3 significant decimal digits are needed avoid loss from rounding.
   double sigma_rounded = round_sig(sigma, sigma_sigdigits);
   // ISO GUM always rounds uncertainty to n=2 significant digits,
-  // but elsewhere Wimmer et al round to only *one* significant digit.
-  // So sigdigits is parameterized to allow variation from (possibly very many)
-  // (possibly known) degrees of freedom?
-
-  // Wimmer uses only one significant digit to round sigma, for reasons unclear.
+  // but elsewhere Wimmer et al round to only *one* significant digit, for reasons unclear.
+  // So sigdigits is parameterized to allow variation from (possibly very many) (possibly known) degrees of freedom?
   // So tests that compare to the paper do not fail when epsilon has values in example 5, p1662.
 
   double g = gamma(sigma_rounded, sigma);
@@ -1179,10 +1165,13 @@ int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigi
   } else { // // <= 1% loss from rounding accepted.
     gl = 0.98972;
   }
-  if (gl > g)
+  if (gl >= g)
   { // Example: Cannot return a rounding m because epsilon 0.05 is too small!
     std::cout << "Cannot return a rounding m because epsilon " << e << " is too small!" << std::endl;
-    return -9999;
+    std::cout << "sigma_rounded = " << sigma_rounded  << ", sigma = " << sigma
+      << ", gamma(sigma_rounded, sigma) = " << g << ", gl = " << gl << std::endl;
+    // sigma_rounded = 0, sigma = 0, gamma(signa_rounded, signma) = 0, gl = 0.90175
+    return -9999;  // Or ???
   }
   // Or throw?
 
