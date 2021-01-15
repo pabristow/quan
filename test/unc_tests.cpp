@@ -15,17 +15,21 @@
 
 // #define BOOST_QUAN_UNC_TRACE // Diagnostic output.  (was UNC_TRACE?)
 
+#include <boost/config.hpp>
+#include <boost/cstdlib.hpp> // needed for boost::exit_failure;
+
 #define BOOST_TEST_MAIN // Required for int test_main() (must come FIRST).
 //#define BOOST_LIB_DIAGNOSTIC "on"// Show library file details.
 // Linking to lib file: libboost_unit_test_framework-vc100-mt-s-1_49.lib
 
-#include <boost/config.hpp>
-#include <boost/cstdlib.hpp> // needed for boost::exit_failure;
+#include <boost/test/included/unit_test.hpp> // 
 
-#include <boost/test/included/unit_test.hpp> // Enhanced for unit_test framework autolink,
 #include <boost/test/tools/floating_point_comparison.hpp> // Extra test tool for FP comparison.
   using boost::unit_test::test_suite;
   using boost::unit_test::unit_test_log;
+
+#include <boost/math/special_functions/next.hpp>
+//     using boost::math::nextafter;
 
 // Classes for simple propagation of Uncertainties according to a pure Gaussian model.
 
@@ -35,7 +39,7 @@
   using std::endl;
   using std::ios_base;
   using std::cin;
-  using std::endl;
+  using std::cout;
   using std::flush;
   using std::ws;
   using std::boolalpha;
@@ -217,8 +221,6 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   BOOST_TEST_MESSAGE(message);
 
  //   BOOST_CHECK(zeroIndex == indexID); // Should pass?
-
-
   // BOOST_CHECK(lout.is_open());
   //   unc_tests.cpp(235): info: check lout.is_open() passed
   // unit_test_log.set_stream(lout); // Switch to log file.
@@ -354,215 +356,6 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   BOOST_CHECK_EQUAL(std::cerr.width(), 0);// Check width has been reset to zero.
   } // BOOST_AUTO_TEST_CASE(unc_test_basic)
 
-//#define CPP_TESTS
-#ifdef CPP_TESTS
-BOOST_AUTO_TEST_CASE(unc_test_stdio)
-{  // Examples of C++ std integer output.
-  int i1 = 1;
-  CHECK(i1, "1");
-  CHECK(noshowpoint << i1, "1"); // Explicit NOshowpoint
-  CHECK(showpoint << i1, "1"); // Never show point if value is integer!
-
-  int i1234 = 1234;
-  CHECK(i1234, "1234");
-  CHECK(noshowpoint << i1234, "1234"); // Normal
-  CHECK(showpoint << i1234, "1234"); // NOT "1234." Doesn't show point if integer!
-  CHECK(std::showpos << i1234, "+1234"); // Shows +
-
-  int m1 = -1; // negative variable.
-  CHECK(m1, "-1"); //  negative constant.
-  CHECK(hex << m1, "ffffffff"); //
-  int m1234 = -1234;
-  CHECK(m1234, "-1234"); // plain negative
-  CHECK(noshowpoint << m1234, "-1234"); // Normal
-  CHECK(showpoint << m1234, "-1234"); // NOT "-1234." Doesn't show point if integer!
-  CHECK(std::showpos << m1234, "-1234"); // Makes no difference - always show - sign.
-  CHECK(nostd::showpos << m1234, "-1234"); // Makes no difference - always show - sign.
-
-  int i = 15;
-  CHECK(hex << showbase << setw(5) << i, "  0xf"); // 2 spaces + 3 digit chars.
-  CHECK(hex << noshowbase << setw(5) << i, "    f"); // 4 spaces + 1 digit char .
-  CHECK(hex << left << noshowbase << setw(5) << i, "f    "); // 1 digit char + 4 fill spaces.
-  CHECK(right << dec << noshowbase << setw(5) << i, "   15"); // 1 digit char + 3 fill spaces.
-  CHECK(setfill('~') << left << dec << noshowbase << setw(5) << i, "15~~~"); //  3 ~ & 1 digit char.
-  CHECK(setfill('~') << right << dec << noshowbase << setw(5) << i, "~~~15"); // 1 digit char + 3 ~.
-
-  // Check some examples of built-in double output.
-
-  double zero = 0.;
-  double one = 1.;
-  double minus1 = -1.;
-  double point1 = 0.1;
-
-  CHECK(zero, "0"); // normal defaults, width = 1
-  CHECK(std::showpos << zero, "+0"); // normal defaults, width = 1
-  CHECK(setprecision(0) << zero, "0"); // NO decimal point.
-  // Check use of std::showpos and showpoint.
-  CHECK(fixed << std::showpos << showpoint << zero, "+0.000000"); // 1+6 zeros - no precision set, so defaults to 6.
-  CHECK(showpoint << setprecision(1) << zero, "0.0"); // normal defaults, width = 7
-  CHECK(showpoint << std::showpos << setprecision(0) << zero, "+0.000000"); // 6 zeros
-  CHECK(showpoint << std::showpos << setprecision(1) << zero, "+0.0"); // normal defaults, width = 1
-  CHECK(showpoint << std::showpos << setprecision(-1) << zero, "+0.000000"); // 6 zeros
-  CHECK(showpoint << std::showpos << setprecision(6) << zero, "+0.000000"); // 6 zeros
-  // So setprecision(0) means precision(6) if normal unless fixed when
-  CHECK(fixed << showpoint << setfill('~') << setprecision(0) << zero, "0."); // width = 2
-  CHECK(fixed << std::showpos << showpoint << setfill('~') << setprecision(0) << zero, "+0."); // width = 2
-  CHECK(fixed << std::showpos << showpoint << setprecision(0) << zero, "+0."); // width = 3
-  CHECK(fixed << std::showpos << showpoint << setprecision(1) << zero, "+0.0"); // width = 4
-  CHECK(fixed << std::showpos << showpoint << setprecision(2) << zero, "+0.00"); // width = 5
-  CHECK(fixed << std::showpos << showpoint << setprecision(3) << zero, "+0.000"); // width = 6
-
-  CHECK(fixed << setprecision(0) << zero, "0"); // width = 1
-  CHECK(fixed << showpoint << setprecision(0) << zero, "0."); // width = 2
-  CHECK(fixed << showpoint << setprecision(1) << zero, "0.0"); // width = 3
-  CHECK(fixed << showpoint << setprecision(2) << zero, "0.00"); // width = 4
-  CHECK(fixed << showpoint << setprecision(3) << zero, "0.000"); // width = 5
-
-  CHECK(one, "1"); // normal defaults, width = 1
-  CHECK(showpoint << one, "1.00000"); // Same as above, using default precision(6)
-  // << showpoint means that precision is used.
-  CHECK(left << showpoint << setfill('~') << setprecision(6) << one, "1.00000"); // width = 7
-  CHECK(left << showpoint << setfill('~') << setprecision(1) << one, "1."); // width = 7
-  CHECK(left << showpoint << setfill('~') << setprecision(0) << one, "1.00000"); // NOT "1."
-  // So conclude that precision(0) means default is used.
-  // Show how precision controls if width is not set & show that no fill char ~ are used):
-  CHECK(left << fixed << showpoint << setprecision(4) << one, "1.0000"); // width = 6
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(6) << one, "1.000000"); // width = 8
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(5) << one, "1.00000"); // width = 7
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(4) << one, "1.0000"); // width = 6
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(3) << one, "1.000"); // width = 5
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(2) << one, "1.00"); // width = 4
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(1) << one, "1.0"); // width = 3
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(0) << one, "1."); // width = 2
-  CHECK(left << showpoint << setfill('~') << setprecision(0) << one, "1.00000"); // width = 6 + 1 .
-
-  CHECK(fixed << showpoint << setprecision(0) << minus1, "-1."); // width = 3 if value >= 1, precision(0) then 1 digit.
-  CHECK(fixed << showpoint << setprecision(1) << minus1, "-1.0"); // width = 4
-  CHECK(fixed << showpoint << setprecision(2) << minus1, "-1.00"); // width = 5
-  CHECK(fixed << showpoint << setprecision(3) << minus1, "-1.000"); // width = 6
-
-  CHECK(fixed << showpoint << setprecision(0) << point1, "0."); // width = 2 - else if value < 1. then NO precision!
-  CHECK(fixed << showpoint << setprecision(1) << point1, "0.1"); // width = 3
-  CHECK(fixed << showpoint << setprecision(2) << point1, "0.10"); // width = 4
-  CHECK(fixed << showpoint << setprecision(3) << point1, "0.100"); // width = 5
-
-  double big = 123456.;
-  CHECK(big, "123456"); // default 'normal' is not fixed, nor showpoint, nor scientific.
-  // Nicholai M Josuttis, The C++ Standard Library, ISBN 0 201 37926 0, page 624
-  CHECK(showpoint                    << big, "123456."); // Add single . point.
-  CHECK(showpoint << setprecision(0) << big, "123456."); // Same as no setprecision
-  CHECK(showpoint << setprecision(1) << big, "1.e+005"); // Cuts down to 1 decimal place and goes exp.
-  CHECK(showpoint << setprecision(2) << big, "1.2e+005"); // Cuts down to 1+1 decimal place and goes exp.
-  CHECK(showpoint << setprecision(3) << big, "1.23e+005"); // Cuts down to 1+2 decimal place and goes exp.
-  CHECK(showpoint << setprecision(4) << big, "1.235e+005"); // Rounds to 1+3 decimal place and goes exp.
-  CHECK(showpoint << setprecision(5) << big, "1.2346e+005"); // Rounds to 1+4 decimal place and goes exp.
-  CHECK(showpoint << setprecision(6) << big, "123456."); // Using default 6 for setprecision(6).
-  CHECK(showpoint                    << big, "123456."); // Same as using default setprecision(6).
-  CHECK(showpoint << setprecision(7) << big, "123456.0"); // Precision digits (7) in integral & fractional part.
-  CHECK(showpoint << setprecision(17) << big, "123456.00000000000"); // Max 64-bit double setprecision, 18 digits
-
-  // If fixed then precision sets the number of digits in the FRACTIONAL part.
-  CHECK(fixed << showpoint << setprecision(0) << big, "123456."); //
-  CHECK(fixed << showpoint << setprecision(1) << big, "123456.0"); //
-  CHECK(fixed << showpoint << setprecision(2) << big, "123456.00"); //
-  CHECK(fixed << showpoint << setprecision(3) << big, "123456.000"); //
-
-  double fourDigits = 1234.;
-  CHECK(fourDigits, "1234"); // default 'normal' aka 'automatic' is not fixed, nor scientific, nor showpoint, nor std::showpos.
-  // Nicholai M Josuttis, The C++ Standard Library, ISBN 0 201 37926 0, page 624
-  CHECK(showpoint                    << fourDigits, "1234.00"); // Add single . point.
-  CHECK(showpoint << setprecision(0) << fourDigits, "1234.00"); // Same as no setprecision
-  CHECK(showpoint << setprecision(1) << fourDigits, "1.e+003"); // Cuts down to 1 decimal place and goes exp.
-  CHECK(showpoint << setprecision(2) << fourDigits, "1.2e+003"); // Cuts down to 1+1 decimal place and goes exp.
-  CHECK(showpoint << setprecision(3) << fourDigits, "1.23e+003"); // Cuts down to 1+2 decimal place and goes exp.
-  CHECK(showpoint << setprecision(4) << fourDigits, "1234."); // Rounds to 1+3 decimal place.
-  CHECK(showpoint << setprecision(5) << fourDigits, "1234.0"); // Rounds to 1+4 decimal place.
-  CHECK(showpoint << setprecision(6) << fourDigits, "1234.00"); // Using default 6 for setprecision(6).
-  CHECK(showpoint                    << fourDigits, "1234.00"); // Same as using default setprecision(6).
-  CHECK(showpoint << setprecision(7) << fourDigits, "1234.000"); // Precision digits (7) in integral & fractional part.
-  CHECK(showpoint << setprecision(17) << fourDigits, "1234.0000000000000"); // Max 64-bit double setprecision, 18 digits
-
-  // If fixed then precision sets the number of digits in the FRACTIONAL part.
-  CHECK(fixed << showpoint << setprecision(0) << fourDigits, "1234."); //
-  CHECK(fixed << showpoint << setprecision(1) << fourDigits, "1234.0"); //
-  CHECK(fixed << showpoint << setprecision(2) << fourDigits, "1234.00"); //
-  CHECK(fixed << showpoint << setprecision(3) << fourDigits, "1234.000"); //
-
-  // Using fixed, showpoint and setprecision to show significant digits, including decimal point and trailing zeros.
-  double twelve34 = 12.34;
-  CHECK(twelve34, "12.34");
-  CHECK(fixed << showpoint << setprecision(0) << twelve34, "12.");
-  CHECK(fixed << showpoint << setprecision(1) << twelve34, "12.3");
-  CHECK(fixed << showpoint << setprecision(2) << twelve34, "12.34");
-  CHECK(fixed << showpoint << setprecision(3) << twelve34, "12.340"); // Adds trailing zero(s)
-  CHECK(fixed << showpoint << setprecision(4) << twelve34, "12.3400");
-  CHECK(fixed << showpoint << setprecision(5) << twelve34, "12.34000");
-
-  // fill NOT used unless width is set.
-  // Forcing + sign with std::showpos
-  CHECK(left << fixed << std::showpos << showpoint << setfill('0') << setprecision(0) << one, "+1."); // width = 3
-  CHECK(left << fixed << showpoint << setfill('0') << setprecision(0) << minus1, "-1."); // width = 3
-
-  // fill NOT used unless width is set using setw().
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(4) << one, "1.0000"); // no set width, 4 zeros after.
-  // Using setfill and showpoint (and setw) to show trailing zeros.
-  CHECK(left << fixed << showpoint << setfill('0') << setprecision(4) << setw(8) << one, "1.000000"); // 2 extra fill zeros.
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(4) << setw(8) << one, "1.0000~~"); // 2 extra fill ~.
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(4) << setw(7) << one, "1.0000~"); // 1 extra fill ~
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(4) << setw(6) << one, "1.0000"); // width has no effect.
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(4) << setw(5) << one, "1.0000"); // NO fill.
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(3) << setw(4) << one, "1.000");
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(2) << setw(3) << one, "1.00");
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(1) << setw(3) << one, "1.0");
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(1) << setw(1) << one, "1.0"); // want 1.
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(1) << setw(2)  << zero , "0.0"); // want 0.
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(1) << setw(1)  << zero , "0.0"); // 0.0
-  CHECK(left << fixed << noshowpoint << setfill('~') << setprecision(1) << setw(1)  << zero , "0.0");
-  CHECK(left << fixed << noshowpoint << setfill('~') << setprecision(0) << setw(1)  << zero , "0");
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(0)  << setw(1)  << zero , "0.");
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(0)  << setw(0)  << zero , "0."); // setw(0) undefined?
-  CHECK(left << fixed << showpoint << setfill('~') << setprecision(-1) << one, "1.000000"); // precision < 0 means default = 6
-
-  double d = 1.234567890;
-  CHECK(setw(20) << d, "             1.23457"); // precision 6, width 20  is 13 spaces + 7 chars.
-  CHECK(fixed << setw(20) << d, "            1.234568"); // width 20  is 12 spaces + 8 chars.
-  CHECK(fixed << setw(20) << d, "            1.234568"); // width 20  is 13 spaces + 8 chars.
-  CHECK(scientific << setw(20) << d, "       1.234568e+000"); // width 20  is 7 spaces + 13 chars.
-  CHECK(scientific << d, "1.234568e+000"); // width reverts automatically to 0.
-  CHECK(scientific << setw(20) << right << d, "       1.234568e+000"); // width 20  is 7 spaces + 13 chars.
-  CHECK(scientific << setw(20) << left << d, "1.234568e+000       "); // width 20  is 7 spaces + 13 chars.
-  CHECK(scientific << setw(20) << internal << d, "       1.234568e+000"); // width 20  is 7 spaces + 13 chars.
-  CHECK(scientific << setw(20) << std::showpos << internal << d, "+      1.234568e+000"); // width 20  is 7 spaces + 13 chars.
-  CHECK(scientific << setw(20) << std::showpos << internal << setfill('0') << d, "+0000001.234568e+000"); // width 20 is 6 zero fills, 0 spaces + 14 chars.
-  CHECK(scientific << setw(20) << std::showpos << internal << setfill('*') << d, "+******1.234568e+000"); // width 20 is 6 * fills, 0 spaces + 14 chars.
-  CHECK(scientific << setw(20) << std::showpos << d, "      +1.234568e+000"); // width 20  is 6 spaces + 14 chars.
-  CHECK(scientific << setw(20) << std::showpos << left << d, "+1.234568e+000      "); // width 20  is 14 chars + 6 spaces.
-  CHECK(scientific << setw(20) << nostd::showpos << setfill('~') << d, "~~~~~~~1.234568e+000"); // Combine scientific with fill
-  CHECK(scientific << setw(20) << nostd::showpos << right << setfill('~') << d,    "~~~~~~~1.234568e+000"); // Combine scientific with fill
-  CHECK(scientific << setw(20) << nostd::showpos << internal << setfill('~') << d, "~~~~~~~1.234568e+000"); // Combine scientific with fill
-  CHECK(scientific << setw(20) << nostd::showpos << left << setfill('~') << d, "1.234568e+000~~~~~~~"); // Combine scientific with fill
-
-  // Padding with fill char.
-  CHECK(setw(0) << setfill('~') << i, "15"); // width(0) so no fill.
-  CHECK(setw(1) << setfill('~') << i, "15"); // width(1) so no room for fill.
-  CHECK(setw(2) << setfill('~') << i, "15"); // width(1) so no room for fill.
-  CHECK(setw(3) << setfill('~') << i, "~15"); // width(1) so 1 fill.
-  CHECK(setw(5) << setfill('~') << i, "~~~15"); // width 5 is 3 fill + 2 digits.
-  CHECK(setw(5) << setfill('~') << right << i, "~~~15"); // width 5 is 3 fill + 2 digits.
-  CHECK(setw(5) << setfill('~') << internal << i, "~~~15"); // width 5 is 3 fill + 2 digits.
-  CHECK(setw(5) << setfill('~') << left << i, "15~~~"); // width 5 is 2 digits + 3 fill.
- // CHECK(setw(5) << setfill('~') << noadjust << i, "~~~15"); // width 5 is 3 fill + 2 digits.
-  CHECK(setw(5) << setfill('~') << left << i, "15~~~"); // width 5 is 2 digits + 3 fill.
-  CHECK(setfill(' ') << i, "15"); // width goes back to 0 each time.
-
-  // Extra multiple manipulators: spaces, tabs and chars.
-  CHECK(spaces(5), "     ");
-  CHECK(tabs(5), "\t""\t""\t""\t""\t");
-  CHECK(stars(5), "*****");
-  CHECK(chars(5, '~'), "~~~~~");
-  CHECK(chars(5, ' '), "     ");
-} // BOOST_AUTO_TEST_CASE(unc_test_stdio)
-#endif // CPP_TESTS
 
 BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
 { // Show 'C++ Standard' rounding of 9.95 and precision(6) is NOT "10."
@@ -583,12 +376,13 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     CHECK(fixed << showpoint << setprecision(2) << nine95, "9.95");
   }
   { // Similar checks for unc type.
+    using boost::math::float_next;
     using boost::math::nextafter;
 
     uncun nine94(9.94, 0.1f); //
-    uncun nine95B(_nextafter(9.95, (std::numeric_limits<double>::min)()), 0.1f); // Just below 9.95.
+    uncun nine95B(boost::math::nextafter(9.95, (std::numeric_limits<double>::min)()), 0.1f); // Just below 9.95.
     uncun nine95(9.95, 0.1f); // Nearest representable to 9.95.)
-    uncun nine95A(_nextafter(9.95, (std::numeric_limits<double>::max)()), 0.1f); // Just after 9.95.
+    uncun nine95A(boost::math::nextafter(9.95, (std::numeric_limits<double>::max)()), 0.1f); // Just after 9.95.
     uncun nine96(9.96, 0.1f); //
     CHECK(nine94, "9.94");  // Should round down up to 9.94.
     CHECK(nine95B, "9.95");  // Should NOT round up to 10.
@@ -1038,8 +832,8 @@ BOOST_AUTO_TEST_CASE(unc_test_nines)
 {
 
 using boost::math::nextafter;
-  uncun nine95B(_nextafter(9.95, (std::numeric_limits<double>::min)()), 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
-  uncun nine95A(_nextafter(9.95, (std::numeric_limits<double>::max)()), 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
+  uncun nine95B(boost::math::nextafter(9.95, (std::numeric_limits<double>::min)()), 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
+  uncun nine95A(boost::math::nextafter(9.95, (std::numeric_limits<double>::max)()), 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
   uncun nine95(9.95, 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
   uncun nine94(9.94, 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
   uncun nine96(9.96, 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
