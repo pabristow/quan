@@ -1090,7 +1090,7 @@ int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigi
   Proper rounding of the measurement results under normality assumptions.
 
   \param epsilon Rounding loss (as fraction) accepted (default is 0.01 or 1%).
-  \param sigma Uncertainty as standard deviation, for example 0.01.
+  \param sigma Uncertainty as standard deviation, for example: 0.01.
   \param sigma_sigdigits Number of significant decimal digits (default = 2)
   for uncertainty to be rounded (range 1 to 4, default = 2), depending on degrees of freedom.\n
   If degrees_of_freedom <= 2, then 1, else if degrees_of_freedom > 1000, then 3 else default = 2.
@@ -1099,9 +1099,20 @@ int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigi
    \return m Signed position of the digit to be used for rounding,
     `m == 0` means use the units digit for rounding the tens digit.
   */
-  if ((sigma_sigdigits < 1) || (sigma_sigdigits > 4))
+  if (sigma <= 0.)
+  {
+    std::cout << "sigma " << sigma << std::endl;
+  }
+
+  if (sigma_sigdigits <= 0)
+  { // sigma_sigdigits is too small to be plausible from the confidence interval of uncertainty.
+     std::cout << ", sigma = " << sigma << ", sigma_sigdigits = " << sigma_sigdigits << " must be >= 1! " << std::endl;
+   sigma_sigdigits = 1; // or throw?
+  }
+  else if (sigma_sigdigits > 4)
   { // sigma_sigdigits is too big to be plausible from the confidence interval of uncertainty.
-    sigma_sigdigits = 4; // or throw?
+    std::cout << ", sigma = " << sigma << ", sigma_sigdigits = " << sigma_sigdigits << " must be <= 4! " << std::endl;
+    sigma_sigdigits = 4U;
   }
   // https://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/dist_ref/dists/chi_squared_dist.html
   // https://www.boost.org/doc/libs/release/libs/math/example/chi_square_std_dev_test.cpp
@@ -1141,8 +1152,8 @@ int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigi
   // meaning that a second digit is not likely to be significant.
   // But for the more common several degrees of freedom, a second digit might be significant.
   // So the ISO GUM pragmatically states that 2 significant decimal digits should be used for the standard uncertainty.
-  // It only when 1000 observations are available (and there are no problems with drift)
-  // a fractional relative standard deviation of uncertainty is about 0.05
+  // It is only when at least 1000 observations are available (and there are no problems with drift)
+  // then a fractional relative standard deviation of uncertainty is about 0.05
   // and that 3 significant decimal digits are needed avoid loss from rounding.
   double sigma_rounded = round_sig(sigma, sigma_sigdigits);
   // ISO GUM always rounds uncertainty to n=2 significant digits,

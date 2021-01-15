@@ -24,7 +24,7 @@ http://www.av8n.com/physics/uncertainty.htm#sec-crank3
 
  jamfile writtem for quan/unc tests but many errors.
 
- But commit work so far.
+ But commit work so far.13Jan2021 17:45
 
 
 

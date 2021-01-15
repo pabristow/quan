@@ -4,7 +4,7 @@
 */
 
 // meas.hpp
-// Copyright Paul A. Bristow 2012
+// Copyright Paul A. Bristow 2012, 2021
 
 #ifndef MEAS_HPP
 #define MEAS_HPP
@@ -38,7 +38,7 @@ public:
   //Meas(); // Constructor - all defaults.
   Meas(double const d = 0.);   // Constructor from double (no extra info).
   //Meas::Meas(uncun u);  // Constructor from uncertain uncun.
-  //	Meas(int const);   // Constructor from int - use automatic conversion int to double.
+  //  Meas(int const);   // Constructor from int - use automatic conversion int to double.
   // Meas(uncun u, string id = "", boost::posix_time::ptime ti = boost::posix_time::not_a_date_time);
   Meas(uncun u, string id = "", boost::posix_time::ptime ti = (boost::posix_time::not_a_date_time), int o = -1);
   //Meas(uncun u, string id = "", int o = -1);
@@ -76,7 +76,7 @@ public:
   // Usage: Meas::lessU(a, b);
   static bool less(const Meas& l, const Meas& r); // l < r value (ignoring uncertainty).
   static bool lessU(const Meas& l, const Meas& r); // < uncertain value.
-  static bool less2U(const Meas& l, const Meas& r); // < 2 * uncertainty .
+  static bool less2U(const Meas& l, const Meas& r); // < 2 * uncertainty.
   static bool precedes(const Meas& l, const Meas& r); // < order.
   static bool earlier(const Meas& l, const Meas& r);  // < time.
   static bool greaterU(const Meas& l, const Meas& r); // > uncertain value.

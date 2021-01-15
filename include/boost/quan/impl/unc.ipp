@@ -4,10 +4,10 @@
   \details Class for simple Propagation of Uncertainties
      according to a pure Gaussian model.
      Uncertain subroutines, manipulators & applicators.
-     but not <iomanip> because defined here (as a copy of code in Std iomanip).
+     but not <iomanip> because defined here (as a copy of code in Std iomanip).  <<<<<<<<<< TODO
 */
 
-// Copyright Paul A. Bristow 1998, 2012.
+// Copyright Paul A. Bristow 1998, 2012, 2021
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -796,7 +796,6 @@ double unc_of(uncun u)
 }
 
 // Pairs of values.
-
 template <> //! \tparam T Built-in floating-point type, float, double, long double or unc or Meas.
 std::pair<double, double> values_of(std::pair<double, double> vp)
 { //!< \return values of a pair of double values.

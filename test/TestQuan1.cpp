@@ -1,4 +1,5 @@
 // TestQuan1.cpp
+
 // Test unc fully first.
 // Compiles and run 8 Aug but results wrong in unc
 // Using atime seems to work but is messy - use Boost posixTime?
@@ -6,11 +7,7 @@
 // Test of Quan1 - univariate using uncertainty and statistical tests.
 
 // see QuanOne word document for description.
-#ifdef _MSC_VER
-#  pragma warning(disable : 4189) // 'argument' : conversion from 'time_t' to 'unsigned short', possible loss of data
-#  pragma warning(disable : 4996) //  _CRT_SECURE_NO_WARNINGS.
-#  pragma warning(disable : 4702) // Unreachable code.
-#endif
+
 
 #include <cmath>   // for sqrt, exp ...
 #include <iostream> //
@@ -26,7 +23,8 @@
 #include <ctime>  // C time.h defines time_t time(time_t* timer);
 #include <cassert> // for testing only.
 
-#include "unc.hpp" // Declaration of Uncertain Classes.
+#include <boost/quan/unc.hpp> // Declaration of Uncertain Classes.
+//#include "unc.hpp" // Declaration of Uncertain Classes.
 #include "meas.hpp" // uncertain plus order.
 #include "to_string.hpp" //
 
@@ -117,7 +115,7 @@ char const* Ctime(time_t* t); // Timestamp as string "Tue Apr 24 16:57:31 2001""
 #include <boost/cstdlib.hpp> // needed for boost::exit_failure;
 
 #include <boost/test/unit_test.hpp> // Enhanced for unit_test framework autolink,
-#include <boost/test/floating_point_comparison.hpp> // Extra test tool for FP comparison.
+#include <boost/test/tools/floating_point_comparison.hpp> // Extra test tool for FP comparison.
   using boost::unit_test::test_suite;
   using boost::unit_test::unit_test_log;
 
@@ -150,7 +148,7 @@ BOOST_AUTO_TEST_CASE(quan1_test_0)
 #else
   message += "."
 #endif
-  BOOST_MESSAGE(message);
+  BOOST_TEST_MESSAGE(message);
   BOOST_CHECK(std::numeric_limits<double>::is_iec559 == true);
   // IEE745 is assumed by code.
 

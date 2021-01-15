@@ -9,22 +9,11 @@
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-// Copyright Paul A. Bristow 1998, 2012.
+// Copyright Paul A. Bristow 1998, 2012, 2021.
 
 // unc_tests.cpp
 
-#ifdef _MSC_VER
-#  pragma warning(disable: 4702) // unreachable code
-#  pragma warning(disable: 4511) // copy constructor could not be generated.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4521) // alignment of a member was sensitive to packing.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4701) // local variable may be used without having been initialized.
-#  pragma warning(disable: 4121) // alignment of a member was sensitive to packing.
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#endif
-
-// #define UNC_TRACE // Diagnostic output.
+// #define BOOST_QUAN_UNC_TRACE // Diagnostic output.  (was UNC_TRACE?)
 
 #define BOOST_TEST_MAIN // Required for int test_main() (must come FIRST).
 //#define BOOST_LIB_DIAGNOSTIC "on"// Show library file details.
@@ -33,7 +22,7 @@
 #include <boost/config.hpp>
 #include <boost/cstdlib.hpp> // needed for boost::exit_failure;
 
-#include <boost/test/unit_test.hpp> // Enhanced for unit_test framework autolink,
+#include <boost/test/included/unit_test.hpp> // Enhanced for unit_test framework autolink,
 #include <boost/test/tools/floating_point_comparison.hpp> // Extra test tool for FP comparison.
   using boost::unit_test::test_suite;
   using boost::unit_test::unit_test_log;
@@ -84,6 +73,34 @@
 //  using std::hexbase;
 
 #include <boost/quan/unc.hpp> // Declaration of Uncertain Classes.
+
+  using std::istream;
+  using std::ostream;
+  using std::ios_base;
+  using std::char_traits;
+  using std::cout;
+  using std::cerr;
+  using std::cin;
+  using std::endl;
+  using std::flush;
+  using std::ws;
+  using std::streamsize;
+  using std::boolalpha;
+  using std::dec;
+  using std::hex;
+  using std::showbase;
+  using std::fixed;
+  using std::scientific;
+  using std::right;
+  using std::showpos;
+  using std::noshowpos;
+  using std::noshowbase;
+  using std::noshowpoint;
+  using std::showpoint;
+
+  using std::setprecision;
+  using std::setw;
+  using std::resetiosflags;
 
 // Files made global to avoid nasty memory leak, and loop to end of memory.
 const char testInputFilename[] = "unc_test_input.txt"; // Input for tests (fin).
@@ -170,34 +187,6 @@ const char diagFilename[] = "unc_diag.txt"; // diagnostic log diverted from cerr
 // BOOST_CHECK_EQUAL(oss.iword(0), indexID);\
 
 // This test case is automatically registered by using BOOST_AUTO_TEST_CASE.
-  using std::istream;
-  using std::ostream;
-  using std::ios_base;
-  using std::char_traits;
-  using std::cout;
-  using std::cerr;
-  using std::cin;
-  using std::endl;
-  using std::flush;
-  using std::ws;
-  using std::streamsize;
-  using std::boolalpha;
-  using std::dec;
-  using std::hex;
-  using std::showbase;
-  using std::fixed;
-  using std::scientific;
-  using std::right;
-  using std::showpos;
-  using std::noshowpos;
-  using std::noshowbase;
-  using std::noshowpoint;
-  using std::showpoint;
-
-  using std::setprecision;
-  using std::setw;
-  using std::resetiosflags;
-
 
 BOOST_AUTO_TEST_CASE(unc_test_basic)
 { // Uncertain Class tests.
@@ -222,40 +211,40 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   // unit_test_log.set_stream(lout); // Switch to log file.
   // BOOST_TEST_MESSAGE(message);
 
-  BOOST_CHECK(numeric_limits<double>::is_iec559 == true); // IEC559/IEEE754 floating point.
+  BOOST_CHECK(std::numeric_limits<double>::is_iec559 == true); // IEC559/IEEE754 floating point.
 
   // Change log level to record warnings & errors.
   // unit_test_log.set_log_threshold(boost::unit_test::log_successful_tests);
   unit_test_log.set_threshold_level(boost::unit_test::log_all_errors);
   //unit_test_log::instance().set_threshold_level(test_suite);
   //unit_test_log::instance().set_threshold_level(messages); // user messages
-  // Prepare to send log to a file instead of cout.
+  // Prepare to send log to a file instead of std::cout.
 
   cout << "\x0F1 Uncertain Class Test output to " << outFilename << ' '
-    << __FILE__ << ' ' <<  __TIMESTAMP__ << endl;
-  // +- symbol on screen cout = dec 177, hex F1 but shows ~n in files?
-  // BUT is messy because in file codeset +- symbol \x0B1 176!
+    << __FILE__ << ' ' <<  __TIMESTAMP__ << std::endl;
+  // +- symbol on screen std::cout = dec 177, hex F1 but shows ~n in files?
+  // BUT is messy because in file codeset +- symbol \x0B1 176! octal \361
 
   BOOST_CHECK(fout.is_open());
   // Test output to file ...
-  fout << "Test Output from " << __FILE__ << " " << __TIMESTAMP__"\n" << endl;
+  fout << "Test Output from " << __FILE__ << " " << __TIMESTAMP__"\n" << std::endl;
 
   // Test diagnostic output to file ...
   //BOOST_CHECK(lout.is_open());
-  //lout << "Unc " << logFilename << " opened." << endl;
+  //lout << "Unc " << logFilename << " opened." << std::endl;
   BOOST_CHECK(dout.is_open());
-  dout << "Unc Diagnostics logged to " << diagFilename << " from " << __FILE__ << " " << __TIMESTAMP__"\n"<< endl;
-  cout << "Unc Diagnostics logged to " << diagFilename  << endl; // \x0F1 on screen but ~n in files.
+  dout << "Unc Diagnostics logged to " << diagFilename << " from " << __FILE__ << " " << __TIMESTAMP__".\n"<< std::endl;
+  std::cout << "Unc Diagnostics logged to " << diagFilename  << std::endl; // \x0F1 on screen but ~n in files.
   cerr.rdbuf(dout.rdbuf()); // cerr = dout;  // Switch cerr to diagnostic log.
-  // dout << "Diagnostic cerr from " << __FILE__ << " " << __TIMESTAMP__"\n" << endl;
-  cerr << "\x0B1 \x0B5 Diagnostic cerr from " << __FILE__ << " " << __TIMESTAMP__"\n" << endl;
+  // dout << "Diagnostic cerr from " << __FILE__ << " " << __TIMESTAMP__"\n" << std::endl;
+  std::cerr << "\x0B1 \x0B5 Diagnostic cerr from " << __FILE__ << " " << __TIMESTAMP__".\n" << std::endl;
   // Greek mu is \x0B5 for files, degree symbol is \x0B0
   // BOOST_CHECK(fin.is_open());  // No input yet?
 
   BOOST_TEST_MESSAGE("Uncertain Class tests log. " << "                                     Expected   Was    Expected");
 
-  // cout.fill('0'); // to get trailing zeros.
-  // cout << fixed << setprecision(17) << 12.34 << automatic << endl; // 12.34000000000000000
+  // std::cout.fill('0'); // to get trailing zeros.
+  // std::cout << std::fixed << std::setprecision(17) << 12.34 << std::defaultfloat << std::endl; // 12.34000000000000000
   // gives 17 digits (2 digits plus 15 trailing zeros AFTER decimal point).
 
   //________________________________________________________________________________________________________________________________
@@ -346,9 +335,9 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
 
   std::streamsize w = cerr.width(6); // Set a width of 6.
   BOOST_CHECK_EQUAL(cerr.width(), 6);  // Confirm has been set to 6.
-  cerr << endl; // Does NOT 'Use' width.
+  cerr << std::endl; // Does NOT 'Use' width.
   BOOST_CHECK_EQUAL(cerr.width(), 6);  // Confirm is STILL 6.
-  cerr << '\t' << endl; // (\a shows as small square) Does 'Use' width, like << "use" or << 99
+  cerr << '\t' << std::endl; // (\a shows as small square) Does 'Use' width, like << "use" or << 99
   BOOST_CHECK_EQUAL(cerr.width(), 0);// Check width has been reset to zero.
   } // BOOST_AUTO_TEST_CASE(unc_test_basic)
 
@@ -549,7 +538,7 @@ BOOST_AUTO_TEST_CASE(unc_test_stdio)
   CHECK(setw(5) << setfill('~') << right << i, "~~~15"); // width 5 is 3 fill + 2 digits.
   CHECK(setw(5) << setfill('~') << internal << i, "~~~15"); // width 5 is 3 fill + 2 digits.
   CHECK(setw(5) << setfill('~') << left << i, "15~~~"); // width 5 is 2 digits + 3 fill.
-  CHECK(setw(5) << setfill('~') << noadjust << i, "~~~15"); // width 5 is 3 fill + 2 digits.
+ // CHECK(setw(5) << setfill('~') << noadjust << i, "~~~15"); // width 5 is 3 fill + 2 digits.
   CHECK(setw(5) << setfill('~') << left << i, "15~~~"); // width 5 is 2 digits + 3 fill.
   CHECK(setfill(' ') << i, "15"); // width goes back to 0 each time.
 
@@ -584,9 +573,9 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     using boost::math::nextafter;
 
     uncun nine94(9.94, 0.1f); //
-    uncun nine95B(_nextafter(9.95, numeric_limits<double>::min()), 0.1f); // Just below 9.95.
-    uncun nine95(9.95, 0.1f); // Nearest representable to 9.95.
-    uncun nine95A(_nextafter(9.95, numeric_limits<double>::max()), 0.1f); // Just after 9.95.
+    uncun nine95B(_nextafter(9.95, (std::numeric_limits<double>::min)()), 0.1f); // Just below 9.95.
+    uncun nine95(9.95, 0.1f); // Nearest representable to 9.95.)
+    uncun nine95A(_nextafter(9.95, (std::numeric_limits<double>::max)()), 0.1f); // Just after 9.95.
     uncun nine96(9.96, 0.1f); //
     CHECK(nine94, "9.94");  // Should round down up to 9.94.
     CHECK(nine95B, "9.95");  // Should NOT round up to 10.
@@ -745,11 +734,11 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     CHECK_USED(plusminus << twelve3, "12.30 +/-0.026");
     //CHECK_OUT_IN(plusminus << twelve3, "12.30 +/-0.05", 12.3, 0.025f, 0,  (UNC_KNOWN | UNC_QUAN_DECIMAL | UNC_EXPLICIT) ));
 
-    uncun imax(numeric_limits<int>::max()); // Exact int max 2147483647.
+    uncun imax((std::numeric_limits<int>::max)()); // Exact int max 2147483647.
     BOOST_CHECK(imax.types() & VALUE_INTEGER); // Check IS integer from argument.
     CHECK_USED(imax, "2147483647"); // no . because integer.
 
-    uncun imin(numeric_limits<int>::min()); // Exact int min -2147483648.
+    uncun imin((std::numeric_limits<int>::min)()); // Exact int min -2147483648.
     BOOST_CHECK(imin.types() & VALUE_INTEGER); // Check IS integer from argument.
     CHECK_USED(imin, "-2147483648"); // no . because integer.
     uncun twelvede(1234.); // double from double variable, default stddev, so implicitly exact.
@@ -854,7 +843,7 @@ BOOST_AUTO_TEST_CASE(unc_test_input)
 {
   // zero integer rational uncKnown noPlus noMinus at end of read.
   uncun r1;
-  //outUncTypes(r1.types(), cout);
+  outUncTypes(r1.types(), std::cout);
   istringstream isr1("0"); // Read from integer.
   isr1 >> r1;
   BOOST_CHECK_EQUAL(r1.value(), 0.);
@@ -916,18 +905,18 @@ BOOST_AUTO_TEST_CASE(unc_test_input)
     uncun r1;
     istringstream isr1("2/3"); // Read from string.
     isr1 >> r1;
-    cout << r1.value() << ' ' << r1.std_dev() << ' ' << r1.degFree() << r1.types() << ", " ;
-    outUncTypes(r1.types(), cout);
-    cout << endl;
+    std::cout << r1.value() << ' ' << r1.std_dev() << ' ' << r1.degFree() << r1.types() << ", " ;
+    outUncTypes(r1.types(), std::cout);
+    std::cout << std::endl;
   }
 
     {
     uncun r1;
     istringstream isr1("2/3+/-0.02f"); // Read from string.
     isr1 >> r1;
-    cout << r1.value() << ' ' << r1.std_dev() << ' ' << r1.degFree() << r1.types() << ", " ;
-    outUncTypes(r1.types(), cout);
-    cout << endl;
+    std::cout << r1.value() << ' ' << r1.std_dev() << ' ' << r1.degFree() << r1.types() << ", " ;
+    outUncTypes(r1.types(), std::cout);
+    std::cout << std::endl;
   }
 
 
@@ -1036,8 +1025,8 @@ BOOST_AUTO_TEST_CASE(unc_test_nines)
 {
 
 using boost::math::nextafter;
-  uncun nine95B(_nextafter(9.95, numeric_limits<double>::min()), 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
-  uncun nine95A(_nextafter(9.95, numeric_limits<double>::max()), 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
+  uncun nine95B(_nextafter(9.95, (std::numeric_limits<double>::min)()), 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
+  uncun nine95A(_nextafter(9.95, (std::numeric_limits<double>::max)()), 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
   uncun nine95(9.95, 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
   uncun nine94(9.94, 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
   uncun nine96(9.96, 2.f); // Inexact from double, sd 0.01, df 2 = 3 values.
@@ -1104,7 +1093,7 @@ BOOST_AUTO_TEST_CASE(unc_test_big)
 
   // Check on too big values.
   uncun big(1e39, 2e36f); // Bigger than exponent limit.
-  //cout << big << endl;
+  //std::cout << big << std::endl;
   CHECK_USED(big, "1e+039");  // Default exp format, precision 6 total decimal digits.
 
   uncun bigSI(1e25, 2.f); // Bigger than SI exponent limit.
@@ -1144,12 +1133,12 @@ BOOST_AUTO_TEST_CASE(unc_test_manips)
   CHECK_USED(scientific << noplusminus << setw(20) << left << one2345,   "1.235               "); //
   CHECK_USED(scientific << plusminus << setw(20) << left << one2345,     "1.235 +/-0.010      "); //
   CHECK_USED(scientific << plusminus << setw(20) << right << one2345,    "      1.235 +/-0.010"); //
-  CHECK_USED(scientific << plusminus << setw(20) << noadjust << one2345, "      1.235 +/-0.010"); // == right adjust.
+  //CHECK_USED(scientific << plusminus << setw(20) << noadjust << one2345, "      1.235 +/-0.010"); // == right adjust.
   CHECK_USED(scientific << plusminus << setw(20) << showpos << one2345,  "     +1.235 +/-0.010"); // == right adjust.
   CHECK_USED(scientific << plusminus << setw(20) << showpos
                                                 << internal << one2345,  "     +1.235 +/-0.010"); // Expect same as right.
 
-  CHECK_USED(scientific << plusminus << setw(20) << noadjust << setfill('~') << one2345, "~~~~~~1.235 +/-0.010"); // expect same as right adjust.
+ // CHECK_USED(scientific << plusminus << setw(20) << noadjust << setfill('~') << one2345, "~~~~~~1.235 +/-0.010"); // expect same as right adjust.
   CHECK_USED(scientific << plusminus << setw(20) << setfill('~') << left << one2345,     "1.235 +/-0.010~~~~~~"); //
   CHECK_USED(scientific << plusminus << setw(20) << setfill('~') << internal << one2345, "~~~~~~1.235 +/-0.010");
   CHECK_USED(scientific << plusminus << setw(20) << setfill('~') << right << one2345,    "~~~~~~1.235 +/-0.010"); // Expect same as right.
@@ -1160,41 +1149,41 @@ BOOST_AUTO_TEST_CASE(unc_test_manips)
 
 } // BOOST_AUTO_TEST_CASE(unc_test_manips)
 
-BOOST_AUTO_TEST_CASE(unc_test_setsigfigs)
-{ // Tests of fixing sigfigs.
-  uncun u0(0, 0);  // Exact Zero, using constructor from int zero.
-
-  fout << "setSigDigits(4) " << setSigDigits(4) << endl; // Check can set setsigdigits,
-  BOOST_CHECK_EQUAL(fout.iword(setSigDigitsIndex), 4); // and read back correctly.
-
-  fout << "setUncSigDigits(1) " << setUncSigDigits(1) << endl; // Check can set setuncsigdigits,
-  BOOST_CHECK_EQUAL(fout.iword(setUncSigDigitsIndex), 1); // and read back correctly.
-
-  CHECK(setSigDigits(4) << u0, "0"); // Not yet setsigdigits, so has no effect.
-  // setsigdigits should force to 4 digits set by setSigDigits(4).
-  CHECK(setSigDigits(4) << setsigdigits << u0, "0.0000"); // Fails!
-
-  uncun one(1., 0.001f); //
-  CHECK(setSigDigits(3) << setsigdigits << one, "1.00"); //  getting 1.
-  CHECK_USED(setSigDigits(-1) << setsigdigits << u0, "0.00000000000000000"); // Invalid sigDigits (show max_digits10).
-  CHECK_USED(setSigDigits(0) << setsigdigits << u0, "0.00000000000000000"); // Zero sigDigits (show max_digits10).
-  CHECK_USED(setSigDigits(1) << setsigdigits << u0, "0.0"); // Override normal is still exact, so no decimal point.
-  CHECK_USED(setSigDigits(2) << setsigdigits << u0, "0.00"); // Is still exact, so no decimal point.
-  CHECK_USED(setSigDigits(3) << setsigdigits << u0, "0.000"); //
-  CHECK_USED(setSigDigits(4) << setsigdigits << u0, "0.0000"); //
-  CHECK_USED(setSigDigits(1) << setsigdigits << showpoint << u0, "0.0"); // Override normal is still exact, but showpoint demands a decimal point.
-  CHECK_USED(setSigDigits(1) << setsigdigits << showpos << u0, "+0.0"); //  Show plus sign.
-  CHECK_USED(setSigDigits(1) << setsigdigits << left << setw(6) << u0, "0.0   "); // Trailing spaces.
-
-
-  uncun u(12.345678, 0.09876F);
-  CHECK_USED(plusminus << u, "12.35 +/-0.099");
-  CHECK_USED(setSigDigits(6) << setsigdigits << plusminus << u, "12.3457 +/-0.099");
-  CHECK_USED(setSigDigits(6) << setsigdigits << plusminus << showpos << u, "+12.3457 +/-0.099");
-  CHECK_USED(setUncSigDigits(6) << setuncsigdigits << plusminus << u, "12.35 +/-0.0988");
-  // Uncertainty controls value but not uncertainty digits of precision.
-
-}
+//BOOST_AUTO_TEST_CASE(unc_test_setsigfigs)
+//{ // Tests of fixing sigfigs.
+//  uncun u0(0, 0);  // Exact Zero, using constructor from int zero.
+//
+//  fout << "setSigDigits(4) " << setSigDigits(4) << std::endl; // Check can set setsigdigits,
+//  BOOST_CHECK_EQUAL(fout.iword(setSigDigitsIndex), 4); // and read back correctly.
+//
+//  fout << "setUncSigDigits(1) " << setUncSigDigits(1) << std::endl; // Check can set setuncsigdigits,
+//  BOOST_CHECK_EQUAL(fout.iword(setUncSigDigitsIndex), 1); // and read back correctly.
+//
+//  CHECK(setSigDigits(4) << u0, "0"); // Not yet setsigdigits, so has no effect.
+//  // setsigdigits should force to 4 digits set by setSigDigits(4).
+//  CHECK(setSigDigits(4) << setsigdigits << u0, "0.0000"); // Fails!
+//
+//  uncun one(1., 0.001f); //
+//  CHECK(setSigDigits(3) << setsigdigits << one, "1.00"); //  getting 1.
+//  CHECK_USED(setSigDigits(-1) << setsigdigits << u0, "0.00000000000000000"); // Invalid sigDigits (show max_digits10).
+//  CHECK_USED(setSigDigits(0) << setsigdigits << u0, "0.00000000000000000"); // Zero sigDigits (show max_digits10).
+//  CHECK_USED(setSigDigits(1) << setsigdigits << u0, "0.0"); // Override normal is still exact, so no decimal point.
+//  CHECK_USED(setSigDigits(2) << setsigdigits << u0, "0.00"); // Is still exact, so no decimal point.
+//  CHECK_USED(setSigDigits(3) << setsigdigits << u0, "0.000"); //
+//  CHECK_USED(setSigDigits(4) << setsigdigits << u0, "0.0000"); //
+//  CHECK_USED(setSigDigits(1) << setsigdigits << showpoint << u0, "0.0"); // Override normal is still exact, but showpoint demands a decimal point.
+//  CHECK_USED(setSigDigits(1) << setsigdigits << showpos << u0, "+0.0"); //  Show plus sign.
+//  CHECK_USED(setSigDigits(1) << setsigdigits << left << setw(6) << u0, "0.0   "); // Trailing spaces.
+//
+//
+//  uncun u(12.345678, 0.09876F);
+//  CHECK_USED(plusminus << u, "12.35 +/-0.099");
+//  CHECK_USED(setSigDigits(6) << setsigdigits << plusminus << u, "12.3457 +/-0.099");
+//  CHECK_USED(setSigDigits(6) << setsigdigits << plusminus << showpos << u, "+12.3457 +/-0.099");
+//  CHECK_USED(setUncSigDigits(6) << setuncsigdigits << plusminus << u, "12.35 +/-0.0988");
+//  // Uncertainty controls value but not uncertainty digits of precision.
+//
+//}
 
 BOOST_AUTO_TEST_CASE(unc_test_setscale)
 {   // Tests of unc setscale and autoscale functions.
@@ -1257,7 +1246,7 @@ BOOST_AUTO_TEST_CASE(unc_test_set_manips)
   setUncDefaults(fout); //†Resets stream's format flags to default.
   fout << resetiosflags(ios_base::basefield | ios_base::adjustfield | ios_base::floatfield
   | ios_base::showpos | ios_base::showpoint | ios_base::uppercase | ios_base::showbase )
-  << endl;
+  << std::endl;
   setiosDefaults(fout); // &
   setUncDefaults(fout);
 
@@ -1270,31 +1259,31 @@ BOOST_AUTO_TEST_CASE(unc_test_set_manips)
   BOOST_CHECK_EQUAL(fout.iword(setScaleIndex), 0);
   BOOST_CHECK_EQUAL(fout.iword(scaleIndex), 0);
 
-  fout << "setSigDigits(4) " << setSigDigits(4) << endl;
-  BOOST_CHECK_EQUAL(fout.iword(setSigDigitsIndex), 4);
+  //fout << "setSigDigits(4) " << setSigDigits(4) << std::endl;
+  //BOOST_CHECK_EQUAL(fout.iword(setSigDigitsIndex), 4);
 
-  fout << setSigDigits(2) << endl;
-  BOOST_CHECK_EQUAL(fout.iword(setSigDigitsIndex), 2);
-  BOOST_CHECK_EQUAL(fout.iword(oldSigDigitsIndex), 4); // Check save.
+  //fout << setSigDigits(2) << std::endl;
+  //BOOST_CHECK_EQUAL(fout.iword(setSigDigitsIndex), 2);
+  //BOOST_CHECK_EQUAL(fout.iword(oldSigDigitsIndex), 4); // Check save.
 
-  BOOST_CHECK_EQUAL(fout.iword(oldUncSigDigitsIndex),-1); // Default means not set yet.
-  fout << setUncSigDigits(5) << endl; // Bigger that makes sense.
-  BOOST_CHECK_EQUAL(fout.iword(setUncSigDigitsIndex), 3); // Reduces to max sensible.
-  fout << setUncSigDigits(2) << endl; // ISO default.
-  BOOST_CHECK_EQUAL(fout.iword(setUncSigDigitsIndex), 2); // Is default.
-  BOOST_CHECK_EQUAL(fout.iword(oldUncSigDigitsIndex), 3); // Previous set to 3.
+  //BOOST_CHECK_EQUAL(fout.iword(oldUncSigDigitsIndex),-1); // Default means not set yet.
+  //fout << setUncSigDigits(5) << std::endl; // Bigger that makes sense.
+  //BOOST_CHECK_EQUAL(fout.iword(setUncSigDigitsIndex), 3); // Reduces to max sensible.
+  //fout << setUncSigDigits(2) << std::endl; // ISO default.
+  //BOOST_CHECK_EQUAL(fout.iword(setUncSigDigitsIndex), 2); // Is default.
+  //BOOST_CHECK_EQUAL(fout.iword(oldUncSigDigitsIndex), 3); // Previous set to 3.
 
-  fout << "setUncWidth(10) " << setUncWidth(20) << flush;
-  BOOST_CHECK_EQUAL(fout.iword(uncWidthIndex), 20);
+  //fout << "setUncWidth(10) " << setUncWidth(20) << flush;
+  //BOOST_CHECK_EQUAL(fout.iword(uncWidthIndex), 20);
 
-  fout << "setScale(-3) " << setScale(-3) << flush;
-  BOOST_CHECK_EQUAL(fout.iword(setScaleIndex), -3);
+  //fout << "setScale(-3) " << setScale(-3) << flush;
+  //BOOST_CHECK_EQUAL(fout.iword(setScaleIndex), -3);
 
-  fout << "setsigdigits(5) " << setSigDigits(5) << flush;
-  BOOST_CHECK_EQUAL(fout.iword(setSigDigitsIndex), 5);
+  //fout << "setsigdigits(5) " << setSigDigits(5) << flush;
+  //BOOST_CHECK_EQUAL(fout.iword(setSigDigitsIndex), 5);
 
-  fout << "setuncsigdigits(1) " << setUncSigDigits(1) << flush;
-  BOOST_CHECK_EQUAL(fout.iword(setUncSigDigitsIndex), 1);
+  //fout << "setuncsigdigits(1) " << setUncSigDigits(1) << flush;
+  //BOOST_CHECK_EQUAL(fout.iword(setUncSigDigitsIndex), 1);
 
 
 } // BOOST_AUTO_TEST_CASE(unc_test_set_manips)
@@ -1351,9 +1340,9 @@ BOOST_AUTO_TEST_CASE(unc_test_unc_Nan_inf)
   CHECK_USED(plusminus << zeroMaybe, "0.00000000000000000 +/-?");
 
   uncun postwoMaybe(+2., numeric_limits<float>::quiet_NaN());  // +1.234 with unknown uncertainty.
-  //cout << postwoMaybe << endl;
+  //std::cout << postwoMaybe << std::endl;
   uncun posonetwoMaybe(+1.234, numeric_limits<float>::quiet_NaN());  // +1.234 with unknown uncertainty.
-  //cout << posonetwoMaybe << endl;
+  //std::cout << posonetwoMaybe << std::endl;
   CHECK_USED(posonetwoMaybe, "1.2340000000000000");
 
   uncun negtwoMaybe(-2.2, numeric_limits<float>::quiet_NaN());  // -2.2 with unknown uncertainty.
@@ -1379,31 +1368,31 @@ BOOST_AUTO_TEST_CASE(unc_test_coda)
 {
   BOOST_TEST_MESSAGE("Uncertain Class tests log end. " << __FILE__ << ' ' <<  __TIMESTAMP__ );
 
-  dout << "\n""Unc Diagnostics log end. " << endl; // \x0F1 = +- on screen, but ~n in files!
+  dout << "\n""Unc Diagnostics log end. " << std::endl; // \x0F1 = +- on screen, but ~n in files!
 
   cerr.rdbuf(dout.rdbuf()); // Switch diagnostic log back to cerr before close!
   // cerr = fout; in effect.
   dout.close(); // Diagnostics.
-  cerr << "\n\nClosed diagnostics file " << diagFilename << ' '<< __TIMESTAMP__ << endl;
+  cerr << "\n\nClosed diagnostics file " << diagFilename << ' '<< __TIMESTAMP__ << std::endl;
 
-  fout << "\nClosed test output "<< __FILE__ << ' ' <<  __TIMESTAMP__ << endl;
+  fout << "\nClosed test output "<< __FILE__ << ' ' <<  __TIMESTAMP__ << std::endl;
   fout.close(); // Test output.
-  //lout << logFilename << " end." << endl;
+  //lout << logFilename << " end." << std::endl;
 
-  //unit_test_log.set_stream(cout); // Switch back to cout,
+  //unit_test_log.set_stream(std::cout); // Switch back to std::cout,
   //lout.close();  // before close in case there is more log output,
   // which is almost certain, else ends unhappily!
 
-  cout << "\nClosed fout "<< __FILE__ << ' ' <<  __TIMESTAMP__ << endl;
+  std::cout << "\nClosed fout "<< __FILE__ << ' ' <<  __TIMESTAMP__ << std::endl;
 //  fin.close();
-//  cout << "\nClosed fin "<< __FILE__ << ' ' <<  __TIMESTAMP__ << endl;
-  cerr << endl;  // Needed to avoid crash right at end.
+//  std::cout << "\nClosed fin "<< __FILE__ << ' ' <<  __TIMESTAMP__ << std::endl;
+  cerr << std::endl;  // Needed to avoid crash right at end.
 }  // BOOST_AUTO_TEST_CASE(unc_test_coda)
 
 
 /*
 
-// Display of all 8-bit characters, showing differences between cout and fout.
+// Display of all 8-bit characters, showing differences between std::cout and fout.
 //{for (int i = 1; i < 0xFF; ++i)
   //{ // Output all 256 8-bit chars.
   //  fout << char(i);
@@ -1412,7 +1401,7 @@ BOOST_AUTO_TEST_CASE(unc_test_coda)
   //    fout << nl;
   //  }
   //}} // for i
-  //fout << endl;
+  //fout << std::endl;
   //!"#$%&'()*+,-./0123456789:;<=>?@
   //ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~Ä
   //ÅÇÉÑÖÜáàâäãåçéèêëíìîïñóòôöõúùûü†°¢£§•¶ß®©™´¨≠ÆØ∞±≤≥¥µ∂∑∏π∫ªºΩæø¿
@@ -1421,9 +1410,9 @@ BOOST_AUTO_TEST_CASE(unc_test_coda)
 // No minus infinity in numeric_limits,
 // but <cfloat> int _fpclass (double) == _FPCLASS_NINF if negative infinity.
 // uncun minus_infinite(MINUS_INFINITY, 0.0f);  // exact minus infinity.
-// fout << " (MINUS_INFINITY, 0.) " << minus_infinite << endl;
+// fout << " (MINUS_INFINITY, 0.) " << minus_infinite << std::endl;
 // infinite = uncun(MINUS_INFINITY, 0.1f);  // uncertain plus infinity.
-// fout << " (MINUS_INFINITY, 0.1) " << minus_infinite << endl;
+// fout << " (MINUS_INFINITY, 0.1) " << minus_infinite << std::endl;
 if (testMath)
 {
 cerr << "Test math functions." << nl;
@@ -1439,9 +1428,9 @@ fout <<
 uncun mod(0);
 uncun x(0);
 mod = fmod(x + 0.5, 1.0);  // Floating point modulus or remainder.
-fout << "fmod(" << (x + 0.5) << ", " << 1.0 << ") = " << mod << endl;
+fout << "fmod(" << (x + 0.5) << ", " << 1.0 << ") = " << mod << std::endl;
 mod = fmod(5.5, 0.9 + 0.1 * a);
-fout << "fmod(" << 5.5 << ", " << (0.9 + 0.1 * a) << ") = " << mod << endl;
+fout << "fmod(" << 5.5 << ", " << (0.9 + 0.1 * a) << ") = " << mod << std::endl;
 }
 {
 // unc modf(unc x, double* intPart)
@@ -1454,9 +1443,9 @@ uncun frac(0.88); // for return.
 
 double intPartdbl;  // for integer part as double.
 frac = modf(x, &intPartdbl); // integer part as double.
-fout << "modf(" << x << ", intPart) = " << intPartdbl << " & " << frac << endl;
+fout << "modf(" << x << ", intPart) = " << intPartdbl << " & " << frac << std::endl;
 frac = modf(x + 0.5, &intPartdbl);
-fout << "modf(" << (x + 0.5) << ", intPart) = " << intPartdbl << " & "<< frac << endl;
+fout << "modf(" << (x + 0.5) << ", intPart) = " << intPartdbl << " & "<< frac << std::endl;
 }
 // double frexp( double x, int *expptr );
 // breaks floating-point value (x) into a mantissa (m) and an exponent (n),
@@ -1465,31 +1454,31 @@ fout << "modf(" << (x + 0.5) << ", intPart) = " << intPartdbl << " & "<< frac <<
 
 int intPart;  // for exponent part of double.
 t = frexp(c, &intPart);  // split c to mantissa & exponent.
-fout << "frexp(" << c << ", i) = " << t << endl;
+fout << "frexp(" << c << ", i) = " << t << std::endl;
 t = frexp(c + 0.5, &intPart);
-fout << "frexp(" << (c + 0.5) << ", i) = " << t << endl;
+fout << "frexp(" << (c + 0.5) << ", i) = " << t << std::endl;
 t = ceil(c);  // integer (as double) >= double.
-fout << "ceil(" << c << ") = " << " " << t << endl;
+fout << "ceil(" << c << ") = " << " " << t << std::endl;
 t = ceil(c + 0.5);
-fout << "ceil(" << (c + 0.5) << ") = " << t << endl;
+fout << "ceil(" << (c + 0.5) << ") = " << t << std::endl;
 t = floor(c);  // integer (as double) <= double.
-fout << "floor(" << c << ") = " << t << endl;
+fout << "floor(" << c << ") = " << t << std::endl;
 t = floor(c + 0.5);
-fout << "floor(" << (c + 0.5) << ") = " << t << endl;
+fout << "floor(" << (c + 0.5) << ") = " << t << std::endl;
 
 t = fabs(c);  // absolute value of a double.
-fout << "fabs(" << c << ") = " << t << endl;
+fout << "fabs(" << c << ") = " << t << std::endl;
 b = -1.2;
 t = fabs(b);
-fout << "fabs(" << b << ") = " << t << endl;
+fout << "fabs(" << b << ") = " << t << std::endl;
 t = fabs(b + 0.02);
-fout << "fabs(" << (b + 0.02) << ") = " << t << endl;
+fout << "fabs(" << (b + 0.02) << ") = " << t << std::endl;
 // End scope of uncun a,b,c, ...
 } // test Meth
 
 fout << "\nUnits test Output from "
 << __FILE__ << space << __DATE__ << " " << __TIME__
-<< "\n" << endl;
+<< "\n" << std::endl;
 
 uncun uGiven;  // Give on input.
 uncun uScaled; // Input scaled by unit prefix or symbol.
@@ -1501,8 +1490,8 @@ if (fin) getline(fin, test);
 if (test.size() == 0) break;  // to quit.
 if (test.size() > 0)
 {
-fout << "\nINPUT: " << test << endl;  // Echo input to file.
-cerr << "\nINPUT: " << test << endl;  // Echo input to console.
+fout << "\nINPUT: " << test << std::endl;  // Echo input to file.
+cerr << "\nINPUT: " << test << std::endl;  // Echo input to console.
 istringstream is(test);
 is >> uGiven;
 if (is.fail() == true || is.eof() == true)
@@ -1544,7 +1533,7 @@ continue;
 }
 
 is >> multipleUnit;  // 1 meter, 2.2 mm, 1 inch, 3.4 uin or u"
-cerr << "multipleUnit " << multipleUnit << endl;
+cerr << "multipleUnit " << multipleUnit << std::endl;
 is >> ws;  // Ensure any trailing whitespace read.
 
 // TODO multiple units like mg/ml also written as mg ml-1???
@@ -1553,7 +1542,7 @@ if (multipleUnit[0] == '?')
 {
 if (multipleUnit[1] == '?')
 {  // Show all units for all types, mass, length, current ...
-// fout << "\nshowAllUnits(u, fout); for all units.\n" << endl;
+// fout << "\nshowAllUnits(u, fout); for all units.\n" << std::endl;
 for (int unitno = 0; unitno < unitsCount; unitno++)  // All units.
 {
 const unit* unit = unitps[unitno];
@@ -1589,16 +1578,16 @@ confactor = u->unitToSIfactors[unitNamesIndex]; // Conversion factor to SI unit.
 }
 else // isUnit == false
 {
-cerr << "Unit " << multipleUnit << " is NOT a unit of " << u->unitOf << '.' << endl;
-fout << "Unit " << multipleUnit << " is NOT a unit of " << u->unitOf << '.' << endl;
+cerr << "Unit " << multipleUnit << " is NOT a unit of " << u->unitOf << '.' << std::endl;
+fout << "Unit " << multipleUnit << " is NOT a unit of " << u->unitOf << '.' << std::endl;
 const unit& ur = findAnyUnit(multipleUnit, unitNamesIndex, givenIndex, SIindex);
 if (&ur == &unknownUnit  || unitNamesIndex == notOK)
 {
-fout << "Unit " << multipleUnit << " is NOT a known unit!" << endl;
+fout << "Unit " << multipleUnit << " is NOT a known unit!" << std::endl;
 continue;
 }
 
-fout << "But unit " << multipleUnit << " IS a unit of " << ur.unitOf << '.' << endl;
+fout << "But unit " << multipleUnit << " IS a unit of " << ur.unitOf << '.' << std::endl;
 isUnit = (unitNamesIndex != notOK);
 if (!isUnit)
 {
@@ -1637,7 +1626,7 @@ if (isSIunit)
 confactor = u->unitToSIfactors[unitNamesIndex];
 if (confactor != 1.)
 {  // Internal data error, expect SI unit confactor to be unity!
-cerr << "SI unit conversion factor not unity but " << confactor << "!" << endl;
+cerr << "SI unit conversion factor not unity but " << confactor << "!" << std::endl;
 // Ignoring error.
 uSIvalue = uScaled;
 }
@@ -1712,7 +1701,7 @@ if (is.peek() == '!')
 string comment;
 // is >> comment; // still stops at ws.
 getline(is, comment);  // to end of line.
-//fout << " Comment: "<< comment << ", length " << comment.length()<< endl;
+//fout << " Comment: "<< comment << ", length " << comment.length()<< std::endl;
 }
 }
 }
