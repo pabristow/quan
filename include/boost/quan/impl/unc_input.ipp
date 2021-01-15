@@ -1,11 +1,11 @@
 /*!
   \file
-  \brief Testing uncertain classes using Boost Test Tool.
+  \brief Input of uncertain classes, used to implement operator>> .
   \details Class for simple Propagation of Uncertainties
      according to a pure Gaussian model.
 */
 
-// Copyright Paul A. Bristow 1998, 2012.
+// Copyright Paul A. Bristow 1998, 2012, 2021.
 
 // unc_input.cpp
 
@@ -15,7 +15,7 @@
 void unc_input(
                    double& value,  // mean, central or most probable value.
                    double& stdDev, // or float& perhaps?
-                   unsigned short int& degreesOfFreedom,  // 1 observation.
+                   unsigned short int& degreesOfFreedom,  // = observations -1 .
                    unsigned short int& types, // TODO settings bits.
                    std::istream& is = std::cin)
 {	// Inputs uncertainty as value, (implicitly exact, std deviation = 0).
@@ -73,7 +73,7 @@ void unc_input(
   // 'Default' values for unc_input arguments.
   value = 0.;	// double mean, central or most probable value.
   stdDev = 0.f;  // Exact float std deviation, unless find otherwise.
-  degreesOfFreedom = 1U;  // Default == 1 observation.
+  degreesOfFreedom = 0;  // Default zero means 1 observation.
   types = 0U;
     //static_cast<unsigned short>(~(VALUE_ZERO | VALUE_INTEGER | VALUE_RATIONAL| VALUE_NEGATIVE_ONLY | VALUE_POSITIVE_ONLY | UNC_KNOWN | UNC_NOPLUS
     //	| UNC_NOMINUS | UNC_QUAN_DECIMAL | UNC_QUAN_BINARY | UNC_EXPLICIT | UNC_UNIFORM | UNC_TRIANGULAR | DEG_FREE_EXACT | DEG_FREE_KNOWN));

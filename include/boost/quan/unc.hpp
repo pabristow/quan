@@ -55,20 +55,20 @@ and C++ include files are in folder:
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Copyright Paul A. Bristow 1998, 2012.
+// Copyright Paul A. Bristow 1998, 2012, 2021
 
 #ifndef UNC_HPP
 #define UNC_HPP
 
-#ifdef _MSC_VER
-#  pragma once
-#  pragma warning (disable : 4127) // conditional expression is constant.
-#  pragma warning (disable : 4800)// forcing value to bool 'true' or 'false' (performance warning).
-#  pragma warning (disable : 4189) // local variable is initialized but not referenced.
-// Could use no_unused_variable_warning(x);
-//template<class T> // Avoid MSVC warning "C4189 variable initialised but not used".
-//inline void no_unused_variable_warning(const T&) {}
-#endif//  _MSC_VER
+//#ifdef _MSC_VER
+//#  pragma once
+//#  pragma warning (disable : 4127) // conditional expression is constant.
+//#  pragma warning (disable : 4800)// forcing value to bool 'true' or 'false' (performance warning).
+//#  pragma warning (disable : 4189) // local variable is initialized but not referenced.
+//// Could use no_unused_variable_warning(x);
+////template<class T> // Avoid MSVC warning "C4189 variable initialised but not used".
+////inline void no_unused_variable_warning(const T&) {}
+//#endif//  _MSC_VER
 
 #include <boost/math/special_functions/fpclassify.hpp>
   //using boost::math::isnan;
@@ -178,6 +178,7 @@ void unc_input(double& mean,  // mean (central or most probable) value.
                    unsigned short int& degreesOfFreedom,  // 1 observation.
                    unsigned short int& uncTypes,
                    std::istream& is);
+// Implemented in unc_input.ipp
 
 //template<typename correlated> std::ostream& operator<< (std::ostream& os, const unc<false>& u);
 //template<typename correlated> std::ostream& operator<< (std::ostream& os, const unc<false>& u);
@@ -589,13 +590,13 @@ class unc : public std::char_traits<char>
 
   friend void unc_input(double& mean,  // Mean (central or most probable) value.
                    double& stdDev, // Uncertainty estimate as Standard deviation.
-                   unsigned short int& degreesOfFreedom,  // Degrees of freedome -1. (Default zero for 1 observation).
+                   unsigned short int& degreesOfFreedom,  // Degrees of freedom -1. (Default zero for 1 observation).
                    unsigned short int& types, // 16 Uncertain type flags showing type of value.
                    std::istream& is);
   //friend void unc_output(double value, // Mean(central or most probable) value.
   //                  float stdDev, // Uncertainty estimate as Standard deviation.
   //                  unsigned short int degFree, // Degrees of freedom.
-  //                  unsigned short int uncTypes, //  16 Uncertain type flagsshowing type of value.
+  //                  unsigned short int uncTypes, //  16 Uncertain type flags showing type of uncertain value.
   //                  std::ostream& os);  // Output stream, default std::cout.
 
   // using char_traits<char>::int_type; // Derivation from public \c std::char_traits<char> needed for \c int_type.
@@ -621,12 +622,11 @@ public:
   //! Relative is a problem if value near zero.
   //! +|- is std deviation, so
   //! for input of "1.0" implicit standard deviation and uncertainty limits +|- 0.05.
-  short unsigned int degFree_;  /*!< degrees of freedom, usually = number of observations;
+  short unsigned int degFree_;  /*!< degrees of freedom, usually = number of observations -1;
+     Range from 0 (usually 1 observation) to 65534 = std::numeric_limits<unsigned short int>::max() - 1
      so for 2 observations assign 1 to degFree_ degree of freedom.
-     Range from 1 (usally 1 observation) to 65534 = std::numeric_limits<unsigned short int>::max() - 1
      Higher numbers of observations are indistinguishable from infinite observations.
      Max unsigned value 0xFFFF == 65535 is used to indicate degFree_ is NOT meaningful.
-     Zero is as yet undefined?
      BUT many programs seem to use NON-integer degrees of freedom,
      so a float might seem better, but is 32 bits not 16, so use 16 for compact struct.
      (Might use an explicit 16 bit unsigned integer type?)
@@ -722,7 +722,7 @@ public:
     // Ignore warning C4520: 'unc<1>' : multiple default constructors specified
     // (because they will be the same default values).
     const float unc = 0.0f,  // Default value exact.
-    const short unsigned int df = 1,  // df means observations = 1.
+    const short unsigned int df = 0,  // df = 0 means number of observations = 1.
     const short unsigned int uncTypeFlags = UNC_KNOWN | UNC_EXPLICIT| DEG_FREE_EXACT | DEG_FREE_KNOWN) // unc type flags.
     : value_(val), uncertainty_(unc), degFree_(df), unctypes_(uncTypeFlags)
   {
@@ -814,11 +814,11 @@ public:
   // A specific constructor from int (as well as double) leads to this warning.
   // #pragma warning (disable : 4520) //!< 'unc<1>' : multiple default constructors specified.
 
-  //!< Constructor from integer value.
+  //!< unc Constructor from integer value.
   unc(
     const int ivalue = 0, // Default value integer zero.
     const float unc = 0.0f,  // Exact.
-    const short unsigned int df = 1,  // means observations = 1.
+    const short unsigned int df = 0,  // means n observations - 1 = 0.
     const short unsigned int uncTypeFlags =  // unc type flags.
       DEG_FREE_DEF | // See also constructor from double.
       VALUE_INTEGER | VALUE_RATIONAL |  // If integer, must be rational too.
@@ -1327,16 +1327,16 @@ public:
     using boost::math::isnan;
     using boost::math::isinf;
 
+    constexpr int max_digits10 = std::numeric_limits<double>::max_digits10; // std::numeric_limits<double>::digits10 * 3010/10000;
+
     double intpart;
-    int max_digits10 = std::numeric_limits<double>::digits10 * 3010/10000;
-    // std::numeric_limits<double>::max_digits10))
     if (boost::math::isfinite(mean))
     {
       if(isSetSigDigits)
       { // Use explicit number of digits of precision.
         long& sigDigits = os.iword(setSigDigitsIndex);
         if ((sigDigits <= 0) || (sigDigits > max_digits10) )
-        { // show all potentially significant digits.
+        { // Show all potentially significant digits.
           sigDigits = max_digits10;
         }
         oss << std::showpoint << std::setprecision(sigDigits) << mean;
@@ -1366,13 +1366,17 @@ public:
         else if(unc_flags & VALUE_INTEGER)
         { // Value is flagged as an integer (used integer constructor or set flag).
           double fracpart = std::modf(mean, &intpart);
-          oss << static_cast<long>(intpart); // Integer, so not rounded, and no decimal point,
-          // even if decimal point is specified by showpoint!
+          oss << std::noshowpoint << static_cast<long>(intpart); // Integer, so not rounded, and no decimal point,
+          // even if decimal point was specified by showpoint!
         }
         else if (unc_flags & VALUE_EXACT)
-        { // Value flagged as exact because sd == 0 (but NOT integer)
+        { // Value flagged as exact because std_dev == 0 (but NOT integer)
           // (used double constructor or set flag) so show decimal point.
-          oss.unsetf(std::ios_base::showpoint); // Ignore showpoint so NO trailing zeros.
+          oss.unsetf(std::ios_base::showpoint); // Ignore showpoint so NO trailing zeros (because exact).
+          if (isShowPos)
+          { // User specified showing + sign;
+            oss << std::showpos;
+          }
           // Kinda want a decimal point here, but causes trouble with setw :-(
           oss << std::setprecision(std::numeric_limits<double>::digits10) << mean;
           double fracpart = std::modf(mean, &intpart);
@@ -1390,7 +1394,7 @@ public:
             { // Move rounding digit to one less significant position.
               m--;
             }
-            if (isShowPos)
+            if (isShowPos == true)
             {
               oss << '+';
             }

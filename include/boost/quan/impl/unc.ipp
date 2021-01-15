@@ -220,12 +220,9 @@ void outIosFlags(long flags, std::ostream& os = std::cerr)
   if (flags & std::ios_base::fixed) // Display floating-point numbers in fixed format, for example: 12.3456.
     os << " fixed";
   if ((flags & std::ios_base::scientific) && (flags & std::ios_base::fixed)) // Display floating-point numbers in hex format.
-    os << " hexFloat";
-  // TR1 adds both fixed and scientific as hexfloat.
-  // This is 15 - fmtflag appears to be limited by Dinkumware/MS fmtflags = 0xffff and most significant bit 15 is also used internally :-(
+    os << " hexfloat";
   os << ".";
 }  // out ios_base::flags(long flags, ostream&)
-
 
 /*! Show the set uncertain class io stream flags settings as words.
   \param uncFlags Output flags to be displayed as words.
@@ -461,7 +458,7 @@ showUncFlags::showUncFlags(unsigned short int f) : flags(f)
 }
 
 std::ostream& operator<< (std::ostream& os, const showUncFlags& uf)  // Define.
-{ // Output uncFlags to this ostream.
+{ // Output uncFlags as desriptive word strings to this ostream.
   unsigned short uncFlags = uf.flags;
   os << "uncFlags ("<< std::hex << uncFlags << std::dec << ")";
   os << ((uncFlags & firm) ? " firm" : "" );
@@ -477,7 +474,6 @@ std::ostream& operator<< (std::ostream& os, const showUncFlags& uf)  // Define.
   return os;
 } // ostream& operator<< (ostream& os, const showUncFlags&)
   //long& uncFlags = os.iword(uncFlagsIndex);
-
 
 // setAllUncflags(int flags);
 // Usage: out << setAllUncFlags(0x5a) ...
