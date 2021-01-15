@@ -34,9 +34,26 @@
   using std::ends;
   using std::endl;
   using std::ios_base;
+  using std::cin;
+  using std::endl;
+  using std::flush;
+  using std::ws;
+  using std::boolalpha;
+  using std::dec;
   using std::hex;
   using std::oct;
-  using std::dec;
+  using std::showbase;
+  using std::fixed;
+  using std::scientific;
+  using std::right;
+  using std::showpos;
+  using std::noshowpos;
+  using std::noshowbase;
+  using std::noshowpoint;
+  using std::showpoint;
+  using std::setprecision;
+  using std::setw;
+  using std::resetiosflags;
   using std::boolalpha;
   using std::getline;
   using std::skipws;
@@ -44,9 +61,11 @@
   using std::uppercase;
   using std::showbase;
   using std::showpos;
-  using std::left;
-  using std::right;
   using std::internal; // Initial default - neither left, right nor internal.
+  using std::noshowpoint;
+  using std::streamsize;
+  using std::char_traits;
+
 #include <iomanip>  // for <iomanip.h> for setw, setprecision ...
   using std::setfill;
 #include <fstream>  // for <fstream.h> for filing.
@@ -70,32 +89,31 @@
 //  using std::hexbase;
 
 #include <boost/quan/unc.hpp> // Declaration of Uncertain Classes.
-  using std::istream;
-  using std::ostream;
-  using std::ios_base;
-  using std::char_traits;
-  using std::cout;
-  using std::cerr;
-  using std::cin;
-  using std::endl;
-  using std::flush;
-  using std::ws;
-  using std::streamsize;
-  using std::boolalpha;
-  using std::dec;
-  using std::hex;
-  using std::showbase;
-  using std::fixed;
-  using std::scientific;
-  using std::right;
-  using std::showpos;
-  using std::noshowpos;
-  using std::noshowbase;
-  using std::noshowpoint;
-  using std::showpoint;
-  using std::setprecision;
-  using std::setw;
-  using std::resetiosflags;
+  //using std::istream;
+  //using std::ostream;
+  //using std::ios_base;
+  //using std::char_traits;
+  //using std::cout;
+  //using std::cerr;
+  //using std::cin;
+  //using std::endl;
+  //using std::flush;
+  //using std::ws;
+  //using std::boolalpha;
+  //using std::dec;
+  //using std::hex;
+  //using std::showbase;
+  //using std::fixed;
+  //using std::scientific;
+  //using std::right;
+  //using std::showpos;
+  //using std::noshowpos;
+  //using std::noshowbase;
+  //using std::noshowpoint;
+  //using std::showpoint;
+  //using std::setprecision;
+  //using std::setw;
+  //using std::resetiosflags;
 
 // Files made global to avoid nasty memory leak, and loop to end of memory.
 const char testInputFilename[] = "unc_test_input.txt"; // Input for tests (fin).
@@ -215,7 +233,7 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   //unit_test_log::instance().set_threshold_level(messages); // user messages
   // Prepare to send log to a file instead of std::cout.
 
-  cout << "\x0F1 Uncertain Class Test output to " << outFilename << ' '
+  std::cout << "\x0F1 Uncertain Class Test output to " << outFilename << ' '
     << __FILE__ << ' ' <<  __TIMESTAMP__ << std::endl;
   // +- symbol on screen std::cout = dec 177, hex F1 but shows ~n in files?
   // BUT is messy because in file codeset +- symbol \x0B1 176! octal \361
@@ -230,7 +248,7 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   BOOST_CHECK(dout.is_open());
   dout << "Unc Diagnostics logged to " << diagFilename << " from " << __FILE__ << " " << __TIMESTAMP__".\n"<< std::endl;
   std::cout << "Unc Diagnostics logged to " << diagFilename  << std::endl; // \x0F1 on screen but ~n in files.
-  cerr.rdbuf(dout.rdbuf()); // cerr = dout;  // Switch cerr to diagnostic log.
+  std::cerr.rdbuf(dout.rdbuf()); // cerr = dout;  // Switch cerr to diagnostic log.
   // dout << "Diagnostic cerr from " << __FILE__ << " " << __TIMESTAMP__"\n" << std::endl;
   std::cerr << "\x0B1 \x0B5 Diagnostic cerr from " << __FILE__ << " " << __TIMESTAMP__".\n" << std::endl;
   // Greek mu is \x0B5 for files, degree symbol is \x0B0
@@ -289,7 +307,7 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   BOOST_CHECK_EQUAL(fout.flags() & ios_base::boolalpha, 0); // no boolapha.
 
   // Basic checks on re-initialisation of ios and unc using.
-  void setiosDefaults(ostream&); // &
+  void setiosDefaults(std::ostream&); // &
   void setUncDefaults(ios_base&);
 
   std::ostringstream oss;
@@ -328,12 +346,12 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   BOOST_CHECK_EQUAL(oss.iword(zeroIndex), indexID);
   BOOST_CHECK_EQUAL(oss.iword(topIndex), indexID);
 
-  std::streamsize w = cerr.width(6); // Set a width of 6.
-  BOOST_CHECK_EQUAL(cerr.width(), 6);  // Confirm has been set to 6.
-  cerr << std::endl; // Does NOT 'Use' width.
-  BOOST_CHECK_EQUAL(cerr.width(), 6);  // Confirm is STILL 6.
-  cerr << '\t' << std::endl; // (\a shows as small square) Does 'Use' width, like << "use" or << 99
-  BOOST_CHECK_EQUAL(cerr.width(), 0);// Check width has been reset to zero.
+  std::streamsize w = std::cerr.width(6); // Set a width of 6.
+  BOOST_CHECK_EQUAL(std::cerr.width(), 6);  // Confirm has been set to 6.
+  std::cerr << std::endl; // Does NOT 'Use' width.
+  BOOST_CHECK_EQUAL(std::cerr.width(), 6);  // Confirm is STILL 6.
+  std::cerr << '\t' << std::endl; // (\a shows as small square) Does 'Use' width, like << "use" or << 99
+  BOOST_CHECK_EQUAL(std::cerr.width(), 0);// Check width has been reset to zero.
   } // BOOST_AUTO_TEST_CASE(unc_test_basic)
 
 //#define CPP_TESTS
@@ -630,14 +648,14 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     BOOST_CHECK(z.types() & VALUE_ZERO); // Is zero.
     BOOST_CHECK(z.types() & VALUE_INTEGER); // Is integer.
     CHECK_USED(z, "0"); // Exact zero.
-    CHECK_USED(setw(0) << z, "0"); // Exact zero, default width.
-    CHECK_USED(setw(1) << z, "0"); // Tight fit.
-    CHECK_USED(setw(2) << z, " 0"); // no adjust == right justify
-    CHECK_USED(left << setw(2) << z, "0 "); // Just 1 pad.
-    CHECK_USED(left << setw(3) << z, "0  "); // 2 pads.
-    CHECK_USED(left << setw(4) << z, "0   "); // 1 digit plus 3 pad.
-    CHECK_USED(left << setw(4) << z, "0   "); // 1 digit plus 3 pad, left == default.
-    CHECK_USED(right << setw(4) << z, "   0"); // right so 3 pad plus 1 digit.
+    CHECK_USED(std::setw(0) << z, "0"); // Exact zero, default width.
+    CHECK_USED(std::setw(1) << z, "0"); // Tight fit.
+    CHECK_USED(std::setw(2) << z, " 0"); // no adjust == right justify
+    CHECK_USED(std::left << setw(2) << z, "0 "); // Just 1 pad.
+    CHECK_USED(std::left << setw(3) << z, "0  "); // 2 pads.
+    CHECK_USED(std::left << setw(4) << z, "0   "); // 1 digit plus 3 pad.
+    CHECK_USED(std::left << setw(4) << z, "0   "); // 1 digit plus 3 pad, left == default.
+    CHECK_USED(std::right << setw(4) << z, "   0"); // right so 3 pad plus 1 digit.
    }
   } //  BOOST_AUTO_TEST_CASE(unc_test_zeros)
 
@@ -1125,22 +1143,22 @@ BOOST_AUTO_TEST_CASE(unc_test_manips)
   // Examples of scientific and unc values including setw.
   uncun one2345(1.2345, 0.01f, 2); // Inexact from double, sd 0.01, df 2 = 3 values.
   one2345.std_dev(0.01f);
-  CHECK_USED(scientific << noplusminus << setw(20) << left << one2345,   "1.235               "); //
-  CHECK_USED(scientific << plusminus << setw(20) << left << one2345,     "1.235 +/-0.010      "); //
-  CHECK_USED(scientific << plusminus << setw(20) << right << one2345,    "      1.235 +/-0.010"); //
+  CHECK_USED(std::scientific << noplusminus << std::setw(20) << std::left << one2345,   "1.235               "); //
+  CHECK_USED(std::scientific << plusminus << std::setw(20) << std::left << one2345,     "1.235 +/-0.010      "); //
+  CHECK_USED(std::scientific << plusminus << std::setw(20) << std::right << one2345,    "      1.235 +/-0.010"); //
   //CHECK_USED(scientific << plusminus << setw(20) << noadjust << one2345, "      1.235 +/-0.010"); // == right adjust.
-  CHECK_USED(scientific << plusminus << setw(20) << std::showpos << one2345,  "     +1.235 +/-0.010"); // == right adjust.
-  CHECK_USED(scientific << plusminus << setw(20) << std::showpos
+  CHECK_USED(std::scientific << plusminus << std::setw(20) << std::showpos << one2345,  "     +1.235 +/-0.010"); // == right adjust.
+  CHECK_USED(std::scientific << plusminus << std::setw(20) << std::showpos
                                                 << internal << one2345,  "     +1.235 +/-0.010"); // Expect same as right.
 
  // CHECK_USED(scientific << plusminus << setw(20) << noadjust << setfill('~') << one2345, "~~~~~~1.235 +/-0.010"); // expect same as right adjust.
-  CHECK_USED(scientific << plusminus << setw(20) << setfill('~') << left << one2345,     "1.235 +/-0.010~~~~~~"); //
-  CHECK_USED(scientific << plusminus << setw(20) << setfill('~') << internal << one2345, "~~~~~~1.235 +/-0.010");
-  CHECK_USED(scientific << plusminus << setw(20) << setfill('~') << right << one2345,    "~~~~~~1.235 +/-0.010"); // Expect same as right.
+  CHECK_USED(std::scientific << plusminus << std::setw(20) << std::setfill('~') << std::left << one2345,     "1.235 +/-0.010~~~~~~"); //
+  CHECK_USED(std::scientific << plusminus << std::setw(20) << std::setfill('~') << std::internal << one2345, "~~~~~~1.235 +/-0.010");
+  CHECK_USED(std::scientific << plusminus << std::setw(20) << std::setfill('~') << std::right << one2345,    "~~~~~~1.235 +/-0.010"); // Expect same as right.
 
   // Some bigger values.
   uncun ten2345(10.2345, 0.01f, 2); // Inexact from double, sd 0.01, df 2 = 3 values.
-  CHECK_USED(scientific << noplusminus << setw(20) << left << ten2345,   "10.235              "); //
+  CHECK_USED(std::scientific << noplusminus << std::setw(20) << std::left << ten2345,   "10.235              "); //
 
 } // BOOST_AUTO_TEST_CASE(unc_test_manips)
 
@@ -1365,10 +1383,10 @@ BOOST_AUTO_TEST_CASE(unc_test_coda)
 
   dout << "\n""Unc Diagnostics log end. " << std::endl; // \x0F1 = +- on screen, but ~n in files!
 
-  cerr.rdbuf(dout.rdbuf()); // Switch diagnostic log back to cerr before close!
+  std::cerr.rdbuf(dout.rdbuf()); // Switch diagnostic log back to cerr before close!
   // cerr = fout; in effect.
   dout.close(); // Diagnostics.
-  cerr << "\n\nClosed diagnostics file " << diagFilename << ' '<< __TIMESTAMP__ << std::endl;
+  std::cerr << "\n\nClosed diagnostics file " << diagFilename << ' '<< __TIMESTAMP__ << std::endl;
 
   fout << "\nClosed test output "<< __FILE__ << ' ' <<  __TIMESTAMP__ << std::endl;
   fout.close(); // Test output.
@@ -1381,9 +1399,8 @@ BOOST_AUTO_TEST_CASE(unc_test_coda)
   std::cout << "\nClosed fout "<< __FILE__ << ' ' <<  __TIMESTAMP__ << std::endl;
 //  fin.close();
 //  std::cout << "\nClosed fin "<< __FILE__ << ' ' <<  __TIMESTAMP__ << std::endl;
-  cerr << std::endl;  // Needed to avoid crash right at end.
+  std::cerr << std::endl;  // Needed to avoid crash right at end.
 }  // BOOST_AUTO_TEST_CASE(unc_test_coda)
-
 
 /*
 
