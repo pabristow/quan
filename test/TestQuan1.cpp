@@ -25,7 +25,7 @@
 
 #include <boost/quan/unc.hpp> // Declaration of Uncertain Classes.
 //#include "unc.hpp" // Declaration of Uncertain Classes.
-#include "meas.hpp" // uncertain plus order.
+#include <boost/quan/impl/meas.hpp> // uncertain plus order.
 #include "to_string.hpp" //
 
 using std::ofstream;

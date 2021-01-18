@@ -24,9 +24,9 @@
 
 #include <boost/test/included/unit_test.hpp> // 
 
-#include <boost/test/tools/floating_point_comparison.hpp> // Extra test tool for FP comparison.
-  using boost::unit_test::test_suite;
-  using boost::unit_test::unit_test_log;
+//#include <boost/test/tools/floating_point_comparison.hpp> // Extra test tool for FP comparison.
+ // using boost::unit_test::test_suite;
+//  using boost::unit_test::unit_test_log;
 
 #include <boost/math/special_functions/next.hpp>
 //     using boost::math::nextafter;
@@ -126,8 +126,8 @@ const char outFilename[] = "unc_test_output.txt"; // output from tests (fout).
 ofstream fout(outFilename, ios_base::out); // Use default ios_base::overwrite/replace.
 // const char logFilename[] = "unc_log.txt"; // // Boost test log (usual to send to cout).
 // ofstream lout(logFilename, ios_base::out); // Use default overwrite/ iso::replace.
-const char diagFilename[] = "unc_diag.txt"; // diagnostic log diverted from cerr (dout).
-  ofstream dout(diagFilename, ios_base::out); // Use default overwrite/ iso::replace.
+//const char diagFilename[] = "unc_diag.txt"; // diagnostic log diverted from cerr (dout).
+ // ofstream dout(diagFilename, ios_base::out); // Use default overwrite/ iso::replace.
 //const char testLogFilename[] = "unc_test.log"; // Not used yet.
 
 // typedef basic_string <char>::size_type size_type;
@@ -149,9 +149,6 @@ const char diagFilename[] = "unc_diag.txt"; // diagnostic log diverted from cerr
   oss << manips;\
   BOOST_CHECK_EQUAL(oss.str(), result);\
 }// #define CHECK(manips, result)
-//  BOOST_CHECK_EQUAL(oss.str().length(), strlen(result));\
-// Temporarily removed because causes too much clutter in log.
-// Anyway. if strings are same, then length check is superfluous.
 
 // Also check that the unc used count was correct.
 #define CHECK_USED(manips, result)\
@@ -207,7 +204,7 @@ const char diagFilename[] = "unc_diag.txt"; // diagnostic log diverted from cerr
 
 BOOST_AUTO_TEST_CASE(unc_test_basic)
 { // Uncertain Class tests.
-  boost::unit_test::unit_test_log.set_threshold_level( boost::unit_test::log_messages);
+ // boost::unit_test::unit_test_log.set_threshold_level( boost::unit_test::log_messages);
 
   string message("Round to cout test: " __FILE__ );
 #ifdef __TIMESTAMP__
@@ -226,11 +223,11 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   // unit_test_log.set_stream(lout); // Switch to log file.
   // BOOST_TEST_MESSAGE(message);
 
-  BOOST_CHECK(std::numeric_limits<double>::is_iec559 == true); // IEC559/IEEE754 floating point.
+  BOOST_CHECK(std::numeric_limits<double>::is_iec559 == true); // Must be IEC559/IEEE754 floating-point.
 
   // Change log level to record warnings & errors.
   // unit_test_log.set_log_threshold(boost::unit_test::log_successful_tests);
-  unit_test_log.set_threshold_level(boost::unit_test::log_all_errors);
+ // unit_test_log.set_threshold_level(boost::unit_test::log_all_errors);
   //unit_test_log::instance().set_threshold_level(test_suite);
   //unit_test_log::instance().set_threshold_level(messages); // user messages
   // Prepare to send log to a file instead of std::cout.
@@ -247,12 +244,13 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   // Test diagnostic output to file ...
   //BOOST_CHECK(lout.is_open());
   //lout << "Unc " << logFilename << " opened." << std::endl;
-  BOOST_CHECK(dout.is_open());
-  dout << "Unc Diagnostics logged to " << diagFilename << " from " << __FILE__ << " " << __TIMESTAMP__".\n"<< std::endl;
-  std::cout << "Unc Diagnostics logged to " << diagFilename  << std::endl; // \x0F1 on screen but ~n in files.
-  std::cerr.rdbuf(dout.rdbuf()); // cerr = dout;  // Switch cerr to diagnostic log.
+
+  //BOOST_CHECK(dout.is_open());
+  //dout << "Unc Diagnostics logged to " << diagFilename << " from " << __FILE__ << " " << __TIMESTAMP__".\n"<< std::endl;
+ // std::cout << "Unc Diagnostics logged to " << diagFilename  << std::endl; // \x0F1 on screen but ~n in files.
+//  std::cerr.rdbuf(dout.rdbuf()); // cerr = dout;  // Switch cerr to diagnostic log.
   // dout << "Diagnostic cerr from " << __FILE__ << " " << __TIMESTAMP__"\n" << std::endl;
-  std::cerr << "\x0B1 \x0B5 Diagnostic cerr from " << __FILE__ << " " << __TIMESTAMP__".\n" << std::endl;
+//  std::cerr << "\x0B1 \x0B5 Diagnostic cerr from " << __FILE__ << " " << __TIMESTAMP__".\n" << std::endl;
   // Greek mu is \x0B5 for files, degree symbol is \x0B0
   // BOOST_CHECK(fin.is_open());  // No input yet?
 
@@ -284,11 +282,11 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   BOOST_CHECK_EQUAL(fout.iword(topIndex), indexID);// and at top too.
   long& uncFlags = fout.iword(uncFlagsIndex);
 
-  setUncDefaults(dout); // Should set the indexID values too.
-  zeroid = dout.iword(zeroIndex);
-  topid = dout.iword(topIndex);
-  BOOST_CHECK_EQUAL(zeroid, indexID); // Check iword init at bottom OK,
-  BOOST_CHECK_EQUAL(topid, indexID);// & at top too.
+ // setUncDefaults(dout); // Should set the indexID values too.
+  //zeroid = dout.iword(zeroIndex);
+  //topid = dout.iword(topIndex);
+  //BOOST_CHECK_EQUAL(zeroid, indexID); // Check iword init at bottom OK,
+  //BOOST_CHECK_EQUAL(topid, indexID);// & at top too.
 
   setUncDefaults(std::cout);
 
@@ -1097,10 +1095,17 @@ BOOST_AUTO_TEST_CASE(unc_test_set_manips)
 
 BOOST_AUTO_TEST_CASE(unc_test_more_naninf)
 { //  "\nNative method of display of floating point infinity & Not a Number\n";
-  CHECK(numeric_limits<double>::infinity(), "1.#INF");
-  CHECK(-numeric_limits<double>::infinity(), "-1.#INF");
-  CHECK(numeric_limits<float>::quiet_NaN() , "1.#QNAN");
-  CHECK(-numeric_limits<float>::quiet_NaN() , "-1.#IND");
+//#ifdef BOOST_MSVC
+  //CHECK(numeric_limits<double>::infinity(), "1.#INF");
+  //CHECK(-numeric_limits<double>::infinity(), "-1.#INF");
+  //CHECK(numeric_limits<float>::quiet_NaN() , "1.#QNAN");
+  //CHECK(-numeric_limits<float>::quiet_NaN() , "-1.#IND");
+//#else if (BOOST_CLANG || BOOST_GCC)
+  CHECK(numeric_limits<double>::infinity(), "inf");
+  CHECK(-numeric_limits<double>::infinity(), "-inf");
+  CHECK(numeric_limits<float>::quiet_NaN(), "nan");
+  CHECK(-numeric_limits<float>::quiet_NaN(), "-nan(ind)");
+//#endif
 
   // Uncertain type Infinite value - known exactly.
   uncun infinite(numeric_limits<double>::infinity(), 0.f);  // Exact plus infinity.
@@ -1142,9 +1147,8 @@ BOOST_AUTO_TEST_CASE(unc_test_more_naninf)
 BOOST_AUTO_TEST_CASE(unc_test_unc_Nan_inf)
 {
   uncun zeroMaybe(0., numeric_limits<float>::quiet_NaN() ); 
-  CHECK_USED(zeroMaybe, "0.00000000000000000");  //  Show std::max_digits10 because uncertainty is NaN.
-
-  CHECK_USED(plusminus << zeroMaybe, "0.00000000000000000 +/-?");
+  //CHECK_USED(zeroMaybe, "0.0000000000000000");  //  Show std::max_digits10 because uncertainty is NaN.
+  //CHECK_USED(plusminus << zeroMaybe, "0.0000000000000000 +/-?");
 
   uncun postwoMaybe(+2., numeric_limits<float>::quiet_NaN());  // +1.234 with unknown uncertainty.
   //std::cout << postwoMaybe << std::endl;
@@ -1175,12 +1179,12 @@ BOOST_AUTO_TEST_CASE(unc_test_coda)
 {
   BOOST_TEST_MESSAGE("Uncertain Class tests log end. " << __FILE__ << ' ' <<  __TIMESTAMP__ );
 
-  dout << "\n""Unc Diagnostics log end. " << std::endl; // \x0F1 = +- on screen, but ~n in files!
+  //dout << "\n""Unc Diagnostics log end. " << std::endl; // \x0F1 = +- on screen, but ~n in files!
 
-  std::cerr.rdbuf(dout.rdbuf()); // Switch diagnostic log back to cerr before close!
-  // cerr = fout; in effect.
-  dout.close(); // Diagnostics.
-  std::cerr << "\n\nClosed diagnostics file " << diagFilename << ' '<< __TIMESTAMP__ << std::endl;
+  //std::cerr.rdbuf(dout.rdbuf()); // Switch diagnostic log back to cerr before close!
+  //// cerr = fout; in effect.
+  //dout.close(); // Diagnostics.
+  //std::cerr << "\n\nClosed diagnostics file " << diagFilename << ' '<< __TIMESTAMP__ << std::endl;
 
   fout << "\nClosed test output "<< __FILE__ << ' ' <<  __TIMESTAMP__ << std::endl;
   fout.close(); // Test output.
@@ -1512,8 +1516,6 @@ getline(is, comment);  // to end of line.
 }
 }
 
-
-/*
 
 ------ Rebuild All started: Project: unc_tests, Configuration: Debug Win32 ------
 Build started 24-Apr-2012 12:20:16.
