@@ -60,6 +60,7 @@ project quan_test
    # <toolset>gcc:<cxxflags>-std=c++14 Minimum
     <toolset>gcc:<cxxflags>-Wno-reorder
     <toolset>gcc:<cxxflags>-Wno-comment
+    <toolset>gcc:<cxxflags>-Wno-unused-local-typedefs
   ;
 
 test-suite "Quan and Unc library tests"

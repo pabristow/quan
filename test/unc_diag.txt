@@ -1,0 +1,8 @@
+Unc Diagnostics logged to unc_diag.txt from unc_tests.cpp Mon Jan 18 12:59:08 2021.
+
+± µ Diagnostic cerr from unc_tests.cpp Mon Jan 18 12:59:08 2021.
+
+
+     	
+
+Unc Diagnostics log end. 
