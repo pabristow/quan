@@ -624,7 +624,7 @@ public:
   //! for input of "1.0" implicit standard deviation and uncertainty limits +|- 0.05.
   short unsigned int degFree_;  /*!< degrees of freedom, usually = number of observations -1;
      Range from 0 (usually 1 observation) to 65534 = std::numeric_limits<unsigned short int>::max() - 1
-     so for 2 observations assign 1 to degFree_ degree of freedom.
+     so for 2 observations assign 1 to degFree_ degree of freedom,for 3 observations assing 2 ....
      Higher numbers of observations are indistinguishable from infinite observations.
      Max unsigned value 0xFFFF == 65535 is used to indicate degFree_ is NOT meaningful.
      BUT many programs seem to use NON-integer degrees of freedom,
@@ -789,13 +789,13 @@ public:
       { // Check for a valid uncertainty, but type parameter is exact.
         if (uncertainty_ != 0.f)
         {
-          std::cout << "Value " << value_ << " flagged as exact, but uncertainty " <<  uncertainty_ << " is not zero!" << std::endl;
+          std::cout << "Warning: uncertain value " << value_ << " is flagged as uncTypeFlags == VALUE_EXACT, but uncertainty " <<  uncertainty_ << " is not zero!" << std::endl;
           uncertainty_ = 0.f;  // Override any unc provided.
           // This indicates a programmer logic error!
         }
         if (degFree_ != 0)
         {
-          std::cout << "Value " << value_ << " flagged as exact, but degfree " << degFree_ << " is not zero!" << std::endl;
+          std::cout << "Warning: uncertain value " << value_ << " flagged as uncTypeFlags == VALUE_EXACT, but degfree " << degFree_ << " is not zero!" << std::endl;
           degFree_ = 0;  // Override any degfree provided.
           // This indicates a programmer logic error!
         }

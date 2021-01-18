@@ -257,7 +257,7 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   // Greek mu is \x0B5 for files, degree symbol is \x0B0
   // BOOST_CHECK(fin.is_open());  // No input yet?
 
- // BOOST_TEST_MESSAGE("Uncertain Class tests log. " << "                                     Expected   Was    Expected");
+  BOOST_TEST_MESSAGE("Uncertain Class tests log. " << "                                     Expected   Was    Expected");
 
   // std::cout.fill('0'); // to get trailing zeros.
   // std::cout << std::fixed << std::setprecision(17) << 12.34 << std::defaultfloat << std::endl; // 12.34000000000000000
@@ -497,14 +497,14 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     CHECK_USED(u0,"0.00000000000000"); // All 15 guaranteed decimal digits.
     u0.std_dev(0.0000000000000001f);
     CHECK_USED(u0, "0.00000000000000"); // All 17 significant decimal digits.
-    uncun exact(1., 1.f, 2, VALUE_EXACT);  // Exact Unity from double with sd and df.
+    uncun exact(1., 1.f, 2, VALUE_EXACT);  // Exact Unity from double with std_dev and deg_free.
     // This should signal a conflict in the constructor!
     BOOST_CHECK(exact.types() & VALUE_EXACT); // Should still be flagged as exact.
     BOOST_CHECK_EQUAL(exact.value(), 1.); // value
-    BOOST_CHECK_EQUAL(exact.std_dev(), 0.f);//  StdDeviation should be over-ridden by VALUE_EXACT.
-    // "Value 1 flagged as exact, but uncertainty 1 is not zero!"
-    BOOST_CHECK_EQUAL(exact.deg_free(), 0); // deg_free should be overwritten by VALUE_EXACT.
-    // "Value 1 flagged as exact, but degfree 2 is not zero!"
+    BOOST_CHECK_EQUAL(exact.std_dev(), 0.f);//  StdDeviation should be over-ridden by VALUE_EXACT, so warn:
+    // warning : uncertain value 1 is flagged as uncTypeFlags == VALUE_EXACT, but uncertainty 1 is not zero!
+    BOOST_CHECK_EQUAL(exact.deg_free(), 0); // deg_free should be overwritten by VALUE_EXACT, so warn:
+    // warning : uncertain value 1 flagged as uncTypeFlags == VALUE_EXACT, but degfree 2 is not zero!
 
     uncun iminus1(-1); // Exact minus 1 from integer -1 value.
     BOOST_CHECK(iminus1.types() & VALUE_INTEGER); // Check IS recognised as integer.
@@ -1566,5 +1566,26 @@ Build FAILED.
 
 Time Elapsed 00:00:08.71
 ========== Rebuild All: 0 succeeded, 1 failed, 0 skipped ==========
+
+
+18Jan 2021 GCC10.0.1
+
+Running 21 test cases...
+± Uncertain Class Test output to unc_test_output.txt I:\boost\libs\quan\test\unc_tests.cpp Mon Jan 18 15:37:55 2021
+
+
+Value 1 flagged as exact, but uncertainty 1 is not zero!
+Value 1 flagged as exact, but degfree 2 is not zero!
+sigma 0
+Cannot return a rounding m because epsilon 0.05 is too small!
+sigma_rounded = 0, sigma = 0, gamma(sigma_rounded, sigma) = 0, gl = 0.90175
+uncTypes (0x60e7) zero integer rational uncKnown noPlus noMinus df_exact df_known.0 0 0231, uncTypes (0xe7) zero integer rational uncKnown noPlus noMinus.
+0 0.02 017702, uncTypes (0x4526) integer rational uncKnown quantize10 explicit df_known.
+
+*** No errors detected
+Process returned 0 (0x0)   execution time : 0.062 s
+
+
+
 
 */
