@@ -669,7 +669,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_4)
 
 BOOST_AUTO_TEST_CASE(Wimmer_5_1)
 { // Wimmer example 5(i) e = 0.01
-  //int round_m(double epsilon, double unc, unsigned int sigdigits, distribution_type t);
+  //int round_m(double loss_risk, double unc, unsigned int sigdigits, distribution_type t);
 
   // Mean is 127.835, and standard deviation sigma is 15.287.
   double sigma = 15.287;
@@ -677,17 +677,17 @@ BOOST_AUTO_TEST_CASE(Wimmer_5_1)
   double sigma_star = round_sig(sigma, 2); // 2 for ISO rule.
   BOOST_CHECK_CLOSE_FRACTION(sigma_star, 15., tol); // Sigma rounded.
 
-  double epsilon = 0.01; // Allow 1% loss from rounding.
-  int m = round_m(epsilon, sigma, 2U, gaussian); // Calculate rounding digit, using sigma.
+  double loss_risk = 0.01; // Allow 1% loss from rounding.
+  int m = round_m(loss_risk, sigma, 2U, gaussian); // Calculate rounding digit, using sigma.
   BOOST_CHECK_EQUAL(m, -1); // Rounding digit is 1st after decimal point, 0.d.
   // Repeat using defaults.
-  m = round_m(epsilon, sigma); // Calculate rounding digit, using sigma.
+  m = round_m(loss_risk, sigma); // Calculate rounding digit, using sigma.
   BOOST_CHECK_EQUAL(m, -1); // Rounding digit is 1st after decimal point, 0.d.
 
   double g = gamma(sigma_star, sigma);
   BOOST_CHECK_CLOSE_FRACTION(g, 0.98123, tol); // Check gamma = 0.98123 given.
 
-  double d = delta(epsilon, g, gaussian);
+  double d = delta(loss_risk, g, gaussian);
   BOOST_CHECK_CLOSE_FRACTION(d, 0.0537, tol); // Wimmer only quotes 0.05.
   d = 0.05 * sigma_star / (5 * g); // Round as Wimmer to 0.05
   double md = log10(d);
@@ -717,19 +717,19 @@ BOOST_AUTO_TEST_CASE(Wimmer_5_1)
    double g = gamma(sigma_star, sigma);
    BOOST_CHECK_CLOSE_FRACTION(g, 0.86207, tol); // Check gamma =  0.86207 given.
 
-   // Wimmer says epsilon = 0.04 will fails from table 1.
-   // Epsilon 0.05 (95%) gamma_0.05 is 0.90175 which is > 0.86207,
-   // Epsilon 0.1 (90%) gamma_0.1 is 0.81271 which is < 0.86207 so OK.
-   double epsilon = 0.001; // Expect to fail if only use one digit for rounding sigma.
-   int m = round_m(epsilon, sigma); // Calculate rounding digit, using sigma.
+   // Wimmer says epslon loss_risk (epsilon) = 0.04 will fails from table 1.
+   // loss_risk 0.05 (95%) gamma_0.05 is 0.90175 which is > 0.86207, 
+   // loss_risk 0.1 (90%) gamma_0.1 is 0.81271 which is < 0.86207 so OK.
+   double loss_risk = 0.001; // Expect to fail if only use one digit for rounding sigma.
+   int m = round_m(loss_risk, sigma); // Calculate rounding digit, using sigma.
    BOOST_CHECK_EQUAL(m, -9999);
-   // Message: Cannot return a rounding m because epsilon 0.001 is too small!
-   epsilon = 0.1;  // Should be OK.
-   m = round_m(epsilon, sigma); // Calculate rounding digit, using sigma.
+   // Expect Message: Cannot return a rounding m because loss_risk 0.001 is too small!
+   loss_risk = 0.1;  // Should be OK.
+   m = round_m(loss_risk, sigma); // Calculate rounding digit, using sigma.
    BOOST_CHECK_EQUAL(m, -3);
 
    double x = 1.23875;  // Final part of example.
-   epsilon = 0.1;  // Should be OK.
+   loss_risk = 0.1;  // Should be OK.
    string s = round_ms(x, m);
    BOOST_CHECK_EQUAL(s, "1.24");
    std::pair<double, double> ci =
@@ -746,14 +746,14 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
   // std::string round_ue(double v, double unc, double epsilon = 0.01, unsigned int sigdigits = 2U)
   BOOST_CHECK_EQUAL(round_ue(127.835, 15.287, 0.01, 2U),"128.");  // explicit 2 uncertain digits.
   BOOST_CHECK_EQUAL(round_ue(127.835, 15.287, 0.01),"128."); // Default unc sigdigit (2)s.
-  BOOST_CHECK_EQUAL(round_ue(127.835, 15.287),"128."); // Default unc sigdigits and default epsilon.
+  BOOST_CHECK_EQUAL(round_ue(127.835, 15.287),"128."); // Default unc sigdigits and default loss_risk.
 
   // Wimmer example 5(i b) e = 0.04
   BOOST_CHECK_EQUAL(round_ue(127.835, 15.287, 0.04),"130."); // Increase e to 0.04 to allow more rounding loss.
   // Wimmer example 5(ii a) e = 0.05 fails.
   //BOOST_CHECK_NE(round_ue(1.23875, 0.0232, 0.05, 1U),"1.24"); // Fails correctly with message:
-  // Epsilon 0.05 is too small for gamma rounded/unrounded ratio 0.862069
-  // Cannot return a rounding m because epsilon is too small!
+  // loss_risk 0.05 is too small for gamma rounded/unrounded ratio 0.862069
+  // Cannot return a rounding m because loss_risk is too small!
   // Wimmer example 5(ii b) e = 0.1
   BOOST_CHECK_EQUAL(round_ue(1.23875, 0.0232, 0.1, 1U),"1.24"); //
 
@@ -932,7 +932,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_triangular_test)
   BOOST_CHECK_EQUAL(oss.str(), "15"); // unc 15. properly rounded.
   double gam = unc_rounded / unc;
   BOOST_CHECK_CLOSE_FRACTION(gam, 0.98123, 0.01);
-  // double delta(double epsilon, double gamma, distribution_type distrib = normal);
+  // double delta(double loss_risk, double gamma, distribution_type distrib = normal);
   double del = delta(0.01, gam, triangular); // eps = 0.01 for high 99% confidence.
   BOOST_CHECK_CLOSE_FRACTION(del, 0.0561, 0.01);
 
@@ -1039,13 +1039,13 @@ BOOST_AUTO_TEST_CASE(Wimmer_uniform_test)
   BOOST_CHECK_EQUAL(oss.str(), "15"); // unc 15. properly rounded.
   double gam = unc_rounded / unc;
   BOOST_CHECK_CLOSE_FRACTION(gam, 0.98123, 0.01);
-  // double delta(double epsilon, double gamma, distribution_type distrib = normal);
+  // double delta(double loss_risk, double gamma, distribution_type distrib = normal);
   // Compare all deltas for the three distributions.
   BOOST_CHECK_CLOSE_FRACTION(delta(0.01, gam),  0.053705908361491229, 0.01);
   BOOST_CHECK_CLOSE_FRACTION(delta(0.01, gam, triangular), 0.056070697653393911, 0.01);
   BOOST_CHECK_CLOSE_FRACTION(delta(0.01, gam, uniform), -1, 0.01);
   // std::cout  << "delta(0.01, gam, gaussian) = " << delta(0.01, gam) << ' ' << delta(0.01, gam, triangular) << ' ' << delta(0.01, gam, uniform) << std::endl;
-  // "Epsilon 0.01 is too small for gamma rounded/unrounded ratio 0.98122587819716089, threshold is 0.98999999999999999for uniform distribution."
+  // "loss_risk 0.01 is too small for gamma rounded/unrounded ratio 0.98122587819716089, threshold is 0.98999999999999999for uniform distribution."
   double del = delta(0.01, gam, uniform); // eps = 0.01 for high 99% confidence.
   BOOST_CHECK_CLOSE_FRACTION(del, -1., 0.01); // but is too high, so return -1
   // "Epsilon 0.01 is too small for gamma rounded/unrounded ratio 0.981226, threshold is 0.99."
@@ -1213,12 +1213,12 @@ BOOST_AUTO_TEST_CASE(Sephton_C_rounding_test)
   //cout << d4 << std::endl; // 0.431895
 
   //double d5 = delta(0.05, 0.86207);
-  // Epsilon 0.05 is too small for gamma rounded/unrounded ratio 0.86207
+  // loss_risk 0.05 is too small for gamma rounded/unrounded ratio 0.86207
 
   //cout << d5 << std::endl; // -1.#IND
 
-  // Values in Table 1 Threshold value of gamma rounded for epsilon.
-  // If gamma rounded ratio > threshold, cannot get epsilon-properly rounded result.
+  // Values in Table 1 Threshold value of gamma rounded for loss_risk.
+  // If gamma rounded ratio > threshold, cannot get loss_risk-properly rounded result.
   //double d005 = delta(0.005, 0.98972); // fails.
   //double d005p = delta(0.005, 0.99871);  // is OK
   //double d01 = delta(0.01, 0.97954);
@@ -1227,14 +1227,14 @@ BOOST_AUTO_TEST_CASE(Sephton_C_rounding_test)
   //double d04 = delta(0.04, 0.92063);
   //double d05 = delta(0.05, 0.90175);
   //double d1 = delta(0.1, 0.81271);
-  //Epsilon 0.05 is too small for gamma rounded/unrounded ratio 0.86207
-  //Epsilon 0.005 is too small for gamma rounded/unrounded ratio 0.98972
-  //Epsilon 0.01 is too small for gamma rounded/unrounded ratio 0.97954
-  //Epsilon 0.02 is too small for gamma rounded/unrounded ratio 0.95951
-  //Epsilon 0.03 is too small for gamma rounded/unrounded ratio 0.93987
-  //Epsilon 0.04 is too small for gamma rounded/unrounded ratio 0.92063
-  //Epsilon 0.05 is too small for gamma rounded/unrounded ratio 0.90175
-  //Epsilon 0.1 is too small for gamma rounded/unrounded ratio 0.81271
+  //loss_risk 0.05 is too small for gamma rounded/unrounded ratio 0.86207
+  //loss_risk 0.005 is too small for gamma rounded/unrounded ratio 0.98972
+  //loss_risk 0.01 is too small for gamma rounded/unrounded ratio 0.97954
+  //loss_risk 0.02 is too small for gamma rounded/unrounded ratio 0.95951
+  //loss_risk 0.03 is too small for gamma rounded/unrounded ratio 0.93987
+  //loss_risk 0.04 is too small for gamma rounded/unrounded ratio 0.92063
+  //loss_risk 0.05 is too small for gamma rounded/unrounded ratio 0.90175
+  //loss_risk 0.1 is too small for gamma rounded/unrounded ratio 0.81271
 
 
   //cout << d005p << std::endl;
@@ -1246,7 +1246,7 @@ BOOST_AUTO_TEST_CASE(Sephton_C_rounding_test)
   //cout << d05 << std::endl;
   //cout << d1 << std::endl;
 
-  // Wimmer et al claim "equation 24 approximation error is less than 0.0123 for epsilon 0.005 to 0.1".
+  // Wimmer et al claim "equation 24 approximation error is less than 0.0123 for loss_risk 0.005 to 0.1".
   // Check that this is true for these examples from the text.
   // Perhaps should be abs (difference) < 0.0123 ?
    BOOST_CHECK((delta(0.01, 0.98123) - 0.05) < 0.0123);
@@ -1286,7 +1286,7 @@ BOOST_AUTO_TEST_CASE(round_m_test2)
 
     BOOST_CHECK_EQUAL(round_m(0.01, 15.287, 2U), -1); // Example 5 (i a), page 1662.
     BOOST_CHECK_EQUAL(round_m(0.04, 15.287, 2U), 0); // Example 5 (i b)
-    BOOST_CHECK_NE(round_m(0.05, 0.0232, 1U), -3); // Example 5 (ii a) epsilon <= 0.05 should fail, and does.
+    BOOST_CHECK_NE(round_m(0.05, 0.0232, 1U), -3); // Example 5 (ii a) loss_risk <= 0.05 should fail, and does.
    // Cannot return a rounding m because epsilon 0.05 is too small!
     BOOST_CHECK_EQUAL(round_m(0.1, 0.0232, 1U), -3); // Example 5 (ii b), should pass.
 
