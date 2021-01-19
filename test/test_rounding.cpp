@@ -1261,15 +1261,14 @@ BOOST_AUTO_TEST_CASE(Wimmer_gamma_test)   // Test Wimmer gamma = rounded /unroun
 } // BOOST_AUTO_TEST_CASE(Wimmer_gamma_test)
 
 BOOST_AUTO_TEST_CASE(round_m_test2)
-{
+{ // Tests of the round_m function.
     ostringstream oss;
     double u = 15.287;
-    //cout << round_1(u) << ' ' << round_2(u) << ' ' << round_3(u) << ' ' << round_nth(u, 4) << std::endl;
+    //std::cout << round_1(u) << ' ' << round_2(u) << ' ' << round_3(u) << ' ' << round_nth(u, 4) << std::endl;
     // 15.3 15.29 15.287 15.287
     oss << round_1(u);
     BOOST_CHECK_EQUAL(oss.str(), "15.3");
     oss.str(""); oss.clear();
-
     double t = 0.15; // printf unwanted round down case.
    // std::cout  << round_1(t) << ' ' << round_2(t) << ' ' << round_3(t) << ' ' << round_nth(t, 4) << std::endl;
     // 0.2 0.15 0.15 0.15
@@ -1286,14 +1285,19 @@ BOOST_AUTO_TEST_CASE(round_m_test2)
 
     BOOST_CHECK_EQUAL(round_m(0.01, 15.287, 2U), -1); // Example 5 (i a), page 1662.
     BOOST_CHECK_EQUAL(round_m(0.04, 15.287, 2U), 0); // Example 5 (i b)
+    // Example with large uncertainty.
     BOOST_CHECK_NE(round_m(0.05, 0.0232, 1U), -3); // Example 5 (ii a) loss_risk <= 0.05 should fail, and does.
-   // Cannot return a rounding m because epsilon 0.05 is too small!
+    // Message is:
+    //   Uncertain warning : Cannot return a rounding m because loss_risk 0.05 is too small!
+
+    std::cout << "round_m(0.05, 0.0232, 1U) = " << round_m(0.05, 0.0232, 1U) << std::endl;
     BOOST_CHECK_EQUAL(round_m(0.1, 0.0232, 1U), -3); // Example 5 (ii b), should pass.
 
   // 0.053779018871944452 and 0.05
   BOOST_CHECK_EQUAL(round_e(0.0000000012345678901234567, 1),"1.e-9"); // round 1 sig digit.
   //BOOST_CHECK_EQUAL(round(0.12345678901234567, 0),"1."); // round 0 - at decimal
   //BOOST_CHECK_EQUAL(round(1.2345678901234567, 0),"1."); // round 0 - at decimal
+  /// ...
   //BOOST_CHECK_EQUAL(round(123456789.01234567, 0),"1."); // round 0 - at decimal
   //BOOST_CHECK_EQUAL(round(12345678901234567., 0),"1."); // round 0 - at decimal
   //BOOST_CHECK_EQUAL(round(12345678901234567890123456789., 0),"1."); // round 0 - at decimal

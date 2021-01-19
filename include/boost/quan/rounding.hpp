@@ -976,12 +976,11 @@ double delta(double loss_risk, double gamma, distribution_type distrib = gaussia
 
   //assert (gamma <= 1);
   using std::sqrt;
+
+  constexpr double sqrt_3 = 1.7320508075688772935274463415058723669428052543712;
   double d;
   double x;
   double threshold;
-  double sqrt_3 = 1.7320508075688772935274463415058723669428052543712;
-
-  // TODO use boost.math constant.
 
   switch (distrib) {
     case gaussian: // equation 24, p 1664.
@@ -1156,7 +1155,10 @@ int round_m(double loss_risk = 0.01, double sigma = 0., unsigned int sigma_sigdi
     std::cout << "Uncertain warning: " 
       "sigma_rounded = " << sigma_rounded  << ", sigma = " << sigma
       << ", gamma(sigma_rounded, sigma) = " << g << ", gl = " << gl << std::endl;
-    // sigma_rounded = 0, sigma = 0, gamma(signa_rounded, signma) = 0, gl = 0.90175
+    // Example from Wimmer and test_rounding.
+    // BOOST_CHECK_NE(round_m(0.05, 0.0232, 1U), -3); // Example 5 (ii a) loss_risk <= 0.05 should fail,
+    // Uncertain warning: Cannot return a rounding m because loss_risk 0.05 is too small!
+    // Uncertain warning : sigma_rounded = 0.02, sigma = 0.0232, gamma(sigma_rounded, sigma) = 0.862069, gl = 0.90175
     return -9999;  // Or ???
   }
   // Or throw?
@@ -1167,14 +1169,14 @@ int round_m(double loss_risk = 0.01, double sigma = 0., unsigned int sigma_sigdi
     return -9999; // or throw.
   }
   d = d * sigma_rounded / (5 * g); // Wimmer equation 12, page 1661.
-  // (and same for triangular distribution equation 10, page 24,
-  // and uniform distribution equation 22, page 6).
+  // (and same for triangular distribution equation 10, page 24, and uniform distribution equation 22, page 6).
   d = log10(d);
   return static_cast<int> (floor(d)); // \return m the position of the digit to be used for rounding.
-  // m == 0 means use the units digit for rounding the tens digit...
+  // m == 0 means use the units digit for rounding the tens digit, m = 1 means using the tens digit for rounding the hundreds digit ...
 } // int round_m(double loss_risk, double sigma, unsigned int sigdigits)
 
-std::string round_ue(double v, double sigma, double loss_risk = 0.01, unsigned int sigdigits = 2U) { /*! \brief Properly round value to a decimal digit `std::string`.
+std::string round_ue(double v, double sigma, double loss_risk = 0.01, unsigned int sigdigits = 2U) { 
+  /*! \brief Properly round value to a decimal-digit as `std::string`.
   \details Measurement Science and Technolology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X.\n
     Gejza Wimmer, Viktor Witkovsky, Tomas Duby,
     Proper rounding of the measurement results under normality assumptions.
@@ -1185,7 +1187,7 @@ std::string round_ue(double v, double sigma, double loss_risk = 0.01, unsigned i
     \param loss_risk Fraction of loss of accuracy from rounding permitted (default 1%).
     \param sigdigits Number of digits that are significant (default 2).
 
-    \return Decimal digit `std::string` containing rounded value.
+    \return Decimal digit @c std::string containing properly rounded value.
   */
   //int round_m(double loss_risk, double unc, unsigned int sigdigits, distribution_type t);
   int m = round_m(loss_risk, sigma, sigdigits, gaussian);
