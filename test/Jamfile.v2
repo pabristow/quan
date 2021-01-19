@@ -10,21 +10,25 @@
 import testing ;  # Bring in rules for testing
 import feature ;
 
-feature.feature iterator_debugging
-  : on off
-  : composite propagated optional
-  ;
-
-feature.compose <iterator_debugging>off
-  : <define>_HAS_ITERATOR_DEBUGGING=0
-  ;
+#feature.feature iterator_debugging
+#  : on off
+#  : composite propagated optional
+#  ;
+#
+#feature.compose <iterator_debugging>off
+#  : <define>_HAS_ITERATOR_DEBUGGING=0
+#  ;
+#
 
 project quan_test
   : requirements
     <include>$(boost-root)
     <include>../../..
+    <link>static
     <library>/boost/test//boost_test_exec_monitor/<link>static
+    # BOOST_ALL_DYN_LINK 
 
+# MSVC
    # <toolset>msvc:<cxxflags>-std=c++14 Minimum
     <toolset>msvc:<asynch-exceptions>on # Needed for Boost.Test.
     <toolset>msvc:<warnings>all
@@ -45,7 +49,7 @@ project quan_test
 
     #<toolset>msvc:<iterator_debugging>off
     #<toolset>intel-win:<iterator_debugging>off
-    
+    # Clang/LLVM
   #  <toolset>clang:<cxxflags>-std=c++14 Minimum
     <toolset>clang:<cxxflags>-Wno-reorder
     <toolset>clang:<cxxflags>-D_CRT_SECURE_NO_WARNINGS
@@ -53,11 +57,13 @@ project quan_test
     <toolset>clang:<cxxflags>-Wno-unused-variable
     ##<toolset>clang:<cxxflags>-Wno-unused-but-set-variable gcc only?
     <toolset>clang:<cxxflags>-Wno-unused-const-variable
+    <toolset>clang:<cxxflags>-DBOOST_ALL_NO_LIB=1  
     
+    # GCC
+   # <toolset>gcc:<cxxflags>-std=c++14 Minimum
     # <toolset>gcc:<cxxflags>-Wno-unused-local-typedef
     <toolset>gcc:<cxxflags>-Wno-unused-variable
     <toolset>gcc:<cxxflags>-Wno-unused-but-set-variable
-   # <toolset>gcc:<cxxflags>-std=c++14 Minimum
     <toolset>gcc:<cxxflags>-Wno-reorder
     <toolset>gcc:<cxxflags>-Wno-comment
     <toolset>gcc:<cxxflags>-Wno-unused-local-typedefs
@@ -65,7 +71,7 @@ project quan_test
 
 test-suite "Quan and Unc library tests"
    :
-    # [ run test_rounding.cpp ]
+     [ run test_rounding.cpp ]
      [ run unc_tests.cpp ]
     # [ run TestQuan1.cpp ]
   ;

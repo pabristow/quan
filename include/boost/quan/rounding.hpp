@@ -222,10 +222,10 @@ std::string round_e(FPT d, int sigdigits)
 
      \note the difference in meaning of precision from default, fixed and scientific, for example:
      `d = 19.99;` \n
-     `cerr << setprecision(2) << d << endl; // 20 // rounded`\n
-     `cerr << fixed << setprecision(1) << d << endl; // 20.0 - rounded up.`\n
-     `cerr << fixed << setprecision(2) << d << endl; // 19.99 - 2 digits after decimal point.`\n
-     `cerr << scientific << setprecision(2) << d << endl; // 2.00e+001 - 2 digits after decimal point`
+     `std::cerr << setprecision(2) << d << std::endl; // 20 // rounded`\n
+     `std::cerr << fixed << setprecision(1) << d << std::endl; // 20.0 - rounded up.`\n
+     `std::cerr << fixed << setprecision(2) << d << std::endl; // 19.99 - 2 digits after decimal point.`\n
+     `std::cerr << scientific << setprecision(2) << d << std::endl; // 2.00e+001 - 2 digits after decimal point`
 
     \details Also remove all redundant exponent characters and digits,
     See http://en.wikipedia.org/wiki/Rounding .
@@ -242,35 +242,7 @@ std::string round_e(FPT d, int sigdigits)
     For 64-bit double, @c max_digits10 is 17, so write @c cout.precision(17).
     This will avoid any bias or loss of accuracy in statistical calculations caused by rounding.
 
-    \note The C++ Standard IOstream library does not specify any guarantee about accuracy
-     of input from a decimal digits string to internal floating-point format like @c double.\n
-    The compiler will always convert a literal floating-point to the @b nearest
-    @b representable @b value, but the C++ Standard IOstream library is @b not @b required do this.
-    In particular, MSVC 8.0 (2007) and 10.0 (2010) do not quite always achieve this
-    for `defaultfloat` format -
-    about 1/3 third of significand values in the range 0.0001 to 0.003894 are not
-    input to the nearest representable double, but are 1-bit different.
-
-    It is impracticable to test all floating-point values in a useful time,
-    so random values were tested.
-
-    For details see:
-
-    http://lab.msdn.microsoft.com/productfeedback/viewfeedback.aspx?feedbackid=7bf2f26d-171f-41fe-be05-4169a54eef9e
-
-    aka http://tinyurl.com/mpk72
-
-    This is very significant if you wish to 'round-trip'
-    (outputting a value and reading it back in again)
-    for example with lexical_cast or using Boost.Serialization.
-    A test like
-
-       assert(value_output == value_reinput)
-
-    will fail *very* intermittently.
-
-    So if this is important to you, use the scientific (exponential) format
-    with precision max_digits10 (17 for double) where random tests have not revealed any differences.
+    Use the scientific (exponential) format with precision max_digits10 (17 for double).
 
     Logic is using C++ std printf-style rounding to start with a decimal digit string with rounded value
     of digits10, only the guaranteed correct digits
@@ -299,7 +271,7 @@ std::string round_e(FPT d, int sigdigits)
     return (boost::math::signbit(d) ? "-NaN" : "NaN");
   }
   if (sigdigits <= 0) {
-    std::cout << "Trying to display " << sigdigits << " significant decimal digits!" << std::endl;
+    std::cout << "Uncertain warning: Trying to display " << sigdigits << " significant decimal digits!" << std::endl;
     return ""; // Or throw?
   }
 
@@ -749,15 +721,15 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
     so limit @c sigdigits to @c digits10 (15 for IEEE 64-bit double).
    */
   if (sigdigits > std::numeric_limits<FPT>::digits10) {
-    std::cout << "Maximum significant digits is " << std::numeric_limits<FPT>::digits10 << std::endl;
+    std::cout << "Uncertain warning: Maximum significant digits is " << std::numeric_limits<FPT>::digits10 << std::endl;
     sigdigits = std::numeric_limits<FPT>::digits10; // digits10 (15 for double) decimal digits after the decimal point.
   }
 
   if (sigdigits < 0) { // Must be a mistake.
-    std::cout << "Trying to output " << sigdigits << " significant digits!" << std::endl;
+    std::cout << "Uncertain warning: Trying to output " << sigdigits << " significant digits!" << std::endl;
     return "";  // Or throw?
   } else if (sigdigits == 0) { // Might handle zero case differently from sigdigits < 0?
-    std::cout << "Trying to output zero significant digits!" << std::endl;
+    std::cout << "Uncertain warning: Trying to output zero significant digits!" << std::endl;
     return "";
   }
   //else sigdigits > 0, so usable.
@@ -1020,7 +992,7 @@ double delta(double epsilon, double gamma, distribution_type distrib = gaussian)
       if (x < (std::numeric_limits<double>::min)() * 100.) // Small value allows for approximation uncertainty.
       { // Not possible to have epsilon this small!
         threshold = x; // ???
-        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma << ", threshold is " << threshold << " for gaussian distribution." << std::endl;
+        std::cout << "Uncertain warning: Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma << ", threshold is " << threshold << " for gaussian distribution." << std::endl;
         // For example:
         // "Epsilon 0.01 is too small for gamma rounded/unrounded ratio 0.981226, threshold is 0.99."
         return -1.; // Not sure how to signal the problem here. Throw?
@@ -1034,7 +1006,7 @@ double delta(double epsilon, double gamma, distribution_type distrib = gaussian)
       // Measurement Science Review, Vol 2, section 1, (2002), pages 1 - 7.
       threshold = 1 - epsilon; // Wimmer equation 17, page 5
       if (gamma < threshold) {
-        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma << ", threshold is " << threshold << " for uniform distribution." << std::endl;
+        std::cout << "Uncertain warning: Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma << ", threshold is " << threshold << " for uniform distribution." << std::endl;
         return -1; // Not sure how to signal the problem here.
       }
       d = sqrt_3 * (gamma + 2 * epsilon - 1); // Wimmer equation 20, page 6.
@@ -1044,7 +1016,7 @@ double delta(double epsilon, double gamma, distribution_type distrib = gaussian)
       // Measurement Science Review, Vol 2, section 1, (2002), pages 21 to 31.
       threshold = (1 - gamma) / (1 + gamma);
       if (epsilon < threshold) {
-        std::cout << "Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma << ", threshold is " << threshold << " for triangular distribution." << std::endl;
+        std::cout << "Uncertain warning: Epsilon " << epsilon << " is too small for gamma rounded/unrounded ratio " << gamma << ", threshold is " << threshold << " for triangular distribution." << std::endl;
         return -1; // Not sure how to signal the problem here.
       }
       // d = sqrt(6 * (epsilon - ((1 - gamma) /(1 + gamma)))); // Wimmer equation 18, page 27.
@@ -1178,8 +1150,9 @@ int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigi
   }
   if (gl >= g)
   { // Example: Cannot return a rounding m because epsilon 0.05 is too small!
-    std::cout << "Cannot return a rounding m because epsilon " << e << " is too small!" << std::endl;
-    std::cout << "sigma_rounded = " << sigma_rounded  << ", sigma = " << sigma
+    std::cout << "Uncertain warning: Cannot return a rounding m because epsilon " << e << " is too small!" << std::endl;
+    std::cout << "Uncertain warning: " 
+      "sigma_rounded = " << sigma_rounded  << ", sigma = " << sigma
       << ", gamma(sigma_rounded, sigma) = " << g << ", gl = " << gl << std::endl;
     // sigma_rounded = 0, sigma = 0, gamma(signa_rounded, signma) = 0, gl = 0.90175
     return -9999;  // Or ???
@@ -1188,7 +1161,7 @@ int round_m(double epsilon = 0.01, double sigma = 0., unsigned int sigma_sigdigi
 
   double d = delta(epsilon, g, distrib);
   if (d < 0.) { // Chosen epsilon is too small! (for example, e = 0.01 loss is too demanding, so try 0.02).
-    std::cout << "Cannot compute a rounding digit index m because epsilon " << epsilon << " is too small!" << std::endl;
+    std::cout << "Uncertain warning: Cannot compute a rounding digit index m because epsilon " << epsilon << " is too small!" << std::endl;
     return -9999; // or throw.
   }
   d = d * sigma_rounded / (5 * g); // Wimmer equation 12, page 1661.

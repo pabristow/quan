@@ -25,14 +25,17 @@
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report Boost.Test library file details.
 
+
 #include <boost/static_assert.hpp>
 
-#include <boost/test/unit_test.hpp>
-  using boost::unit_test::test_suite;
-  using boost::unit_test::unit_test_log;
+//#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>  
 
-using boost::unit_test_framework::unit_test_log;
-using boost::unit_test_framework::log_level;
+  using boost::unit_test::test_suite;
+//  using boost::unit_test::unit_test_log;
+//
+//using boost::unit_test_framework::unit_test_log;
+//using boost::unit_test_framework::log_level;
 
 #include <boost/quan/rounding.hpp>
 
@@ -88,7 +91,7 @@ BOOST_AUTO_TEST_CASE(round_test_0)
 }
 
 BOOST_AUTO_TEST_CASE(round_test_1)
-{ // Round to cout tests.
+{ // Round to std::cout tests.
 
   string message("Round test: " __FILE__ );
 #ifdef __TIMESTAMP__
@@ -97,41 +100,23 @@ BOOST_AUTO_TEST_CASE(round_test_1)
 #ifdef _MSC_FULL_VER
   message +=  ", MSVC version " BOOST_STRINGIZE(_MSC_FULL_VER) ".";
 #else
-  message += "."
+  message += ".";
 #endif
 
-  BOOST_TEST_MESSAGE(message);
-  BOOST_TEST_MESSAGE("double maxdigits10 is " << maxdigits10);
-    cout << "std::numeric_limits<double>::max_exponent = " << std::numeric_limits<double>::max_exponent
-    << ", \nstd::numeric_limits<double>::max_exponent10 = " << std::numeric_limits<double>::max_exponent10
-    << ",\nstd::numeric_limits<double>::max_exponent10 -1 = "<< std::numeric_limits<double>::max_exponent10 -1 << ". " << endl;
+  std::cout << message << std::endl;
+
+  //BOOST_TEST_MESSAGE(message);
+  //BOOST_TEST_MESSAGE("double maxdigits10 is " << maxdigits10);
+    //std::cout << "std::numeric_limits<double>::max_exponent = " << std::numeric_limits<double>::max_exponent
+    //<< ", \nstd::numeric_limits<double>::max_exponent10 = " << std::numeric_limits<double>::max_exponent10
+    //<< ",\nstd::numeric_limits<double>::max_exponent10 -1 = "<< std::numeric_limits<double>::max_exponent10 -1 << ". " << std::endl;
     //  std::numeric_limits<double>::max_exponent = 1024,
     //  std::numeric_limits<double>::max_exponent10 = 308,
     //  std::numeric_limits<double>::max_exponent10 -1 = 307.
-#ifdef _MSC_VER
-    BOOST_CHECK_EQUAL(maxdigits10, 17U);
-#endif
 
-  // Experiments to see if a special meaning can be assigned to BOTH fixed and scientific.
-  // BUT the std::hex display option added with TR1
-  // means CANNOT use this mechanism.
-  // #define _IOShexfloat 0x3000  // added with TR1.
-  // Last top Bit 15 also appears used, so MUST use uncflags for controlling scaling etc.
+    BOOST_CHECK_EQUAL(maxdigits10, 17U); // expected for 64-bit double.
 
-  //std::ios_base::fmtflags fs = cout.flags();
-  //cout << hex << "cout.flags() " << (cout.flags() & std::ios_base::floatfield) << endl;
-  //cout << "std::ios::fixed "<< std::ios::fixed  << fixed << endl;
-  //cout << hex << "cout.flags() " << (cout.flags() & std::ios_base::floatfield) << endl;
-  //cout << "std::ios::scientific "<< std::ios::scientific << scientific << endl;
-  //cout << hex << "cout.flags() " << (cout.flags() & std::ios_base::floatfield) << endl;
-
-  //cout.setf(std::ios::fixed | std::ios::scientific, std::ios_base::floatfield);
-  //cout.setf(std::ios::fixed | std::ios::scientific);
-  //cout << hex << "cout.flags() = " << (cout.flags() & std::ios_base::floatfield) << endl;
-  // so need a extra 'special' manipulator to set BOTH scientific AND fixed.
 } //  BOOST_AUTO_TEST_CASE(round_test_1)
-
-
 
 BOOST_AUTO_TEST_CASE(round_f_test)
 {
@@ -148,8 +133,8 @@ BOOST_AUTO_TEST_CASE(round_f_test)
   { // Test round_f.
     // round_f is fixed format.
     double v = 1.23456; // Value to test rounded output.
-    BOOST_CHECK_EQUAL(round_f(v, 0), ""); // With message "Trying to output zero significant digits!".
-    BOOST_CHECK_EQUAL(round_f(v, -1), ""); // With message "Trying to output -1 significant digits!".
+    BOOST_CHECK_EQUAL(round_f(v, 0), ""); // With message "Uncertain warning: Trying to output zero significant digits!".
+    BOOST_CHECK_EQUAL(round_f(v, -1), ""); // With message "Uncertain warning: Trying to output -1 significant digits!!".
     BOOST_CHECK_EQUAL(round_f(v, 1), "1."); //
     BOOST_CHECK_EQUAL(round_f(v, 2), "1.2"); //
     BOOST_CHECK_EQUAL(round_f(v, 3), "1.23"); //
@@ -196,12 +181,14 @@ BOOST_AUTO_TEST_CASE(round_f_test)
     BOOST_CHECK_EQUAL(round_f(v, 13), "0.001234567890123"); //
     BOOST_CHECK_EQUAL(round_f(v, 14), "0.0012345678901235"); //
     BOOST_CHECK_EQUAL(round_f(v, digits10), "0.00123456789012346"); //
-    BOOST_CHECK_EQUAL(round_f(v, maxdigits10), "0.00123456789012346"); //
+    BOOST_CHECK_EQUAL(round_f(v, maxdigits10), "0.00123456789012346"); // Uncertain warning: Maximum significant digits is 15
 
     v = 12345678901234567890.0; // Value > max_digits10 digits.
     BOOST_CHECK_EQUAL(round_f(v, 4),           "12350000000000000000.");
     BOOST_CHECK_EQUAL(round_f(v, 10),          "12345678900000000000.");
-    BOOST_CHECK_EQUAL(round_f(v, maxdigits10), "12345678901234600000.");
+    BOOST_CHECK_EQUAL(round_f(v, digits10), "12345678901234600000.");
+    BOOST_CHECK_EQUAL(round_f(v, maxdigits10), "12345678901234600000.");  // Uncertain warning: Maximum significant digits is 15
+
 
     v = 0.0000000012345678901234567890; // Value < max_digits10 digits.
     BOOST_CHECK_EQUAL(round_f(v, 4), "0.000000001235"); //
@@ -263,7 +250,7 @@ BOOST_AUTO_TEST_CASE(round_e_test)  // Test round_e.
   }
   {
     double d = 0.99999999999999999; // Round to before decimal point.
-    // cout << setprecision(4) << showpoint << d << endl; // 1.000
+    // std::cout  << setprecision(4) << showpoint << d << std::endl; // 1.000
     BOOST_CHECK_EQUAL(round_e(d, 1), "1."); // 1 digit.
     BOOST_CHECK_EQUAL(round_e(d, 2), "1.0"); // 2 digits.
     BOOST_CHECK_EQUAL(round_e(d, 3), "1.00"); // 3 digits.
@@ -302,9 +289,9 @@ BOOST_AUTO_TEST_CASE(round_e_test)  // Test round_e.
   }
     { // Positive exponent.
     double d = 9.9e+2; // 990
-    //cout << setprecision(1) << fixed << d << endl; //  990.0
-    //cout << setprecision(1) << scientific << d << endl; // 9.9e+002
-    //cout << setprecision(0) << scientific << d << endl; // 9.9e+002
+    //cout << setprecision(1) << fixed << d << std::endl; //  990.0
+    //cout << setprecision(1) << scientific << d << std::endl; // 9.9e+002
+    //cout << setprecision(0) << scientific << d << std::endl; // 9.9e+002
     BOOST_CHECK_EQUAL(round_e(d, 1), "1.e3"); // 1 digit, rounded.
     BOOST_CHECK_EQUAL(round_e(d, 2), "9.9e2"); // 2 digits.
     BOOST_CHECK_EQUAL(round_e(d, 3), "9.90e2"); // 3 digits.
@@ -313,9 +300,9 @@ BOOST_AUTO_TEST_CASE(round_e_test)  // Test round_e.
 
   { // Big positive exponent.
     double d = 9.9e+20; // 990
-    //cout << setprecision(1) << fixed << d << endl; //  990000000000000000000.0
-    //cout << setprecision(1) << scientific << d << endl; // 9.9e+020
-    //cout << setprecision(0) << scientific << d << endl; // 9.9e+020
+    //cout << setprecision(1) << fixed << d << std::endl; //  990000000000000000000.0
+    //cout << setprecision(1) << scientific << d << std::endl; // 9.9e+020
+    //cout << setprecision(0) << scientific << d << std::endl; // 9.9e+020
     BOOST_CHECK_EQUAL(round_e(d, 1), "1.e21"); // 1 digit, rounded.
     BOOST_CHECK_EQUAL(round_e(d, 2), "9.9e20"); // 2 digits.
     BOOST_CHECK_EQUAL(round_e(d, 3), "9.90e20"); // 3 digits.
@@ -324,9 +311,9 @@ BOOST_AUTO_TEST_CASE(round_e_test)  // Test round_e.
 
     { // Very big positive exponent.
     double d = 9.9e+123; //
-    //cout << setprecision(1) << fixed << d << endl; //  990000000000000000000.0
-    //cout << setprecision(1) << scientific << d << endl; // 9.9e+020
-    //cout << setprecision(0) << scientific << d << endl; // 9.9e+020
+    //cout << setprecision(1) << fixed << d << std::endl; //  990000000000000000000.0
+    //cout << setprecision(1) << scientific << d << std::endl; // 9.9e+020
+    //cout << setprecision(0) << scientific << d << std::endl; // 9.9e+020
     BOOST_CHECK_EQUAL(round_e(d, 1), "1.e124"); // 1 digit, rounded.
     BOOST_CHECK_EQUAL(round_e(d, 2), "9.9e123"); // 2 digits.
     BOOST_CHECK_EQUAL(round_e(d, 3), "9.90e123"); // 3 digits.
@@ -335,8 +322,8 @@ BOOST_AUTO_TEST_CASE(round_e_test)  // Test round_e.
 
   { // Negative exponent.
     double d = 9.9e-2;
-    //cout << setprecision(1) << fixed << d << endl; // 0.1
-    //cout << setprecision(1) << scientific << d << endl; // 9.9e-002
+    //cout << setprecision(1) << fixed << d << std::endl; // 0.1
+    //cout << setprecision(1) << scientific << d << std::endl; // 9.9e-002
     BOOST_CHECK_EQUAL(round_e(d, 1), "1.e-1"); // 1 digit, rounded.
     BOOST_CHECK_EQUAL(round_e(d, 2), "9.9e-2"); // 2 digits.
     BOOST_CHECK_EQUAL(round_e(d, 3), "9.90e-2"); // 3 digits.
@@ -345,8 +332,8 @@ BOOST_AUTO_TEST_CASE(round_e_test)  // Test round_e.
 
   { // Big negative exponent.
     double d = 9.9e-20;
-    //cout << setprecision(1) << fixed << d << endl; // 0.1
-    //cout << setprecision(1) << scientific << d << endl; // 9.9e-002
+    //cout << setprecision(1) << fixed << d << std::endl; // 0.1
+    //cout << setprecision(1) << scientific << d << std::endl; // 9.9e-002
     BOOST_CHECK_EQUAL(round_e(d, 1), "1.e-19"); // 1 digit, rounded.
     BOOST_CHECK_EQUAL(round_e(d, 2), "9.9e-20"); // 2 digits.
     BOOST_CHECK_EQUAL(round_e(d, 3), "9.90e-20"); // 3 digits.
@@ -354,8 +341,8 @@ BOOST_AUTO_TEST_CASE(round_e_test)  // Test round_e.
   }
   { // Very big negative exponent.
     double d = 9.9e-234;
-    //cout << setprecision(1) << fixed << d << endl; // 0.1
-    //cout << setprecision(1) << scientific << d << endl; // 9.9e-002
+    //cout << setprecision(1) << fixed << d << std::endl; // 0.1
+    //cout << setprecision(1) << scientific << d << std::endl; // 9.9e-002
     BOOST_CHECK_EQUAL(round_e(d, 1), "1.e-233"); // 1 digit, rounded.
     BOOST_CHECK_EQUAL(round_e(d, 2), "9.9e-234"); // 2 digits.
     BOOST_CHECK_EQUAL(round_e(d, 3), "9.90e-234"); // 3 digits.
@@ -448,9 +435,9 @@ BOOST_AUTO_TEST_CASE(cdf_quantile_test)
     double alpha = 0.005;
     double qlo = quantile(complement(tdist, alpha));
     double qhi = quantile(tdist, alpha);
-    //cout << "quantile(complement(tdist, alpha));  " << qlo << ", quantile(tdist, alpha) " << qhi << endl;
+    //cout << "quantile(complement(tdist, alpha));  " << qlo << ", quantile(tdist, alpha) " << qhi << std::endl;
     //  quantile(complement(tdist, alpha));  2.20454, quantile(tdist, alpha) -2.20454
-    //cout << "cdf( quantile(complement(tdist, alpha)) = "<< cdf_tri(qlo) << ", cdf(quantile(tdist, alpha) = " << cdf_tri(qhi) << endl;
+    //cout << "cdf( quantile(complement(tdist, alpha)) = "<< cdf_tri(qlo) << ", cdf(quantile(tdist, alpha) = " << cdf_tri(qhi) << std::endl;
     //   cdf( quantile(complement(tdist, alpha)) = 0.995, cdf(quantile(tdist, alpha) = 0.005
     BOOST_CHECK_CLOSE_FRACTION(cdf_tri(qhi), alpha, 0.001);
     BOOST_CHECK_CLOSE_FRACTION(cdf_tri(qlo), 1. - alpha, 0.001);
@@ -458,7 +445,7 @@ BOOST_AUTO_TEST_CASE(cdf_quantile_test)
     double q01l = quantile_tri(1. - alpha);
     double q01h = quantile_tri(alpha);
 
-    //cout << "quantile_tri(1. - alpha) " << q01l << ", quantile_tri(alpha); " << q01h << endl;
+    //cout << "quantile_tri(1. - alpha) " << q01l << ", quantile_tri(alpha); " << q01h << std::endl;
     //   quantile_tri(1. - alpha) 2.20454, quantile_tri(alpha); -2.20454
 
     double c01h = cdf_tri(q01h);
@@ -467,52 +454,52 @@ BOOST_AUTO_TEST_CASE(cdf_quantile_test)
 
     double c01l = cdf_tri(q01l);
     BOOST_CHECK_CLOSE_FRACTION(c01l, 1. - alpha, 0.005);  // OK at 0.005
-    //cout << "cdf_tri(quantile_tri(alpha)) " << c01l << ",cdf_tri(quantile_tri(1. - alpha)) " << c01h << endl;
+    //cout << "cdf_tri(quantile_tri(alpha)) " << c01l << ",cdf_tri(quantile_tri(1. - alpha)) " << c01h << std::endl;
     //  cdf_tri(quantile_tri(alpha)) 0.995,cdf_tri(quantile_tri(1. - alpha)) 0.005
     BOOST_CHECK_EQUAL(cdf_tri(-3.), 0); // check > sqrt6 limits.
     BOOST_CHECK_EQUAL(cdf_tri(+3.), 1.);
 
     boost::math::uniform udist(-sqrt_3, +sqrt_3); // Wimmer page 3, below eq 5.
   // Loop back tests.
-  //cout << "loopback boost::math cdf(z) "<< endl;
+  //cout << "loopback boost::math cdf(z) "<< std::endl;
     for (double d = -2.4; d < +2.4; d += 0.2)
     {
-     // cout << d << ' '<< cdf(tdist, d) << ' ' << quantile(tdist, cdf(tdist, d)) << ' '<< d - quantile(tdist, cdf(tdist, d)) << endl;
+     // std::cout  << d << ' '<< cdf(tdist, d) << ' ' << quantile(tdist, cdf(tdist, d)) << ' '<< d - quantile(tdist, cdf(tdist, d)) << std::endl;
       //BOOST_CHECK_CLOSE_FRACTION(d, quantile(tdist, cdf(tdist, d)), 0.01); fails for d near zero
       BOOST_CHECK_SMALL(d - quantile(tdist, cdf(tdist, d)), 100 * eps);
     }
 
-    //cout << "loopback boost::math quantile(alpha))" << endl;
+    //cout << "loopback boost::math quantile(alpha))" << std::endl;
     for (double a = 0.; a <= 1.; a += 0.1)
     {
-      //cout << a << ' ' << quantile(tdist, a) << ' ' << cdf(tdist, quantile(tdist, a)) << ' ' << a - cdf(tdist, quantile(tdist, a)) << endl;
+      //cout << a << ' ' << quantile(tdist, a) << ' ' << cdf(tdist, quantile(tdist, a)) << ' ' << a - cdf(tdist, quantile(tdist, a)) << std::endl;
       BOOST_CHECK_CLOSE_FRACTION(a, cdf(tdist, quantile(tdist, a)), 0.01);
     }
 
-    //cout << "loopback triangular cdf(z)" << endl;
+    //cout << "loopback triangular cdf(z)" << std::endl;
     for (double d = -2.4; d < +2.4; d += 0.2)
     {
-      //cout << d << ' '<< cdf_tri(d) << ' ' << quantile_tri(cdf_tri(tdist, d)) << ' '<< d - quantile_tri(cdf_tri(tdist, d)) << endl;
+      //cout << d << ' '<< cdf_tri(d) << ' ' << quantile_tri(cdf_tri(tdist, d)) << ' '<< d - quantile_tri(cdf_tri(tdist, d)) << std::endl;
       //BOOST_CHECK_CLOSE_FRACTION(d, quantile_tri(cdf(tdist, d)), 0.01); // fails d near zero
       BOOST_CHECK_SMALL(d - quantile_tri(cdf(tdist, d)), 100 * eps);
     }
 
-    //cout << "loopback triangular quantile" << endl;
+    //cout << "loopback triangular quantile" << std::endl;
     for (double a = 0.; a <= 1.; a += 0.1)
     {
-      //cout << a << ' ' << quantile_tri(a) << ' ' << cdf_tri(quantile_tri(a)) << ' ' << a - cdf_tri(quantile_tri(a)) << endl;
+      //cout << a << ' ' << quantile_tri(a) << ' ' << cdf_tri(quantile_tri(a)) << ' ' << a - cdf_tri(quantile_tri(a)) << std::endl;
       BOOST_CHECK_CLOSE_FRACTION(a, cdf_tri(quantile_tri(a)), 0.01);
     }
-    //cout << "loopback uniform quantile" << endl;
+    //cout << "loopback uniform quantile" << std::endl;
     for (double a = 0.; a <= 1.; a += 0.1)
     {
-      //cout << a << ' ' << quantile_uni(a) << ' ' << cdf_uni(quantile_uni(a)) << ' ' << a - cdf_uni(quantile_uni(a)) << endl;
+      //cout << a << ' ' << quantile_uni(a) << ' ' << cdf_uni(quantile_uni(a)) << ' ' << a - cdf_uni(quantile_uni(a)) << std::endl;
       BOOST_CHECK_CLOSE_FRACTION(a, cdf_uni(quantile_uni(a)), 0.01);
     }
-    //cout << "loopback uniform cdf_uni(z)" << endl;
+    //cout << "loopback uniform cdf_uni(z)" << std::endl;
     for (double d = -sqrt_3; d < +sqrt_3; d += 0.2)
     {
-      //cout << d << ' '<< cdf(d) << ' ' << quantile_tri(cdf(tdist, d)) << ' '<< d - quantile_tri(cdf(tdist, d)) << endl;
+      //cout << d << ' '<< cdf(d) << ' ' << quantile_tri(cdf(tdist, d)) << ' '<< d - quantile_tri(cdf(tdist, d)) << std::endl;
       //BOOST_CHECK_CLOSE_FRACTION(d, quantile_tri(cdf(tdist, d)), 0.01); // fails d near zero
       BOOST_CHECK_SMALL(d - quantile_uni(cdf(udist, d)), 100 * eps);
     }
@@ -544,7 +531,7 @@ BOOST_AUTO_TEST_CASE(round_ms_test)
   BOOST_CHECK_EQUAL(round_ms(-v, 307), "-200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000."); // -1.797693134862316 and 308
 
   v = (std::numeric_limits<double>::min)();
-  // cout <<setprecision (17) << v << endl; // 2.2250738585072014e-308
+  // std::cout  <<setprecision (17) << v << std::endl; // 2.2250738585072014e-308
   BOOST_CHECK_EQUAL(round_ms(v, std::numeric_limits<double>::min_exponent10), "0."); //  2.22507385850720 and -308
   BOOST_CHECK_EQUAL(round_ms(v, std::numeric_limits<double>::min_exponent10+1), "0."); //  2.22507385850720 and -307 ?? is 0. expected?
   BOOST_CHECK_EQUAL(round_ms(v, std::numeric_limits<double>::min_exponent10+2), "0."); //  2.22507385850720 and -306 ?? is 0. expected?
@@ -636,8 +623,8 @@ BOOST_AUTO_TEST_CASE(round_ms_test)
   BOOST_CHECK_EQUAL(round_ms(1.95e+18, +2),"1950000000000000000."); //
   BOOST_CHECK_EQUAL(round_ms(1.95e+24, +2),"1950000000000000000000000."); //
   // numeric_limits<double>::max() = 1.797693134862316 E 308
-  BOOST_CHECK_EQUAL(round_ms(numeric_limits<double>::max(), 305),"180000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000."); //
-  BOOST_CHECK_EQUAL(round_ms(numeric_limits<double>::min(), -307),"0.");
+  BOOST_CHECK_EQUAL(round_ms((std::numeric_limits<double>::max)(), 305),"180000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000.");
+  BOOST_CHECK_EQUAL(round_ms((std::numeric_limits<double>::min)(), -307),"0.");
 
   // Some small values.
   BOOST_CHECK_EQUAL(round_ms(1.95e-6, -8),"0.0000020");
@@ -650,7 +637,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_3)
   // Calculate confidence interval.
   //std::pair<double, double> conf_interval(double value, double unc, double df, double alpha);
   std::pair<double, double> p(97.8725, 157.7975);
-  // cout << p << endl; // <97.8725, 157.798>
+  // std::cout  << p << std::endl; // <97.8725, 157.798>
   p = conf_interval(127.835, 15.287);  // Default to 1 degree of freedom, alpha 0.05, 95% confidence & gaussian.
   BOOST_CHECK_CLOSE_FRACTION(p.first, 97.8725, tol);
   BOOST_CHECK_CLOSE_FRACTION(p.second, 157.798, tol); //
@@ -712,11 +699,11 @@ BOOST_AUTO_TEST_CASE(Wimmer_5_1)
   BOOST_CHECK_EQUAL(round_ms(x, m),"128."); // Round mean to a string.
   BOOST_CHECK_EQUAL(round_ms(x, round_m(0.01, 15.287, 2U, gaussian)),"128.");
 
-// void out_value_df_limits(double mean, double unc, int degfree = 1, std::ostream& os = cout)
+// void out_value_df_limits(double mean, double unc, int degfree = 1, std::ostream& os = std::cout )
   ostringstream oss;
   out_value_df_limits(127.835, 15.287, 1, oss);
   // out_value_df_limits(123.835, 15.287); 128. +/- 15 <97.9, 157.8>
-  // cout << oss.str() << endl;
+  // std::cout  << oss.str() << std::endl;
   BOOST_CHECK_EQUAL(oss.str(), "128. +/- 15 <97.9, 157.8>");
 } // BOOST_AUTO_TEST_CASE(Wimmer_5_1)
 
@@ -747,7 +734,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_5_1)
    BOOST_CHECK_EQUAL(s, "1.24");
    std::pair<double, double> ci =
      conf_interval(x, sigma_star, 1., 0.05);
-   //cout << "conf_interval(x, sigma, 1., 0.05);" << ci << endl;
+   //cout << "conf_interval(x, sigma, 1., 0.05);" << ci << std::endl;
    BOOST_CHECK_CLOSE_FRACTION(ci.first, 1.2008, tol * 2); // 1.1995
    BOOST_CHECK_CLOSE_FRACTION(ci.second, 1.2792, tol); // 1.27795
    // Not sure why this isn't exactly same as Wimmer.
@@ -781,15 +768,15 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
 
     std::pair<double, double> u(5.67, 5.82); // Known sigma 0.98 confidence interval estimate.
     // and gamma = 5.67/5.82 = 0.97423
-    //cout << "uncs ratio " << gamma(5.67, 5.82) << endl; //  uncs ratio 0.974227
+    //cout << "uncs ratio " << gamma(5.67, 5.82) << std::endl; //  uncs ratio 0.974227
     BOOST_CHECK_CLOSE_FRACTION(gamma(5.67, 5.82), 0.97423, tol); // unc ratio.
-    // cout << "delta " << delta(nu, gamma(5.67, 5.82)) << endl; //  delta 0.261833
+    // std::cout  << "delta " << delta(nu, gamma(5.67, 5.82)) << std::endl; //  delta 0.261833
     BOOST_CHECK_CLOSE_FRACTION(delta(nu, gamma(5.67, 5.82)), 0.26, tol*10); // delta = 0.26
-    // cout << log10(0.26 * 5.82 /5) << endl; // expect -0.519074
+    // std::cout  << log10(0.26 * 5.82 /5) << std::endl; // expect -0.519074
     BOOST_CHECK_CLOSE_FRACTION(log10(0.26 * 5.82 / 5), -0.519, tol);
     // m < -0.519 so rounding x.
     int m = static_cast<int>(floor(-0.519));
-    //cout << "floor(-0.519) " << m << endl; // floor(-0.519) -1
+    //cout << "floor(-0.519) " << m << std::endl; // floor(-0.519) -1
     BOOST_CHECK_EQUAL(m, -1);
     double x = 56.387; // Measured value.
     BOOST_CHECK_EQUAL(round_ms(x, m), "56."); // Rounded measured value.
@@ -799,16 +786,16 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
     using boost::math::normal;
     normal dist; // Normal distribution with zero mean and unit standard deviation.
     //double t1 = quantile(dist, alpha / 2);
-    //cout << t1 << endl; // = -1.95996 so can use
+    //cout << t1 << std::endl; // = -1.95996 so can use
     double t = quantile(complement(dist, alpha /2 ));
-    // cout << t << endl; // 1.95996 for 0.05
+    // std::cout  << t << std::endl; // 1.95996 for 0.05
     BOOST_CHECK_CLOSE_FRACTION(t, 1.95996, tol);
     // Wimmer rounds to t = 1.96; but tests pass OK with either value.
 
     std::pair<double, double> p; // Confidence interval.
     p.first = x_star - 5.67 * t; // lower.
     p.second = x_star + 5.67 * t; // higher.
-    // cout << p << endl; //  <44.887, 67.113>
+    // std::cout  << p << std::endl; //  <44.887, 67.113>
     BOOST_CHECK_CLOSE_FRACTION(p.first, 44.8868, tol); // Wimmer values.
     BOOST_CHECK_CLOSE_FRACTION(p.second, 67.1132, tol);
 
@@ -817,11 +804,11 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
     alpha = 0.01; // 99% confidence for 0.05 proper 0.99 confidence interval estimate.
     normal dist01; // Normal distribution with zero mean and unit standard deviation.
     t = quantile(complement(dist01, alpha / 2));
-    // cout << t << endl; // 1.95996
+    // std::cout  << t << std::endl; // 1.95996
     // Confidence interval.
     p.first = x_star - 5.67 * t;
     p.second = x_star + 5.67 * t;
-    // cout << "Alpha 0.01 " << p << endl; //  Alpha 0.01 <41.395, 70.605>
+    // std::cout  << "Alpha 0.01 " << p << std::endl; //  Alpha 0.01 <41.395, 70.605>
     BOOST_CHECK_CLOSE_FRACTION(p.first, 41.391, tol);
     BOOST_CHECK_CLOSE_FRACTION(p.second, 70.6059, tol);
     // Note this 0.995 confidence requirement means that the interval is wider.
@@ -836,7 +823,7 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
     double sigma_star = sigma / sqrt(static_cast<double>(n)); // Why divide by sqrt(10)?
     BOOST_CHECK_CLOSE_FRACTION(sigma_star, 0.223606797, tol/10.);
     double sigma_rounded = round_sig(sigma_star, 1); // Round to 1 sig digit to get 0.2.
-    // cout << "unc_rounded " << unc_rounded << endl; // unc_rounded 0.2
+    // std::cout  << "unc_rounded " << unc_rounded << std::endl; // unc_rounded 0.2
     BOOST_CHECK_CLOSE_FRACTION(sigma_rounded, 0.2, tol); //
     BOOST_CHECK_EQUAL(sigma_rounded, 0.2); // unc 0.1 properly rounded.
     ostringstream oss;
@@ -856,7 +843,7 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
     // confidence interval is 87.9 +/- 0.2 and (87.3848, 88.4152).
 
     double r = log10(del * sigma_rounded / (5 * gam));
-    //cout << "r = " << r << endl; //   r = -1.71409
+    //cout << "r = " << r << std::endl; //   r = -1.71409
     BOOST_CHECK_CLOSE_FRACTION(r, -1.716, tol *5 );
     int m = static_cast<int>(floor(log10(del * sigma_rounded / (5 * gam)))); // Wimmer eq 12 p 1661.
     BOOST_CHECK_EQUAL(m, -2);
@@ -869,7 +856,7 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
     double alpha = 0.01;
     //boost::math::normal dist(rounded_x, variance/(n-1));
     //double t = quantile(complement(dist, alpha/2));
-    //cout << "quantile(complement(dist, alpha/2)); = " << t << endl; // for 0.1 = 1.64485, 0.01 2.57583
+    //cout << "quantile(complement(dist, alpha/2)); = " << t << std::endl; // for 0.1 = 1.64485, 0.01 2.57583
     // This should be the upper limit.
     // quantile(complement(dist, alpha/2)); = 88.1213
     // dist(x, variance/n); gives quantile(complement(dist, alpha/2)); = 88.0679
@@ -883,12 +870,12 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
     // Note use of rounded values to get exactly the same result as Wimmer.
     p.first = rounded_x - sigma_rounded * t;
     p.second = rounded_x + sigma_rounded * t;
-    // cout << "lower " << p.first << ", upper " << p.second << endl; //   lower 87.3848, upper 88.4152
+    // std::cout  << "lower " << p.first << ", upper " << p.second << std::endl; //   lower 87.3848, upper 88.4152
     BOOST_CHECK_CLOSE_FRACTION(p.first, 87.3848, tol);  // These confidence intervals are given.
     BOOST_CHECK_CLOSE_FRACTION(p.second, 88.4152, tol);
 
     // So in summary:
-    // void out_value_limits(double mean, double unc, std::pair<double, double> ci, int m, std::ostream& os = cout);
+    // void out_value_limits(double mean, double unc, std::pair<double, double> ci, int m, std::ostream& os = std::cout );
     // std::cout << "out_value_limits(x, sigma_star, p, m, std::cout); ";
     // out_value_limits(x, sigma_star, p, m, std::cout);
     // std::cout << std::endl;
@@ -896,19 +883,19 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
 
     alpha = 0.1;  // 90% confidence for mean.
     t = quantile(complement(dist01, alpha / 2));
-    //cout << t << endl; // 1.64485
+    //cout << t << std::endl; // 1.64485
     p.first = rounded_x - sigma_star * t;
     p.second = rounded_x + sigma_star * t;
-    // cout << "Alpha 0.1 " << p << endl; // Alpha 0.1 <87.5322, 88.2678>
+    // std::cout  << "Alpha 0.1 " << p << std::endl; // Alpha 0.1 <87.5322, 88.2678>
     BOOST_CHECK_CLOSE_FRACTION(p.first, 87.573, tol);  // These confidence intervals not given,
     BOOST_CHECK_CLOSE_FRACTION(p.second, 88.27, tol);  // but they look plausible.
 
     alpha = 0.05;  // 95% confidence for mean (not given by Wimmer).
     t = quantile(complement(dist01, alpha / 2));
-    // cout << t << endl; // 1.95996
+    // std::cout  << t << std::endl; // 1.95996
     p.first = rounded_x - sigma_star * t;
     p.second = rounded_x + sigma_star * t;
-    //cout << "Alpha 0.05 " << p << endl; // 87.5009 == 87.5 // 88.3774 == 88.3 rounded.
+    //cout << "Alpha 0.05 " << p << std::endl; // 87.5009 == 87.5 // 88.3774 == 88.3 rounded.
     // Alpha 0.05 <87.4617, 88.3383>
     BOOST_CHECK_CLOSE_FRACTION(p.first, 87.3848, tol);
     BOOST_CHECK_CLOSE_FRACTION(p.second, 88.4152, tol);
@@ -917,17 +904,17 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
 
     alpha = 0.01;  // 99% confidence for mean (Wimmer).
     t = quantile(complement(dist01, alpha / 2));
-    // cout << t << endl; // 2.57583
+    // std::cout  << t << std::endl; // 2.57583
     p.first = rounded_x - sigma_star * t;
     p.second = rounded_x + sigma_star * t;
-    // cout << "Alpha 0.01 " << p << endl;// 87.3631 == 87.3,  88.5151 == 88.5
+    // std::cout  << "Alpha 0.01 " << p << std::endl;// 87.3631 == 87.3,  88.5151 == 88.5
     // Alpha 0.01 <87.324, 88.476>
     BOOST_CHECK_CLOSE_FRACTION(p.first, 87.3848, tol); // but Wimmer gives 87.3848 not 88.5151.
     BOOST_CHECK_CLOSE_FRACTION(p.second, 88.4152, tol); // but Wimmer gives 88.4152 not 88.5151.
     BOOST_CHECK_EQUAL(round_ms(p.first, m), "87.3"); // 0.1_properly rounded.
     BOOST_CHECK_EQUAL(round_ms(p.second, m), "88.5"); // 0.1_properly rounded.
     //cout << "Mean " << x << " == " << round_ms(x, m) << " +/- " << sigma_rounded
-    //  << " <" << round_ms(p.first, m) << ", " << round_ms(p.second, m) << ">" << endl;
+    //  << " <" << round_ms(p.first, m) << ", " << round_ms(p.second, m) << ">" << std::endl;
     //Mean 87.9391 == 87.9 +/- 0.2 <87.3, 88.5>
 
   }// End Wimmer p 1662, example 7 - Repeated measurements with known variance.
@@ -938,7 +925,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_triangular_test)
   double x = 127.835;
   double unc = 15.287;
   double unc_rounded = round_sig(unc, 2); // round to 2 sig digit - ISO rule.
-  // cout << "unc_rounded " << unc_rounded << endl; // unc_rounded 15
+  // std::cout  << "unc_rounded " << unc_rounded << std::endl; // unc_rounded 15
   BOOST_CHECK_CLOSE_FRACTION(unc_rounded, 15., 0.01);
   ostringstream oss;
   oss << setprecision(3) << unc_rounded; // expect 0.2 whatever precision (< digits10)
@@ -965,19 +952,19 @@ BOOST_AUTO_TEST_CASE(Wimmer_triangular_test)
   using boost::lexical_cast;
   double vr = lexical_cast<double>(round_ms(x, m)); // = 128.
   ci = conf_interval(vr, unc_rounded, 1, 0.05, triangular); // alpha = 0.05, example 3 1st 0.01-proper 0.95 confidence interval <99.5, 156.5>.
-  // cout << "conf_interval(vr, unc, 1, 0.05, triangular); " << ci << endl;
+  // std::cout  << "conf_interval(vr, unc, 1, 0.05, triangular); " << ci << std::endl;
   //  conf_interval(vr, unc, 1, 0.05, triangular); <99.4735, 156.527>
   BOOST_CHECK_CLOSE_FRACTION(ci.first, 99.5, tol); // 98.9
   BOOST_CHECK_CLOSE_FRACTION(ci.second, 156.5, tol); // 157.1
 
   // Round confidence intervals to 1 decimal digit
   //double cilo =  lexical_cast<double>(round_ms(ci.first, m-1)); // = 98.9
-  //cout << "ci lo " << cilo << endl; //   ci lo 99.5
+  //cout << "ci lo " << cilo << std::endl; //   ci lo 99.5
   //double cihi =  lexical_cast<double>(round_ms(ci.second, m-1)); // = 156.5
-  //cout << "ci hi " << cihi << endl; //  ci hi 156.5
+  //cout << "ci hi " << cihi << std::endl; //  ci hi 156.5
 
-  //out_confidence_interval(ci, m, cout); // <99.5, 157>
-  //cout << endl;
+  //out_confidence_interval(ci, m, std::cout ); // <99.5, 157>
+  //cout << std::endl;
 
   oss.clear(); // Clears only clear stream fail or error bits!
   oss.str(""); // Erases the previous str (oss.str().erase() does NOT change std::string - because it only acts on a copy C string?)
@@ -985,7 +972,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_triangular_test)
   BOOST_CHECK_EQUAL(oss.str(), "<99.5, 157>");
 
   //out_value_limits(x, unc, ci, m); //  128. +/- 15 <99.5, 156.5>
-  //cout << endl;
+  //cout << std::endl;
   oss.clear(); // Clears only clear stream fail or error bits!
   oss.str(""); // Erases the previous str (oss.str().erase() does NOT change std::string - because it only acts on a copy C string?)
   out_value_limits(x, unc, ci, m, oss); //  128. +/- 15 <99.5, 156.5>
@@ -999,28 +986,28 @@ BOOST_AUTO_TEST_CASE(Wimmer_triangular_test)
   BOOST_CHECK_EQUAL(round_ms(x, m), "130.");
   // Show confidence intervals for various alpha, 0.01 to 0.1:
   ci = conf_interval(x, unc, 1, 0.01, triangular);
-  //cout << "conf_interval(x, unc, 1, 0.01, triangular); " << ci << endl;
+  //cout << "conf_interval(x, unc, 1, 0.01, triangular); " << ci << std::endl;
   oss.clear(); // Clears only clear stream fail or error bits!
   oss.str(""); // Erases the previous str (oss.str().erase() does NOT change std::string - because it only acts on a copy C string?)
   oss << setprecision(6) << ci;
   BOOST_CHECK_EQUAL(oss.str(), "<94.1342, 161.536>");
 
   ci = conf_interval(x, unc, 1, 0.02, triangular);
-  //cout << "conf_interval(x, unc, 1, 0.02, triangular); " << ci << endl;
+  //cout << "conf_interval(x, unc, 1, 0.02, triangular); " << ci << std::endl;
   oss.clear(); // Clears only clear stream fail or error bits!
   oss.str(""); // Erases the previous str (oss.str().erase() does NOT change std::string - because it only acts on a copy C string?)
   oss << setprecision(6) << ci;
   BOOST_CHECK_EQUAL(oss.str(), "<95.6852, 159.985>");
 
   ci = conf_interval(x, unc, 1, 0.05, triangular);
-  //cout << "conf_interval(x, unc, 1, 0.05, triangular); " << ci << endl;
+  //cout << "conf_interval(x, unc, 1, 0.05, triangular); " << ci << std::endl;
   oss.clear(); // Clears only clear stream fail or error bits!
   oss.str(""); // Erases the previous str (oss.str().erase() does NOT change std::string - because it only acts on a copy C string?)
   oss << setprecision(6) << ci;
   BOOST_CHECK_EQUAL(oss.str(), "<98.7627, 156.907>");
 
   ci = conf_interval(x, unc, 1, 0.1, triangular);
-  //cout << "conf_interval(x, unc, 1, 0.1, triangular); " << ci << endl;
+  //cout << "conf_interval(x, unc, 1, 0.1, triangular); " << ci << std::endl;
   oss.clear(); // Clears only clear stream fail or error bits!
   oss.str(""); // Erases the previous str (oss.str().erase() does NOT change std::string - because it only acts on a copy C string?)
   oss << setprecision(6) << ci;
@@ -1041,11 +1028,11 @@ BOOST_AUTO_TEST_CASE(Wimmer_triangular_test)
 
 BOOST_AUTO_TEST_CASE(Wimmer_uniform_test)
 { // Wimmer Uniform distribution - no example but use same data as triangular.
-  //cout << "Uniform distribution " << endl;
+  //cout << "Uniform distribution " << std::endl;
   double x = 127.835;
   double unc = 15.287;
   double unc_rounded = round_sig(unc, 2); // round to 2 sig digit - why?
-  // cout << "unc_rounded " << unc_rounded << endl; // 15
+  // std::cout  << "unc_rounded " << unc_rounded << std::endl; // 15
   BOOST_CHECK_CLOSE_FRACTION(unc_rounded, 15., tol);
   ostringstream oss;
   oss << setprecision(3) << unc_rounded; // expect 0.2 whatever precision (< digits10)
@@ -1057,7 +1044,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_uniform_test)
   BOOST_CHECK_CLOSE_FRACTION(delta(0.01, gam),  0.053705908361491229, 0.01);
   BOOST_CHECK_CLOSE_FRACTION(delta(0.01, gam, triangular), 0.056070697653393911, 0.01);
   BOOST_CHECK_CLOSE_FRACTION(delta(0.01, gam, uniform), -1, 0.01);
-  // cout << "delta(0.01, gam, gaussian) = " << delta(0.01, gam) << ' ' << delta(0.01, gam, triangular) << ' ' << delta(0.01, gam, uniform) << endl;
+  // std::cout  << "delta(0.01, gam, gaussian) = " << delta(0.01, gam) << ' ' << delta(0.01, gam, triangular) << ' ' << delta(0.01, gam, uniform) << std::endl;
   // "Epsilon 0.01 is too small for gamma rounded/unrounded ratio 0.98122587819716089, threshold is 0.98999999999999999for uniform distribution."
   double del = delta(0.01, gam, uniform); // eps = 0.01 for high 99% confidence.
   BOOST_CHECK_CLOSE_FRACTION(del, -1., 0.01); // but is too high, so return -1
@@ -1079,7 +1066,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_uniform_test)
   using boost::lexical_cast;
   double vr = lexical_cast<double>(round_ms(x, m)); // = 128.
   std::pair<double, double> ci = conf_interval(vr, unc_rounded, 1, 0.05, uniform); // alpha = 0.05, example 3b 1st 0.04-proper 0.95 confidence interval <99.5, 156.5>.
-  //cout << "conf_interval(vr, unc, 1, 0.05, uniform); " << ci << endl;
+  //cout << "conf_interval(vr, unc, 1, 0.05, uniform); " << ci << std::endl;
   //  conf_interval(vr, unc, 1, 0.05, uniform); <103.318, 152.682>
   {
     std::ostringstream os;
@@ -1090,7 +1077,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_uniform_test)
   BOOST_CHECK_CLOSE_FRACTION(ci.second, 152.68, tol); //
   //cout << "out_value_limits(x, unc, ci, m) = " ;
   //out_value_limits(x, unc, ci, m);
-  //cout << endl; //
+  //cout << std::endl; //
   // out_value_limits(x, unc, ci, m) = 128. +/- 15 <103.3, 152.7>
   {
     std::ostringstream os;
@@ -1104,8 +1091,8 @@ BOOST_AUTO_TEST_CASE(Wimmer_uniform_test)
 BOOST_AUTO_TEST_CASE(Sephton_C_rounding_test)
 {  // Sephton's example of counter-intuitive C/C++ rounding.
     double d = 0.15;
-    //cout << setprecision(17) << "0.15 precision 17 is " << d << endl; // Double is 0.14999999999999999
-    //cout << setprecision(1) << "0.15 precision 1 is " << d << endl; // 0.15 precision 1 is 0.1
+    //cout << setprecision(17) << "0.15 precision 17 is " << d << std::endl; // Double is 0.14999999999999999
+    //cout << setprecision(1) << "0.15 precision 1 is " << d << std::endl; // 0.15 precision 1 is 0.1
     // so internally stored value is nearer to 1., so rounds down to 0.1, perhaps to viewers' surprise!
     BOOST_CHECK_EQUAL(round_e(d, 0),""); // No significant digits! might decide to throw an exception?
     BOOST_CHECK_EQUAL(round_e(d, 1),"2.e-1"); // 1 significant digit.
@@ -1113,19 +1100,23 @@ BOOST_AUTO_TEST_CASE(Sephton_C_rounding_test)
     BOOST_CHECK_EQUAL(round_e(d, 3),"1.50e-1");
     BOOST_CHECK_EQUAL(round_e(d, 4),"1.500e-1");
 
-    d = 1.25; //
-    //cout << setprecision(17) << "1.25 precision 17 is " << d << endl; // Double is
-    //cout << setprecision(2) << "1.25 precision 2 is " << d << endl; // 1.25 precision 2 is 1.3
-    //cout << "printf(""%.1f"", 1.25); = "; printf("%.1f\n", 1.25); cout << endl; // printf(%.1f, 1.25); = 1.3
+    BOOST_CHECK_EQUAL(round_e(d, 14),"1.5000000000000e-1");
+    BOOST_CHECK_EQUAL(round_e(d, 15),"1.50000000000000e-1");
+    BOOST_CHECK_EQUAL(round_e(d, 16),"1.50000000000000e-1");
+    BOOST_CHECK_EQUAL(round_e(d, 17),"1.50000000000000e-1");
+       d = 1.25; //
+    //cout << setprecision(17) << "1.25 precision 17 is " << d << std::endl; // Double is
+    //cout << setprecision(2) << "1.25 precision 2 is " << d << std::endl; // 1.25 precision 2 is 1.3
+    //cout << "printf(""%.1f"", 1.25); = "; printf("%.1f\n", 1.25); std::cout  << std::endl; // printf(%.1f, 1.25); = 1.3
     d = 0.15; // Sephton's pathological example showing that
     // output digit string is 'correct' (0.15) for precision(numeric_limits<double>::digits10)
     // and this rounds to 0.2, as expected.
     // Imprecision 0.14999999999999999 only appears at numeric_limits<double>::maxdigits10.
     // So by starting with the digit10 precision string, we should never get the unexpected
     // and unwanted rounding down to 0.1.
-    for (int i = 1; i <= maxdigits10; i++)
+    for (unsigned int i = 1; i <= maxdigits10; i++)
     {
-      //cout << i << ' ' << showpoint << setprecision(i) << d << ' ' << round_e(d, i) << endl;
+      //cout << i << ' ' << showpoint << setprecision(i) << d << ' ' << round_e(d, i) << std::endl;
       //1 0.1 2.e-001
       //2 0.15 1.5e-001
       //3 0.150 1.50e-001
@@ -1203,9 +1194,9 @@ BOOST_AUTO_TEST_CASE(Sephton_C_rounding_test)
   BOOST_CHECK_CLOSE_FRACTION(round_sig(985.438, 3), 985., 2 * eps);
   BOOST_CHECK_CLOSE_FRACTION(round_sig(0.00987624, 3), 0.00988, 2 * eps);
 
-  //cout << round(15.287) << ' ' << round(15.287)/15.287 << endl; // 0.981226
-  //cout << round(15.587) << endl;
-  //cout << round(15.1f) << endl;
+  //cout << round(15.287) << ' ' << round(15.287)/15.287 << std::endl; // 0.981226
+  //cout << round(15.587) << std::endl;
+  //cout << round(15.1f) << std::endl;
  } //  BOOST_AUTO_TEST_CASE(round_n_test)
 
 
@@ -1216,15 +1207,15 @@ BOOST_AUTO_TEST_CASE(Sephton_C_rounding_test)
   //double d2 = delta(0.04, 0.98123);
   //double d3 = delta(0.005, 0.99736);
   //double d4 = delta(0.1, 0.89442);
-  //cout << d1 << endl; // 0.053779
-  //cout << d2 << endl; // 0.352144
-  //cout << d3 << endl; // 0.12
-  //cout << d4 << endl; // 0.431895
+  //cout << d1 << std::endl; // 0.053779
+  //cout << d2 << std::endl; // 0.352144
+  //cout << d3 << std::endl; // 0.12
+  //cout << d4 << std::endl; // 0.431895
 
   //double d5 = delta(0.05, 0.86207);
   // Epsilon 0.05 is too small for gamma rounded/unrounded ratio 0.86207
 
-  //cout << d5 << endl; // -1.#IND
+  //cout << d5 << std::endl; // -1.#IND
 
   // Values in Table 1 Threshold value of gamma rounded for epsilon.
   // If gamma rounded ratio > threshold, cannot get epsilon-properly rounded result.
@@ -1246,14 +1237,14 @@ BOOST_AUTO_TEST_CASE(Sephton_C_rounding_test)
   //Epsilon 0.1 is too small for gamma rounded/unrounded ratio 0.81271
 
 
-  //cout << d005p << endl;
-  //cout << d005 << endl;
-  //cout << d01 << endl;
-  //cout << d02 << endl;
-  //cout << d03 << endl;
-  //cout << d04 << endl;
-  //cout << d05 << endl;
-  //cout << d1 << endl;
+  //cout << d005p << std::endl;
+  //cout << d005 << std::endl;
+  //cout << d01 << std::endl;
+  //cout << d02 << std::endl;
+  //cout << d03 << std::endl;
+  //cout << d04 << std::endl;
+  //cout << d05 << std::endl;
+  //cout << d1 << std::endl;
 
   // Wimmer et al claim "equation 24 approximation error is less than 0.0123 for epsilon 0.005 to 0.1".
   // Check that this is true for these examples from the text.
@@ -1273,14 +1264,14 @@ BOOST_AUTO_TEST_CASE(round_m_test2)
 {
     ostringstream oss;
     double u = 15.287;
-    //cout << round_1(u) << ' ' << round_2(u) << ' ' << round_3(u) << ' ' << round_nth(u, 4) << endl;
+    //cout << round_1(u) << ' ' << round_2(u) << ' ' << round_3(u) << ' ' << round_nth(u, 4) << std::endl;
     // 15.3 15.29 15.287 15.287
     oss << round_1(u);
     BOOST_CHECK_EQUAL(oss.str(), "15.3");
     oss.str(""); oss.clear();
 
     double t = 0.15; // printf unwanted round down case.
-   // cout << round_1(t) << ' ' << round_2(t) << ' ' << round_3(t) << ' ' << round_nth(t, 4) << endl;
+   // std::cout  << round_1(t) << ' ' << round_2(t) << ' ' << round_3(t) << ' ' << round_nth(t, 4) << std::endl;
     // 0.2 0.15 0.15 0.15
     // Note the desired 0.2! Using this rounding algorithm, unlike printf 0.1.
     //   0.2 0.15 0.15 0.15
@@ -1308,17 +1299,17 @@ BOOST_AUTO_TEST_CASE(round_m_test2)
   //BOOST_CHECK_EQUAL(round(12345678901234567890123456789., 0),"1."); // round 0 - at decimal
 
   //double d = 1.2945678901234567890;
-  //cout << scientific << setprecision(0) << d << endl; //default 6
-  //cout << scientific << setprecision(1) << d << endl; // 1.2
-  //cout << scientific << setprecision(2) << d << endl; // 1.23
-  //cout << scientific << setprecision(3) << d << endl; // 1.235
-  //cout << scientific << setprecision(15) << d << endl; // 1.294567890123457e+000
-  //cout << scientific << setprecision(16) << d << endl; // 1.2945678901234567e+000
-  //cout << scientific << setprecision(17) << d << endl; // 1.29456789012345670e+000
-  //cout << scientific << setprecision(18) << d << endl; // 1.294567890123456700e+000
+  //cout << scientific << setprecision(0) << d << std::endl; //default 6
+  //cout << scientific << setprecision(1) << d << std::endl; // 1.2
+  //cout << scientific << setprecision(2) << d << std::endl; // 1.23
+  //cout << scientific << setprecision(3) << d << std::endl; // 1.235
+  //cout << scientific << setprecision(15) << d << std::endl; // 1.294567890123457e+000
+  //cout << scientific << setprecision(16) << d << std::endl; // 1.2945678901234567e+000
+  //cout << scientific << setprecision(17) << d << std::endl; // 1.29456789012345670e+000
+  //cout << scientific << setprecision(18) << d << std::endl; // 1.294567890123456700e+000
 } // BOOST_AUTO_TEST_CASE(round_m_test)
 
-//  cout << endl;
+//  std::cout  << std::endl;
 
 /*
 
