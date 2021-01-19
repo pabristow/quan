@@ -1072,10 +1072,6 @@ int round_m(double loss_risk = 0.01, double sigma = 0., unsigned int sigma_sigdi
    \return m Signed position of the digit to be used for rounding,
     `m == 0` means use the units digit for rounding the tens digit.
   */
-  if (sigma <= 0.)
-  {
-    std::cout << "sigma " << sigma << std::endl;
-  }
 
   if (sigma_sigdigits <= 0)
   { // sigma_sigdigits is too small to be plausible from the confidence interval of uncertainty.

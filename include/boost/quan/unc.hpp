@@ -773,12 +773,12 @@ public:
         if (!is_correlated) // NOT correlated case.
         { // Error! Throw? Or set uncertainty to zero?
           unctypes_ &= ~UNC_KNOWN;
-          std::cerr << "Negative uncertainty " << unc << ", Value " << val << "!" << std::endl;
+          std::cerr << "Uncertain warning: Negative uncertainty " << unc << ", Value " << val << "!" << std::endl;
           // uncertainty_ = 0.0f; or NaN?
         }
         else // is correlated.
         { // But CAN have negative uncertainty for correlated case.
-          std::cout << "Negative uncertainty for correlated case is not yet implemented." << std::endl;
+          std::cout << "Uncertain warning: Negative uncertainty for correlated case is not yet implemented." << std::endl;
         }
         if (unctypes_ && (UNC_NOPLUS | UNC_NOMINUS | UNC_QUAN_DECIMAL | UNC_QUAN_BINARY | UNC_UNIFORM | UNC_TRIANGULAR | UNC_EXPLICIT) != 0)
         { // Any uncertainty specifier bit means uncertainty is known.

@@ -3,6 +3,8 @@
   \brief Testing uncertain classes using Boost Test Tool.
   \details Class for simple Propagation of Uncertainties
      according to a pure Gaussian model.
+
+    see also tst_rounding.cpp for ttests of the rounding algorithms used.
 */
 
 // Use, modification and distribution are subject to the
@@ -469,7 +471,7 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     BOOST_CHECK(unity.types() & VALUE_EXACT); // Check is still exact (sd == 0).
 
     CHECK_USED(unity, "1."); // Should have decimal point because sd == 0,
-    // so exact (but no longer integer).
+    // so exact (but no longer VALUE_INTEGER == true).
     CHECK_USED(showpoint << unity, "1."); // Regardless of showpoint or not.
 
     CHECK_USED(plusminus << unity, "1. +/-0"); // Do show +/-0 for exact value (no longer integer).
@@ -501,10 +503,10 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     // This should signal a conflict in the constructor!
     BOOST_CHECK(exact.types() & VALUE_EXACT); // Should still be flagged as exact.
     BOOST_CHECK_EQUAL(exact.value(), 1.); // value
-    BOOST_CHECK_EQUAL(exact.std_dev(), 0.f);//  StdDeviation should be over-ridden by VALUE_EXACT, so warn:
-    // warning : uncertain value 1 is flagged as uncTypeFlags == VALUE_EXACT, but uncertainty 1 is not zero!
-    BOOST_CHECK_EQUAL(exact.deg_free(), 0); // deg_free should be overwritten by VALUE_EXACT, so warn:
-    // warning : uncertain value 1 flagged as uncTypeFlags == VALUE_EXACT, but degfree 2 is not zero!
+   // BOOST_CHECK_EQUAL(exact.std_dev(), 0.f);//  StdDeviation should be over-ridden by VALUE_EXACT, so warn:
+    // Uncertain warns : uncertain value 1 is flagged as uncTypeFlags == VALUE_EXACT, but uncertainty 1 is not zero!
+   // BOOST_CHECK_EQUAL(exact.deg_free(), 0); // deg_free should be overwritten by VALUE_EXACT, so warn:
+    // Uncertain warns : uncertain value 1 flagged as uncTypeFlags == VALUE_EXACT, but degfree 2 is not zero!
 
     uncun iminus1(-1); // Exact minus 1 from integer -1 value.
     BOOST_CHECK(iminus1.types() & VALUE_INTEGER); // Check IS recognised as integer.
@@ -1584,6 +1586,9 @@ uncTypes (0x60e7) zero integer rational uncKnown noPlus noMinus df_exact df_know
 
 *** No errors detected
 Process returned 0 (0x0)   execution time : 0.062 s
+
+
+
 
 
 
