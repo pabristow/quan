@@ -217,7 +217,6 @@ boostbook standalone
   # Use local preference for syntax coloring.
   <format>pdf:<xsl:param>html.stylesheet=boostbook.css
 
-
   <dependency>autodoc
   <dependency>html
   <dependency>images
