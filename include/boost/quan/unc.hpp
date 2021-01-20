@@ -60,6 +60,8 @@ and C++ include files are in folder:
 #ifndef UNC_HPP
 #define UNC_HPP
 
+//#define BOOST_QUAN_DIAGNOSTICS
+
 //#ifdef _MSC_VER
 //#  pragma once
 //#  pragma warning (disable : 4127) // conditional expression is constant.
@@ -1958,7 +1960,7 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
     // diff = lhi - rlo;
     bool isLess =  lhi < (rlo + hypot(l.uncertainty_, r.uncertainty_)); // == less
     double tol = hypot(l.uncertainty_, r.uncertainty_); // 'Average' of two uncertainties.
-    if (true)
+#ifdef BOOST_QUAN_DIAGNOSTICS
     { // Output diagnostic info.
       std::cerr << "lessU " << l.value_ << ' '
         << lhi // (l.value_ + l.uncertainty_)
@@ -1970,6 +1972,7 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
         << ' ' << diff
         << std::endl;
     }
+#endif
     return isLess;
   } // bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
 
@@ -1986,7 +1989,7 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
     double diff = lhi - rlo;
     double tol = hypot(l.uncertainty_ + l.uncertainty_, r.uncertainty_ + r.uncertainty_); // 'Average' of two uncertainties.
     bool isLess =  lhi < (rlo + hypot(l.uncertainty_+ l.uncertainty_, r.uncertainty_ + r.uncertainty_)); // == less
-    if (true)
+#ifdef BOOST_QUAN_DIAGNOSTICS
     { // Output diagnostic info.
       std::cerr << "lessU " << l.value_ << ' '
         << lhi // (l.value_ + l.uncertainty_ * 2)
@@ -1998,6 +2001,7 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
         << ' ' << diff
         << std::endl;
     }
+#endif
     return isLess;
   } // bool lessU2(const unc<is_correlated>& l, const unc<is_correlated>& r)
 

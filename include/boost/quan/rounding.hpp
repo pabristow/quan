@@ -535,7 +535,7 @@ std::string round_ms(FPT v, signed int m) {
           && (s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 5)) // e+308
   { // for double == 21 (would be 22 if negative).
     outFmtFlags(ss.flags());
-    std::cout << "\n " << v << ", " << m << ", " << s << ", "
+    std::cout << "\nFunction round_ms " << v << ", " << m << ", " << s << ", "
             << s.size() << ", " << std::numeric_limits<FPT>::digits10 + 1 + 1 + 4 << std::endl;
     return s;
   }
@@ -616,7 +616,7 @@ std::string round_ms(FPT v, signed int m) {
         *sr = '0';
         carry = true;
       } else {
-        std::cout << "round_ms is wrong ! *sr = " << *sr << std::endl;
+        std::cout << "Function round_ms is wrong ! *sr = " << *sr << std::endl;
         break;
       }
     } while (carry == true && sr != s.begin());
@@ -824,7 +824,7 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
         *sr = '0';
         carry = true;
       } else {
-        std::cout << "rounder is wrong ! *sr = " << *sr << std::endl;
+        std::cout << "Function rounder_f is wrong ! *sr = " << *sr << std::endl;
         break;
       }
     } while (carry == true && sr != s.begin());
@@ -942,7 +942,7 @@ enum distribution_type
   undefined = 3 //!< `unc_types` bit 11 and bit 12 == '11' == 3.
 };
 
-double delta(double loss_risk, double gamma, distribution_type distrib = gaussian) 
+double delta(double loss_risk, double rounded_div_value, distribution_type distrib = gaussian) 
 {
   /*! \brief Calculate Wimmer delta function using equation 24, p 1664.
     \details Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
@@ -959,7 +959,7 @@ double delta(double loss_risk, double gamma, distribution_type distrib = gaussia
     \param loss_risk Proper-rounding increase of confidence-interval because of rounding, must be positive and 'small'.
     \note loss_risk is usually 0.05 (equivalent to 95%), values in range 0.2 to 0.01 make good sense,
        0.2 (80%) risks a fair bit of loss from rounding, 0.01 (1%) causes almost no loss.
-    \param gamma Ratio rounded / unrounded (gamma is assumed <= 1).
+    \param rounded_div_value Ratio rounded / unrounded (rounded_div_value is assumed <= 1).
     \param distrib Distribution type, normal or gaussian(default), uniform, triangular, or laplace.
 
     \return Approximation of Wimmer delta function using equation 24, p 1664,
@@ -968,12 +968,12 @@ double delta(double loss_risk, double gamma, distribution_type distrib = gaussia
     Throwing an exception might be better here?
 
   */
-  // gamma > rounded gamma (so gamma < 1.?)
+  // rounded_div_value > rounded rounded_div_value (so rounded_div_value < 1.?)
   // Approximation error is less than 0.0123 for 0.005 <= loss_risk < 0.1
-  // and gamma > rounded gamma for this loss_risk - see table 1.
-  // assert(gamma > rounded_gamma);
+  // and rounded_div_value > rounded rounded_div_value for this loss_risk - see table 1.
+  // assert(rounded_div_value > rounded_gamma);
 
-  //assert (gamma <= 1);
+  //assert (rounded_div_value <= 1);
   using std::sqrt;
 
   constexpr double sqrt_3 = 1.7320508075688772935274463415058723669428052543712;
@@ -987,49 +987,49 @@ double delta(double loss_risk, double gamma, distribution_type distrib = gaussia
       // Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X.
 
       d = (1.348 + 0.9886 * loss_risk + 0.2288 * sqrt(loss_risk));
-      x = gamma - 1.0001 + 2.058 * loss_risk - 1.93 * loss_risk * loss_risk;
+      x = rounded_div_value - 1.0001 + 2.058 * loss_risk - 1.93 * loss_risk * loss_risk;
       if (x < (std::numeric_limits<double>::min)() * 100.) // Small value allows for approximation uncertainty.
       { // Not possible to have loss_risk this small!
         threshold = x; // ???
-        std::cout << "Uncertain warning: loss_risk " << loss_risk << " is too small for gamma rounded/unrounded ratio " << gamma << ", threshold is " << threshold << " for gaussian distribution." << std::endl;
+        std::cout << "Uncertain warning: loss_risk " << loss_risk << " is too small for rounded_div_value rounded/unrounded ratio " << rounded_div_value << ", threshold is " << threshold << " for gaussian distribution." << std::endl;
         // For example:
-        // "loss_risk 0.01 is too small for gamma rounded/unrounded ratio 0.981226, threshold is 0.99."
+        // "loss_risk 0.01 is too small for rounded_div_value rounded/unrounded ratio 0.981226, threshold is 0.99."
         return -1.; // Not sure how to signal the problem here. Throw?
       }
       x = sqrt(x);
       d = d * x;
-      return d; // sqrt(gamma - 1.0001 + 2.058 * loss_risk - 1.93 * loss_risk * loss_risk);
+      return d; // sqrt(rounded_div_value - 1.0001 + 2.058 * loss_risk - 1.93 * loss_risk * loss_risk);
       break;
     case uniform:
       // Gejza Wimmer, Viktor Witkovsky, Proper rounding of the measurement result under the assumption of uniform distribution,
       // Measurement Science Review, Vol 2, section 1, (2002), pages 1 - 7.
       threshold = 1 - loss_risk; // Wimmer equation 17, page 5
-      if (gamma < threshold) {
-        std::cout << "Uncertain warning: loss_risk " << loss_risk << " is too small for gamma rounded/unrounded ratio " << gamma << ", threshold is " << threshold << " for uniform distribution." << std::endl;
+      if (rounded_div_value < threshold) {
+        std::cout << "Uncertain warning: loss_risk " << loss_risk << " is too small for rounded_div_value rounded/unrounded ratio " << rounded_div_value << ", threshold is " << threshold << " for uniform distribution." << std::endl;
         return -1; // Not sure how to signal the problem here.
       }
-      d = sqrt_3 * (gamma + 2 * loss_risk - 1); // Wimmer equation 20, page 6.
+      d = sqrt_3 * (rounded_div_value + 2 * loss_risk - 1); // Wimmer equation 20, page 6.
       return d;
     case triangular:
       // Gejza Wimmer, Viktor Witkovsky, Proper rounding of the measurement result under the assumtpion of triangular distribution,
       // Measurement Science Review, Vol 2, section 1, (2002), pages 21 to 31.
-      threshold = (1 - gamma) / (1 + gamma);
+      threshold = (1 - rounded_div_value) / (1 + rounded_div_value);
       if (loss_risk < threshold) {
-        std::cout << "Uncertain warning: loss_risk " << loss_risk << " is too small for gamma rounded/unrounded ratio " << gamma << ", threshold is " << threshold << " for triangular distribution." << std::endl;
+        std::cout << "Uncertain warning: loss_risk " << loss_risk << " is too small for rounded_div_value rounded/unrounded ratio " << rounded_div_value << ", threshold is " << threshold << " for triangular distribution." << std::endl;
         return -1; // Not sure how to signal the problem here.
       }
-      // d = sqrt(6 * (loss_risk - ((1 - gamma) /(1 + gamma)))); // Wimmer equation 18, page 27.
+      // d = sqrt(6 * (loss_risk - ((1 - rounded_div_value) /(1 + rounded_div_value)))); // Wimmer equation 18, page 27.
       d = sqrt(6 * (loss_risk - threshold));
       return d;
     default:
       // Might add one more (4th) distribution here - assuming distribution type is encoded using 2 bits in unc class.
       return -1;
   } // switch
-} // double delta(double loss_risk, double gamma, distribution_type distrib = gaussian)
+} // double delta(double loss_risk, double rounded_div_value, distribution_type distrib = gaussian)
 
-double gamma(double rounded, double value)
+double rounded_div_value(double rounded, double value)
 {
-  /*! \brief Calculate Wimmer gamma rounded/unrounded function p 1664.
+  /*! \brief Calculate Wimmer rounded_div_value rounded/unrounded function p 1664.
   \details Measurement Science and Technolology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X.
     Gejza Wimmer, Viktor Witkovsky, Tomas Duby
     Proper rounding of the measurement results under normality assumptions.
@@ -1051,10 +1051,10 @@ double gamma(double rounded, double value)
     g = 1. / g;
   }
   return g; 
-} // double gamma(double rounded, double value)
+} // double rounded_div_value(double rounded, double value)
 
 int round_m(double loss_risk = 0.01, double sigma = 0., unsigned int sigma_sigdigits = 2U, distribution_type distrib = gaussian) 
-{ /*! \brief Calculate the Wimmer rounding digit m using delta and gamma functions p 1661, equation 12.
+{ /*! \brief Calculate the Wimmer rounding digit m using delta and rounded_div_value functions p 1661, equation 12.
   \details Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X.
   Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
   Proper rounding of the measurement results under normality assumptions.
@@ -1072,12 +1072,12 @@ int round_m(double loss_risk = 0.01, double sigma = 0., unsigned int sigma_sigdi
 
   if (sigma_sigdigits <= 0)
   { // sigma_sigdigits is too small to be plausible from the confidence interval of uncertainty.
-     std::cout << ", sigma = " << sigma << ", sigma_sigdigits = " << sigma_sigdigits << " must be >= 1! " << std::endl;
+     std::cout << "round_m sigma = " << sigma << ", sigma_sigdigits = " << sigma_sigdigits << " must be >= 1! " << std::endl;
    sigma_sigdigits = 1; // or throw?
   }
   else if (sigma_sigdigits > 4)
   { // sigma_sigdigits is too big to be plausible from the confidence interval of uncertainty.
-    std::cout << ", sigma = " << sigma << ", sigma_sigdigits = " << sigma_sigdigits << " must be <= 4! " << std::endl;
+    std::cout << "round_m sigma = " << sigma << ", sigma_sigdigits = " << sigma_sigdigits << " must be <= 4! " << std::endl;
     sigma_sigdigits = 4U;
   }
   // https://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/dist_ref/dists/chi_squared_dist.html
@@ -1127,7 +1127,7 @@ int round_m(double loss_risk = 0.01, double sigma = 0., unsigned int sigma_sigdi
   // So sigdigits is parameterized to allow variation from (possibly very many) (possibly known) degrees of freedom?
   // So tests that compare to the paper do not fail when loss_risk has values in example 5, p1662.
 
-  double g = gamma(sigma_rounded, sigma);
+  double g = rounded_div_value(sigma_rounded, sigma);
   // Check against limits in table 1, page 1662.
   double gl;
   double e = loss_risk;
@@ -1147,11 +1147,11 @@ int round_m(double loss_risk = 0.01, double sigma = 0., unsigned int sigma_sigdi
     std::cout << "Uncertain warning: Cannot return a rounding m because loss_risk " << e << " is too small!" << std::endl;
     std::cout << "Uncertain warning: " 
       "sigma_rounded = " << sigma_rounded  << ", sigma = " << sigma
-      << ", gamma(sigma_rounded, sigma) = " << g << ", gl = " << gl << std::endl;
+      << ", rounded_div_value(sigma_rounded, sigma) = " << g << ", gl = " << gl << std::endl;
     // Example from Wimmer and test_rounding.
     // BOOST_CHECK_NE(round_m(0.05, 0.0232, 1U), -3); // Example 5 (ii a) loss_risk <= 0.05 should fail,
     // Uncertain warning: Cannot return a rounding m because loss_risk 0.05 is too small!
-    // Uncertain warning : sigma_rounded = 0.02, sigma = 0.0232, gamma(sigma_rounded, sigma) = 0.862069, gl = 0.90175
+    // Uncertain warning : sigma_rounded = 0.02, sigma = 0.0232, rounded_div_value(sigma_rounded, sigma) = 0.862069, gl = 0.90175
     return -9999;  // Or ???
   }
   // Or throw?
