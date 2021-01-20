@@ -420,7 +420,9 @@ std::string round_e(FPT d, int sigdigits)
 } // string round_e(FPT d, unsigned int sigdigits)
 
 template<typename FPT>
-std::string round_ms(FPT v, signed int m) { /*! \brief Round floating-point v (not-exponential) to order m.  (m is the index of the rounder digit).
+std::string round_ms(FPT v, signed int m) {
+  /*!
+  \brief Round floating-point v (not-exponential) to order m.  (m is the index of the roundER digit).
     This is variously called 'common rounding', 'round_5_up'.
     \details Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
     Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X\n
@@ -945,7 +947,8 @@ enum distribution_type { /*! \brief Distribution type, encoded into two bits in 
   undefined = 3 //!< `unc_types` bit 11 and bit 12 == '11' == 3.
 };
 
-double delta(double loss_risk, double gamma, distribution_type distrib = gaussian) { /*! \brief Calculate Wimmer delta function using equation 24, p 1664.
+double delta(double loss_risk, double gamma, distribution_type distrib = gaussian) {
+  /*! \brief Calculate Wimmer delta function using equation 24, p 1664.
     \details Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
     Measurement Science and Technology, 11 (2000) pages 1659-1665.
     ISSN 0957-0233 S0957-233(00)13838-X.\n

@@ -4,7 +4,7 @@
   \details Class for simple Propagation of Uncertainties
      according to a pure Gaussian model.
 
-    see also tst_rounding.cpp for ttests of the rounding algorithms used.
+    see also test_rounding.cpp for tests of the rounding algorithms used.
 */
 
 // Use, modification and distribution are subject to the
@@ -64,7 +64,6 @@
   using std::setw;
   using std::resetiosflags;
   using std::boolalpha;
-  using std::getline;
   using std::skipws;
   using std::noskipws;
   using std::uppercase;
@@ -98,31 +97,6 @@
 //  using std::hexbase;
 
 #include <boost/quan/unc.hpp> // Declaration of Uncertain Classes.
-  //using std::istream;
-  //using std::ostream;
-  //using std::ios_base;
-  //using std::char_traits;
-  //using std::cout;
-  //using std::cerr;
-  //using std::cin;
-  //using std::endl;
-  //using std::flush;
-  //using std::ws;
-  //using std::boolalpha;
-  //using std::dec;
-  //using std::hex;
-  //using std::showbase;
-  //using std::fixed;
-  //using std::scientific;
-  //using std::right;
-  //using std::showpos;
-  //using std::noshowpos;
-  //using std::noshowbase;
-  //using std::noshowpoint;
-  //using std::showpoint;
-  //using std::setprecision;
-  //using std::setw;
-  //using std::resetiosflags;
 
 // Files made global to avoid nasty memory leak, and loop to end of memory.
 const char testInputFilename[] = "unc_test_input.txt"; // Input for tests (fin).
@@ -144,8 +118,7 @@ ofstream fout(outFilename, ios_base::out); // Use default ios_base::overwrite/re
 // CHECK(hex << showbase << setw(10) << i, "       0xf")
 // CHECK(scientific << setw(20) << d, "       1.234568e+001");
 // Note: sets uncertain defaults (& oss has ios defaults too).
-// BUT CHECK cannot check the number of chars output using unc_print "used",
-// so use CHECK_USED for this.
+// BUT CHECK cannot check the number of chars output using unc_print "used", so use CHECK_USED for this.
 
 #define CHECK(manips, result)\
 {\
@@ -1173,6 +1146,20 @@ BOOST_AUTO_TEST_CASE(unc_test_unc_Nan_inf)
   CHECK_USED(infUnknown, "9.8000000000000007");
   CHECK_USED(plusminus << infUnknown, "9.8000000000000007 +/-inf");
 } // BOOST_AUTO_TEST_CASE(unc_test_unc_Nan_inf)
+
+BOOST_AUTO_TEST_CASE(unc_test_ci_outputs)
+{
+  uncun ud1(1.23, 0.56F, 7); // Uncertain type
+  //CHECK_USED(scientific << plusminus << addlimits << adddegfree << ud1, "1.2 +/-0.56 <0.8200, 1.6400> (7)");
+ // CHECK_USED(plusminus << addlimits << adddegfree << ud1, "1.2 +/-0.56 <0.8200, 1.6400> (7)");
+ // CHECK_USED(plusminus << addlimits << ud1, "1.2 +/-0.56 <0.8200, 1.6400>");
+  //CHECK_USED(addlimits << ud1, "1.2 <0.82, 1.64>");  
+ //CHECK_USED(plusminus << ud1, "1.2 +/-0.56");
+
+
+} // BOOST_AUTO_TEST_CASE(unc_test_ci_outputs)
+
+
 
 BOOST_AUTO_TEST_CASE(unc_test_setsegdigits)
 {
