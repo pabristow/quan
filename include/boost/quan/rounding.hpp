@@ -506,13 +506,8 @@ std::string round_ms(FPT v, signed int m) {
   }
   // std::cout <<'|' << s <<'|' << ' ' << s.size() << std::endl; // For example: |1.797693134862316e+308| 22
   /*
-
   MSVC always was 3 exponent digits  (not longer true, now following the C++ standard).
-  4.206884193232336e+000
-  1.797693134862316e+308
-  1.230000000000000e+00 - is one less than GCC???
-
-  MSVC and GCC and Clang can have two or three exponent digits.
+  Recent  MSVC and GCC and Clang can all now have two or three exponent digits 2021
   0.00000000000000000e+00
   1.23456789012345669e+00
   1.23456789012345666e+03
@@ -540,7 +535,7 @@ std::string round_ms(FPT v, signed int m) {
           && (s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 5)) // e+308
   { // for double == 21 (would be 22 if negative).
     outFmtFlags(ss.flags());
-    std::cout << "\n" << v << ", " << m << ", " << s << ", "
+    std::cout << "\n " << v << ", " << m << ", " << s << ", "
             << s.size() << ", " << std::numeric_limits<FPT>::digits10 + 1 + 1 + 4 << std::endl;
     return s;
   }
@@ -621,7 +616,7 @@ std::string round_ms(FPT v, signed int m) {
         *sr = '0';
         carry = true;
       } else {
-        std::cout << "wrong ! *sr = " << *sr << std::endl;
+        std::cout << "round_ms is wrong ! *sr = " << *sr << std::endl;
         break;
       }
     } while (carry == true && sr != s.begin());
@@ -829,7 +824,7 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
         *sr = '0';
         carry = true;
       } else {
-        std::cout << "wrong ! *sr = " << *sr << std::endl;
+        std::cout << "rounder is wrong ! *sr = " << *sr << std::endl;
         break;
       }
     } while (carry == true && sr != s.begin());
@@ -923,8 +918,7 @@ inline double round_nth(double v, unsigned int d) { //! round value v to d digit
   return std::floor(v * std::pow(10., static_cast<int> (d)) + 0.5) / std::pow(10., static_cast<int> (d));
 }
 
-// Three explicit  versions which may be slightly more efficient.
-
+// Three explicit versions for 1, 2 and 3 digits after decimal point which may be slightly more efficient.
 inline double round_1(double v) { //! round value v to 1 digit after decimal point, using 1st digit to round.
   return std::floor(v * 10. + 0.5) / 10.;
 }
@@ -937,7 +931,8 @@ inline double round_3(double v) { //! round value v to 3 digit2 after decimal po
   return std::floor(v * 1000. + 0.5) / 1000.;
 }
 
-enum distribution_type { /*! \brief Distribution type, encoded into two bits in `short int unc_types`.
+enum distribution_type 
+{ /*! \brief Distribution type, encoded into two bits in `short int unc_types`.
    \note `gaussian` name is chosen rather than `normal` to avoid name clash
    from name of bit 11 and bit 12 in `enum unc_types`.
   */
@@ -947,7 +942,8 @@ enum distribution_type { /*! \brief Distribution type, encoded into two bits in 
   undefined = 3 //!< `unc_types` bit 11 and bit 12 == '11' == 3.
 };
 
-double delta(double loss_risk, double gamma, distribution_type distrib = gaussian) {
+double delta(double loss_risk, double gamma, distribution_type distrib = gaussian) 
+{
   /*! \brief Calculate Wimmer delta function using equation 24, p 1664.
     \details Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
     Measurement Science and Technology, 11 (2000) pages 1659-1665.
@@ -968,7 +964,7 @@ double delta(double loss_risk, double gamma, distribution_type distrib = gaussia
 
     \return Approximation of Wimmer delta function using equation 24, p 1664,
     for normal distribution, and similar for triangular and uniform.
-    Returns -1 if loss_risk is too 'tight' so must be increased for delta to be calculated.
+    Returns -1 if loss_risk is too 'tight', so must be increased for delta to be calculated.
     Throwing an exception might be better here?
 
   */
@@ -988,8 +984,7 @@ double delta(double loss_risk, double gamma, distribution_type distrib = gaussia
   switch (distrib) {
     case gaussian: // equation 24, p 1664.
       // Gejza Wimmer, Viktor Witkovsky, Tomas Duby
-      // Measurement Science and Technology, 11 (2000) 1659-1665.
-      // ISSN 0957-0233 S0957-233(00)13838-X.
+      // Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X.
 
       d = (1.348 + 0.9886 * loss_risk + 0.2288 * sqrt(loss_risk));
       x = gamma - 1.0001 + 2.058 * loss_risk - 1.93 * loss_risk * loss_risk;
@@ -1032,7 +1027,9 @@ double delta(double loss_risk, double gamma, distribution_type distrib = gaussia
   } // switch
 } // double delta(double loss_risk, double gamma, distribution_type distrib = gaussian)
 
-double gamma(double rounded, double value) {/*! \brief Calculate Wimmer gamma rounded/unrounded function p 1664.
+double gamma(double rounded, double value)
+{
+  /*! \brief Calculate Wimmer gamma rounded/unrounded function p 1664.
   \details Measurement Science and Technolology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X.
     Gejza Wimmer, Viktor Witkovsky, Tomas Duby
     Proper rounding of the measurement results under normality assumptions.
@@ -1047,16 +1044,13 @@ double gamma(double rounded, double value) {/*! \brief Calculate Wimmer gamma ro
     return 0.;
   }
   double g = rounded / value;
+    //  assert(g <= 1.); // Assumes rounded < unrounded.
+
   if (g > 1.) { // This seems necessary for some cases???
     //std::cout << "value " << value << ", rounded " << rounded << std::endl;
     g = 1. / g;
   }
-  if (g > 1.) { // This seems necessary for some cases???
-    std::cerr << "value " << value << ", rounded " << rounded << std::endl;
-    //   assert(g <= 1.); // Assumes rounded < unrounded.
-  }
-
-  return g;
+  return g; 
 } // double gamma(double rounded, double value)
 
 int round_m(double loss_risk = 0.01, double sigma = 0., unsigned int sigma_sigdigits = 2U, distribution_type distrib = gaussian) 
