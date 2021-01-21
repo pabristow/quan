@@ -972,7 +972,6 @@ double delta(double loss_risk, double rounded_div_value, distribution_type distr
   // Approximation error is less than 0.0123 for 0.005 <= rounding_loss < 0.1
   // and rounded_div_value > rounded rounded_div_value for this rounding_loss - see table 1.
   // assert(rounded_div_value > rounded_gamma);
-
   //assert (rounded_div_value <= 1);
   using std::sqrt;
 
@@ -1353,7 +1352,8 @@ double quantile_tri(double alpha) { /*! Quantile or Inverse of cumulative distri
   }
 } // double quantile_tri(double z)
 
-void out_confidence_interval(std::pair<double, double> ci, int m, std::ostream& os = std::cout) { /*! Output to os, confidence interval enclosed in brackets and separated by comma.
+void out_confidence_interval(std::pair<double, double> ci, int m, std::ostream& os = std::cout)
+{  /*! Output to os, confidence interval enclosed in brackets and separated by comma.
       The precision is controlled by the rounding order `m` used for the mean
       but with one extra decimal digit of precision, so rounding to m-1 th place.
       For example: <99.5, 156.5> rounding to -1 position
@@ -1386,7 +1386,7 @@ void out_value_limits(double mean, double unc, std::pair<double, double> ci, int
   os.precision(2); // Uncertainty always rounded to 2 decimal digits.
   double unc_rounded = round_sig(unc, 2); // Round to 2 significant digit - ISO rules.
   // TODO increase here if noisydigit wanted,
-  // and/or if degress of freedom > 100.
+  // and/or if degrees of freedom > 100.
   os << round_ms(mean, m) << " +/- " << unc_rounded;
   os.precision(6); //
   using boost::lexical_cast;
@@ -1408,8 +1408,8 @@ void out_value_df_limits(double mean, double unc, int degfree = 1, std::ostream&
   int round_m(double loss_risk, double unc, unsigned int sigdigits, distribution_type t);
   // int round_m(double rounding_loss = 0.01, double unc = 0., unsigned int uncsigdigits = 2U, distribution_type distrib = gaussian)
 
-  double e = 0.01;
-  int m = round_m(e, unc, 2U, gaussian);
+  double loss_risk = 0.01; 
+  int m = round_m(loss_risk, unc, 2U, gaussian);
 
   std::pair<double, double> ci;
   ci = conf_interval(mean, unc, degfree);
@@ -1417,7 +1417,7 @@ void out_value_df_limits(double mean, double unc, int degfree = 1, std::ostream&
   os.precision(2); // Uncertainty always rounded to 2 decimal digits.
   double unc_rounded = round_sig(unc, 2); // Round to 2 significant digit - ISO rules.
   // TODO increase here if noisydigit wanted,
-  // and/or if degress of freedom > 100.
+  // and/or if degrees of freedom > 100.
   os << round_ms(mean, m) << " +/- " << unc_rounded;
   os.precision(6); //
   using boost::lexical_cast;

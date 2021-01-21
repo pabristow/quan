@@ -1323,7 +1323,7 @@ public:
     }
     else
     {
-      confidence = conf / 1.e6;
+      confidence = conf / 1.e6;  // Unscale the scaled value stored as an int - back into a double.
     }
     using boost::math::isfinite;
     using boost::math::isnan;
@@ -1344,7 +1344,7 @@ public:
         oss << std::showpoint << std::setprecision(sigDigits) << mean;
       }
       else
-      { // Use uncertainty to control digits of precision.
+      { // Use uncertainty of value to control digits of precision output.
         if (mean == 0)
         { // isValueZero = true;
           if (uncertainty == 0.F )
@@ -1372,7 +1372,7 @@ public:
           // even if decimal point was specified by showpoint!
         }
         else if (unc_flags & VALUE_EXACT)
-        { // Value flagged as exact because std_dev == 0 (but NOT integer)
+        { // Value flagged as exact like 2.54 because constructor std_dev == 0 (but NOT integer)
           // (used double constructor or set flag) so show decimal point.
           oss.unsetf(std::ios_base::showpoint); // Ignore showpoint so NO trailing zeros (because exact).
           if (isShowPos)
@@ -1390,8 +1390,12 @@ public:
         else
         { // Non-zero uncertainty, sd != 0.
           if (isfinite(uncertainty))
-          { // Rounding is appropriate.
-            int m = round_m(round_loss, uncertainty, 2, distrib); // m is rounding digit index.
+          { 
+            int m = std::numeric_limits<double>::digits10; // Effectively no rounding?
+            if (uncertainty > 0.F)
+            { // Rounding is appropriate.
+              m = round_m(round_loss, uncertainty, 2, distrib); // m is rounding digit index.
+            }
             if (isNoisyDigit)
             { // Move rounding digit to one less significant position.
               m--;
@@ -1400,9 +1404,16 @@ public:
             {
               oss << '+';
             }
-            if (mean <= 1e15)
+            if (mean < 1e+15)
             { // Will fit into 1000000000000 (digits10 = 15).
-              oss << round_ms(mean, m);
+              if (uncertainty > 0.F)
+              {
+                oss << round_ms(mean, m);
+              }
+              else
+              {
+                oss  << mean;
+              }
             }
             else
             { // Won't fit into 1000000000000 (digits10 = 15), so switch to exponent format.
@@ -1411,7 +1422,7 @@ public:
               // Need to round but and not display exp as "e+009"  TODO.
             }
           }
-          else
+          else 
           { // Uncertainty NAN or infinite, so show all possibly significant digits.
             oss << std::showpoint << std::setprecision(max_digits10) << mean;
           }

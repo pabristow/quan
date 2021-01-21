@@ -195,8 +195,7 @@ void unc_output(double value, // Mean or most likely value.
   // Why restore? - passed by value, so can alter if want to.
 
   // Width, precision, flags & fillChar data from stream os. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  streamsize iosWidth = os.width(); //!< \warning Width must be read BEFORE any use of os
-  // which would reset width back to zero!
+  streamsize iosWidth = os.width(); //!< \warning Width must be read BEFORE any use of os which would reset width back to zero!
   // & prevent any ios formatting during os << ...
   // because unc_output does all its own formatting.
   isWidthSet = (iosWidth > 0); // For example by os << setw(99)
@@ -355,7 +354,7 @@ void unc_output(double value, // Mean or most likely value.
   if (!isfinite(stdDev))
   { // stdDev is NaN or infinity.
     isValueInteger = false; // ???
-    isValueExact = false; // Uncertainty must be zero for exact, sp can't be exact if uncertainty is undefined, .
+    isValueExact = false; // Uncertainty must be zero for exact, so can't be exact if uncertainty is undefined, .
     uncTypes &= ~(UNC_KNOWN | UNC_NOPLUS | UNC_NOMINUS | UNC_QUAN_DECIMAL | UNC_QUAN_BINARY | UNC_UNIFORM | UNC_TRIANGULAR);
     // and clear many bits for unc_types which cannot be correct.
     isUncKnown = false; // Despite uncType flag UNC_KNOWN.
@@ -464,7 +463,7 @@ void unc_output(double value, // Mean or most likely value.
   } // isValueExact.
 
   if (os.iword(uncFlagsIndex) && useSetSigDigits)
-  { // Use set sig digits instead of calculated from uncertainty.
+  { // Use setSigDigits instead of calculated from uncertainty.
     sigDigits = setSigDigits;
     os << setprecision(setSigDigits) << value;
   }
@@ -525,9 +524,8 @@ void unc_output(double value, // Mean or most likely value.
   boost::io::ios_precision_saver precision_saver(os); // Save and restore on exit.
   boost::io::ios_flags_saver flags_saver(os);
 
-    // round here.
-    //os << val.value() << "(+/-" << val.uncertainty() << ")";
-
+  // round here.
+  //os << val.value() << "(+/-" << val.uncertainty() << ")";
   //os << oss.str(); // "1.23 +/- 0.1 (9) mV"
 
   used = oss.str().size();

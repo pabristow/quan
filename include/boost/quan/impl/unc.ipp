@@ -458,7 +458,7 @@ showUncFlags::showUncFlags(unsigned short int f) : flags(f)
 }
 
 std::ostream& operator<< (std::ostream& os, const showUncFlags& uf)  // Define.
-{ // Output uncFlags as desriptive word strings to this ostream.
+{ // Output uncFlags as descriptive word strings to this ostream.
   unsigned short uncFlags = uf.flags;
   os << "uncFlags ("<< std::hex << uncFlags << std::dec << ")";
   os << ((uncFlags & firm) ? " firm" : "" );

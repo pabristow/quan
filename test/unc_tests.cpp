@@ -532,24 +532,22 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
 
  BOOST_AUTO_TEST_CASE(unc_test_exact)
  { // Exact values
-   // 1. inch Autoscaled SI 25. +/- 13. millimeter or 25. mm
+    // 1. inch Autoscaled SI 25. +/- 13. millimeter or 25. mm
     // 1.0 inch Autoscaled SI 25.4 +/- 1.3 millimeter or 25.4 mm
     // 1.00 Autoscaled SI 25.4 +/- 0.13 millimeter or 25.4 mm
     // 1.000 Autoscaled SI 25.400 +/- 0.013 millimeter or 25.400 mm
 
     uncun inch_in_cm(2.54); // Exact, with decimal fraction part, implicitly created from double.
     BOOST_CHECK((inch_in_cm.types() & VALUE_EXACT)); // Check is known to be exact.
-
     CHECK_USED(inch_in_cm, "2.54"); // No trailing zeros, because exact.
-    // Trailing zeros would imply an uncertainty.
-
+    // Trailing zeros would imply some uncertainty.
     inch_in_cm.setUncTypes(inch_in_cm.types() & ~VALUE_EXACT); // Flag as NOT exact.
     BOOST_CHECK(!(inch_in_cm.types() & VALUE_EXACT)); // Check exact flag has cleared.
-    CHECK_USED(inch_in_cm, "2.54000000000000"); // Max trailing zeros, because sd still == 0.F.
-
+    // CHECK(inch_in_cm, "2.54000000000000"); // Max trailing zeros, because sd uncertainty is still == 0.F.
+    CHECK(inch_in_cm, "2.54");
     inch_in_cm.std_dev(0.0012f); // Add some uncertainty.
     BOOST_CHECK(!(inch_in_cm.types() & VALUE_EXACT)); // Check still NOT exact.
-    CHECK_USED(inch_in_cm, "2.540"); // One trailing zeros because std dev specified 0.012f.
+    CHECK_USED(inch_in_cm, "2.540"); // One trailing zeros because uncertaintu (std dev) specified as 0.012f.
     inch_in_cm.types(VALUE_EXACT); // Make Exact - Explicitly. - Doesn't work
     inch_in_cm.std_dev(0.f); // No uncertainty.
     BOOST_CHECK((inch_in_cm.types() & VALUE_EXACT)); // Check is now known to be exact.
