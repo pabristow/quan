@@ -210,14 +210,14 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   //unit_test_log::instance().set_threshold_level(messages); // user messages
   // Prepare to send log to a file instead of std::cout.
 
-  std::cout << "\x0F1 Uncertain Class Test output to " << outFilename << ' '
-    << __FILE__ << ' ' <<  __TIMESTAMP__ << std::endl;
-  // +- symbol on screen std::cout = dec 177, hex F1 but shows ~n in files?
-  // BUT is messy because in file codeset +- symbol \x0B1 176! octal \361
 
   BOOST_CHECK(fout.is_open());
   // Test output to file ...
   fout << "Test Output from " << __FILE__ << " " << __TIMESTAMP__"\n" << std::endl;
+  std::cout << "\x0F1 Uncertain Class Test output to " << outFilename << ' '
+    << __FILE__ << ' ' <<  __TIMESTAMP__ << std::endl;
+  // +- symbol on screen std::cout = dec 177, hex F1 but shows ~n in files?
+  // BUT is messy because in file codeset +- symbol \x0B1 176! octal \361
 
   // Test diagnostic output to file ...
   //BOOST_CHECK(lout.is_open());
@@ -472,14 +472,14 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     CHECK_USED(u0,"0.00000000000000"); // All 15 guaranteed decimal digits.
     u0.std_dev(0.0000000000000001f);
     CHECK_USED(u0, "0.00000000000000"); // All 17 significant decimal digits.
-    uncun exact(1., 1.f, 2, VALUE_EXACT);  // Exact Unity from double with std_dev and deg_free.
+    //  uncun exact(1., 1.f, 2, VALUE_EXACT);  // Exact Unity from double with std_dev and deg_free.
     // This should signal a conflict in the constructor!
-    BOOST_CHECK(exact.types() & VALUE_EXACT); // Should still be flagged as exact.
-    BOOST_CHECK_EQUAL(exact.value(), 1.); // value
-   // BOOST_CHECK_EQUAL(exact.std_dev(), 0.f);//  StdDeviation should be over-ridden by VALUE_EXACT, so warn:
-    // Uncertain warns : uncertain value 1 is flagged as uncTypeFlags == VALUE_EXACT, but uncertainty 1 is not zero!
-   // BOOST_CHECK_EQUAL(exact.deg_free(), 0); // deg_free should be overwritten by VALUE_EXACT, so warn:
-    // Uncertain warns : uncertain value 1 flagged as uncTypeFlags == VALUE_EXACT, but degfree 2 is not zero!
+    // Uncertain warning : value 1 is flagged as uncTypeFlags == VALUE_EXACT, but uncertainty 1 is not zero!
+    // Uncertain warning : value 1 flagged as uncTypeFlags == VALUE_EXACT, but degfree 2 is not zero!
+    // BOOST_CHECK(exact.types() & VALUE_EXACT); // Should still be flagged as exact.
+    // BOOST_CHECK_EQUAL(exact.value(), 1.); // value
+    // BOOST_CHECK_EQUAL(exact.std_dev(), 0.f);//  StdDeviation should be over-ridden by VALUE_EXACT, 
+   // BOOST_CHECK_EQUAL(exact.deg_free(), 0); // deg_free should be overwritten by VALUE_EXACT, hence warning.
 
     uncun iminus1(-1); // Exact minus 1 from integer -1 value.
     BOOST_CHECK(iminus1.types() & VALUE_INTEGER); // Check IS recognised as integer.
@@ -626,7 +626,8 @@ BOOST_AUTO_TEST_CASE(unc_test_input)
 {
   // zero integer rational uncKnown noPlus noMinus at end of read.
   uncun r1;
-  outUncTypes(r1.types(), std::cout);
+  // std::cout << "default uncertain constructed types are : "; outUncTypes(r1.types(), std::cout); std::cout << std::endl;
+  // default uncertain constructed types are : uncTypes (0x60e7) zero integer rational uncKnown noPlus noMinus df_exact df_known.
   istringstream isr1("0"); // Read from integer.
   isr1 >> r1;
   BOOST_CHECK_EQUAL(r1.value(), 0.);
@@ -684,23 +685,27 @@ BOOST_AUTO_TEST_CASE(unc_test_input)
   //CHECK_IN("2/3", 2/3, 0.1f, 0, (VALUE_RATIONAL | UNC_KNOWN | UNC_QUAN_DECIMAL | UNC_EXPLICIT ));
   //CHECK_IN("2/3 +/-0.1", 2/3, 0.1f, 0, (VALUE_RATIONAL | UNC_KNOWN | UNC_QUAN_DECIMAL | UNC_EXPLICIT ));
 
-  {
-    uncun r123;
-    istringstream isr123("2/3"); // Read from string.
-    isr123 >> r123;
-    std::cout << r123.value() << ' ' << r123.std_dev() << ' ' << r123.degFree() << r123.types() << ", " ;
-    outUncTypes(r123.types(), std::cout);
-    std::cout << std::endl;
-  }
+  //{
+  //  uncun r123;
+  //  istringstream isr123("2/3"); // Read from string.
+  //  isr123 >> r123;
+  //  std::cout << "isr123(\"2 / 3\") is " << r123.value() << ' ' << r123.std_dev() << ' ' << r123.degFree() << r123.types() << ", \n" ;
+  //  outUncTypes(r123.types(), std::cout);
+  //  std::cout << "\n"<< std::endl;
+  //  // isr123("2 / 3") is 0 0 0231,
+  //  // uncTypes(0xe7) zero integer rational uncKnown noPlus noMinus.
+  //}
 
-  {
-    uncun r12302;
-    istringstream isr12302("2/3+/-0.02f"); // Read from string.
-    isr12302 >> r12302;
-    std::cout << r12302.value() << ' ' << r12302.std_dev() << ' ' << r12302.degFree() << r12302.types() << ", " ;
-    outUncTypes(r12302.types(), std::cout);
-    std::cout << std::endl;
-  }
+  //{
+  //  uncun r12302;
+  //  istringstream isr12302("2/3+/-0.02f"); // Read from string.
+  //  isr12302 >> r12302;
+  //  std::cout << "isr12302(\"2/3 + / -0.02f\") is " << r12302.value() << ' ' << r12302.std_dev() << ' ' << r12302.degFree() << r12302.types() << ", " ;
+  //  // std::cout << "\n";
+  //  outUncTypes(r12302.types(), std::cout);
+  //  std::cout << std::endl;
+  //  // isr12302("2/3 + / -0.02f") is 0 0.02 017702, uncTypes (0x4526) integer rational uncKnown quantize10 explicit df_known.
+  //}
 
   // Exponent value and uncertainty.
   CHECK_IN("12.e1 +/-0.1", 12., 0.1f, 0, (UNC_KNOWN | UNC_QUAN_DECIMAL | UNC_EXPLICIT));

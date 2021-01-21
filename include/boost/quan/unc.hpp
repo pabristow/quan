@@ -791,13 +791,13 @@ public:
       { // Check for a valid uncertainty, but type parameter is exact.
         if (uncertainty_ != 0.f)
         {
-          std::cout << "Warning: uncertain value " << value_ << " is flagged as uncTypeFlags == VALUE_EXACT, but uncertainty " <<  uncertainty_ << " is not zero!" << std::endl;
+          std::cout << "Uncertain Warning: value " << value_ << " is flagged as uncTypeFlags == VALUE_EXACT, but uncertainty " <<  uncertainty_ << " is not zero!" << std::endl;
           uncertainty_ = 0.f;  // Override any unc provided.
           // This indicates a programmer logic error!
         }
         if (degFree_ != 0)
         {
-          std::cout << "Warning: uncertain value " << value_ << " flagged as uncTypeFlags == VALUE_EXACT, but degfree " << degFree_ << " is not zero!" << std::endl;
+          std::cout << "Uncertain Warning: value " << value_ << " flagged as uncTypeFlags == VALUE_EXACT, but degfree " << degFree_ << " is not zero!" << std::endl;
           degFree_ = 0;  // Override any degfree provided.
           // This indicates a programmer logic error!
         }

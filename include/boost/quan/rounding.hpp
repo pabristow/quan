@@ -1143,7 +1143,7 @@ int round_m(double rounding_loss = 0.01, double sigma = 0., unsigned int sigma_s
     gl = 0.98972;
   }
   if (gl >= g)
-  { // Example: Cannot return a rounding m because rounding_loss 0.05 is too small!
+  { // Example: Cannot return a rounding m because chosen rounding_loss 0.05 is too small!
     std::cout << "Uncertain warning: Cannot return a rounding m because rounding_loss " << e << " is too small!" << std::endl;
     std::cout << "Uncertain warning: " 
       "sigma_rounded = " << sigma_rounded  << ", sigma = " << sigma
