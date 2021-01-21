@@ -693,7 +693,7 @@ BOOST_AUTO_TEST_CASE(unc_test_input)
     std::cout << std::endl;
   }
 
-    {
+  {
     uncun r12302;
     istringstream isr12302("2/3+/-0.02f"); // Read from string.
     isr12302 >> r12302;
@@ -702,15 +702,11 @@ BOOST_AUTO_TEST_CASE(unc_test_input)
     std::cout << std::endl;
   }
 
-
   // Exponent value and uncertainty.
   CHECK_IN("12.e1 +/-0.1", 12., 0.1f, 0, (UNC_KNOWN | UNC_QUAN_DECIMAL | UNC_EXPLICIT));
   CHECK_IN("12. +/-0.1e-1", 12., 0.01f, 0, (UNC_KNOWN | UNC_QUAN_DECIMAL | UNC_EXPLICIT));
   CHECK_IN("12.e1 +/-0.1e-1", 12., 0.01f, 0, (UNC_KNOWN | UNC_QUAN_DECIMAL | UNC_EXPLICIT));
 
-  /*
-
-  */
   // #define  CHECK_OUT_IN(manips, result, value, sd, df, types)
 } //  BOOST_AUTO_TEST_CASE(unc_test_input)
 
@@ -1024,7 +1020,7 @@ BOOST_AUTO_TEST_CASE(unc_test_asym)
 }
 
 BOOST_AUTO_TEST_CASE(unc_test_set_manips)
-{
+{ // Test all the uncertain one parameter manips to set unc width, scale, sigdigits & unc sigdigits.
   fout << "\nTest one parameter manips to set unc width, scale, sigdigits & unc sigdigits.\n";
   setUncDefaults(fout); // Resets stream's format flags to default.
   fout << resetiosflags(ios_base::basefield | ios_base::adjustfield | ios_base::floatfield
@@ -1149,14 +1145,17 @@ BOOST_AUTO_TEST_CASE(unc_test_unc_Nan_inf)
 
 BOOST_AUTO_TEST_CASE(unc_test_ci_outputs)
 {
-  uncun ud1(1.23, 0.56F, 7); // Uncertain type
-  //CHECK_USED(scientific << plusminus << addlimits << adddegfree << ud1, "1.2 +/-0.56 <0.8200, 1.6400> (7)");
- // CHECK_USED(plusminus << addlimits << adddegfree << ud1, "1.2 +/-0.56 <0.8200, 1.6400> (7)");
- // CHECK_USED(plusminus << addlimits << ud1, "1.2 +/-0.56 <0.8200, 1.6400>");
-  //CHECK_USED(addlimits << ud1, "1.2 <0.82, 1.64>");  
- //CHECK_USED(plusminus << ud1, "1.2 +/-0.56");
+  uncun ud1(1.23, 0.56F, 7); // Uncertain type.
 
-
+  CHECK(ud1, "1.2"); // 
+  CHECK(plusminus << ud1, "1.2 +/-0.56"); // From "plusminus << ud1" Got  expected 1.2 +/-0.56 == 1.2 +/-0.56 : true
+  CHECK(addlimits << ud1, "1.2 <0.82, 1.64>"); // From "addlimits << ud1" Got  expected 1.2 <0.82, 1.64> == 1.2 <0.82, 1.64> : true
+  CHECK(plusminus << addlimits << ud1, "1.2 +/-0.56 <0.82, 1.64>");
+  CHECK(addlimits << plusminus << ud1, "1.2 +/-0.56 <0.82, 1.64>");
+  CHECK(scientific << plusminus << addlimits << adddegfree << ud1, "1.2 +/-0.56 <0.82, 1.64> (7)");
+  CHECK(plusminus << addlimits << adddegfree << ud1, "1.2 +/-0.56 <0.82, 1.64> (7)");
+  CHECK(addlimits << ud1, "1.2 <0.82, 1.64>");
+  CHECK(plusminus << ud1, "1.2 +/-0.56");
 } // BOOST_AUTO_TEST_CASE(unc_test_ci_outputs)
 
 

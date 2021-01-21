@@ -1520,8 +1520,8 @@ public:
     { // Want to append confidence interval as <1.23, 2.34>.
       if (boost::math::isfinite(mean) && boost::math::isfinite(uncertainty) && degFree > 0)
       { // degfree 1 means 2 observations, so possible to compute confidence limits or interval in < > angle brackets.
-        std::streamsize osprec = os.precision(); // Save precision. TODO but don't seem to restore?
-        oss.precision(3); //
+       // std::streamsize osprec = os.precision(); // Save precision. TODO but don't seem to restore?
+       // oss.precision(3); //
         //std::pair<double, double> conf_interval(double mean, double unc, double df = 1., double alpha = 0.05, distribution_type distrib = gaussian);
         double alpha = os.iword(confidenceIndex) / 1.e6; // Pick up and unscale alpha.
        // double round_loss = os.iword(roundingLossIndex) / 1.e3; // Pick up and rounding loss and unscale.
@@ -1532,7 +1532,7 @@ public:
           uncSigDigits++;
         }
         std::pair<double, double> ci  = conf_interval(mean, uncertainty, degFree, alpha, distrib);
-        int m = round_m(round_loss, uncertainty, uncSigDigits, distrib);
+        int m = round_m(round_loss, uncertainty, uncSigDigits, distrib);  // Compute roundER digit number.
         using boost::lexical_cast;
         oss << " <"
             << lexical_cast<double>(round_ms(ci.first, m-1)) << ", "
@@ -1541,7 +1541,7 @@ public:
       }
       else
       { // Not possible to compute confidence limits or interval.
-        oss << " < ? >" ;
+        oss << " < ?, ? >" ;
       }
     } // Appended confidence interval.
 
