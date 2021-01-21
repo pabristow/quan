@@ -560,7 +560,7 @@ class setRoundingLoss
   friend std::istream operator>> (std::istream, const setRoundingLoss&);
 public:
   setRoundingLoss(double);// eps) : setRoundingLoss(eps) {}  // Constructor
-  // Initialisation means setRoundingLoss = epsilon
+  // Initialisation means setRoundingLoss = round_loss
   //protected:
   double roundingloss_; // Set by constructor.
 }; // class setRoundingLoss
@@ -1152,7 +1152,7 @@ public:
       double frac = modf(value_, &i);  // modf only works for doubles,
       // so can't test frac = 0.0f and this is better anyway.
       if (frac <= std::numeric_limits<double>::epsilon())  // nearly == 0
-        // numeric_limits<double>::epsilon() = 2.22045e-016 aka DBL_EPSILON
+        // std::numeric_limits<double>::round_loss() = 2.22045e-016 aka DBL_EPSILON
       {
         unctypes_ |= (VALUE_INTEGER | VALUE_RATIONAL);
       }
@@ -1296,22 +1296,22 @@ public:
     } // Distribution type set.
 
     long& roundloss = os.iword(roundingLossIndex);
-    double epsilon;
+    double round_loss;
     if (roundloss <= 0)
     { // Not been set (or silly),
-      epsilon = 0.05; // so use a default.
+      round_loss = 0.05; // so use a default.
     }
     else
     { // Has been set by a call like `out << confidence(0.01);`.
       // rounding loss is stored as a long, so scaled by 1000,
       // so that 0.05 or 1% is stored as 50.
-      epsilon = roundloss / 1000.;  // `<< roundingloss(0.05)`
+      round_loss = roundloss / 1000.;  // `<< roundingloss(0.05)`
     }
     //! Confidence or alpha to compute confidence interval is similarly scaled.
     //! Usage: `out << confidence(0.01) << ...` means 1 - confidence = 99% confidence.
     //!   double confidence = os.iword(conf) / 1000.;  // `<< confidence(0.05)` aka 95%
 
-    //int round_m(double epsilon = 0.01, double unc = 0., unsigned int uncsigdigits = 2, distribution_type distrib = gaussian);
+    //int round_m(double round_loss = 0.01, double unc = 0., unsigned int uncsigdigits = 2, distribution_type distrib = gaussian);
     //void out_confidence_interval(std::pair<double, double> ci, int m, std::ostream& os = std::cout);
     //void out_value_limits(double mean, double unc, std::pair<double, double> ci, int m, std::ostream& os = std::cout);
 
@@ -1357,7 +1357,7 @@ public:
           }
           else
           { // Inexact zero.
-            int m = round_m(epsilon, uncertainty, 2, distrib);
+            int m = round_m(round_loss, uncertainty, 2, distrib);
             if (isNoisyDigit)
             { // Move rounding digit to one less significant position.
               m--;
@@ -1391,7 +1391,7 @@ public:
         { // Non-zero uncertainty, sd != 0.
           if (isfinite(uncertainty))
           { // Rounding is appropriate.
-            int m = round_m(epsilon, uncertainty, 2, distrib); // m is rounding digit index.
+            int m = round_m(round_loss, uncertainty, 2, distrib); // m is rounding digit index.
             if (isNoisyDigit)
             { // Move rounding digit to one less significant position.
               m--;
@@ -1518,13 +1518,13 @@ public:
 
     if(isConfidenceInterval)
     { // Want to append confidence interval as <1.23, 2.34>.
-      if (boost::math::isfinite(mean) && boost::math::isfinite(uncertainty) && degFree >= 1)
-      { // Possible to compute confidence limits or interval in < > angle brackets.
+      if (boost::math::isfinite(mean) && boost::math::isfinite(uncertainty) && degFree > 0)
+      { // degfree 1 means 2 observations, so possible to compute confidence limits or interval in < > angle brackets.
         std::streamsize osprec = os.precision(); // Save precision. TODO but don't seem to restore?
-        oss.precision(4); //
+        oss.precision(3); //
         //std::pair<double, double> conf_interval(double mean, double unc, double df = 1., double alpha = 0.05, distribution_type distrib = gaussian);
         double alpha = os.iword(confidenceIndex) / 1.e6; // Pick up and unscale alpha.
-        //double epsilon = os.iword(roundingLossIndex) / 1.e3; // Pick up and rounding loss and unscale.
+       // double round_loss = os.iword(roundingLossIndex) / 1.e3; // Pick up and rounding loss and unscale.
         // TODO check has already been set above at line 1503
         int uncSigDigits = os.iword(setUncSigDigitsIndex);  // Pick up significant digits for uncertainty.
         if(isNoisyDigit)
@@ -1532,7 +1532,7 @@ public:
           uncSigDigits++;
         }
         std::pair<double, double> ci  = conf_interval(mean, uncertainty, degFree, alpha, distrib);
-        int m = round_m(epsilon, uncertainty, uncSigDigits, distrib);
+        int m = round_m(round_loss, uncertainty, uncSigDigits, distrib);
         using boost::lexical_cast;
         oss << " <"
             << lexical_cast<double>(round_ms(ci.first, m-1)) << ", "
