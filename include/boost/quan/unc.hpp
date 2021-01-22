@@ -152,7 +152,7 @@ void outUncTypes(unsigned short int, std::ostream&);
 //namespace units {
 
 // Forward declarations.
-template <bool is_correlated> // Default is uncertainties that are NOT correlated.
+template <bool is_correlated> // Default is uncertainties that are NOT correlated (the normal case).
 class unc;
 
 // Two actual uncertain floating-point types for the user:
@@ -587,8 +587,8 @@ public:
 template <bool is_correlated = false> //! \tparam is_correlated if true, standard deviation is correlated, else not.
 class unc : public std::char_traits<char>
 {
+public:
   typedef double value_type;
-
 
   friend void unc_input(double& mean,  // Mean (central or most probable) value.
                    double& stdDev, // Uncertainty estimate as Standard deviation.
@@ -605,7 +605,7 @@ class unc : public std::char_traits<char>
 
 //#pragma warning (disable : 4520) //!< 'unc<1>' : multiple default constructors specified.
   // This is by design so that it is possible construct from integer or double.
-  // Doubtful if this is necessary or useful?
+  // Doubtful if this is necessary or useful?  TODO causes trouble with Doxygen docs.
 public:
   /*! \note It is convenient to use 64-bit floating-point value
      (so even really accurate values like weights are OK),
@@ -1887,7 +1887,7 @@ public:
     return retval;
   }
 
-  // Getter functions for read-only access to private data members:
+  // Getter functions for read-only access to data members:
   // uncertainty_, value_, degrees of freedom and unc type.
 
   // These are duplicates.
