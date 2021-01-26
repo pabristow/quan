@@ -4,18 +4,18 @@
 */
 
 // meas.ipp
-// Copyright Paul A. Bristow 2003, 2012
+// Copyright Paul A. Bristow 2003, 2012, 2021
 
 #ifndef MEAS_IPP
 #define MEAS_IPP
 
-#ifdef _MSC_VER
-#  pragma warning (push)
-#pragma warning (disable : 4189) // local variable is initialized but not referenced TODO!
-#  pragma warning (disable : 4146) // unary minus operator applied to unsigned type, result still unsigned
-#  pragma warning (disable : 4305) //C4305: 'initializing' : truncation from 'unsigned int' to 'short'.
-#  pragma warning (disable : 4309) // C4309: 'initializing' : truncation of constant value.
-#endif
+//#ifdef _MSC_VER
+//#  pragma warning (push)
+//#pragma warning (disable : 4189) // local variable is initialized but not referenced TODO!
+//#  pragma warning (disable : 4146) // unary minus operator applied to unsigned type, result still unsigned
+//#  pragma warning (disable : 4305) //C4305: 'initializing' : truncation from 'unsigned int' to 'short'.
+//#  pragma warning (disable : 4309) // C4309: 'initializing' : truncation of constant value.
+//#endif
 
 #include <boost/math/special_functions/hypot.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp> //include all types plus i/o
@@ -123,7 +123,7 @@ Meas::Meas(uncun u, string id, ptime ti)
 }
 */
 
-Meas::Meas(uncun u, string id, boost::posix_time::ptime ti /* = (boost::gregorian_time::not_a_date_time)*/, int order)
+Meas::Meas(uncun u, std::string id, boost::posix_time::ptime ti /* = (boost::gregorian_time::not_a_date_time)*/, int order)
 :   id_(id), time_(ti), order_(order)
 { // Constructor value, id & order (but NOT time) with default values.
   time_ = ti; // time not known, & cannot be calculated from order.
@@ -429,7 +429,7 @@ std::ostream& operator<< (std::ostream& os, const Meas& p)  // Definition.
   return os;  //  Allow chaining concatenation of << ... << .
 } // operator<<
 
-istream& operator>> (istream& is, Meas& p)
+std::istream& operator>> (std::istream& is, Meas& p)
 {
   uncun u;
   is >> u;
@@ -488,9 +488,9 @@ std::pair<double, double> uncs_of(std::pair<Meas const, uncun> vp)
   return std::make_pair<double, double>(unc_of(vp.first), unc_of(vp.second));
 }
 
-
-#if defined (BOOST_MSVC)
-#  pragma warning(pop)
-#endif
+//
+//#if defined (BOOST_MSVC)
+//#  pragma warning(pop)
+//#endif
 
 #endif // MEAS_IPP

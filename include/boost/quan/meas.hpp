@@ -14,14 +14,14 @@
 
 #include <boost/quan/unc.hpp>
 
-// Declaration.
+// Forward Declaration.
 //class Meas;  // Measured uncertain value AND its id and order and/or time-date stamp.
 
 #include <iostream>
-  using std::ostream;
-  using std::istream;
+  //using std::ostream;
+  //using std::istream;
 #include <string>
-  using std::string;  // not_a_date_time
+ // using std::string;  // for not_a_date_time
 
 typedef unc<false> uncun; // Uncertain Uncorrelated (the normal case).
 
@@ -31,8 +31,8 @@ typedef unc<false> uncun; // Uncertain Uncorrelated (the normal case).
 
 class Meas : public uncun
 {
-  friend ostream& operator<< (ostream&, const Meas&);
-  friend istream& operator>> (istream&, Meas&);
+  friend std::ostream& operator<< (std::ostream&, const Meas&);
+  friend std::istream& operator>> (std::istream&, Meas&);
 
 public:
   //Meas(); // Constructor - all defaults.
@@ -40,7 +40,7 @@ public:
   //Meas::Meas(uncun u);  // Constructor from uncertain uncun.
   //  Meas(int const);   // Constructor from int - use automatic conversion int to double.
   // Meas(uncun u, string id = "", boost::posix_time::ptime ti = boost::posix_time::not_a_date_time);
-  Meas(uncun u, string id = "", boost::posix_time::ptime ti = (boost::posix_time::not_a_date_time), int o = -1);
+  Meas(uncun u, std::string id = "", boost::posix_time::ptime ti = (boost::posix_time::not_a_date_time), int o = -1);
   //Meas(uncun u, string id = "", int o = -1);
   Meas(const Meas&);   // Copy constructor.
   ~Meas();  // Default destructor.
@@ -85,7 +85,7 @@ public:
   static bool lessAbsM(const Meas& l, const Meas& r); // abs value < abs value.
 
  // Meas Member variables.
-public: // Inconvenient to make private?
+public:
   std::string id_; // Identification info, if any, else "".
 
   // Time and order values could be:
@@ -100,8 +100,18 @@ public: // Inconvenient to make private?
 }; // class Meas
 
 // Output and input operator<< & operator>>
-ostream& operator<< (ostream& os, const Meas& m);
-istream& operator>> (istream& is, Meas& m);
+std::ostream& operator<< (std::ostream& os, const Meas& m);
+std::istream& operator>> (std::istream& is, Meas& m);
+
+std::ostream& operator<< (std::ostream& os, const std::pair<Meas, Meas>& mp)
+{ /*! Output a pair (X and Y) of uncertain measurement values with (if defined) uncertainty and degrees of freedom etc
+     \details For example: "1.23 +/- 0.01 (13), 3.45 +/- 0.06 (78)".
+   */
+  os << mp.first << ", " << mp.second;
+  return os;
+} // std::ostream& operator<< (std::ostream& os, const std::pair< Meas<correlated>, Meas<correlated> >& mp)
+
+// Might add other mixed types here too?
 
 // Definitions in meas.ipp.
 #include <boost/quan/impl/meas.ipp>

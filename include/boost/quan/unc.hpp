@@ -2040,15 +2040,16 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
 }; // class unc<is_correlated>
 
 template <bool correlated>
-std::ostream& operator<< (std::ostream& os, const std::pair< unc<correlated>, unc<correlated> >& u)
+std::ostream& operator<< (std::ostream& os, const std::pair< unc<correlated>, unc<correlated> >& up)
 { /*! Output a pair (X and Y) of uncertain values with (if defined) uncertainty and degrees of freedom.
      \details For example: "1.23 +/- 0.01 (13), 3.45 +/- 0.06 (78)".
    */
-  os << u.first << ", " << u.second;
+  os << up.first << ", " << up.second;
   return os;
 } // std::ostream& operator<< (ostream& os, const pair<unc<correlated>, unc<correlated> >& u)
 
 //template std::ostream& operator<< (std::ostream& os, const std::pair< unc<false>, unc<false> >& u);
+// unc<false> version is not normally needed.
 
 //! Two helper functions to provide values and uncertainties as pairs.
 //! \note Names value_of and plural valueS_of.
