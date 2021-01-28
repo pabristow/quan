@@ -7,6 +7,7 @@
  \date Oct 2009, 2012, 2020
 */
 
+// boost\libs\quan\include\boost\quan\pair_io.hpp
 #include <utility>
  // using std::pair;
 
@@ -14,7 +15,7 @@
 template<typename charT, typename traits, typename T1, typename T2>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const std::pair<T1, T2>& p)
 {
-  return os << "<" << p.first << ", " << p.second << '>'; // Separated by comma & space.
+  return os << "<" << p.first << ", " << p.second << '>'; // Enclosed by <> and separated by comma & space.
 }
 
 //! Output pair, separated by comma & space.
@@ -22,7 +23,7 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
 template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const std::pair<double, double>& p)
 {
-  return os << "<" << p.first << ", " << p.second << '>'; // Separated by comma & space.
+  return os << "<" << p.first << ", " << p.second << '>'; // Enclosed by <> and separated by comma & space.
 }
 
 

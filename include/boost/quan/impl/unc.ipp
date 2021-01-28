@@ -798,7 +798,7 @@ std::pair<double, double> values_of(std::pair<double, double> vp)
   return std::make_pair(value_of(vp.first), value_of(vp.second));
 }
 
-// Const vrsion
+// Const version
 template <> //! \tparam T Built-in floating-point type, float, double, long double or unc or Meas.
 std::pair<double, double> values_of(std::pair<double const, double> vp)
 { //!< \return values of a pair of double values.
