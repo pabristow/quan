@@ -11,8 +11,10 @@
 
 #include <boost/date_time/gregorian/gregorian.hpp> // include all types plus i/o.
 #include <boost/date_time/posix_time/posix_time.hpp> // include all types plus i/o.
+// using ptime and 'not_a_date_time'.
 
-#include <boost/quan/unc.hpp>
+#include <boost/quan/unc.hpp> // uncertain types, mainly
+typedef unc<false> uncun; // Uncertain Uncorrelated (the normal case).
 
 // Forward Declaration.
 //class Meas;  // Measured uncertain value AND its id and order and/or time-date stamp.
@@ -21,9 +23,8 @@
   //using std::ostream;
   //using std::istream;
 #include <string>
- // using std::string;  // for not_a_date_time
-
-typedef unc<false> uncun; // Uncertain Uncorrelated (the normal case).
+ // using std::string;  
+ 
 
 /*!
  \brief Measured uncertain value AND its id and order and/or time-date stamp.
@@ -35,13 +36,15 @@ class Meas : public uncun
   friend std::istream& operator>> (std::istream&, Meas&);
 
 public:
-  //Meas(); // Constructor - all defaults.
-  Meas(double const d = 0.);   // Constructor from double (no extra info).
-  //Meas::Meas(uncun u);  // Constructor from uncertain uncun.
+ // Meas(); // Constructor - all defaults, compiler provided.
+  Meas(double const d = 0.);   // Constructor from (assumed exact) @ double (no extra info).
+  //Meas::Meas(uncun u);  // Constructor from uncertain uncun with default id, time and order#.
   //  Meas(int const);   // Constructor from int - use automatic conversion int to double.
   // Meas(uncun u, string id = "", boost::posix_time::ptime ti = boost::posix_time::not_a_date_time);
-  Meas(uncun u, std::string id = "", boost::posix_time::ptime ti = (boost::posix_time::not_a_date_time), int o = -1);
-  //Meas(uncun u, string id = "", int o = -1);
+  Meas(uncun u, // Uncertain value including uncertainty (standard deviation and degress of freedom etc).
+    std::string id = "",  // identification (default null string).
+    boost::posix_time::ptime ti = (boost::posix_time::not_a_date_time), // Time of measurement (default @cboost::posix_time::not_a_date_time).
+    int o = -1); // Order of this measurement in a sequence.
   Meas(const Meas&);   // Copy constructor.
   ~Meas();  // Default destructor.
 
@@ -71,7 +74,42 @@ public:
     return *this;
   }
 
-  // Meas Member functions.
+  // Get and set member functions.
+  //! \returns a identication @c std::string describing the measurement. 
+  std::string& id()
+  {
+    return id_;
+  }
+
+  //! Set a identication string describing the measurement. 
+  //! \param ident as a @ std::string
+  void id(std::string& ident)
+  {
+    id_ = ident;
+  }
+  //! \returns a time_point as ptime when the measurement was made. 
+  boost::posix_time::ptime& time()
+  {
+    return time_;
+  }
+
+  //! Set a time_point as ptime when the measurement was made. 
+  void time(boost::posix_time::ptime& tim)
+  {
+    time_ = tim;
+  }
+  //! \return Order of this measurement in a sequence of measurements, often at fixed intervals.
+  int order()
+  {
+    return order_;
+  }
+  //! Set the order of this measurement in a sequence of measurements, often at fixed intervals.
+  void order(int order_no)
+  {
+    order_ = order_no;
+  }
+
+  // Meas Member comparison functions.
   // Note static as only one instance of functions for all Meas objects.
   // Usage: Meas::lessU(a, b);
   static bool less(const Meas& l, const Meas& r); // l < r value (ignoring uncertainty).

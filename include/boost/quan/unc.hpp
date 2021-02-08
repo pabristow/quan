@@ -509,7 +509,7 @@ class setScale  // Set uncertain scale.
 {
   friend std::ostream operator<< (std::ostream, const setScale&); // Declarations
   friend std::istream operator>> (std::istream, const setScale&); // Defined below.
-  // Allows ostream operator>> and << to access private member scale.
+  // Allows @c std::ostream operator>> and << to access private member scale.
 public:
   setScale(int); // n) : scale(n) {}  // Constructor - initialisation scale = n.
   int scale; // setScale.scale used by operators << and >>
@@ -537,7 +537,7 @@ public:
    when the difference between 1.4 (rounded to 1) and 1.6 (rounded to 2.) is a doubling.
   3 is appropriate only for large degrees of freedoms, >= 1000.
   \warning Values < 1 or > 3 are silently ignored.
-  -1 passes through to allow dymanic choice based on degress of freedom.
+  -1 passes through to allow dynamic choice of uncertainty significant digits or precision based on degrees of freedom.
   Usage: out << setUncSigDigits(3) ...
 */
 class setUncSigDigits
@@ -728,13 +728,7 @@ public:
     const short unsigned int uncTypeFlags = UNC_KNOWN | UNC_EXPLICIT| DEG_FREE_EXACT | DEG_FREE_KNOWN) // unc type flags.
     : value_(val), uncertainty_(unc), degFree_(df), unctypes_(uncTypeFlags)
   {
-#ifdef UNC_CD_TRACE
-    {
-      cerr << "\n     ^^^ Construct from double value  " << dec << val << ", unc " << unc
-        << ", df " << df << ", types" << showUncTypes(uncTypeFlags) << endl;
-    }
-#endif
-    // Check on value.
+    // Check on value, uncertainty and unctypes.
     if (
       (boost::math::isfinite(value_)) // Value is finite, so neither infinity nor NaN!
       && (0.0f == uncertainty_) // Uncertainty parameter is zero (default).
@@ -758,7 +752,6 @@ public:
     { // Value is Nan or Infinity.
       // Use a flag here?  VALUE_NONFINITE ??
     }
-
     // Check if unc (std dev) is NaN or infinity.
     if (!boost::math::isfinite(unc))
     { // unc (std dev) is NaN or infinity.
@@ -803,14 +796,6 @@ public:
         }
       } //
     } // unc finite check
-#ifdef UNC_CD_TRACE
-    {
-      cerr << "  Constructed from double: value_ "
-        << value_ << ", m_unc " << uncertainty_ << ", m_df "
-        << dec << degFree_ << ", " << showUncTypes(unctypes_)
-        << endl;
-    }
-#endif
   };  // unc constructor from double.
 
   // A specific constructor from int (as well as double) leads to this warning.
@@ -834,28 +819,12 @@ public:
       { // Zero integer case.
         unctypes_ |= VALUE_ZERO;
       }
-#ifdef UNC_CD_TRACE
-    {
-      cerr << "\n    ^^^ Constructed from int: value "
-        << ivalue << ", value_ " << value_ << ", unc " << uncertainty_ << ", df "
-        << dec << degFree_ << ", " << showUncTypes(unctypes_)
-        << endl;
-    }
-#endif
   } // Constructor from integer value.
 
   unc(const unc& ud) //!< Constructor copy from another unc.
     : value_(ud.value_), uncertainty_(ud.uncertainty_),
     degFree_(ud.degFree_), unctypes_(ud.unctypes_)
   {  // Just copy all 4 member data.
-#ifdef UNC_CD_TRACE
-    {
-      cerr << "\n    ^^^ Constructed from unc: value_ "
-        << value_ << ", m_unc " << uncertainty_ << ", m_df "
-        << dec << degFree_ << ", " << showUncTypes(unctypes_)
-        << endl;
-    }
-#endif
   } // Constructor from unc.
 
   //! Destructors. Two versions defined in unc.ipp to provide diagnostic output.
