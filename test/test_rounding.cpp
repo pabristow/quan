@@ -25,11 +25,10 @@
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report Boost.Test library file details.
 
-
 #include <boost/static_assert.hpp>
 
 //#include <boost/test/unit_test.hpp>
-#include <boost/test/included/unit_test.hpp>  
+#include <boost/test/included/unit_test.hpp>
 
   using boost::unit_test::test_suite;
 //  using boost::unit_test::unit_test_log;
@@ -37,7 +36,7 @@
 //using boost::unit_test_framework::unit_test_log;
 //using boost::unit_test_framework::log_level;
 
-#include <boost/quan/rounding.hpp>
+#include <boost/quan/rounding.hpp>  // Proper rounding implementation under test.
 
 #include <iostream>
   using std::cout;
@@ -77,13 +76,11 @@
   using std::numeric_limits;
 
 BOOST_STATIC_ASSERT (std::numeric_limits<double>::is_iec559); // Assume IEEE 754 ONLY.
-// _STATIC_ASSERT (numeric_limits<double>::is_iec559); // and MS STATIC assert.
 
- // const unsigned int maxdigits10 = 2 + std::numeric_limits<double>::digits * 3010/10000;
-  const double eps = std::numeric_limits<double>::epsilon();
-  const int digits10 = std::numeric_limits<double>::digits10;
-
-  const double tol = 0.001; // Fractional tolerance for  BOOST_CHECK_CLOSE_FRACTION.
+// const unsigned int maxdigits10 = 2 + std::numeric_limits<double>::digits * 3010/10000;
+constexpr double eps = std::numeric_limits<double>::epsilon();
+constexpr int digits10 = std::numeric_limits<double>::digits10;
+constexpr double tol = 0.001; // Fractional tolerance for  BOOST_CHECK_CLOSE_FRACTION.
 
 BOOST_AUTO_TEST_CASE(round_test_0)
 {
@@ -684,8 +681,8 @@ BOOST_AUTO_TEST_CASE(Wimmer_5_1)
   m = round_m(loss_risk, sigma); // Calculate rounding digit, using sigma.
   BOOST_CHECK_EQUAL(m, -1); // Rounding digit is 1st after decimal point, 0.d.
 
-  double g = gamma(sigma_star, sigma);
-  BOOST_CHECK_CLOSE_FRACTION(g, 0.98123, tol); // Check gamma = 0.98123 given.
+  double g = rounded_div_value(sigma_star, sigma);
+  BOOST_CHECK_CLOSE_FRACTION(g, 0.98123, tol); // Check rounded_div_value aka gamma = 0.98123 given.
 
   double d = delta(loss_risk, g, gaussian);
   BOOST_CHECK_CLOSE_FRACTION(d, 0.0537, tol); // Wimmer only quotes 0.05.
@@ -714,11 +711,11 @@ BOOST_AUTO_TEST_CASE(Wimmer_5_1)
    double sigma_star = round_sig(sigma, 1); // Why only one significant digit for rounding?
    BOOST_CHECK_CLOSE_FRACTION(sigma_star, 0.02, tol);
 
-   double g = gamma(sigma_star, sigma);
-   BOOST_CHECK_CLOSE_FRACTION(g, 0.86207, tol); // Check gamma =  0.86207 given.
+   double g = rounded_div_value(sigma_star, sigma);
+   BOOST_CHECK_CLOSE_FRACTION(g, 0.86207, tol); // Check rounded_div_value aka gamma = 0.86207 given.
 
    // Wimmer says epslon loss_risk (epsilon) = 0.04 will fails from table 1.
-   // loss_risk 0.05 (95%) gamma_0.05 is 0.90175 which is > 0.86207, 
+   // loss_risk 0.05 (95%) gamma_0.05 is 0.90175 which is > 0.86207,
    // loss_risk 0.1 (90%) gamma_0.1 is 0.81271 which is < 0.86207 so OK.
    double loss_risk = 0.001; // Expect to fail if only use one digit for rounding sigma.
    int m = round_m(loss_risk, sigma); // Calculate rounding digit, using sigma.
@@ -769,9 +766,9 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
     std::pair<double, double> u(5.67, 5.82); // Known sigma 0.98 confidence interval estimate.
     // and gamma = 5.67/5.82 = 0.97423
     //cout << "uncs ratio " << gamma(5.67, 5.82) << std::endl; //  uncs ratio 0.974227
-    BOOST_CHECK_CLOSE_FRACTION(gamma(5.67, 5.82), 0.97423, tol); // unc ratio.
-    // std::cout  << "delta " << delta(nu, gamma(5.67, 5.82)) << std::endl; //  delta 0.261833
-    BOOST_CHECK_CLOSE_FRACTION(delta(nu, gamma(5.67, 5.82)), 0.26, tol*10); // delta = 0.26
+    BOOST_CHECK_CLOSE_FRACTION(rounded_div_value(5.67, 5.82), 0.97423, tol); // unc ratio.
+    // std::cout  << "delta " << delta(nu, rounded_div_value(5.67, 5.82)) << std::endl; //  delta 0.261833
+    BOOST_CHECK_CLOSE_FRACTION(delta(nu, rounded_div_value(5.67, 5.82)), 0.26, tol*10); // delta = 0.26
     // std::cout  << log10(0.26 * 5.82 /5) << std::endl; // expect -0.519074
     BOOST_CHECK_CLOSE_FRACTION(log10(0.26 * 5.82 / 5), -0.519, tol);
     // m < -0.519 so rounding x.
@@ -1180,7 +1177,7 @@ BOOST_AUTO_TEST_CASE(Sephton_C_rounding_test)
 
   // Quite big values, but not more than digits10.
   BOOST_CHECK_CLOSE_FRACTION(round_sig(123456.789, 0), 0., 2 * eps);
-  // 
+  //
   BOOST_CHECK_CLOSE_FRACTION(round_sig(123456.789, 1), 100000., 3 * eps);
   BOOST_CHECK_CLOSE_FRACTION(round_sig(123456.789, 2), 120000., 3 * eps);
   BOOST_CHECK_CLOSE_FRACTION(round_sig(123456.789, 3), 123000, 2 * eps);
@@ -1264,7 +1261,7 @@ BOOST_AUTO_TEST_CASE(Sephton_C_rounding_test)
 
 BOOST_AUTO_TEST_CASE(Wimmer_gamma_test)   // Test Wimmer gamma = rounded /unrounded
 {
-  BOOST_CHECK_CLOSE_FRACTION(gamma(1.8, 1.8457), 0.97524, 0.01);
+  BOOST_CHECK_CLOSE_FRACTION(rounded_div_value(1.8, 1.8457), 0.97524, 0.01);
 } // BOOST_AUTO_TEST_CASE(Wimmer_gamma_test)
 
 BOOST_AUTO_TEST_CASE(round_m_test2)

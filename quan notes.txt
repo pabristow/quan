@@ -32,6 +32,8 @@ SHA-1: d53c3f78c18e567ec57ccceedfd7b208c4f7e7ee
 
 08Feb2021 16:21 added get and set members to Meas and tested using 1d and 2d Meas demos.
 
+[develop 817e3b6] Added set and get member functions to Meas and used in 1d and 2 demos.
+
 
 
 

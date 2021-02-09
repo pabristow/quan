@@ -1,14 +1,19 @@
 # boost_root/libs/quan/test/jamfile.v2
 
-# quantity and uncertainty library
-# Copyright Paul A. Bristow2021
+# Tests of quantity and uncertainty library
+# Copyright Paul A. Bristow 2021
 
 # From Copyright 2005: Eric Niebler
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+# Test OK C++14 b2 msvc, gcc,clang I:\boost\libs\quan\test\quan_test_9feb2021_1224.log
+# and gcc and clang c++11, but msvc VS2019 preview fails.
+
 import testing ;  # Bring in rules for testing
 import feature ;
+#  Rules for checking compiler C++ standard requirements.
+import ../../config/checks/config : requires ;
 
 #feature.feature iterator_debugging
 #  : on off
@@ -70,8 +75,9 @@ project quan_test
   ;
 
 test-suite "Quan and Unc library tests"
-   :
-     [ run test_rounding.cpp ]
-     [ run unc_tests.cpp ]
+  :
+    [ run stdio_tests.cpp : : : [ requires cxx11_numeric_limits ] ]
+    [ run test_rounding.cpp ]
+    [ run unc_tests.cpp ]
     # [ run TestQuan1.cpp ]
   ;
