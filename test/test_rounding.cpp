@@ -419,8 +419,8 @@ BOOST_AUTO_TEST_CASE(round_e_test)  // Test round_e.
     BOOST_CHECK_EQUAL(round_e(-d, 1), "-NaN");
 
     d = std::numeric_limits<double>::infinity();
-    BOOST_CHECK_EQUAL(round_e(d, 1), "Inf");
-    BOOST_CHECK_EQUAL(round_e(-d, 1), "-Inf");
+    BOOST_CHECK_EQUAL(round_e(d, 1), "inf");
+    BOOST_CHECK_EQUAL(round_e(-d, 1), "-inf");
   }
 } // BOOST_AUTO_TEST_CASE(round_e_test)
 
@@ -720,7 +720,10 @@ BOOST_AUTO_TEST_CASE(Wimmer_5_1)
    double loss_risk = 0.001; // Expect to fail if only use one digit for rounding sigma.
    int m = round_m(loss_risk, sigma); // Calculate rounding digit, using sigma.
    BOOST_CHECK_EQUAL(m, -9999);
-   // Expect Message: Cannot return a rounding m because loss_risk 0.001 is too small!
+   // Expect Message: 
+   // Uncertain warning in delta: rounding_loss 0.001 is too small for rounded_div_value rounded/unrounded ratio 0.991379,
+   //   threshold is -0.00666462 for gaussian distribution.
+   // Uncertain warning in rounded_div_value: Cannot compute a rounding digit index m because rounding_loss 0.001 is too small!
    loss_risk = 0.1;  // Should be OK.
    m = round_m(loss_risk, sigma); // Calculate rounding digit, using sigma.
    BOOST_CHECK_EQUAL(m, -3);
@@ -1426,6 +1429,82 @@ Build succeeded.
 Time Elapsed 00:00:04.20
 ========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
+
+*/
+
+/*
+Build started...
+1>------ Build started: Project: test_rounding, Configuration: Debug x64 ------
+1>test_rounding.vcxproj -> I:\Cpp\quan\quan_skeleton\x64\Debug\test_rounding.exe
+1>Autorun "I:\Cpp\quan\quan_skeleton\x64\Debug\test_rounding.exe"
+1>Running 18 test cases...
+1>Platform: Win32
+1>Compiler: Microsoft Visual C++ version 14.2
+1>STL     : Dinkumware standard library version 650
+1>Boost   : 1.75.0
+1>Entering test module "Master Test Suite"
+1>I:\boost\libs\quan\test\test_rounding.cpp(85): Entering test case "round_test_0"
+1>Test case round_test_0 did not check any assertions
+1>I:\boost\libs\quan\test\test_rounding.cpp(85): Leaving test case "round_test_0"; testing time: 58us
+1>I:\boost\libs\quan\test\test_rounding.cpp(90): Entering test case "round_test_1"
+1>Round test: I:\boost\libs\quan\test\test_rounding.cpp at "Tue Feb  9 16:49:43 2021", MSVC version 192829812.
+1>I:\boost\libs\quan\test\test_rounding.cpp(90): Leaving test case "round_test_1"; testing time: 85us
+1>I:\boost\libs\quan\test\test_rounding.cpp(118): Entering test case "round_f_test"
+1>EXEC : Uncertain warning : Trying to output zero significant digits!
+1>EXEC : Uncertain warning : Trying to output -1 significant digits!
+1>EXEC : Uncertain warning : Maximum significant digits is 15
+1>EXEC : Uncertain warning : Maximum significant digits is 15
+1>EXEC : Uncertain warning : Maximum significant digits is 15
+1>EXEC : Uncertain warning : Maximum significant digits is 15
+1>EXEC : Uncertain warning : Maximum significant digits is 15
+1>EXEC : Uncertain warning : Maximum significant digits is 15
+1>EXEC : Uncertain warning : Maximum significant digits is 15
+1>I:\boost\libs\quan\test\test_rounding.cpp(118): Leaving test case "round_f_test"; testing time: 1799us
+1>I:\boost\libs\quan\test\test_rounding.cpp(202): Entering test case "round_e_test"
+1>I:\boost\libs\quan\test\test_rounding.cpp(202): Leaving test case "round_e_test"; testing time: 3618us
+1>I:\boost\libs\quan\test\test_rounding.cpp(427): Entering test case "cdf_quantile_test"
+1>I:\boost\libs\quan\test\test_rounding.cpp(427): Leaving test case "cdf_quantile_test"; testing time: 1632us
+1>I:\boost\libs\quan\test\test_rounding.cpp(515): Entering test case "round_ms_test"
+1>I:\boost\libs\quan\test\test_rounding.cpp(515): Leaving test case "round_ms_test"; testing time: 2579us
+1>I:\boost\libs\quan\test\test_rounding.cpp(632): Entering test case "Wimmer_3"
+1>I:\boost\libs\quan\test\test_rounding.cpp(632): Leaving test case "Wimmer_3"; testing time: 104us
+1>I:\boost\libs\quan\test\test_rounding.cpp(648): Entering test case "Wimmer_4"
+1>I:\boost\libs\quan\test\test_rounding.cpp(648): Leaving test case "Wimmer_4"; testing time: 127us
+1>I:\boost\libs\quan\test\test_rounding.cpp(667): Entering test case "Wimmer_5_1"
+1>I:\boost\libs\quan\test\test_rounding.cpp(667): Leaving test case "Wimmer_5_1"; testing time: 342us
+1>I:\boost\libs\quan\test\test_rounding.cpp(707): Entering test case "Wimmer_5_2"
+1>Uncertain warning in delta: rounding_loss 0.001 is too small for rounded_div_value rounded/unrounded ratio 0.991379, threshold is -0.00666462 for gaussian distribution.
+1>Uncertain warning in rounded_div_value: Cannot compute a rounding digit index m because rounding_loss 0.001 is too small!
+1>I:\boost\libs\quan\test\test_rounding.cpp(707): Leaving test case "Wimmer_5_2"; testing time: 193us
+1>I:\boost\libs\quan\test\test_rounding.cpp(743): Entering test case "round_ue_test"
+1>I:\boost\libs\quan\test\test_rounding.cpp(743): Leaving test case "round_ue_test"; testing time: 764us
+1>I:\boost\libs\quan\test\test_rounding.cpp(923): Entering test case "Wimmer_triangular_test"
+1>I:\boost\libs\quan\test\test_rounding.cpp(923): Leaving test case "Wimmer_triangular_test"; testing time: 640us
+1>I:\boost\libs\quan\test\test_rounding.cpp(1035): Entering test case "Wimmer_uniform_test"
+1>Uncertain warning in delta: rounding_loss 0.01 is too small for rounded_div_value rounded/unrounded ratio 0.981226, threshold is 0.99 for uniform distribution.
+1>Uncertain warning in delta: rounding_loss 0.01 is too small for rounded_div_value rounded/unrounded ratio 0.981226, threshold is 0.99 for uniform distribution.
+1>I:\boost\libs\quan\test\test_rounding.cpp(1035): Leaving test case "Wimmer_uniform_test"; testing time: 471us
+1>I:\boost\libs\quan\test\test_rounding.cpp(1097): Entering test case "Sephton_C_rounding_test"
+1>EXEC : Uncertain warning : Trying to display 0 significant decimal digits!
+1>I:\boost\libs\quan\test\test_rounding.cpp(1097): Leaving test case "Sephton_C_rounding_test"; testing time: 317us
+1>I:\boost\libs\quan\test\test_rounding.cpp(1146): Entering test case "round_n_test"
+1>I:\boost\libs\quan\test\test_rounding.cpp(1146): Leaving test case "round_n_test"; testing time: 585us
+1>I:\boost\libs\quan\test\test_rounding.cpp(1210): Entering test case "Wimmer_delta"
+1>I:\boost\libs\quan\test\test_rounding.cpp(1210): Leaving test case "Wimmer_delta"; testing time: 79us
+1>I:\boost\libs\quan\test\test_rounding.cpp(1265): Entering test case "Wimmer_gamma_test"
+1>I:\boost\libs\quan\test\test_rounding.cpp(1265): Leaving test case "Wimmer_gamma_test"; testing time: 66us
+1>I:\boost\libs\quan\test\test_rounding.cpp(1270): Entering test case "round_m_test2"
+1>Uncertain warning in rounded_div_value: Cannot return a rounding m because rounding_loss 0.05 is too small!
+1>Uncertain warning in rounded_div_value: sigma_rounded = 0.02, sigma = 0.0232, rounded_div_value(sigma_rounded, sigma) = 0.862069, gl = 0.90175
+1>Uncertain warning in rounded_div_value: Cannot return a rounding m because rounding_loss 0.05 is too small!
+1>Uncertain warning in rounded_div_value: sigma_rounded = 0.02, sigma = 0.0232, rounded_div_value(sigma_rounded, sigma) = 0.862069, gl = 0.90175
+1>round_m(0.05, 0.0232, 1U) = -9999
+1>
+1>*** No errors detected
+1>I:\boost\libs\quan\test\test_rounding.cpp(1270): Leaving test case "round_m_test2"; testing time: 269us
+1>Leaving test module "Master Test Suite"; testing time: 14821us
+1>Done building project "test_rounding.vcxproj".
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 */
 

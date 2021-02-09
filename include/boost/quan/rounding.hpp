@@ -13,7 +13,7 @@
 
 //   \file rounding.hpp
 
-// Copyright Paul A. Bristow 2009, 2012, 2020.
+// Copyright Paul A. Bristow 2009, 2012, 2021
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -57,9 +57,9 @@
 #include <boost/math/distributions/students_t.hpp>
 // using boost::math::students_t;
 #include <boost/math/distributions/normal.hpp>
+// using boost::math::normal;
 #include <boost/math/distributions/uniform.hpp>
 #include <boost/math/distributions/triangular.hpp>
-// using boost::math::normal;
 //#include "pair_io.hpp"
 // operator<<
 
@@ -97,10 +97,6 @@
 #include <string>
 //using std::string;
 
-#include <fstream>  // for fstream
-//using std::fstream;
-//using std::ofstream;
-
 #include <sstream> // stream
 //using std::ostringstream;
 //using std::string;
@@ -131,7 +127,7 @@ const unsigned int maxdigits10 = std::numeric_limits<double>::max_digits10;
 
 // Explicit specialization for output of a pair of doubles.
 std::ostream& operator<<(std::ostream& os, std::pair<double, double>& p)
-{ /*! Output a pair of `double`s, using < > angle brackets and comma separator, using current stream's precision..
+{ /*! Output a pair of `double`s, using < > angle brackets and comma separator, using current stream's precision.
   \details Explicit specialization for `std::pair` for `double`s.\n
   For example: <97.8725, 157.798>
   \param p Pair of doubles.
@@ -160,6 +156,11 @@ FPT round_sig(FPT v, int n) { /*! \brief Returns v rounded to n significant deci
    (int)(x < 0 ? x - 0.5 : x + 0.5))
    So do we need to do something different for negative doubles?
    The difference between symmetric and asymmetric rounding?
+   \param V Floating-point value to be rounded.
+   \param n number of digificant digits to round to.
+   \returns Binary representation of decimal rounded value.
+
+   \tparam FPT Floating-point type, for example, fundamental float, double, long
   */
   // Will fail if FPT is not a floating-point type (because will not output in scientific format!).
   BOOST_STATIC_ASSERT(boost::is_floating_point<FPT>::value);
@@ -169,16 +170,20 @@ FPT round_sig(FPT v, int n) { /*! \brief Returns v rounded to n significant deci
   using std::ceil;
   using std::floor;
 
-  if (n < 0) { // Probably a program error, so might throw?
+  if (n < 0) 
+  { // Probably a program error, so might throw?
     return 0;
-  } else if (n == 0) { // Might also be an error, but make some sense, so
-    return 0.;
-  } else if (n > std::numeric_limits<FPT>::digits10) { // We might use max_digits10, but only digits10 are guaranteed.
+  } else if (n == 0)
+  { // Might also be an error, but make some sense, so ignore value v and return a zero.
+    return static_cast<FPT>(0);
+  } else if (n > std::numeric_limits<FPT>::digits10)
+  { // We might use max_digits10, but only digits10 are guaranteed.
     n = std::numeric_limits<FPT>::digits10;
     return v; // or just return value as is?
   }
-  if (v == 0) {
-    return 0.;
+  if (v == 0) 
+  {
+    return static_cast<FPT>(0);  //  No rounding needed, or possible, so return a suitable zero.
   }
   FPT l10 = log10(v);
   int l = static_cast<int> (ceil(l10));
@@ -265,7 +270,7 @@ std::string round_e(FPT d, int sigdigits)
   BOOST_STATIC_ASSERT(boost::is_floating_point<FPT>::value);
 
   if (boost::math::isinf(d)) {
-    return (boost::math::signbit(d) ? "-Inf" : "Inf");
+    return (boost::math::signbit(d) ? "-inf" : "inf");
   }
   if (boost::math::isnan(d)) {
     return (boost::math::signbit(d) ? "-NaN" : "NaN");
@@ -278,7 +283,7 @@ std::string round_e(FPT d, int sigdigits)
   //const unsigned int max_digits10 = 2 + std::numeric_limits<FPT>::digits * 3010/10000;
   if (sigdigits >= std::numeric_limits<FPT>::digits10) // C++11 provides std::numeric_limits<double>::max_digits10;
   {
-    sigdigits = std::numeric_limits<FPT>::digits10; // digits10 (15 for double) decimal digits
+    sigdigits = std::numeric_limits<FPT>::digits10; // digits10 (for example: 15 for double) decimal digits.
     // *after* the decimal point, so a total of 16 digits (plus a decimal point).
   }
 
@@ -302,11 +307,12 @@ std::string round_e(FPT d, int sigdigits)
   //assert(s.size() == std::numeric_limits<FPT>::digits10 + 1 + 1 + 5); // == 22 if positive
 
   std::string::iterator is = s.begin(); // 1st most significant digit before decimal point.
-  if ((*is) == '-') { // Skip over minus sign.
-    // Can ignore + case as won't ever be output because default std::ostringstream is std::noshowpos.
+  if ((*is) == '-') 
+  { // Skip over minus sign.
+    // Can ignore unary + case as won't ever be output because default std::ostringstream is std::noshowpos.
     is++;
   }
-  char s1 = *is; // Copy 1st digit before decimal point.
+  char s1 = *is; // 1st digit before decimal point.
   std::string::iterator is1 = is; // Copy 1st digit before decimal point.
   assert((*is1 >= '0') && (*is1 <= '9'));
   is++; // Move to decimal point.
@@ -420,8 +426,8 @@ std::string round_e(FPT d, int sigdigits)
 } // string round_e(FPT d, unsigned int sigdigits)
 
 template<typename FPT>
-std::string round_ms(FPT v, signed int m) {
-  /*!
+std::string round_ms(FPT v, signed int m) 
+{  /*!
   \brief Round floating-point v (not-exponential) to order m.  (m is the index of the roundER digit).
     This is variously called 'common rounding', 'round_5_up'.
     \details Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
@@ -432,9 +438,9 @@ std::string round_ms(FPT v, signed int m) {
 
     \note `m` is the index of the rounder digit, that is the just insignificant digit
     used to decide if the m+1th digit is to be rounded up or left as is.
-    So `m == 0` means that the rounder digit is the units digits, used to round the tens digit,
-    `m == +1` the rounder is the tens digit, and the rounded digit is the hundreds digit
-    `m == -1` rounder is the tenths digit (0.1), rounding the hundredths digit (0.01).
+    So `m == 0` means that the roundER digit is the units digits, used to round the tens digit,
+    `m == +1` the roundER is the tens digit, and the rounded digit is the hundreds digit
+    `m == -1` roundER is the tenths digit (0.1), rounding the hundredths digit (0.01).
 
     (Other authors specify the nth digit to be significant, where n = m + 1).
 
@@ -452,7 +458,7 @@ std::string round_ms(FPT v, signed int m) {
   int is_neg = signbit(v);
   if (isnan(v)) { //! \note that the most significant sign bit of NaN is recognized by using function signbit,
     //! 'sign' of NaNs cannot reliably and portably be tested using "x < 0"
-    //! because all comparisons using NaN are false - by definition.
+    //! because ALL comparisons using NaN are false - by definition.
     return (is_neg) ? "-NaN" : "NaN";
   } else if (isinf(v)) {
     return (is_neg) ? "-inf" : "inf";
@@ -499,15 +505,16 @@ std::string round_ms(FPT v, signed int m) {
   std::string s = ss.str();
 
   std::string::iterator is = s.begin();
-  if ((*is) == '-') { // delete minus sign.
+  if ((*is) == '-') 
+  { // delete minus sign.
     // Can ignore + case as won't ever be output as default std::ostringstream is std::noshowpos.
     // is_neg = true; already noted above using signbit.
     s.erase(is); // is++;
   }
   // std::cout <<'|' << s <<'|' << ' ' << s.size() << std::endl; // For example: |1.797693134862316e+308| 22
   /*
-  MSVC always was 3 exponent digits  (not longer true, now following the C++ standard).
-  Recent  MSVC and GCC and Clang can all now have two or three exponent digits 2021
+  MSVC was always 3 exponent digits  (not longer true, now following the C++ standard).
+  Recent MSVC and GCC and Clang may now have two or three exponent digits 2021
   0.00000000000000000e+00
   1.23456789012345669e+00
   1.23456789012345666e+03
@@ -516,21 +523,7 @@ std::string round_ms(FPT v, signed int m) {
   1.23456789012345671e-200
    */
 
-//#ifdef _MSC_VER
-//  if (s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 5) // exponent sign,
-//  { // for double == 21 (would be 23 if value was negative, but we are only dealing with abs value).
-//    // 1.23000000000000000e+00
-//    outFmtFlags(ss.flags());
-//    std::cout << "\n" << v << ", " << m << ", " << s << ", "
-//            << s.size() << ", " << std::numeric_limits<FPT>::digits10 + 1 + 1 + 5 << std::endl;
-//    // assert(s.size() == std::numeric_limits<FPT>::digits10 + 1 + 1 + 5);
-//    // 1.23, -2, 1.230000000000000e+00, 21, 22
-//    // This happens if type FPT passed is not floating-point (integer?).
-//    return s;
-//  }
-//#endif
-//#ifdef (__GNUC__ ||  _MSC_VER)
-  // Format varies with size of exponent - either two or three digits.
+  // Format varies with size of exponent part that may use either two or three digits: +e99 or +e300.
   if ((s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 4) // e+00
           && (s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 5)) // e+308
   { // for double == 21 (would be 22 if negative).
@@ -539,7 +532,6 @@ std::string round_ms(FPT v, signed int m) {
             << s.size() << ", " << std::numeric_limits<FPT>::digits10 + 1 + 1 + 4 << std::endl;
     return s;
   }
-//#endif
   std::string::iterator is1 = s.begin(); // 1st digit.
   assert(*is1 >= '0');
   assert(*is1 <= '9');
@@ -990,7 +982,7 @@ double delta(double loss_risk, double rounded_div_value, distribution_type distr
       if (x < (std::numeric_limits<double>::min)() * 100.) // Small value allows for approximation uncertainty.
       { // Not possible to have rounding_loss this small!
         threshold = x; // ???
-        std::cout << "Uncertain warning: rounding_loss " << loss_risk << " is too small for rounded_div_value rounded/unrounded ratio " << rounded_div_value << ", threshold is " << threshold << " for gaussian distribution." << std::endl;
+        std::cout << "Uncertain warning in delta: rounding_loss " << loss_risk << " is too small for rounded_div_value rounded/unrounded ratio " << rounded_div_value << ", threshold is " << threshold << " for gaussian distribution." << std::endl;
         // For example:
         // "rounding_loss 0.01 is too small for rounded_div_value rounded/unrounded ratio 0.981226, threshold is 0.99."
         return -1.; // Not sure how to signal the problem here. Throw?
@@ -1004,7 +996,7 @@ double delta(double loss_risk, double rounded_div_value, distribution_type distr
       // Measurement Science Review, Vol 2, section 1, (2002), pages 1 - 7.
       threshold = 1 - loss_risk; // Wimmer equation 17, page 5
       if (rounded_div_value < threshold) {
-        std::cout << "Uncertain warning: rounding_loss " << loss_risk << " is too small for rounded_div_value rounded/unrounded ratio " << rounded_div_value << ", threshold is " << threshold << " for uniform distribution." << std::endl;
+        std::cout << "Uncertain warning in delta: rounding_loss " << loss_risk << " is too small for rounded_div_value rounded/unrounded ratio " << rounded_div_value << ", threshold is " << threshold << " for uniform distribution." << std::endl;
         return -1; // Not sure how to signal the problem here.
       }
       d = sqrt_3 * (rounded_div_value + 2 * loss_risk - 1); // Wimmer equation 20, page 6.
@@ -1014,7 +1006,7 @@ double delta(double loss_risk, double rounded_div_value, distribution_type distr
       // Measurement Science Review, Vol 2, section 1, (2002), pages 21 to 31.
       threshold = (1 - rounded_div_value) / (1 + rounded_div_value);
       if (loss_risk < threshold) {
-        std::cout << "Uncertain warning: rounding_loss " << loss_risk << " is too small for rounded_div_value rounded/unrounded ratio " << rounded_div_value << ", threshold is " << threshold << " for triangular distribution." << std::endl;
+        std::cout << "Uncertain warning in delta: rounding_loss " << loss_risk << " is too small for rounded_div_value rounded/unrounded ratio " << rounded_div_value << ", threshold is " << threshold << " for triangular distribution." << std::endl;
         return -1; // Not sure how to signal the problem here.
       }
       // d = sqrt(6 * (rounding_loss - ((1 - rounded_div_value) /(1 + rounded_div_value)))); // Wimmer equation 18, page 27.
@@ -1069,6 +1061,11 @@ int round_m(double rounding_loss = 0.01, double sigma = 0., unsigned int sigma_s
     `m == 0` means use the units digit for rounding the tens digit.
   */
 
+  if (sigma <= (std::numeric_limits<float>::min)())
+  {
+    std::cout << "round_m sigma = " << sigma << ", sigma_sigdigits = " << sigma_sigdigits << " must be >= 1! " << std::endl;
+    return -9999;
+  }
   if (sigma_sigdigits <= 0)
   { // sigma_sigdigits is too small to be plausible from the confidence interval of uncertainty.
      std::cout << "round_m sigma = " << sigma << ", sigma_sigdigits = " << sigma_sigdigits << " must be >= 1! " << std::endl;
@@ -1143,8 +1140,8 @@ int round_m(double rounding_loss = 0.01, double sigma = 0., unsigned int sigma_s
   }
   if (gl >= g)
   { // Example: Cannot return a rounding m because chosen rounding_loss 0.05 is too small!
-    std::cout << "Uncertain warning: Cannot return a rounding m because rounding_loss " << e << " is too small!" << std::endl;
-    std::cout << "Uncertain warning: " 
+    std::cout << "Uncertain warning in rounded_div_value: Cannot return a rounding m because rounding_loss " << e << " is too small!" << std::endl;
+    std::cout << "Uncertain warning in rounded_div_value: " 
       "sigma_rounded = " << sigma_rounded  << ", sigma = " << sigma
       << ", rounded_div_value(sigma_rounded, sigma) = " << g << ", gl = " << gl << std::endl;
     // Example from Wimmer and test_rounding.
@@ -1157,7 +1154,7 @@ int round_m(double rounding_loss = 0.01, double sigma = 0., unsigned int sigma_s
 
   double d = delta(rounding_loss, g, distrib);
   if (d < 0.) { // Chosen rounding_loss is too small! (for example, e = 0.01 loss is too demanding, so try 0.02).
-    std::cout << "Uncertain warning: Cannot compute a rounding digit index m because rounding_loss " << rounding_loss << " is too small!" << std::endl;
+    std::cout << "Uncertain warning in rounded_div_value: Cannot compute a rounding digit index m because rounding_loss " << rounding_loss << " is too small!" << std::endl;
     return -9999; // or throw.
   }
   d = d * sigma_rounded / (5 * g); // Wimmer equation 12, page 1661.
@@ -1167,8 +1164,9 @@ int round_m(double rounding_loss = 0.01, double sigma = 0., unsigned int sigma_s
   // m == 0 means use the units digit for rounding the tens digit, m = 1 means using the tens digit for rounding the hundreds digit ...
 } // int round_m(double rounding_loss, double sigma, unsigned int sigdigits)
 
-std::string round_ue(double v, double sigma, double loss_risk = 0.01, unsigned int sigdigits = 2U) { 
-  /*! \brief Properly round value to a decimal-digit as `std::string`.
+std::string round_ue(double v, double sigma, double loss_risk = 0.01, unsigned int sigdigits = 2U) 
+{ 
+  /*! \brief Properly round value to a decimal-digit `std::string`.
   \details Measurement Science and Technolology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X.\n
     Gejza Wimmer, Viktor Witkovsky, Tomas Duby,
     Proper rounding of the measurement results under normality assumptions.
@@ -1179,8 +1177,15 @@ std::string round_ue(double v, double sigma, double loss_risk = 0.01, unsigned i
     \param rounding_loss Fraction of loss of accuracy from rounding permitted (default 1%).
     \param sigdigits Number of digits that are significant (default 2).
 
-    \return Decimal digit @c std::string containing properly rounded value.
+    \return Decimal digit @c std::string containing properly rounded value as decimal-digits.
   */
+  if (sigma <= 0)
+  {
+    std::ostringstream oss;
+ //   oss << std::setprecision(std::numeric_limits<double>::digits10) << v;  // 
+    oss << std::setprecision(sigdigits) << v;  // 
+    return oss.str();
+  } 
   //int round_m(double rounding_loss, double unc, unsigned int sigdigits, distribution_type t);
   int m = round_m(loss_risk, sigma, sigdigits, gaussian);
   std::string r = round_ms(v, m);
@@ -1334,7 +1339,8 @@ double cdf_tri(double z) { /*! Cumulative Distribution Function (CDF) of Triangu
   }
 } // double cdf_tri(double z)
 
-double quantile_tri(double alpha) { /*! Quantile or Inverse of cumulative distribution function CDF of triangular distribution.
+double quantile_tri(double alpha) 
+{  /*! Quantile or Inverse of cumulative distribution function CDF of triangular distribution.
   Gejza Wimmer, Viktor Witkovsky, Tomas Duby,
   Proper rounding of the measurement result under the assumption of triangular distribution,
   Measurement Science Review, Vol 2, section 1, (2002), page 24, equation 8.
@@ -1395,27 +1401,33 @@ void out_value_limits(double mean, double unc, std::pair<double, double> ci, int
   os.precision(osp); // Restore saved.
 } // void out_value_limits
 
-void out_value_df_limits(double mean, double unc, int degfree = 1, std::ostream& os = std::cout)
+void out_value_df_limits(double mean, double sigma, int degfree = 1, std::ostream& os = std::cout)
 { /*! Output mean, uncertainty and confidence interval.
   For example: \verbatim  128. +/- 15 \<99.5, 156.5\>  \endverbatim
     \param mean Mean or central estimate of value.
-    \param unc Uncertainty estimate as standard deviation.
+    \param sigma Uncertainty estimate as standard deviation.
     \param degfree Number of degrees of freedom.
     \param os `std::ostream` for output.
   */
+  if (sigma <= 0)
+  {
+    std::ostringstream oss;
+    oss << std::setprecision(std::numeric_limits<double>::digits10) << mean; // Binary rounded to all guaranteed digits (usually 15 for double).
+    os << " +/-0 <" << oss.str() << ">"; 
+    return;
+  }
   std::streamsize osp = os.precision(); // Save to restore.
 
-  int round_m(double loss_risk, double unc, unsigned int sigdigits, distribution_type t);
-  // int round_m(double rounding_loss = 0.01, double unc = 0., unsigned int uncsigdigits = 2U, distribution_type distrib = gaussian)
+  // int round_m(double rounding_loss = 0.01, double sigma = 0., unsigned int uncsigdigits = 2U, distribution_type distrib = gaussian)
 
   double loss_risk = 0.01; 
-  int m = round_m(loss_risk, unc, 2U, gaussian);
+  int m = round_m(loss_risk, sigma, 2U, gaussian);
 
   std::pair<double, double> ci;
-  ci = conf_interval(mean, unc, degfree);
+  ci = conf_interval(mean, sigma, degfree);
 
   os.precision(2); // Uncertainty always rounded to 2 decimal digits.
-  double unc_rounded = round_sig(unc, 2); // Round to 2 significant digit - ISO rules.
+  double unc_rounded = round_sig(sigma, 2); // Round to 2 significant digit - ISO rules.
   // TODO increase here if noisydigit wanted,
   // and/or if degrees of freedom > 100.
   os << round_ms(mean, m) << " +/- " << unc_rounded;
