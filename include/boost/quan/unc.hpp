@@ -1498,7 +1498,7 @@ public:
 
     if(isConfidenceInterval)
     { // Want to append confidence interval as <1.23, 2.34>.
-      if (boost::math::isfinite(mean) && boost::math::isfinite(uncertainty) && degFree > 0)
+      if (boost::math::isfinite(mean) && boost::math::isfinite(uncertainty) && degFree >= 0)
       { // degfree 1 means 2 observations, so possible to compute confidence limits or interval in < > angle brackets.
        // std::streamsize osprec = os.precision(); // Save precision. TODO but don't seem to restore?
        // oss.precision(3); //
@@ -1532,13 +1532,13 @@ public:
          oss << " (?)";
       }
       else if (degFree == 0u)
-      {
-         oss << " (0?)";
+      { // Might show that this is implied by default? with oss << (" (0?)" ? 
+         oss << " (0)";
 
       }
       else
       {
-        oss << " (" << degFree << ")";
+        oss << " (" << degFree << ")"; // " (99)"
       }
 
     }

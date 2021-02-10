@@ -60,3 +60,32 @@ int main()
 
   URealCorr u(1.23, 0.45); = 1.2 +/-0.45 <0.3500, 2.1100> (1)
 */
+
+
+/*
+Rebuild started...
+1>------ Rebuild All started: Project: quan_simple, Configuration: Debug x64 ------
+1>quan_simple.cpp
+1>quan_simple.vcxproj -> I:\Cpp\quan\quan_skeleton\x64\Debug\quan_simple.exe
+1>Autorun "I:\Cpp\quan\quan_skeleton\x64\Debug\quan_simple.exe"
+1>
+1>Program: I:\boost\libs\quan\example\quan_simple.cpp
+1>Wed Feb 10 12:01:46 2021
+1>BuildInfo:
+1>  Platform Win32
+1>  Compiler Microsoft Visual C++ version 14.2
+1>  MSVC version 192829812.
+1>  STL Dinkumware standard library version 650
+1>  Boost version 1.75.0
+1>
+1>URealCorr u(1.23, 0.45); = 1.2 +/-0.45 <0.35, 2.11> (0)
+========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
+
+Projects build report:
+  Status    | Project [Config|platform]
+ -----------|---------------------------------------------------------------------------------------------------
+  Succeeded | ..\quan_simple\quan_simple.vcxproj [Debug|x64]
+
+Build time 00:00:02.809
+Build ended at 10Feb2021 12:40:04
+*/
