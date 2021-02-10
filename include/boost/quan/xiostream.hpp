@@ -16,9 +16,6 @@
 #define XIOSTREAM_HPP
 
 #include <iostream>
-// TODO replace with Boost versions.
-//#include <cfloat>  // for <float.h> for _isnan, _finite, _fpclass & values.
-
 //using std::ios_base;
 //using std::ostream;
 //using std::istream;

@@ -62,16 +62,6 @@ and C++ include files are in folder:
 
 //#define BOOST_QUAN_DIAGNOSTICS
 
-//#ifdef _MSC_VER
-//#  pragma once
-//#  pragma warning (disable : 4127) // conditional expression is constant.
-//#  pragma warning (disable : 4800)// forcing value to bool 'true' or 'false' (performance warning).
-//#  pragma warning (disable : 4189) // local variable is initialized but not referenced.
-//// Could use no_unused_variable_warning(x);
-////template<class T> // Avoid MSVC warning "C4189 variable initialised but not used".
-////inline void no_unused_variable_warning(const T&) {}
-//#endif//  _MSC_VER
-
 #include <boost/math/special_functions/fpclassify.hpp>
   //using boost::math::isnan;
   //using boost::math::isinf;
@@ -134,13 +124,12 @@ and C++ include files are in folder:
 
 #include <boost/quan/unc_init.hpp> // Defines indexes to xalloc iword(index) variables.
 #include <boost/quan/rounding.hpp> // Rounding functions.
+
 #include <boost/lexical_cast.hpp>
 
 #include <boost/static_assert.hpp>
 BOOST_STATIC_ASSERT (std::numeric_limits<double>::is_iec559); // Assume IEEE 754 ONLY.
-// == _STATIC_ASSERT (numeric_limits<double>::is_iec559); // and MS STATIC assert.
-
-#include <boost/io/ios_state.hpp>
+#include <boost/io/ios_state.hpp>  // IO state saver.
 #include <boost/units/io.hpp>
 #include <boost/units/static_rational.hpp>
 #include <boost/type_traits.hpp>
@@ -156,7 +145,6 @@ template <bool is_correlated> // Default is uncertainties that are NOT correlate
 class unc;
 
 // Two actual uncertain floating-point types for the user:
-
 typedef unc<false> uncun;  //! Uncertainties are NOT correlated.
 //! Uncorrelated is the normal case when uncertainties add.
 
@@ -167,14 +155,6 @@ typedef unc<true> unccorr;   //! Uncertainties ARE correlated.
 //! So if both have an uncertainties, they must cancel when the uncertainties are added.
 //! Also applies to items like concentrations which must add up to 100% or unity.
 
-// Obselete - now implemented directly as operator <<
-//void unc_output(double value, // Mean or most likely value.
-//                    float stdDev, // Standard deviation.
-//                    unsigned short int degFree, // Degrees of freedom.
-//                    unsigned short int uncTypes, // 16 Uncertain type flags.
-//                    ostream& os);  // Output stream, default std::cout.
-
-
 void unc_input(double& mean,  // mean (central or most probable) value.
                    double& stdDev,
                    unsigned short int& degreesOfFreedom,  // 1 observation.
@@ -183,7 +163,7 @@ void unc_input(double& mean,  // mean (central or most probable) value.
 // Implemented in unc_input.ipp
 
 //template<typename correlated> std::ostream& operator<< (std::ostream& os, const unc<false>& u);
-//template<typename correlated> std::ostream& operator<< (std::ostream& os, const unc<false>& u);
+// 
 // Need to declare so that can make a friend (in unc), and thus access private data value_ etc.
 // See http://www.parashift.com/c++-faq-lite/templates.html#faq-35.16
 // This avoids failure to instantiate these operators, and thus link failures.
@@ -191,8 +171,8 @@ void unc_input(double& mean,  // mean (central or most probable) value.
 // template<typename correlated> std::istream& operator>> (std::istream& is, const unc<false>& u);
 // friend istream& operator>> (istream& is, UReal<correlated>& u)
 
-template <typename Type> inline Type sqr(const Type& a);
-template <typename Type> inline Type cube(const Type& a);
+///template <typename Type> inline Type sqr(const Type& a);
+//template <typename Type> inline Type cube(const Type& a);
 template <typename Type> inline Type pow4(const Type& a);
 
 // These should be defined elsewhere, but will not compile.
@@ -2005,7 +1985,6 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
      || (l.value_ + l.uncertainty_ + l.uncertainty_ < r.value_ - r.uncertainty_ - r.uncertainty_)); // <
   } // bool equalU2
 
-
 }; // class unc<is_correlated>
 
 template <bool correlated>
@@ -2021,7 +2000,7 @@ std::ostream& operator<< (std::ostream& os, const std::pair< unc<correlated>, un
 // unc<false> version is not normally needed.
 
 //! Two helper functions to provide values and uncertainties as pairs.
-//! \note Names value_of and plural valueS_of.
+//! \note Names: value_of (single value) and plural valueS_of (pair).
 
 /*! Allow value part of variables of class unc to be assigned to, and compared with double.
 \tparam T Built-in floating-point type, float, double or long double, or uncertain type unc.
@@ -2061,17 +2040,8 @@ std::pair<double, double> values_of(std::pair<T, T> up)
   std::pair<double, double> minmax = std::make_pair(up.first.value(), up.second.value());
   return minmax;
 }
-*/// Global Predicates compare LessThan or operator< now static member functions.
-// was bool lessUnc(const unc<false>& a, const unc<false>& b);
-//  Now Obselete as should be able to use std::abs anywhere.
-//namespace std
-//{ // Fudge until MSVC becomes compliant.
-//  template<typename Type> inline
-//    Type abs(const Type& a)
-//  { // Should be std::abs but is NOT in cstdlib - only provides global ::abs.
-//    return Type((a < Type(0)) ? -a : a);
-//  }
-//} // namespace std
+*/
+
 
 // Predicate compare operators for use by sort etc.
 // Functors are _preferred_ to functions for STL algorithms.

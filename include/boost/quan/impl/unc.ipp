@@ -701,22 +701,6 @@ std::istream& operator>> (std::istream& is, const setUncSigDigits& usf)
   return is;
 }
 
-// These all fail to link when placed here???? So left in unc.hpp until understand why.
-
-//! Squared function, notationally convenient for a^2, but overflow possible?
-//template <typename Type>
-//inline Type sqr(const Type& a)
-//{
-//  return a * a;
-//}
-
-//! Cubed function, notationally convenient for x^3, but overflow possible?
-//template <typename Type>
-//inline Type cube(const Type& a)
-//{
-//  return a * a * a;
-//}
-
 ////! Quaded function, notationally convenient for x^4, but overflow possible?
 ////! Used by Welch-Satterthwaite formula.
 //template <typename Type>
@@ -724,17 +708,6 @@ std::istream& operator>> (std::istream& is, const setUncSigDigits& usf)
 //{
 //  return a * a * a * a;
 //}
-/*! Hypot or Square root of the sum of the squares of two numbers,
-   which is equal to the length of the hypotenuse of a right
-   triangle if the two arguments are the lengths of the legs.
-   Used for uncertainty propagation.
-*/
-//template <typename Type>
-//inline Type sqrtSumSqrs (const Type& a, const Type& b)
-//{
-//  return (Type)sqrt(a * a + b * b);
-//}
-//
 
 // Definitions for explicit instantiation for double uncun, mMeas.
 // Definitions must only be in .cpp if unc.hpp included more than once
