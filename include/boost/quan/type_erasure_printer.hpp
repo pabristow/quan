@@ -108,15 +108,15 @@ struct ostreamable<Os, std::pair<T1, T2> >
 /*! An abstract sequence printer - a 'template' that is inherited
  to implement the examples of actual printers defined below.
  */
- 
+
 template< class CharT = char, class Traits = std::char_traits<char> >
 class abstract_printer
 {
 public:
-    //! \tparam Range must be a Forward Range whose elements can be printed to `ostream os`.
+    //! \tparam Range must be a Forward Range whose elements can be printed to @c std::ostream os.
     //! \param r Container to be printed, for example, a C array, std::vector, std::list ...
-    //! \param os  `std::ostream` for printing, for example std::cout.
- 
+    //! \param os  @c std::ostream for printing, default, for example: std::cout.
+
     template<class Range, class CharT, class Traits>
     void print(const Range& r, std::basic_ostream<CharT, Traits>& os = std::cout) const
     {
@@ -144,8 +144,12 @@ protected:
 
     // Use type_erasure::any to enforce the requirements onto ostream and iterator.
     typedef boost::type_erasure::any<requirements, _os&> ostream_type;
+public:
+    // and iterator.
     typedef boost::type_erasure::any<requirements, _iter> iterator_type;
-    // Declare the pure virtual function `do_print` that is defined in all real printers.
+
+protected:
+    //! Declare the pure virtual function @c do_print that is defined in all real printers.
     virtual void do_print(iterator_type first, iterator_type last, ostream_type os) const = 0;
 }; // class abstract_printer
 
@@ -158,11 +162,11 @@ protected:
  Output:\n
  1, 2, 3,\n
  4, 5, 6,\n
- 7, 8, 9,\n 
+ 7, 8, 9,\n
  10, 11, 12\n
- The order of parameters is chosen to try to allow use of the defaults as much as possible, 
+ The order of parameters is chosen to try to allow use of the defaults as much as possible,
  including all defaults placing all items on one line or row separated by spaces.
- 
+
   \param num_columns number of columns (default 0, so all items are on the same line or row).
   \param width ostream width to use to each items (default 0 so that columns may be jagged).
   \param pre string to be output before the first column,

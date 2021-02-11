@@ -17,9 +17,10 @@
 
     1. Use many enough digits to avoid unintended loss of information.
     2. Use few enough digits to be reasonably convenient.
-    3. For other claculations, keep a potentially significant digits (std::numeric_limits<>::max_digits10), 17 for double.
+    3. For other calculations, keep a potentially significant digits (std::numeric_limits<>::max_digits10), 17 for double.
 
   \mainpage
+
   \n
   \b Boost.Quan
 
@@ -134,11 +135,8 @@ BOOST_STATIC_ASSERT (std::numeric_limits<double>::is_iec559); // Assume IEEE 754
 #include <boost/units/static_rational.hpp>
 #include <boost/type_traits.hpp>
 
-void outIosFlags(long, std::ostream&); // Output ios flags.
-void outUncTypes(unsigned short int, std::ostream&);
-
-//namespace boost {
-//namespace units {
+void outIosFlags(long, std::ostream&); // Output std::ios flags.
+void outUncTypes(unsigned short int, std::ostream&); // Output
 
 // Forward declarations.
 template <bool is_correlated> // Default is uncertainties that are NOT correlated (the normal case).
@@ -162,20 +160,9 @@ void unc_input(double& mean,  // mean (central or most probable) value.
                    std::istream& is);
 // Implemented in unc_input.ipp
 
-//template<typename correlated> std::ostream& operator<< (std::ostream& os, const unc<false>& u);
-// 
-// Need to declare so that can make a friend (in unc), and thus access private data value_ etc.
-// See http://www.parashift.com/c++-faq-lite/templates.html#faq-35.16
-// This avoids failure to instantiate these operators, and thus link failures.
-// May need for input operator>> too.
-// template<typename correlated> std::istream& operator>> (std::istream& is, const unc<false>& u);
-// friend istream& operator>> (istream& is, UReal<correlated>& u)
 
-///template <typename Type> inline Type sqr(const Type& a);
-//template <typename Type> inline Type cube(const Type& a);
-template <typename Type> inline Type pow4(const Type& a);
+// template <typename Type> inline Type pow4(const Type& a);
 
-// These should be defined elsewhere, but will not compile.
 //! Quaded function, notationally convenient for x^4, but overflow possible?
 //! Used by Welch-Satterthwaite formula.
 template <typename Type>
@@ -184,12 +171,7 @@ inline Type pow4(const Type& a)
   return (Type)(a * a * a * a);
 }
 
-template <typename Type> inline Type sqrtSumSqrs (const Type& a, const Type& b);
-template <typename Type>
-inline Type sqrtSumSqrs (const Type& a, const Type& b)
-{
-  return (Type)sqrt(a * a + b * b);
-}
+
 
 // SI units from CRC Handbook of Chemistry & Physics 76th edition 1995,
 // ISBN 08493 0476-8 page 1-22.
@@ -280,7 +262,7 @@ enum uncertainflags
   //! power10 in range -max to +max.
   autoScaled = 1 << 2,  //!< bit 2: auto = 1  with << autoscale ...
   plusMinus = 1 << 3, /*!< bit 3 = 1 means add +/- uncertainty
-  Usage: `std::cout << plusminus << u;`
+  Usage: \code std::cout << plusminus << u; \endcode
   */
   addSISymbol = 1 << 4,  //!< bit 4 = 1, add suffix SI symbol G, M, k, m, u, n, p ...
   //! If one is applicable, else = 0 do nothing.
@@ -583,12 +565,9 @@ public:
 
   // using char_traits<char>::int_type; // Derivation from public \c std::char_traits<char> needed for \c int_type.
 
-//#pragma warning (disable : 4520) //!< 'unc<1>' : multiple default constructors specified.
-  // This is by design so that it is possible construct from integer or double.
-  // Doubtful if this is necessary or useful?  TODO causes trouble with Doxygen docs.
 public:
   /*! \note It is convenient to use 64-bit floating-point value
-     (so even really accurate values like weights are OK),
+     (so even really accurate values like weights can be precise enough),
      32-bit floating-point is ample accuracy for standard deviation fractional variation,
      leaving two 16-bit for degrees of freedom and other flags,
      so that total is same as two doubles & can be efficiently aligned.
@@ -619,8 +598,8 @@ public:
   //! \note These sizes mean that total size of a unc is 64 = 32 + 32 = 128 bits
   // for IEEE-754 systems with 64-bit double.
 public:
-  // Member functions to get & value, stdDev, degfree & uncTypes.
-  //! \return Central estimate of value of uncertain type.
+  // Member functions to get mean value, stdDev, degfree & uncTypes.
+  //! \return Central 'best' estimate of value of uncertain type.
   double value()
   {
     return value_;
@@ -641,7 +620,7 @@ public:
     return unctypes_;
   }
 
-  // Set functions.
+  // Set member functions.
   //! \param  value Central estimate of value of uncertain type.
   void value (double value)
   {
@@ -671,7 +650,7 @@ public:
     }
   } // void std_dev (float unc)
 
-  //! \param df Number of degrees of degrees of freedom, usually = number of observations -1.
+  //! \param df Number of degrees of degrees of freedom, usually = number of observations -1, so = means just one observation.
   void deg_free (short unsigned int df)
   {
     degFree_ = df;
@@ -688,7 +667,7 @@ public:
   void types (short unsigned int type)
   {
     unctypes_ &= ~type;
-  }  // Clear type flag(s).
+  }  // Clear all type flag(s).
 
   // Constructors.
 
@@ -778,11 +757,8 @@ public:
     } // unc finite check
   };  // unc constructor from double.
 
-  // A specific constructor from int (as well as double) leads to this warning.
-  // #pragma warning (disable : 4520) //!< 'unc<1>' : multiple default constructors specified.
-
   //!< unc Constructor from integer value.
-  unc(
+  explicit unc(
     const int ivalue = 0, // Default value integer zero.
     const float unc = 0.0f,  // Exact.
     const short unsigned int df = 0,  // means n observations - 1 = 0.
@@ -806,9 +782,6 @@ public:
     degFree_(ud.degFree_), unctypes_(ud.unctypes_)
   {  // Just copy all 4 member data.
   } // Constructor from unc.
-
-  //! Destructors. Two versions defined in unc.ipp to provide diagnostic output.
- // ~unc();  // Declaration, .
 
    // Unary operators + and -.
   // No change to degrees of freedom or unc_types.
@@ -1339,7 +1312,7 @@ public:
         else
         { // Non-zero uncertainty, sd != 0.
           if (isfinite(uncertainty))
-          { 
+          {
             int m = std::numeric_limits<double>::digits10; // Effectively no rounding?
             if (uncertainty > 0.F)
             { // Rounding is appropriate.
@@ -1371,7 +1344,7 @@ public:
               // Need to round but and not display exp as "e+009"  TODO.
             }
           }
-          else 
+          else
           { // Uncertainty NAN or infinite, so show all possibly significant digits.
             oss << std::showpoint << std::setprecision(max_digits10) << mean;
           }
@@ -1423,7 +1396,7 @@ public:
             { // degFree in common range 1 to 10.
               // Choose between 1 and 2 digits based on 1st digit of uncertainty.
               // Would be too big a step if most significant digit was 1 or 2.
-              // std::ostringstream oss; ?? 
+              // std::ostringstream oss; ??
               oss << std::scientific << std::setprecision (1) << uncertainty; // Assume sd positive.
               if(oss.str()[0] == '1') // Check 1st digit before decimal point.
               { // Would be too big a step if most significant digit was 1 or 2.
@@ -1512,7 +1485,7 @@ public:
          oss << " (?)";
       }
       else if (degFree == 0u)
-      { // Might show that this is implied by default? with oss << (" (0?)" ? 
+      { // Might show that this is implied by default? with oss << (" (0?)" ?
          oss << " (0)";
 
       }
@@ -1907,7 +1880,7 @@ public:
   //! \param l Uncertain value.
   //! \param r Uncertain value.
   //! \returns true if l is effectively less than r.
-  //! 
+  //!
 static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
   { // less using Comparison criterion including ONE standard deviation.
     // (Comparison is possibly different for correlated case but not implemented yet).
@@ -2027,22 +2000,6 @@ std::pair<double, double> uncs_of(std::pair<T, T>);
 template <class T1, class T2> //! \tparam T Built-in floating-point type, float, double, long double or unc or Meas.
 std::pair<double, double> uncs_of(std::pair<T1, T2>);
 
-/* already defined.
-template <class T> //! \tparam T Builtin-floating point type or unc.
-std::pair<double, double> values_of(std::pair<T, T> up)
-{ //! \return values (parts) as a pair of doubles.
-  //! \note so can write
-  //!   @c std::pair<const double, double> minmax = value_of(*result.first); // x min & max
-  //!   whether T is double or unc, or ...
-
-  double vp1 = up.first.value();
-  double vp2 = up.second.value();
-  std::pair<double, double> minmax = std::make_pair(up.first.value(), up.second.value());
-  return minmax;
-}
-*/
-
-
 // Predicate compare operators for use by sort etc.
 // Functors are _preferred_ to functions for STL algorithms.
 // Scott Meyers, ESTL, item 46, page 201..
@@ -2081,8 +2038,8 @@ autoprefix_norm(const unc<false> & arg)
 
 // Destructor Definitions need to go into unc.ipp, not unc.hpp
 // or will fail to link because two versions.
-
 #include <boost/quan/impl/unc.ipp>  // Definitions.
+
 #include <boost/quan/impl/unc_input.ipp>  // Definitions.
 // #include <boost/quan/impl/unc_output.ipp>  // Definitions.
 

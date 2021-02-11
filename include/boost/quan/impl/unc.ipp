@@ -4,7 +4,7 @@
   \details Class for simple Propagation of Uncertainties
      according to a pure Gaussian model.
      Uncertain subroutines, manipulators & applicators.
-     but not <iomanip> because defined here (as a copy of code in Std iomanip).  <<<<<<<<<< TODO
+     but not \<iomanip\> because defined here (as a copy of code in Std iomanip). TODO
 */
 
 // Copyright Paul A. Bristow 1998, 2012, 2021
@@ -16,8 +16,8 @@
 
 // unc.ipp
 
-//#ifndef UNC_IPP
-//#define UNC_IPP
+#ifndef UNC_IPP
+#define UNC_IPP
 
 #include <boost/quan/unc.hpp> // Declarations of uncertain items.
 
@@ -25,11 +25,11 @@
 //using std::ostream;
 
 //! 'Unique' value used to check xalloc initialised iwords are OK, and are not corrupted.
-const long indexID = 0x48dbaf8;  //! Random id value.
+static const long indexID = 0x48dbaf8;  //! Random id value.
 
 /*!
-  \brief Set 16 default values for uncertain output flags.
-  Might be best to make setUncDefaults also set ios_base defaults
+  \brief Set 16 default flag bit values for uncertain output flags.
+  Might be best to make setUncDefaults also set std::ios_base defaults
   with void setiosDefaults(ostream&);\n
   Usage: \code setUncDefaults(cout); \endcode
   \warning  @c setUncDefaults() MUST be called before using a stream.
@@ -77,9 +77,9 @@ void setUncDefaults(std::ios_base& os)
   }
 } // void setUncDefaults(std::ios_base& stream)
 
-/*! Output ALL the os.word() values to the ostream log.
-  \param os Current stream to be displayed in log.
-  \param logstream for log.
+/*! Output ALL the @c os.word() values to the @c std::ostream log file, for example: setSigdigits, uncFlags, uncSigDigits.
+  \param os Current @c std::ostream to be displayed in log.
+  \param log @c std::ostream for log.
 */
 void outUncValues(std::ostream& os, std::ostream& log)
 { // Output ALL the os.word() values to the ostream log.
@@ -108,7 +108,7 @@ void outUncValues(std::ostream& os, std::ostream& log)
     << std::endl;// = indexID;  // last .iword(16) as check.
 } // void outUncValues()
 
-//! Description as a word of each bit in unc type, using enum unc_types.
+//! Description as a word of each bit in @c unc_type, using enum unc_types.
 const char* uncTypeWords[16] =
 {
     "zero", //!< 0 VALUE_ZERO value is zero.
@@ -134,7 +134,7 @@ const char* uncTypeWords[16] =
 /*! Output word description for each `unc_type` bit.\n
   Usage:  outUncTypes(unc.getUncTypes(), cerr); // logs to cerr.
   \param uncTypes uncertain types as a short int.
-  \param os ostream for output, default = cerr
+  \param os @c std::ostream for output, default = cerr
 */
 void outUncTypes(unsigned short int uncTypes, std::ostream& os = std::cerr)
 {// Usage:  outUncTypes(unc.getUncTypes(), cerr); // logs to cerr.
@@ -160,9 +160,9 @@ showUncTypes::showUncTypes(unsigned short int t) : types(t)
 }
 
 /*!
-  \nUsage: `out << showUncTypes(uncType)`
+  Usage: \code out << showUncTypes(uncType) \endcode
   \param ut Uncertain type flags.
-  \param std::ostream for output of types as words.
+  \param os @c std::ostream for output of types as words, for example: integer, zero, df_exact.
 */
 std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Define.
 {
@@ -181,10 +181,10 @@ std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Define.
   return os;
 } // ostream& operator<< (ostream& os, const showUncTypes& ut)
 
-/*! Show all the std io stream flags settings as words.\n
+/*! Show all the @c std::ios stream flags settings as words, for example: true, dec, right.\n
   Usage:   \code outIosFlags(cout.flags(), cerr); // logs cout's flag to cerr. \endcode
   \param flags Iostream flags.
-  \param os Ostream for output.
+  \param os @c std::ostream for output, default @c std::cerr
   */
 void outIosFlags(long flags, std::ostream& os = std::cerr)
 { // Show all the std io stream flags settings as words.
@@ -224,7 +224,7 @@ void outIosFlags(long flags, std::ostream& os = std::cerr)
   os << ".";
 }  // out ios_base::flags(long flags, ostream&)
 
-/*! Show the set uncertain class io stream flags settings as words.
+/*! Show the set uncertain class io stream flags settings as words, for examples: add_/-, set_scaled, addlimits .
   \param uncFlags Output flags to be displayed as words.
   \param os Ostream for output.
   Usage:   \code outUncFlags(cout.flags(), cerr); // logs cout's flag to cerr. long& uncFlags = os.iword(uncFlagsIndex); \endcode
@@ -243,7 +243,6 @@ void outUncFlags(long uncFlags, std::ostream& os = std::cerr)
   if (uncFlags & useSetSigDigits) os << " set_sigDigits";
   if (uncFlags & useSetUncSigDigits) os << " set_uncsigDigits";
   if (uncFlags & degfree) os << " adddegfree";
-
   os << '.';
 } //
 
@@ -701,13 +700,6 @@ std::istream& operator>> (std::istream& is, const setUncSigDigits& usf)
   return is;
 }
 
-////! Quaded function, notationally convenient for x^4, but overflow possible?
-////! Used by Welch-Satterthwaite formula.
-//template <typename Type>
-//inline Type pow4(const Type& a)
-//{
-//  return a * a * a * a;
-//}
 
 // Definitions for explicit instantiation for double uncun, mMeas.
 // Definitions must only be in .cpp if unc.hpp included more than once
@@ -845,4 +837,4 @@ const std::pair<float, float> uncs_of(std::pair<const T, T> vp)
 //  }
 //#endif
 //}  // Destructor
-//#endif // UNC_IPP
+#endif // UNC_IPP

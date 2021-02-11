@@ -1,4 +1,4 @@
-/*! \file unc_print.cpp
+/*! \file
   \brief Output of uncertain values.
   \details Definitions of unc_input declarations in unc.hpp.\n
     Outline:
@@ -20,9 +20,11 @@
     Output degrees of freedom, if required.
 
     Record width used etc.
-*/
 
-// Copyright Paul A. Bristow 2009, 2012.
+*/
+//    unc_output.ipp
+
+// Copyright Paul A. Bristow 2009, 2012, 2021.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -59,9 +61,8 @@
   \param stdDev Uncertainty estimate as standard deviation.
   \param degFree Degrees of freedom -1. (Default zero for 1 observation).
   \param uncTypes 16 Uncertain type flags about the value.
-  \param os Output stream, default is to `std::ostream`.
-  \exception Throws `std::bad_alloc()` if 'os::iword' has not been initialised correctly,
-  or has been corrupted.
+  \param os Output stream, default is to @c std::cout.
+  \exception Throws @c std::bad_alloc() if @c os::iword has not been initialised correctly, or has been corrupted.
 */
 void unc_output(double value, // Mean or most likely value.
                 float stdDev, // Standard deviation (uncertainty).
@@ -127,7 +128,7 @@ void unc_output(double value, // Mean or most likely value.
   long& setScale = os.iword(setScaleIndex); // Scale factor, stored by `<< setScale(6)`
   // Only actually scale multiple, if also request to set scale with `out << setscale ...`
 
-  // bools showing output requirements specified using unc additional ostream manipulators.
+  // bools showing output requirements specified using unc additional std::ostream manipulators.
   // Note that these bools are NOT initialised here,
   // assuming compiler will warn if used before being initialised.
   /*
@@ -194,39 +195,41 @@ void unc_output(double value, // Mean or most likely value.
   //const int savedUncWidth = os.iword(uncWidthIndex); // Save to restore.
   // Why restore? - passed by value, so can alter if want to.
 
-  // Width, precision, flags & fillChar data from stream os. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  streamsize iosWidth = os.width(); //!< \warning Width must be read BEFORE any use of os which would reset width back to zero!
-  // & prevent any ios formatting during os << ...
-  // because unc_output does all its own formatting.
-  isWidthSet = (iosWidth > 0); // For example by os << setw(99)
-  // Fixed width field suits tables.
-  // For example: os << setw(10) means fit into a width of 10, with padding if necessary.
-  // stream width <= 0 means no justification or padding.
-  // Since default width = 0 after each item output so ostream,
-  // defaults to flex format, suitable for flexible non-tabulated layout.
+  //! Width, precision, flags & fillChar data from @c std::ostream os.
+  streamsize iosWidth = os.width(); //!< \warning Width must be read BEFORE any use of @c std::ostream os which would reset width back to zero!
+  //! & prevent any @c std::ios formatting during \code os << ... \endcode
+  //! because unc_output does all its own formatting.
+  isWidthSet = (iosWidth > 0); //! For example by \code os << setw(99) \endcode
+  //! Fixed width field suits tables.
+  //! For example: \code os << setw(10) \endcode means fit into a width of 10, with padding if necessary.
+  //! stream width <= 0 means no justification or padding.
+  //! Since default width = 0 after each item output,
+  //! so @c std::ostream defaults to a format suitable for flexible non-tabulated layout.
   const std::streamsize iosPrecision = os.precision();
-  // Number of significant decimal digits prescribed by \c setprecision(int), Default is 6.
+  //! Number of significant decimal digits prescribed by \c std::setprecision(int), Default is 6.
   const char iosFillChar = os.fill(); // Default is a space.
-  // Save format flags from \c ostream, so can restore on exit, and set \c ios default values.
+  //! Save format flags from \c std::ostream, so can restore on exit, and set \c std::ios default values.
   const int iosFlags = os.flags();  // Save fmtflagsin case need to restore.
-  os.width(0); // Would be zeroed by any previous use like << avalue ...
+  os.width(0); //! Would be zeroed by any previous use like << avalue ...
   os.flags(ios_base::dec | ios_base::skipws); // All other format flags are zero (cleared bits).
-  // Leaving fill and precision as on entry.
-#ifdef UNC_TRACE
-  { // Log ios fillchar, precision & width.
-    // fill char set by \c os.fill('~'); or \c << \c setfill('~')
-    // precision by \c << setprecision(10)  or cout.precision(10),
-    // width by \c setw(10) or \c cout.width(10)
-    std::cerr <<  "  IOstream: "
-      "fill char " << hex << showbase
-      << int(iosFillChar) << space
-      << '\'' << iosFillChar<< '\''<< dec
-      << ", precision " << iosPrecision << ", width " << iosWidth << ", "
-      << std::endl;
-    std::cerr << "  "; outFmtFlags(os.flags(), std::cerr, ".\n");
-    std::cerr << "  "; outIOstates(os.rdstate(), std::cerr, ".\n");
-  } // trace
-#endif
+  //! Leaving fill and precision as on entry.
+  #ifdef UNC_TRACE
+    { /*! Log std::ios fillchar, precision & width.
+        fill char set by \code os.fill('~'); or << std::setfill('~') \endcode
+        precision by \code << std::setprecision(10) or std::cout.precision(10) \endcode
+        width by \code std::setw(10) or std::cout.width(10) \endcode
+      */
+      std::cerr <<  "  IOstream: "
+        "fill char " << std::hex << showbase
+        << int(iosFillChar) << space
+        << '\'' << iosFillChar<< '\''<< std::dec
+        << ", precision " << iosPrecision << ", width " << iosWidth << ", "
+        << std::endl;
+      std::cerr << "  "; outFmtFlags(os.flags(), std::cerr, ".\n");
+      std::cerr << "  "; outIOstates(os.rdstate(), std::cerr, ".\n");
+    } // trace
+  #endif
+
 
   // Get print format requirements from std::ios flags. ****************************
   isUppercase = static_cast<bool>(iosFlags & ios_base::uppercase); // E not e.
@@ -525,8 +528,8 @@ void unc_output(double value, // Mean or most likely value.
   boost::io::ios_flags_saver flags_saver(os);
 
   // round here.
-  //os << val.value() << "(+/-" << val.uncertainty() << ")";
-  //os << oss.str(); // "1.23 +/- 0.1 (9) mV"
+  // std::ostream << val.value() << "(+/-" << val.uncertainty() << ")";
+  // std::ostream << oss.str(); // "1.23 +/- 0.1 (9) mV"
 
   used = oss.str().size();
 
@@ -546,4 +549,4 @@ void unc_output(double value, // Mean or most likely value.
   // os.width = savedWidth; // Restoring width is pointless.
   os.flags(iosFlags);  // Restore ios flags.
 } // void unc_output(double value, float stdDev,
-// unsigned short int degFree, unsigned short int uncTypes, ostream& os);
+// unsigned short int degFree, unsigned short int uncTypes, std::ostream& os);

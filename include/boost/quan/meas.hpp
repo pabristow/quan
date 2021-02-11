@@ -14,7 +14,7 @@
 // using ptime and 'not_a_date_time'.
 
 #include <boost/quan/unc.hpp> // uncertain types, mainly
-typedef unc<false> uncun; // Uncertain Uncorrelated (the normal case).
+// typedef unc<false> uncun; // Uncertain Uncorrelated (the normal case).
 
 // Forward Declaration.
 //class Meas;  // Measured uncertain value AND its id and order and/or time-date stamp.
