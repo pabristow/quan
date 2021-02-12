@@ -60,7 +60,7 @@ $(function() {
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// using ptime and &#39;not_a_date_time&#39;.</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="unc_8hpp.html">boost/quan/unc.hpp</a>&gt;</span> <span class="comment">// uncertain types, mainly</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="meas_8hpp.html#a90ab32c41dc3c49bb95cf7a6ee9ab4c1">   17</a></span>&#160;<span class="keyword">typedef</span> <a class="code" href="classunc.html">unc&lt;false&gt;</a> <a class="code" href="meas_8hpp.html#a90ab32c41dc3c49bb95cf7a6ee9ab4c1">uncun</a>; <span class="comment">// Uncertain Uncorrelated (the normal case).</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// typedef unc&lt;false&gt; uncun; // Uncertain Uncorrelated (the normal case).</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// Forward Declaration.</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//class Meas;  // Measured uncertain value AND its id and order and/or time-date stamp.</span></div>
@@ -218,12 +218,11 @@ $(function() {
 <div class="ttc" id="aclass_meas_html_acdaa3ca559a999fb10cbb8204c1e1dc7"><div class="ttname"><a href="class_meas.html#acdaa3ca559a999fb10cbb8204c1e1dc7">Meas::operator&gt;</a></div><div class="ttdeci">bool operator&gt;(const Meas &amp;rhs) const</div><div class="ttdef"><b>Definition:</b> <a href="meas_8ipp_source.html#l00228">meas.ipp:228</a></div></div>
 <div class="ttc" id="aclass_meas_html_ae0a9c2462c59c20fea8c9821e3c030e7"><div class="ttname"><a href="class_meas.html#ae0a9c2462c59c20fea8c9821e3c030e7">Meas::~Meas</a></div><div class="ttdeci">~Meas()</div><div class="ttdef"><b>Definition:</b> <a href="meas_8ipp_source.html#l00167">meas.ipp:167</a></div></div>
 <div class="ttc" id="aclass_meas_html_aecbd2debf692e666f36f7bbf02de41f8"><div class="ttname"><a href="class_meas.html#aecbd2debf692e666f36f7bbf02de41f8">Meas::lessU</a></div><div class="ttdeci">static bool lessU(const Meas &amp;l, const Meas &amp;r)</div><div class="ttdef"><b>Definition:</b> <a href="meas_8ipp_source.html#l00308">meas.ipp:308</a></div></div>
-<div class="ttc" id="aclassunc_html"><div class="ttname"><a href="classunc.html">unc</a></div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00550">unc.hpp:551</a></div></div>
-<div class="ttc" id="aclassunc_html_a3f79dc4b10431fb4515f578f31014348"><div class="ttname"><a href="classunc.html#a3f79dc4b10431fb4515f578f31014348">unc::operator+</a></div><div class="ttdeci">unc&lt; is_correlated &gt; operator+(void) const</div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00791">unc.hpp:791</a></div></div>
-<div class="ttc" id="aclassunc_html_ac1079190c054b134142efb1c9de5c8dc"><div class="ttname"><a href="classunc.html#ac1079190c054b134142efb1c9de5c8dc">unc::value</a></div><div class="ttdeci">double value()</div><div class="ttdoc">encoded as a bitmap 16 bits, 0 to 15 See enum unc_types,</div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00603">unc.hpp:603</a></div></div>
+<div class="ttc" id="aclassunc_html"><div class="ttname"><a href="classunc.html">unc</a></div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00551">unc.hpp:552</a></div></div>
+<div class="ttc" id="aclassunc_html_a3f79dc4b10431fb4515f578f31014348"><div class="ttname"><a href="classunc.html#a3f79dc4b10431fb4515f578f31014348">unc::operator+</a></div><div class="ttdeci">unc&lt; is_correlated &gt; operator+(void) const</div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00799">unc.hpp:799</a></div></div>
+<div class="ttc" id="aclassunc_html_ac1079190c054b134142efb1c9de5c8dc"><div class="ttname"><a href="classunc.html#ac1079190c054b134142efb1c9de5c8dc">unc::value</a></div><div class="ttdeci">double value()</div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00608">unc.hpp:608</a></div></div>
 <div class="ttc" id="ameas_8hpp_html_a1d304c23615bf93bfd375a935f8be600"><div class="ttname"><a href="meas_8hpp.html#a1d304c23615bf93bfd375a935f8be600">operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, const Meas &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="meas_8ipp_source.html#l00035">meas.ipp:392</a></div></div>
 <div class="ttc" id="ameas_8hpp_html_a85735871032ea3c4d6083d91af41cfd2"><div class="ttname"><a href="meas_8hpp.html#a85735871032ea3c4d6083d91af41cfd2">operator&gt;&gt;</a></div><div class="ttdeci">std::istream &amp; operator&gt;&gt;(std::istream &amp;is, Meas &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="meas_8ipp_source.html#l00036">meas.ipp:432</a></div></div>
-<div class="ttc" id="ameas_8hpp_html_a90ab32c41dc3c49bb95cf7a6ee9ab4c1"><div class="ttname"><a href="meas_8hpp.html#a90ab32c41dc3c49bb95cf7a6ee9ab4c1">uncun</a></div><div class="ttdeci">unc&lt; false &gt; uncun</div><div class="ttdef"><b>Definition:</b> <a href="meas_8hpp_source.html#l00017">meas.hpp:17</a></div></div>
 <div class="ttc" id="ameas_8ipp_html"><div class="ttname"><a href="meas_8ipp.html">meas.ipp</a></div><div class="ttdoc">Class for measurement using uncertain class - definitions.</div></div>
 <div class="ttc" id="aunc_8hpp_html"><div class="ttname"><a href="unc_8hpp.html">unc.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
@@ -241,11 +240,11 @@ $(function() {
      (See accompanying file LICENSE_1_0.txt or copy at&nbsp;
      <a href="http://www.boost.org/LICENSE_1_0.txt"> http://www.boost.org/LICENSE_1_0.txt </a>)</p>
       <!-- Change copyright to YOUR name (and affiliation, if any) below:  -->
-     <p>Copyright © 2021 Paul A. Bristow</p>
+     <p>Copyright &#xA9; 2021 Paul A. Bristow</p>
       <!-- 2021 becomes the current year, for example 2010, so claims copyright for a range of years, 2009 - 2010. -->
      <p>Doxygen Documentation generated by&nbsp;<a href="https://www.doxygen.org/index.html"> 
      <img src="https://www.doxygen.nl/images/doxygen.png"   width="100" height="20"
-     alt="Doxygen logo" align="middle" border="1"/>&nbsp; 1.9.1</a>, Revised at Thu Feb 11 2021 17:08:14</p>
+     alt="Doxygen logo" align="middle" border="1"/>&nbsp; 1.9.1</a>, Revised at Fri Feb 12 2021 12:57:05</p>
   </address>
   </tr>
 </tbody>

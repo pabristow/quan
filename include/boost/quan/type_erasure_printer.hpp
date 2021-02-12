@@ -7,7 +7,7 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
-// from \boost-sandbox\type_erasure\libs\type_erasure\example\print_sequence.cpp
+// from \boost\type_erasure\libs\type_erasure\example\print_sequence.cpp
 
 #ifndef BOOST_TYPE_ERASURE_PRINTER
 #define BOOST_TYPE_ERASURE_PRINTER
@@ -27,18 +27,20 @@
 
 using namespace boost::type_erasure;
 
-// Placeholders used by the abstract printer during specification of requirements.
+//! Placeholder used by the abstract printer during specification of requirements.
 struct _t : boost::type_erasure::placeholder {};
 struct _iter : boost::type_erasure::placeholder {};
 struct _os : boost::type_erasure::placeholder {};
 // This is more readable than using the 'out of the box' _a, ... _g placeholders.
 // See placeholder.hpp.
 
+// Template parameter for concept_interface and in list of requirements in abstract printer.
+//! base_and_derived<std::ios_base, _os>,
+
+//! _os must derive from std::ios_base.
 template<class T, class U = _self>
 struct base_and_derived
-{ // Template parameter for concept_interface.
-  // and in list of requirements in abstract printer.
-  // base_and_derived<std::ios_base, _os>, // _os must derive from std::ios_base.
+{
     static T& apply(U& arg) { return arg; }
 };
 
@@ -57,17 +59,6 @@ struct concept_interface<base_and_derived<T, U>, Base, U> : Base
         return call(base_and_derived<T, U>(), *this);
     }
 };
-
-// Fully specialized for const std::pair<const int, double>&
-//std::ostream& operator<< (std::ostream& os, const std::pair<const int, double>& p)
-//{ /*! Output a pair of values.
-//     \details For example: "1.23 , 3.45".
-//   */
-//  os << p.first << ", " << p.second;
-//  return os;
-//} // std::ostream& operator<<
-
-// But more useful is just providing the two template version:
 
 template <typename T1, typename T2>
 std::ostream& operator<< (std::ostream& os, const std::pair<T1, T2>& p)
@@ -107,7 +98,7 @@ struct ostreamable<Os, std::pair<T1, T2> >
 
 /*! An abstract sequence printer - a 'template' that is inherited
  to implement the examples of actual printers defined below.
- */
+*/
 
 template< class CharT = char, class Traits = std::char_traits<char> >
 class abstract_printer
@@ -155,10 +146,10 @@ protected:
 
 /*!
  Outputs items in a specified number of columns across rows with a separator (often comma and/or space(s)),
- and a suffix (usually newline) every `num_column`s items.\n
- Usage: `decor_printer simple_printer(3, 0, "\n", ", ", "\n", "\n");`\n
- Provide a container to be printed: `double da[] = {1., 2., 3., 4., 5., 6.};`\n
- Print to std::cout using: `simple_printer.print(std::cout, da);` \n
+ and a suffix (usually newline) every @c num_columns items.\n
+ Usage: \code decor_printer simple_printer(3, 0, "\n", ", ", "\n", "\n");\endcode \n
+ Provide a container to be printed: \code double da[] = {1., 2., 3., 4., 5., 6.}; \endcode \n
+ Print to std::cout using: \code simple_printer.print(std::cout, da); \endcode \n
  Output:\n
  1, 2, 3,\n
  4, 5, 6,\n
@@ -168,12 +159,12 @@ protected:
  including all defaults placing all items on one line or row separated by spaces.
 
   \param num_columns number of columns (default 0, so all items are on the same line or row).
-  \param width ostream width to use to each items (default 0 so that columns may be jagged).
-  \param pre string to be output before the first column,
-  (default newline which ensures that the first item is at the left margin).
-  \param sep string to separate (or delimit) items on each row (default space).
-  \param suf suffix at the end of each row (default newline).
-  \param term string to terminate the last row
+  \param width @c std::ostream width to use to each items (default 0 so that columns may be jagged).
+  \param pre String to be output before the first column,
+    (default newline which ensures that the first item is at the left margin).
+  \param sep String to separate (or delimit) items on each row (default is a single space).
+  \param suf String suffix at the end of each row (default newline).
+  \param term string to terminate the last row (default newline).
 */
 class decor_printer : public abstract_printer<>
 {
@@ -182,17 +173,15 @@ public:
       std::size_t num_columns = 0,
       std::size_t wid = 0,
       const std::string& pre = "\n",
-      const std::string& sep = " ",
+      const std::string& sep = " ", // default space as separator.
       const std::string& suf = "\n",
       const std::string& term = "\n")
       :
     cols(num_columns), width(wid), prefix(pre), separator(sep), terminator(term), suffix(suf)
     { /*! Constructor.\n
-       Usage: for example: ``3, 10, "double testd[] = {\n    ", ", ", "\n    ", "\n  };\n"``
-       3 columns with width 10, prefix "double testd[] = {\n    ", separator string comma space,
-       suffix (newline at the end of a column),
-       and a terminator string "\n  };\n".\n
-       Defaults are provided for all parameters, so can contruct: `my_default_printer decor_printer;`\n
+       Usage: for example: \code 3, 10, double testd[] = {\n    ", ", ", "\n    ", "\n  }; \endcode
+       3 columns with width 10, prefix newline, separator string comma space, suffix (newline at the end of a column), and a terminator string "\n
+       Defaults are provided for all parameters, so can simply construct: \code my_default_printer decor_printer; \endcode
        that places all items on one line or row with space between items, and a final newline.
       */
     }
@@ -213,7 +202,7 @@ protected:
             ++temp;
             if(temp != last)
             {
-              os << separator.c_str();
+              os << separator.c_str(); // Default space.
             }
             ++count;
             if((cols != 0) && (count % cols == 0))

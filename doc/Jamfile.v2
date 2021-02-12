@@ -1,6 +1,6 @@
 # jamfile.v2 for Quan Quickbook Documentation and index using Doxygen
 
-# Copyright Paul A. Bristow 2013, 2014
+# Copyright Paul A. Bristow 2013, 2014, 2021
 
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt
@@ -121,14 +121,16 @@ doxygen autodoc
     # May be best to always use \brief and \details to avoid ambiguity?
     #<doxygen:param>INCLUDE_PATH=$(BOOST_ROOT) # The INCLUDE_PATH tag can be used to specify one or more directories that
     # contain include files that are not input files but should be processed by the preprocessor.
+    <doxygen:param>CLASS_DIAGRAMS=YES  # Create class diagrams.
+    <doxygen:param>HAVE_DOT=YES # If = YES, then assumes have GrahViz installed.
     <doxygen:param>WARNINGS=YES # If WARN_IF_UNDOCUMENTED is set to YES, then doxygen will generate warnings for undocumented members.
     # If EXTRACT_ALL is set to YES then this flag will automatically be disabled.
-    <doxygen:param>WARN_IF_UNDOCUMENTED=YES # If WARN_IF_UNDOCUMENTED is set to YES,
-    # then doxygen will generate warnings for undocumented members.
+    <doxygen:param>WARN_IF_UNDOCUMENTED=NO # If WARN_IF_UNDOCUMENTED is set to YES,
+    # then doxygen will generate warnings for undocumented members in file below.
     <doxygen:param>WARN_IF_DOC_ERROR=YES # If WARN_IF_DOC_ERROR is set to YES, Doxygen will generate warnings for
-    # potential errors in the documentation.
+    # potential errors in the documentation in file below.
     <doxygen:param>WARN_LOGFILE=../../../libs/quan/doc/doxywarnings.log # Specific log file - ideally this should be empty!
-    <doxygen:param>EXCLUDE="../../../boost/quan/svg_fwd.hpp ../../../boost/quan/stylesheet.hpp"
+    # <doxygen:param>EXCLUDE="../../../boost/quan/svg_fwd.hpp ../../../boost/quan/stylesheet.hpp"
     # Exclude to avoid warnings about file(s) undocumented.
     # Note: no commas required but need quotes if more than one file.
 
@@ -157,7 +159,7 @@ boostbook standalone
   <xsl:param>nav.layout=horizontal # to get a horizontal navigation bar (you probably DO want this).
   <xsl:param>boost.image=Boost # Options are: none (no logo), Boost (for boost.png), or your own logo.
   <xsl:param>boost.image.src=./images/proposed_for_boost.png #
-  <xsl:param>boost.image.w=200 # Width of logo in pixels. (JM has W = 162, h = 46)
+  <xsl:param>boost.image.w=200 # Width of logo in pixels.
   <xsl:param>boost.image.h=90 # Height of logo in pixels.
 
   # Some general style settings:
@@ -184,6 +186,7 @@ boostbook standalone
   # <xsl:param>quickbook.source.style.show="'true'"
 
   # PDF Options:
+  # problem here with xslt-xsltproc.windows ..\..\..\bin.v2\libs\quan\doc\pdf\quan.docbook "too many params increase MAX_PARAMETERS" - see below for workaround.
   # TOC Generation
   <xsl:param>fop1.extensions=0
   <format>pdf:<xsl:param>xep.extensions=1
@@ -207,12 +210,13 @@ boostbook standalone
   <format>pdf:<xsl:param>preferred.mediaobject.role=print
   <format>pdf:<xsl:param>admon.graphics.path=$(nav_images)/
   <format>pdf:<xsl:param>img.src.path=$(images_location)/
-  <format>pdf:<xsl:param>draft.mode="no"
+  # <format>pdf:<xsl:param>draft.mode="no"
   # http://www.sagehill.net/docbookxsl/AddFont.html
   #  Code section font verdana looks good. But OK for Linux?
-  <format>pdf:<xsl:param>title.font.family="sans-serif"
-  <format>pdf:<xsl:param>body.font.family="sans-serif"
-  <format>pdf:<xsl:param>monospace.font.family="sans-serif"
+  # These were commented-out to avoid failure TOO_MANY_PARAMETERS in XSLT processing, so it default serif font
+  #<format>pdf:<xsl:param>title.font.family="sans-serif"
+  #<format>pdf:<xsl:param>body.font.family="sans-serif"
+  #<format>pdf:<xsl:param>monospace.font.family="sans-serif"
 
   # Use local preference for syntax coloring.
   <format>pdf:<xsl:param>html.stylesheet=boostbook.css

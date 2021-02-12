@@ -297,29 +297,29 @@ void outFpClass(double, std::ostream&);  // Special output for inf, NaN...
 //! All ios_base functions declared below are defined in unc.ipp
 //! \note that all of these are entirely lower case names, like std::ios manipulators.
 
-std::ios_base& scale(std::ios_base&); //!< To use value set with setScale(int)
-std::ios_base& noscale(std::ios_base&);  //!< or not scale.
-std::ios_base& autoscale(std::ios_base&); //!<  Automatically Scale to suitable prefix symbol like M, k, m...
-std::ios_base& noautoscale(std::ios_base&);  // or not to scale to prefix symbol.
-std::ios_base& firmform(std::ios_base&);  //!< Firm fixed layout using setUncWidth.
-std::ios_base& flexform(std::ios_base&); //!< Flexible free format.
-std::ios_base& plusminus(std::ios_base&);  //!< Add +/- uncertainty.
-std::ios_base& noplusminus(std::ios_base&);  //!< Do not add +/- uncertainty
-std::ios_base& addsiprefix(std::ios_base&); //!< Add SI prefix like kilo, micro ..
-std::ios_base& nosiprefix(std::ios_base&);  //!< (Takes precedence over SI symbol if both set).
-std::ios_base& addsisymbol(std::ios_base&); //!< Add SI symbol like M, k, m.
-std::ios_base& nosisymbol(std::ios_base&);  //!< Do not add SI symbol like M, k, m.
-std::ios_base& addnoisyDigit(std::ios_base&);  //!< Add an extra 'noisy' digit for less risk of loss.
-std::ios_base& nonoisyDigit(std::ios_base&);  //!< No noisy to suit human reading.
-std::ios_base& autosigdigits(std::ios_base&);  //!< Calculate sigdigits from uncertainty (default).
-std::ios_base& setsigdigits(std::ios_base&);    //!< Use sig digits stored with `<< setSigDigits(6)` for value.
-std::ios_base& autouncsigdigits(std::ios_base&);  //!< Calculate stdDev sig digits from uncertainty.
-std::ios_base& uncsigdigits(std::ios_base&); //!< Use stdDev sigDigits stored with << useSetUncSigDigits(2) ...
-std::ios_base& adddegfree(std::ios_base&);  //!< Add degrees of freedom as (99).
-std::ios_base& nodegfree(std::ios_base&);  //!< Do not add degrees of freedom to output of value.
-//
-std::ios_base& addlimits(std::ios_base&);  //!< Add lower and upper limits a 0.95 > 1.00 > 1.05.
-std::ios_base& nolimits(std::ios_base&);  //!< Do not add lower and upper limits.
+//std::ios_base& scale(std::ios_base&); //!< To use value set with setScale(int).
+//std::ios_base& noscale(std::ios_base&);  //!< or not scale (default is no scaling).
+//std::ios_base& autoscale(std::ios_base&); //!<  Automatically Scale to suitable prefix symbol like M, k, m...
+//std::ios_base& noautoscale(std::ios_base&);  // or not to scale to prefix symbol.
+//std::ios_base& firmform(std::ios_base&);  //!< Firm fixed layout using setUncWidth.
+//std::ios_base& flexform(std::ios_base&); //!< Flexible free format.
+//std::ios_base& plusminus(std::ios_base&);  //!< Add +/- uncertainty.
+//std::ios_base& noplusminus(std::ios_base&);  //!< Do not add +/- uncertainty
+//std::ios_base& addsiprefix(std::ios_base&); //!< Add SI prefix like kilo, micro ..
+//std::ios_base& nosiprefix(std::ios_base&);  //!< (Takes precedence over SI symbol if both set).
+//std::ios_base& addsisymbol(std::ios_base&); //!< Add SI symbol like M, k, m.
+//std::ios_base& nosisymbol(std::ios_base&);  //!< Do not add SI symbol like M, k, m.
+//std::ios_base& addnoisyDigit(std::ios_base&);  //!< Add an extra 'noisy' digit for less risk of loss.
+//std::ios_base& nonoisyDigit(std::ios_base&);  //!< No noisy to suit human reading.
+//std::ios_base& autosigdigits(std::ios_base&);  //!< Calculate sigdigits from uncertainty (default).
+//std::ios_base& setsigdigits(std::ios_base&);    //!< Use sig digits stored with `<< setSigDigits(6)` for value.
+//std::ios_base& autouncsigdigits(std::ios_base&);  //!< Calculate stdDev sig digits from uncertainty.
+//std::ios_base& uncsigdigits(std::ios_base&); //!< Use stdDev sigDigits stored with << useSetUncSigDigits(2) ...
+//std::ios_base& adddegfree(std::ios_base&);  //!< Add degrees of freedom as (99).
+//std::ios_base& nodegfree(std::ios_base&);  //!< Do not add degrees of freedom to output of value.
+////
+//std::ios_base& addlimits(std::ios_base&);  //!< Add lower and upper limits a 0.95 > 1.00 > 1.05.
+//std::ios_base& nolimits(std::ios_base&);  //!< Do not add lower and upper limits.
 
 // Obselete
 //std::ios_base& confidence(std::ios_base&);
@@ -335,50 +335,50 @@ std::ios_base& nolimits(std::ios_base&);  //!< Do not add lower and upper limits
   f = setuFlags(out, 0xFF); f = resetuFlags(out, 0xFF);
   \endcode
 */
-long uFlags(std::ios_base&);  //!< Returns current uncertain flags.
-long uFlags(std::ios_base&, long); //!< Assigns all uncertain flags & returns previous.
-long setuFlags(std::ios_base&, long);  //!< Set specific flags = 1
-long resetuFlags(std::ios_base&, long);  //!< Reset/clear specific flags = 0
-
-// Forward declarations, defined in unc.ipp.
-class showUncFlags;  //!< Output uncertain flags to `ostream << showUncFlags `.
-class setAllUncFlags;  //!< Assign value to set (and/or clear) all unc flags.
-class setUncFlags;  //!< Set specific unc flags bits.
-class setMaskedUncFlags;  //!< Clear mask & then set unc flag bits.
-class resetUncFlags;  //!< Reset all unc flags bits.
-class resetMaskedUncFlags; //!< Reset specific unc flags bits.
-class setUncWidth; //!< Set width of uncertainty output.
-class setScale; //!< Set scaling factor like 1e3, 1e6 ... `<< setScale(6)`.
-class setSigDigits;  //!< sigdigits to use for value if `<< setsigdigits(4)`.
-class setUncSigDigits;  //!< sigdigits to use for uncertainty if `<< setuncsigdigits(1)`.
-class setRoundingLoss;  //!< Set acceptable loss due to rounding.
-class setConfidence;  //!< Set acceptable loss due to rounding.
-
-// Operator declarations, classes defined below, with constructors in unc.ipp.
-std::ostream operator<< (std::ostream, const showUncFlags&);
-std::ostream operator<< (std::ostream, const setAllUncFlags&);
-std::istream operator>> (std::istream, const setAllUncFlags&);
-std::ostream operator<< (std::ostream, const setUncFlags&);
-std::istream operator>> (std::istream, const setUncFlags&);
-std::ostream operator<< (std::ostream, const setMaskedUncFlags&);
-std::istream operator>> (std::istream, const setMaskedUncFlags&);
-std::ostream operator<< (std::ostream, const resetUncFlags&);
-std::istream operator>> (std::istream, const resetUncFlags&);
-std::ostream operator<< (std::ostream, const resetMaskedUncFlags&);
-std::istream operator>> (std::istream, const resetMaskedUncFlags&);
-std::ostream operator<< (std::ostream, const setUncWidth&);
-std::istream operator>> (std::istream, const setUncWidth&);
-std::ostream operator<< (std::ostream, const setScale&);
-std::istream operator>> (std::istream, const setScale&);
-std::ostream operator<< (std::ostream, const setUncSigDigits&);
-std::istream operator>> (std::istream, const setUncSigDigits&);
-std::ostream operator<< (std::ostream, const setRoundingLoss&);
-std::ostream operator<< (std::ostream, const setConfidence&);
-std::ostream operator<< (std::ostream, const setSigDigits&);
-std::istream operator>> (std::istream, const setSigDigits&);
-
-void outUncFlags(long uncflags, std::ostream);
-
+//long uFlags(std::ios_base&);  //!< Returns current uncertain flags.
+//long uFlags(std::ios_base&, long); //!< Assigns all uncertain flags & returns previous.
+//long setuFlags(std::ios_base&, long);  //!< Set specific flags = 1
+//long resetuFlags(std::ios_base&, long);  //!< Reset/clear specific flags = 0
+//
+//// Forward declarations, defined in unc.ipp.
+//class showUncFlags;  //!< Output uncertain flags to `ostream << showUncFlags `.
+//class setAllUncFlags;  //!< Assign value to set (and/or clear) all unc flags.
+//class setUncFlags;  //!< Set specific unc flags bits.
+//class setMaskedUncFlags;  //!< Clear mask & then set unc flag bits.
+//class resetUncFlags;  //!< Reset all unc flags bits.
+//class resetMaskedUncFlags; //!< Reset specific unc flags bits.
+//class setUncWidth; //!< Set width of uncertainty output.
+//class setScale; //!< Set scaling factor like 1e3, 1e6 ... `<< setScale(6)`.
+//class setSigDigits;  //!< sigdigits to use for value if `<< setsigdigits(4)`.
+//class setUncSigDigits;  //!< sigdigits to use for uncertainty if `<< setuncsigdigits(1)`.
+//class setRoundingLoss;  //!< Set acceptable loss due to rounding.
+//class setConfidence;  //!< Set acceptable loss due to rounding.
+//
+//// Operator declarations, classes defined below, with constructors in unc.ipp.
+//std::ostream operator<< (std::ostream, const showUncFlags&);
+//std::ostream operator<< (std::ostream, const setAllUncFlags&);
+//std::istream operator>> (std::istream, const setAllUncFlags&);
+//std::ostream operator<< (std::ostream, const setUncFlags&);
+//std::istream operator>> (std::istream, const setUncFlags&);
+//std::ostream operator<< (std::ostream, const setMaskedUncFlags&);
+//std::istream operator>> (std::istream, const setMaskedUncFlags&);
+//std::ostream operator<< (std::ostream, const resetUncFlags&);
+//std::istream operator>> (std::istream, const resetUncFlags&);
+//std::ostream operator<< (std::ostream, const resetMaskedUncFlags&);
+//std::istream operator>> (std::istream, const resetMaskedUncFlags&);
+//std::ostream operator<< (std::ostream, const setUncWidth&);
+//std::istream operator>> (std::istream, const setUncWidth&);
+//std::ostream operator<< (std::ostream, const setScale&);
+//std::istream operator>> (std::istream, const setScale&);
+//std::ostream operator<< (std::ostream, const setUncSigDigits&);
+//std::istream operator>> (std::istream, const setUncSigDigits&);
+//std::ostream operator<< (std::ostream, const setRoundingLoss&);
+//std::ostream operator<< (std::ostream, const setConfidence&);
+//std::ostream operator<< (std::ostream, const setSigDigits&);
+//std::istream operator>> (std::istream, const setSigDigits&);
+//
+//void outUncFlags(long uncflags, std::ostream);
+//
 class showUncFlags
 {  // Constructor & operator<< defined in unc.ipp
   friend std::ostream operator<< (std::ostream, const showUncFlags&);
@@ -543,10 +543,11 @@ public:
 
 
 /*! Uncertain number template class unc,
-   using mean and uncertainty (equivalent to std deviation if pure Gaussian),
+   using mean and measure of uncertainty (perhaps standard deviation if pure Gaussian distribution),
    but also includes information about uncertainty as degrees of freedom & distribution.
-*/
-template <bool is_correlated = false> //! \tparam is_correlated if true, standard deviation is correlated, else not.
+
+  \tparam is_correlated if true, standard deviation is correlated, else not correlated (the common case).
+*/template <bool is_correlated = false>
 class unc : public std::char_traits<char>
 {
 public:
@@ -573,8 +574,9 @@ public:
      so that total is same as two doubles & can be efficiently aligned.
   */
   double value_; //!< aka mean, estimate, or most likely value.
-  float uncertainty_; //!< Standard deviation, if known.
-  //! Reduced precision (float guarantees 6 decimal digits not 15) and range e38 not E304
+
+  //! Measure of uncertainty, typically, standard deviation, if known.
+  //! \note Reduced precision (float guarantees 6 decimal digits not 15) and range e38 not E304
   //! should not be a problem unless value is (near) less than 1e38.
   //! Can be zero, meaning exact, and can be negative or anti-correlated,
   //! for example when values must add up to a total like 100%.
@@ -583,27 +585,31 @@ public:
   //! Relative is a problem if value near zero.
   //! +|- is std deviation, so
   //! for input of "1.0" implicit standard deviation and uncertainty limits +|- 0.05.
-  short unsigned int degFree_;  /*!< degrees of freedom, usually = number of observations -1;
-     Range from 0 (usually 1 observation) to 65534 = std::numeric_limits<unsigned short int>::max() - 1
-     so for 2 observations assign 1 to degFree_ degree of freedom,for 3 observations assing 2 ....
-     Higher numbers of observations are indistinguishable from infinite observations.
-     Max unsigned value 0xFFFF == 65535 is used to indicate degFree_ is NOT meaningful.
-     BUT many programs seem to use NON-integer degrees of freedom,
-     so a float might seem better, but is 32 bits not 16, so use 16 for compact struct.
-     (Might use an explicit 16 bit unsigned integer type?)
-   */
-  short unsigned int unctypes_; //!<  Information about the value and uncertainty,
-  //! encoded as a bitmap 16 bits, 0 to 15 See enum unc_types,
+  float uncertainty_;
 
-  //! \note These sizes mean that total size of a unc is 64 = 32 + 32 = 128 bits
-  // for IEEE-754 systems with 64-bit double.
+  /*! Degrees of freedom, usually = number of observations -1, so zero if just one observation or measurement.
+   Range from 0 (usually 1 observation) to 65534 = std::numeric_limits<unsigned short int>::max() - 1
+   so for 2 observations assign 1 to degFree_ degree of freedom,for 3 observations assing 2 ....
+   Higher numbers of observations are indistinguishable from infinite observations.
+   Max unsigned value 0xFFFF == 65535 is used to indicate degFree_ is NOT meaningful.
+   BUT many programs seem to use NON-integer degrees of freedom,
+   so a float might seem better, but fundamental @c float is 32 bits not 16, so use 16 floating-point type for compact struct?
+ */
+  short unsigned int degFree_;
+
+  //!  Information about the value and uncertainty, encoded as a bitmap 16 bits, 0 to 15. \sa enum unc_types. \n
+  //! \note These sizes mean that total size of a unc is 64 = 32 + 32 = 128 bits for IEEE-754 systems with 64-bit double.
+  short unsigned int unctypes_;
+
 public:
   // Member functions to get mean value, stdDev, degfree & uncTypes.
+  //! Get central estimate of value of uncertain type.
   //! \return Central 'best' estimate of value of uncertain type.
   double value()
   {
     return value_;
   }
+  //! Get estimate of uncertainty of value of uncertain type.
   //! \return Estimate of uncertainty as standard deviation of value of uncertain type.
   float std_dev()
   {
@@ -621,19 +627,21 @@ public:
   }
 
   // Set member functions.
-  //! \param  value Central estimate of value of uncertain type.
+  //! Set central estimate of value of uncertain type.
+  //! \param value Central estimate of value of uncertain type.
   void value (double value)
   {
     value_ = value;
   } // void setValue (double value)
 
+  //! Set estimate of uncertainty of value of uncertain type.
   //! \param unc Estimate of uncertainty as standard deviation of value of uncertain type.
   void std_dev (float unc)
   {
     uncertainty_ = unc;
     if (boost::math::isfinite(static_cast<double>(unc)))
     {
-      unctypes_ |= UNC_KNOWN; // set unc is known
+      unctypes_ |= UNC_KNOWN; // Set flag to show uncertainty is known.
       if (unc > 0.f)
       { // NOT exact.
         unctypes_ &= ~(VALUE_EXACT | VALUE_RATIONAL | VALUE_INTEGER | UNC_NOPLUS | UNC_NOMINUS); // Clear.
@@ -1117,14 +1125,14 @@ public:
     // Might also compare within uncertainty - see lessU
   } // operator<
 
-  // Insert and extract operator>> and operator<< for unc.
-  friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated>& val)
+  //! Insert operator<< for unc.
+  //! Should cover both correlated and uncorrelated cases.
+  friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated == false>& val)
   {
     boost::io::ios_precision_saver precision_saver(os);
     boost::io::ios_flags_saver flags_saver(os);
-    // Changes are restored by destructor.
+    // both ios_flags and precision are restored by destructor.
     std::ostringstream oss; // Build up string to output.
-    //oss.flags(os.flags()); // Copy flags to restore TODO not needed?).
 
     double mean = val.mean();
     float uncertainty = val.deviation();
@@ -1134,12 +1142,12 @@ public:
     // bools showing output requirements specified using unc additional ostream manipulators.
     // Note that these bools are NOT initialised here,
     // assuming compiler will warn if used before being initialised.
-    /*
+    /*!
       \var bool isNoisyDigit
       \brief Add an extra 'noisy' guard digit to reduce risk of information loss.
     */
-    bool isNoisyDigit;  //!<
-    bool isDegFree;  //!<  Append degrees of freedom.
+    bool isNoisyDigit;  // Add an extra 'noisy' digit.
+    bool isDegFree;  //!  Append degrees of freedom.
     bool isPlusMinus; //!< Uncertainty as +/- is required too (but ignore if value is exact or integer).
     bool isUppercase; //!< Exponential format is, for example, 1E6 else 1e6.
     bool isScientificFormat;  //!< Taken to mean that exponential format wanted (always possible).
@@ -1508,7 +1516,7 @@ public:
     unc_input(mean, stdDev, degreesOfFreedom, unctypes, is);
     // At present, uses a separate function for input (unlike output).
     ud = unc<is_correlated>(mean, float(stdDev), degreesOfFreedom, unctypes);
-    // Inputs mean, SD & degrees of freedom & set unc types...
+    // Inputs mean, SD & degrees of freedom & set unc types... as a string from file.
     return is;
   }
 

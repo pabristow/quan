@@ -41,6 +41,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
@@ -54,13 +55,18 @@ $(function() {
 <div class="dynheader">
 Inheritance diagram for abstract_printer&lt; CharT, Traits &gt;:</div>
 <div class="dyncontent">
- <div class="center">
-  <img src="classabstract__printer.png" usemap="#abstract_5Fprinter_3C_20CharT_2C_20Traits_20_3E_map" alt=""/>
-  <map id="abstract_5Fprinter_3C_20CharT_2C_20Traits_20_3E_map" name="abstract_5Fprinter_3C_20CharT_2C_20Traits_20_3E_map">
-<area href="classdecor__printer.html" alt="decor_printer" shape="rect" coords="0,56,200,80"/>
-  </map>
-</div></div>
+<div class="center"><img src="classabstract__printer__inherit__graph.png" border="0" usemap="#aabstract__printer_3_01_char_t_00_01_traits_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="aabstract__printer_3_01_char_t_00_01_traits_01_4_inherit__map" id="aabstract__printer_3_01_char_t_00_01_traits_01_4_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,5,168,47"/>
+<area shape="rect" href="classdecor__printer.html" title=" " alt="" coords="30,95,143,121"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a6fb84707c736c900c19dbb29cb4f21d9"><td class="memItemLeft" align="right" valign="top">typedef boost::type_erasure::any&lt; <a class="el" href="classabstract__printer.html#acb1016e67d1bf4fca6faf9dda940a8aa">requirements</a>, <a class="el" href="struct__iter.html">_iter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classabstract__printer.html#a6fb84707c736c900c19dbb29cb4f21d9">iterator_type</a></td></tr>
+<tr class="separator:a6fb84707c736c900c19dbb29cb4f21d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9beee0603985735b7aa050f820945757"><td class="memTemplParams" colspan="2">template&lt;class Range , class CharT , class Traits &gt; </td></tr>
@@ -75,12 +81,11 @@ Protected Types</h2></td></tr>
 <tr class="separator:acb1016e67d1bf4fca6faf9dda940a8aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8251f5b4776858ce72565d69b9adaa1"><td class="memItemLeft" align="right" valign="top">typedef boost::type_erasure::any&lt; <a class="el" href="classabstract__printer.html#acb1016e67d1bf4fca6faf9dda940a8aa">requirements</a>, <a class="el" href="struct__os.html">_os</a> &amp; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classabstract__printer.html#aa8251f5b4776858ce72565d69b9adaa1">ostream_type</a></td></tr>
 <tr class="separator:aa8251f5b4776858ce72565d69b9adaa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fb84707c736c900c19dbb29cb4f21d9"><td class="memItemLeft" align="right" valign="top">typedef boost::type_erasure::any&lt; <a class="el" href="classabstract__printer.html#acb1016e67d1bf4fca6faf9dda940a8aa">requirements</a>, <a class="el" href="struct__iter.html">_iter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classabstract__printer.html#a6fb84707c736c900c19dbb29cb4f21d9">iterator_type</a></td></tr>
-<tr class="separator:a6fb84707c736c900c19dbb29cb4f21d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a860895283a909e6c42bebe502c2629af"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classabstract__printer.html#a860895283a909e6c42bebe502c2629af">do_print</a> (<a class="el" href="classabstract__printer.html#a6fb84707c736c900c19dbb29cb4f21d9">iterator_type</a> first, <a class="el" href="classabstract__printer.html#a6fb84707c736c900c19dbb29cb4f21d9">iterator_type</a> last, <a class="el" href="classabstract__printer.html#aa8251f5b4776858ce72565d69b9adaa1">ostream_type</a> os) const =0</td></tr>
+<tr class="memdesc:a860895283a909e6c42bebe502c2629af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declare the pure virtual function <code>do_print</code> that is defined in all real printers.  <a href="classabstract__printer.html#a860895283a909e6c42bebe502c2629af">More...</a><br /></td></tr>
 <tr class="separator:a860895283a909e6c42bebe502c2629af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -89,7 +94,7 @@ class abstract_printer&lt; CharT, Traits &gt;</h3>
 
 <p>An abstract sequence printer - a 'template' that is inherited to implement the examples of actual printers defined below. </p>
 
-<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00113">113</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00104">104</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a6fb84707c736c900c19dbb29cb4f21d9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6fb84707c736c900c19dbb29cb4f21d9">&#9670;&nbsp;</a></span>iterator_type</h2>
@@ -98,22 +103,14 @@ class abstract_printer&lt; CharT, Traits &gt;</h3>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;class CharT  = char, class Traits  = std::char_traits&lt;char&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">typedef boost::type_erasure::any&lt;<a class="el" href="classabstract__printer.html#acb1016e67d1bf4fca6faf9dda940a8aa">requirements</a>, <a class="el" href="struct__iter.html">_iter</a>&gt; <a class="el" href="classabstract__printer.html">abstract_printer</a>&lt; CharT, Traits &gt;::<a class="el" href="classabstract__printer.html#a6fb84707c736c900c19dbb29cb4f21d9">iterator_type</a></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00147">147</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00140">140</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -139,7 +136,7 @@ template&lt;class CharT  = char, class Traits  = std::char_traits&lt;char&gt;&gt
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00146">146</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00137">137</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -165,7 +162,7 @@ template&lt;class CharT  = char, class Traits  = std::char_traits&lt;char&gt;&gt
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00143">143</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00134">134</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -195,7 +192,7 @@ template&lt;class CharT  = char, class Traits  = std::char_traits&lt;char&gt;&gt
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00134">134</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00125">125</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -242,6 +239,8 @@ template&lt;class CharT  = char, class Traits  = std::char_traits&lt;char&gt;&gt
 </table>
 </div><div class="memdoc">
 
+<p>Declare the pure virtual function <code>do_print</code> that is defined in all real printers. </p>
+
 <p>Implemented in <a class="el" href="classdecor__printer.html#a587339830ce1cca4ce22f3f57d0ac96c">decor_printer</a>.</p>
 
 </div>
@@ -277,19 +276,19 @@ template&lt;class Range , class CharT , class Traits &gt; </div>
 </div><div class="memdoc">
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">Range</td><td>must be a Forward Range whose elements can be printed to `ostream os`. </td></tr>
+    <tr><td class="paramname">Range</td><td>must be a Forward Range whose elements can be printed to <code>std::ostream</code> os. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">r</td><td>Container to be printed, for example, a C array, std::vector, std::list ... </td></tr>
-    <tr><td class="paramname">os</td><td><code>std::ostream</code> for printing, for example std::cout. </td></tr>
+    <tr><td class="paramname">os</td><td><code>std::ostream</code> for printing, default, for example: std::cout. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00121">121</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__erasure__printer_8hpp_source.html#l00112">112</a> of file <a class="el" href="type__erasure__printer_8hpp_source.html">type_erasure_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -311,11 +310,11 @@ template&lt;class Range , class CharT , class Traits &gt; </div>
      (See accompanying file LICENSE_1_0.txt or copy at&nbsp;
      <a href="http://www.boost.org/LICENSE_1_0.txt"> http://www.boost.org/LICENSE_1_0.txt </a>)</p>
       <!-- Change copyright to YOUR name (and affiliation, if any) below:  -->
-     <p>Copyright © 2021 Paul A. Bristow</p>
+     <p>Copyright &#xA9; 2021 Paul A. Bristow</p>
       <!-- 2021 becomes the current year, for example 2010, so claims copyright for a range of years, 2009 - 2010. -->
      <p>Doxygen Documentation generated by&nbsp;<a href="https://www.doxygen.org/index.html"> 
      <img src="https://www.doxygen.nl/images/doxygen.png"   width="100" height="20"
-     alt="Doxygen logo" align="middle" border="1"/>&nbsp; 1.9.1</a>, Revised at Thu Feb 11 2021 17:08:14</p>
+     alt="Doxygen logo" align="middle" border="1"/>&nbsp; 1.9.1</a>, Revised at Fri Feb 12 2021 12:57:05</p>
   </address>
   </tr>
 </tbody>

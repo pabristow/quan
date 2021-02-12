@@ -15,9 +15,9 @@
 [/ $images is reference to a folder where images are held.]
 [def __detail__     [$images/note.png]]
 [def __note__       [$images/note.png]]
-[def __alert__       [$images/alert.png]]
-[def __tip__          [$images/tip.png]]
-[def :-)                 [$images/smiley.png]]
+[def __alert__      [$images/alert.png]]
+[def __tip__        [$images/tip.png]]
+[def :-)            [$images/smiley.png]]
 
 [/ Links   ]
 [/ By Eric's convention prefix *and* suffix _ means a defined value. But here use JM and SW double underscore prefix convention.]
@@ -69,15 +69,12 @@ This is a placeholder at present.
 
 '''
 
-[important This is not (yet) an official Boost library. It was a
-[@http://code.google.com/soc/2007/boost/about.html Google Summer of Code project (2007)]
-whose mentor organization was Boost. It remains a library under construction,
+[important This is not (yet) an official Boost library. It remains a library under construction,
 the code is quite functional, but interfaces, library structure, and names
 may still be changed without notice.
 ]
 
-[note Comments and suggestions (even bugs!) to Paul.A.Bristow (at) hetp (dot) u-net (dot) com
-or Jake Voytko at jakevoytko (at) gmail (dot) com]
+[note Comments and suggestions (even bugs!) to Paul.A.Bristow (at) hetp (dot) u-net (dot) com]
 
 
 [/ quan.qbk
