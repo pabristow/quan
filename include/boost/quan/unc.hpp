@@ -543,6 +543,8 @@ public:
   double confidence_; // Set by constructor.
 }; // class setConfidence
 
+//  template std::ostream& operator<< (std::ostream&, const std::pair< unc<false>, unc<false> >&);
+//  template std::ostream& operator<< (std::ostream&, const std::pair< unc<true>, unc<true> >&);
 
 /*! Uncertain number template class unc,
    using mean and measure of uncertainty (perhaps standard deviation if pure Gaussian distribution),
@@ -554,6 +556,8 @@ class unc : public std::char_traits<char>
 {
 public:
   typedef double value_type;
+
+  friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated == false>& val);
 
   friend void unc_input(double& mean,  // Mean (central or most probable) value.
                    double& stdDev, // Uncertainty estimate as Standard deviation.
@@ -1129,7 +1133,7 @@ public:
   } // operator<
 
   //! Insert operator<< for unc.
-  //! Should cover both correlated and uncorrelated cases.
+  //! (Should cover both correlated and uncorrelated cases?)
   friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated == false>& val)
   {
     boost::io::ios_precision_saver precision_saver(os);
@@ -1508,7 +1512,7 @@ public:
     }
     os << oss.str();
     return os;
-  } // friend ostream& operator<< (ostream& os, const unc<is_correlated>& val)
+  } // friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated>& val)
 
   friend std::istream& operator>> (std::istream& is, unc<is_correlated>& ud)
   {
@@ -1884,7 +1888,7 @@ public:
 
   // Predicate Comparison functions.
   // Should be global to allow leftmost argument to use implicit type conversion
-  // according to Scott Meyers, Effective C++ Item 19 p 68 - 71.
+  // according to Scott Meyers, Effective C++, Item 19 p 68 - 71.
   // But these are member functions and seem to work OK.
   // Note MUST be static bool.
   //! Compare two uncertain values.
@@ -1919,7 +1923,6 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
 #endif // BOOST_QUAN_DIAGNOSTICS
     return isLess;
   } // bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
-
 
   static bool lessU2(const unc<is_correlated>& l, const unc<is_correlated>& r)
   { // less using Comparison criterion including TWO standard deviations.
@@ -2115,10 +2118,10 @@ void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
     std::cout << "Magic index top word is corrupted, should be "  << std::hex << indexID << std::dec << "!" << std::endl;
   }
   log 
-    << std::hex << "zero " << os.iword(zeroIndex)  << std::dec // = indexID; // Mark if has been set to defaults.
-    << " " "UncValues: "
-    <<  "uncFlags " << std::hex << os.iword(uncFlagsIndex) << std::dec //= 0;  // iword(1)
-    // holding bits meaning: add_+/-  add_SI_symbol add_SI_prefix addnoisy set_sigDigits adddegfree replicates addlimits...
+   // << std::hex << "indexID " << os.iword(zeroIndex)  << std::dec // = indexID; // Mark if has been set to defaults.
+    << " UncValues: "
+    <<  "uncFlags " << std::hex << os.iword(uncFlagsIndex) << std::dec //= 0;  // iword(1) holding
+    //  bits meaning: add_+/-  add_SI_symbol add_SI_prefix addnoisy set_sigDigits adddegfree replicates addlimits...
     << ", setSigDigits " << os.iword(setSigDigitsIndex) // = 3;  // Default set 3 sig digits.
     << ", uncWidth " << os.iword(uncWidthIndex) // = 10;  // Default width 10 to allow +1.234E12
     << ", uncSetWidth " << os.iword(oldUncSetWidthIndex) // = 0;  // Not used
@@ -2136,10 +2139,11 @@ void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
     << ", setUncSigDigits " << os.iword(setUncSigDigitsIndex)
     << ", roundingLossIndex " << os.iword(roundingLossIndex) / 1.e3
     << ", confidenceIndex " << os.iword(confidenceIndex) / 1.e6
-     << ", top " << std::hex << os.iword(topIndex) << std::dec
-    << std::endl;// = indexID;  // last .iword(16) as check.
+     << ", top " << std::hex << os.iword(topIndex) << std::dec // = indexID;  // last .iword(16) as check.
+    << std::endl;
   /* Before call of setUnc_defaults() all are zero (probably) and after call:
-  * zero 48dbaf8 UncValues: 
+  * indexID 48dbaf8
+    UncValues: 
       uncFlags 0, setSigDigits 3, uncWidth 10, uncSetWidth -1, uncScale 0, uncSetScale 0, uncUsed 0, uncOldFlags 0, uncOldUncWidth -1, uncOldScale -1, uncSigDigits 2, uncoldSigDigits -1, oldUncUsed -1, oldStdDevSigDigits -1, setUncSigDigits 2, roundingLossIndex 0.05, confidenceIndex 0.05, 
     top 48dbaf8
   */
@@ -2265,11 +2269,15 @@ void outIosFmtFlags(long flags, std::ostream& os = std::cerr)
 }  // out ios_base::flags(long flags, ostream&)
 
 /*! Show the set uncertain class io stream flags settings as words, for examples: add_/-, set_scaled, addlimits .
-  \param uncFlags Output flags to be displayed as words.
+  \param uncFlags Output flags value to be displayed as words.
   \param os stream for output.
-  Usage:   \code
-    outUncIOFlags(std::cout.flags(), std::cerr); // logs cout's flag to cerr.
-   long& uncFlags = os.iword(uncFlagsIndex); \endcode
+  Usage:  
+    \code
+      outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
+   \endcode
+
+   \sa Version that takes the std::ostream as parameter
+   \code void outUncIOFlags(std::ostream& os = std::cout, std::ostream& osout = std::cerr, std::string terminator = ".\n") \endcode
 */
 void outUncIOFlags(long uncFlags, std::ostream& os = std::cerr, std::string terminator = ".\n")
 {
@@ -2283,11 +2291,27 @@ void outUncIOFlags(long uncFlags, std::ostream& os = std::cerr, std::string term
   if (uncFlags & noisyDigit) os << " addnoisy";
   if (uncFlags & useSetSigDigits) os << " set_sigDigits";
   if (uncFlags & useSetUncSigDigits) os << " set_uncsigDigits";
-  if (uncFlags & degfree) os << " adddegfree";
-  if (uncFlags & degfree) os << " replicates";
-  if (uncFlags & limits) os << " addlimits"; // hex 800 = 2048
+  if (uncFlags & degfree) os << " add_degfree";
+  if (uncFlags & degfree) os << " add_replicates";
+  if (uncFlags & limits) os << " add_limits"; // hex 800 = 2048
   os << terminator;
 } //
+
+/*! Show the set uncertain class io stream flags settings as words, for examples: add_/-, set_scaled, addlimits .
+  \param os stream whose unc flags are to be output.
+  \param oslog stream to receive output.
+  Usage:
+    \code
+      outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
+   \endcode
+
+   \sa Version that takes the long uncFlags as parameter
+   \code void outUncIOFlags(long uncFlags, std::ostream& osout = std::cerr, std::string terminator = ".\n") \endcode
+*/
+void outUncIOFlags(std::ostream& os = std::cout, std::ostream& osout = std::cerr, std::string terminator = ".\n")
+{
+  outUncIOFlags(os.iword(uncFlagsIndex));
+}
 
 // Parameterless manipulators to switch format to switch uncFlag bits,
 // flex - width just enough to display, suitable for in-line display non-tables,

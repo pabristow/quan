@@ -7,7 +7,6 @@
 
 #include <boost/version.hpp>
 #include <boost/quan/unc.hpp>
-#include <boost/quan/unc_init.hpp>
 
 #include <iostream>
 // using std::cout;
@@ -43,21 +42,20 @@ int main()
   // zero 48dbaf8 UncValues: 
   //   uncFlags 0, setSigDigits 3, uncWidth 10, uncSetWidth -1, uncScale 0, uncSetScale 0, uncUsed 0, uncOldFlags 0, uncOldUncWidth -1, uncOldScale -1, uncSigDigits 2, uncoldSigDigits -1, oldUncUsed -1, oldStdDevSigDigits -1, setUncSigDigits 2, roundingLossIndex 0.05, confidenceIndex 0.05, 
   // top 48dbaf8
-
   
-  uncun u(1.23, 0.45F);
+  uncun u(1.23, 0.45F, 9);
+  outUncIOFlags(); // uncFlags (0).  default state, no flags set.
 
-
-  outUncValues();
-
-
- // outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0x201) firm adddegfree.
-  std::cout << "URealCorr u(1.23, 0.45); = " << plusminus << addlimits << adddegfree;
-  outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
+  std::cout << "URealCorr u(1.23, 0.45); = " << plusminus << addlimits << adddegfree ;
+  outUncIOFlags(std::cout, std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
 
   std::cout << u << std::endl;
-  outUncIOFlags(std::cout.iword(1), std::cerr, "\n");
+  outUncIOFlags(std::cout, std::cerr, "\n");
+  std::cout << u.mean () << std::endl;
+  std::cout << u.std_dev() << std::endl;
+  std::cout << u.degFree() << std::endl;
 
+  std::cout.operator<<(u);
 
   // add_+/-  add_SI_symbol add_SI_prefix addnoisy set_sigDigits adddegfree replicates addlimits
 } // int main()
