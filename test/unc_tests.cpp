@@ -14,7 +14,6 @@
 // Copyright Paul A. Bristow 1998, 2012, 2021.
 
 // unc_tests.cpp
-
 // #define BOOST_QUAN_UNC_TRACE // Diagnostic output.  (was UNC_TRACE?)
 
 #include <boost/config.hpp>
@@ -119,6 +118,8 @@ ofstream fout(outFilename, ios_base::out); // Use default ios_base::overwrite/re
 // CHECK(scientific << setw(20) << d, "       1.234568e+001");
 // Note: sets uncertain defaults (& oss has ios defaults too).
 // BUT CHECK cannot check the number of chars output using unc_print "used", so use CHECK_USED for this.
+
+using namespace boost::quan;
 
 #define CHECK(manips, result)\
 {\

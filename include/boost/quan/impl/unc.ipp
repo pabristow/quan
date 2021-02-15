@@ -182,7 +182,7 @@ std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Define.
 } // ostream& operator<< (ostream& os, const showUncTypes& ut)
 
 /*! Show all the @c std::ios stream flags settings as words, for example: true, dec, right.\n
-  Usage:   \code outIosFlags(cout.flags(), cerr); // logs cout's flag to cerr. \endcode
+  Usage:   \code outIosFlags(std::cout.flags(), std::cerr); // logs cout's flag to cerr. \endcode
   \param flags Iostream flags.
   \param os @c std::ostream for output, default @c std::cerr
   */
@@ -227,9 +227,11 @@ void outIosFlags(long flags, std::ostream& os = std::cerr)
 /*! Show the set uncertain class io stream flags settings as words, for examples: add_/-, set_scaled, addlimits .
   \param uncFlags Output flags to be displayed as words.
   \param os Ostream for output.
-  Usage:   \code outUncFlags(cout.flags(), cerr); // logs cout's flag to cerr. long& uncFlags = os.iword(uncFlagsIndex); \endcode
+  Usage:   \code 
+    outUncFlags(std::cout.flags(), std::cerr); // logs cout's flag to cerr.
+   long& uncFlags = os.iword(uncFlagsIndex); \endcode
 */
-void outUncFlags(long uncFlags, std::ostream& os = std::cerr)
+void outUncFlags(long uncFlags, std::ostream& os = std::cerr, std::string terminator = ".\n")
 {
   os << "uncFlags (" << std::showbase << std::hex << uncFlags << std::dec << ")";
   os << ((uncFlags & firm) ? " firm" : "" );
@@ -243,7 +245,7 @@ void outUncFlags(long uncFlags, std::ostream& os = std::cerr)
   if (uncFlags & useSetSigDigits) os << " set_sigDigits";
   if (uncFlags & useSetUncSigDigits) os << " set_uncsigDigits";
   if (uncFlags & degfree) os << " adddegfree";
-  os << '.';
+  os << terminator;
 } //
 
 // Parameterless manipulators to switch format to switch uncFlag bits,

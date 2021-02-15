@@ -10,7 +10,8 @@
 // unc_input.cpp
 
 #include <iosfwd>
-//#include <boost/quan/unc.hpp>
+#include <boost/quan/unc.hpp>
+#include <boost/quan/xiostream.hpp>
 
 void unc_input(
                    double& value,  // mean, central or most probable value.
@@ -106,7 +107,7 @@ void unc_input(
   // if (is.eof()) // Sets fail for overflow, so not useful.
   if (!is)
   { // No integer part of value.
-    cerr << "No numeric value input! " << showiostate << endl;
+    cerr << "No numeric value input! " << boost::quan::showiostate << endl;
     value = std::numeric_limits<double>::quiet_NaN();
     stdDev = std::numeric_limits<float>::quiet_NaN();
     types = static_cast<unsigned short>(~(VALUE_ZERO | VALUE_INTEGER | VALUE_RATIONAL| VALUE_NEGATIVE_ONLY | VALUE_POSITIVE_ONLY | UNC_KNOWN | UNC_NOPLUS
@@ -125,7 +126,7 @@ void unc_input(
   // for example, 99999999999999.
   if (is.fail())
   {  // Check for overflow & other problems.
-    std::cerr << "\t" "Uncertain value input failed! "<< showiostate << std::endl;
+    std::cerr << "\t" "Uncertain value input failed! "<< boost::quan::showiostate << std::endl;
     value = std::numeric_limits<double>::quiet_NaN();
     stdDev = std::numeric_limits<float>::quiet_NaN();
     types = static_cast<unsigned short>(~(VALUE_ZERO | VALUE_INTEGER | VALUE_RATIONAL| VALUE_NEGATIVE_ONLY | VALUE_POSITIVE_ONLY | UNC_KNOWN | UNC_NOPLUS

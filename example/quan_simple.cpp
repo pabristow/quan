@@ -33,12 +33,14 @@ std::string versions()
 int main()
 {
    std::cout << std::endl;
+   using namespace boost::quan;
 
-   std::cout << versions() << std::endl;
+  std::cout << versions() << std::endl;
   setUncDefaults(std::cout);
   uncun u(1.23, 0.45F);
+  outUncFlags(std::cout.flags(), std::cerr);
   std::cout << "URealCorr u(1.23, 0.45); = " << plusminus << addlimits << adddegfree << u << std::endl;
-
+  outUncFlags(std::cout.flags(), std::cerr, "\n");
 
 } // int main()
 

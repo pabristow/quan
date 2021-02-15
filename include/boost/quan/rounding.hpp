@@ -39,6 +39,9 @@
     Measurement Science Review, Vol 2, section 1, (2002), pages 21 to 31.\n
  */
 
+#ifndef BOOST_QUAN_ROUNDING_HPP
+#define BOOST_QUAN_ROUNDING_HPP
+
 #include <cmath>
 // using std::floor;
 // using std::pow;
@@ -108,6 +111,10 @@
 
 #include <locale>
 // default locale for isdigit
+
+namespace boost {
+  namespace quan {
+
 
 BOOST_STATIC_ASSERT(std::numeric_limits<double>::is_iec559); // Assume IEEE 754 ONLY.
 // _STATIC_ASSERT (numeric_limits<double>::is_iec559); // and MS STATIC assert.
@@ -529,7 +536,7 @@ std::string round_ms(FPT v, signed int m)
   if ((s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 4) // e+00
           && (s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 5)) // e+308
   { // for double == 21 (would be 22 if negative).
-    outFmtFlags(ss.flags());
+    boost::quan::outFmtFlags(ss.flags());
     std::cout << "\nFunction round_ms " << v << ", " << m << ", " << s << ", "
             << s.size() << ", " << std::numeric_limits<FPT>::digits10 + 1 + 1 + 4 << std::endl;
     return s;
@@ -1440,3 +1447,8 @@ void out_value_df_limits(double mean, double sigma, int degfree = 1, std::ostrea
 } // void out_value_limits
 
 // Above is missing degrees of freedom included in unc type.
+
+} // namespace quan
+} //namespace boost
+#endif // #ifndef BOOST_QUAN_ROUNDING_HPP
+

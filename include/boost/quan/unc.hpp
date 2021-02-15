@@ -57,18 +57,17 @@ and C++ include files are in folder:
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // Copyright Paul A. Bristow 1998, 2012, 2021
+// 
+//#define BOOST_QUAN_DIAGNOSTICS if diagnositics required.
 
-#ifndef UNC_HPP
-#define UNC_HPP
-
-//#define BOOST_QUAN_DIAGNOSTICS
+#ifndef BOOST_QUAN_UNC_HPP
+#define BOOST_QUAN_UNC_HPP
 
 #include <boost/math/special_functions/fpclassify.hpp>
   //using boost::math::isnan;
   //using boost::math::isinf;
   //using boost::math::isfinite;
   //using boost::math::isnormal; // isfinite and not denormalised.
-// Might instead use the std TR1 versions?
 
 #include <cstdlib>  //
 #include <cmath>   // for log, exp etc
@@ -134,6 +133,10 @@ BOOST_STATIC_ASSERT (std::numeric_limits<double>::is_iec559); // Assume IEEE 754
 #include <boost/units/io.hpp>
 #include <boost/units/static_rational.hpp>
 #include <boost/type_traits.hpp>
+
+
+namespace boost {
+  namespace quan {
 
 void outIosFlags(long, std::ostream&); // Output std::ios flags.
 void outUncTypes(unsigned short int, std::ostream&); // Output
@@ -2033,7 +2036,7 @@ template<typename Type> // Predicate Functor modelled on STL less in functional.
 
 // Specialization of autoprefix_norm for UDT boost::units::uncun
 // See /boost-trunk/libs/units/example/measurement.hpp
-// For autoprefix_norm see /boost-trunk/boost/units/io.hpp.
+// For autoprefix_norm see /boost/units/io.hpp.
 // This specialization is required to get autoprefix to work with this class.
 
 using boost::units::autoprefix_norm_impl;
@@ -2049,6 +2052,9 @@ autoprefix_norm(const unc<false> & arg)
 #include <boost/quan/impl/unc.ipp>  // Definitions.
 
 #include <boost/quan/impl/unc_input.ipp>  // Definitions.
-// #include <boost/quan/impl/unc_output.ipp>  // Definitions.
+// #include <boost/quan/impl/unc_output.ipp>  // Definitions. (Obselete)
 
-#endif // UNC_HPP
+} // namespace quan
+} //namespace boost
+
+#endif // BOOST_QUAN_UNC_HPP
