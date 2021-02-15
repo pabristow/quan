@@ -21,6 +21,8 @@
 
     Record width used etc.
 
+    #define BOOST_QUAN_UNC_TRACE for some diagnostics.
+
 */
 //    unc_output.ipp
 
@@ -213,7 +215,7 @@ void unc_output(double value, // Mean or most likely value.
   os.width(0); //! Would be zeroed by any previous use like << avalue ...
   os.flags(ios_base::dec | ios_base::skipws); // All other format flags are zero (cleared bits).
   //! Leaving fill and precision as on entry.
-  #ifdef UNC_TRACE
+  #ifdef BOOST_QUAN_UNC_TRACE
     { /*! Log std::ios fillchar, precision & width.
         fill char set by \code os.fill('~'); or << std::setfill('~') \endcode
         precision by \code << std::setprecision(10) or std::cout.precision(10) \endcode
@@ -228,7 +230,7 @@ void unc_output(double value, // Mean or most likely value.
       std::cerr << "  "; outFmtFlags(os.flags(), std::cerr, ".\n");
       std::cerr << "  "; outIOstates(os.rdstate(), std::cerr, ".\n");
     } // trace
-  #endif
+  #endif // BOOST_QUAN_UNC_TRACE
 
 
   // Get print format requirements from std::ios flags. ****************************
@@ -265,7 +267,7 @@ void unc_output(double value, // Mean or most likely value.
   int exponent = 0; // To hold calculated 10 ^ exponent.
   size_t used = 0; // Count of chars actually output to stream os.
 
-#ifdef UNC_TRACE
+#ifdef BOOST_QUAN_UNC_TRACE
   { // Log display options.
    std:: cerr << "  " "Display: "
       << (isPlusMinus ? "+/- " : "")
@@ -283,7 +285,7 @@ void unc_output(double value, // Mean or most likely value.
       << (isShowPoint ? "show_. " : "")
       << std::endl;
   } // trace
-#endif
+#endif // BOOST_QUAN_UNC_TRACE
 
   // Check value, stdDev & unc types for finite, zero, integer, exact. @@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -393,7 +395,7 @@ void unc_output(double value, // Mean or most likely value.
     }
   } // End checks on stdDev.
 
-#ifdef UNC_TRACE
+#ifdef BOOST_QUAN_UNC_TRACE
   { // Show output settings.
     std::cerr
       << "  " "Output Settings: " << boolalpha << dec
@@ -423,7 +425,7 @@ void unc_output(double value, // Mean or most likely value.
 
       std::cerr << "  " "Value " << setprecision(18) << value << (isValueNearZero ? "isValueNearZero " : "");
   } // trace
-#endif
+#endif // BOOST_QUAN_UNC_TRACE
   // Scale the value, if required by unc flags setScaled or autoScaled. __________________________
   // 0 == scale10 means (not)scaled by unity. 3 means divided by 1000 ...
   if (!isValueInteger && !isValueZero && !isValueInfinite && !isValueNaN)
@@ -472,7 +474,7 @@ void unc_output(double value, // Mean or most likely value.
   }
 
   // Inexact and known uncertainty (including 0.0000 +/- 0.00019 case).
-#ifdef UNC_TRACE
+#ifdef BOOST_QUAN_UNC_TRACE
   { // scaling.
     std::cerr << std::setprecision(sigDigits+2) << dec
       << "  "
@@ -488,7 +490,7 @@ void unc_output(double value, // Mean or most likely value.
         << std::endl;
       }
   } // trace
-#endif
+#endif // BOOST_QUAN_UNC_TRACE
 
   const char signChar = (isValueNegative) ? '-': // Always show '-' sign.
   (isShowPos ? '+' :  // show '+' only if isShowPos.
@@ -501,7 +503,7 @@ void unc_output(double value, // Mean or most likely value.
 
   // ###################  Actually Output value (append +/- if isPlusMinus). ####################################
 
-#ifdef UNC_TRACE
+#ifdef BOOST_QUAN_UNC_TRACE
   {
     std::cerr << "  " " ios Width " << iosWidth
       << ", ios fill char " << showbase << hex << int(iosFillChar) << dec
@@ -509,7 +511,7 @@ void unc_output(double value, // Mean or most likely value.
       << ", signChar (" << showbase << hex << int(signChar) << dec << noshowbase << ") " << ((signChar != 0) ? signChar : ' ')
       << std::endl;
   } // trace
-#endif
+#endif // BOOST_QUAN_UNC_TRACE
 
   std::ostringstream oss; // Value etc string to really output, with pre & /or after padding, if necessary.
 
@@ -533,11 +535,11 @@ void unc_output(double value, // Mean or most likely value.
 
   used = oss.str().size();
 
-#ifdef UNC_TRACE
+#ifdef BOOST_QUAN_UNC_TRACE
   {
     std::cerr << "  " << dec << used << " chars used in total."  << std::endl;
   } // trace
-#endif
+#endif // BOOST_QUAN_UNC_TRACE
 
   os.iword(oldUncUsedIndex) = os.iword(usedIndex); // Save previous used.
   os.iword(usedIndex) = static_cast<long>(used);  // Record chars actually output to os.

@@ -113,6 +113,7 @@ and C++ include files are in folder:
   //using std::exception;
   //using std::bad_alloc;
 
+// File for Quan library:
 #include <boost/quan/xiostream.hpp> // for extra manipulators, spaces.
 // These extra manipulators have been placed in std for convenience.
   //using std::noadjust;  // Restore to default state.
@@ -125,8 +126,8 @@ and C++ include files are in folder:
 #include <boost/quan/unc_init.hpp> // Defines indexes to xalloc iword(index) variables.
 #include <boost/quan/rounding.hpp> // Rounding functions.
 
+// Boost libraries.
 #include <boost/lexical_cast.hpp>
-
 #include <boost/static_assert.hpp>
 BOOST_STATIC_ASSERT (std::numeric_limits<double>::is_iec559); // Assume IEEE 754 ONLY.
 #include <boost/io/ios_state.hpp>  // IO state saver.
@@ -134,12 +135,8 @@ BOOST_STATIC_ASSERT (std::numeric_limits<double>::is_iec559); // Assume IEEE 754
 #include <boost/units/static_rational.hpp>
 #include <boost/type_traits.hpp>
 
-
 namespace boost {
-  namespace quan {
-
-void outIosFlags(long, std::ostream&); // Output std::ios flags.
-void outUncTypes(unsigned short int, std::ostream&); // Output
+namespace quan {
 
 // Forward declarations.
 template <bool is_correlated> // Default is uncertainties that are NOT correlated (the normal case).
@@ -161,10 +158,11 @@ void unc_input(double& mean,  // mean (central or most probable) value.
                    unsigned short int& degreesOfFreedom,  // 1 observation.
                    unsigned short int& uncTypes,
                    std::istream& is);
-// Implemented in unc_input.ipp
 
+void outIosFmtFlags(long, std::ostream&); // Output std::ios flags.
+void outUncTypes(unsigned short int, std::ostream&); // Output uncertain types.
 
-// template <typename Type> inline Type pow4(const Type& a);
+// Implemented below.
 
 //! Quaded function, notationally convenient for x^4, but overflow possible?
 //! Used by Welch-Satterthwaite formula.
@@ -173,8 +171,6 @@ inline Type pow4(const Type& a)
 {
   return (Type)(a * a * a * a);
 }
-
-
 
 // SI units from CRC Handbook of Chemistry & Physics 76th edition 1995,
 // ISBN 08493 0476-8 page 1-22.
@@ -207,9 +203,10 @@ inline Type pow4(const Type& a)
 // http://aurora.rg.iupui.edu/~schadow/units/UCUM/ucum.html
 
 void outUncValues(std::ostream& os, std::ostream& log); // Output uncertain values.
-void setUncDefaults(std::ios_base& os); // Set I=Unc class defaults for stream os.
+void setUncDefaults(std::ios_base& os); // Set Unc class defaults for std::ostream os.
 
  //! 16 type bits used by unc uncTypes. Bit set = 1 means a positive attribute.
+ //! Unctypes are
 enum unc_types
 {
   VALUE_ZERO = 1 << 0, //!< bit zero = 1 means value is zero.
@@ -251,15 +248,17 @@ const unsigned short int VALUE_EXACT = (UNC_NOMINUS | UNC_NOPLUS);  //!< Both se
 const unsigned short int UNC_DEF = (UNC_KNOWN | UNC_NOMINUS | UNC_NOPLUS | //!< Any defined means that uncertainty is defined.
                                     UNC_QUAN_DECIMAL | UNC_QUAN_BINARY |
                                     UNC_EXPLICIT //!< Not implicit from number of significant digits.
-                                    | UNC_UNIFORM | UNC_TRIANGULAR);  //
+                                    | UNC_UNIFORM | UNC_TRIANGULAR);  // default Guassian distribution.
 const unsigned short int DEG_FREE_DEF = (DEG_FREE_EXACT | DEG_FREE_KNOWN);
 
-extern const char* uncTypeWords[];
+// extern const char* uncTypeWords[];
 
-enum uncertainflags
-{  //! \enum uncertainflags Control of printing uncertain values, similar to ios flags.
+enum uncIOflags
+{  //! \enum uncIOflags Control of printing uncertain values, similar to std::ios flags.
+  //! @brief  Can be output, for example:
+  //! \code outUncIOFlags(std::cout.flags(), std::cerr); // uncFlags (0x201) firm adddegfree.  \endcode
   defaults = 0, //!< Default.
-  firm = 1  << 0,  //!< bit 0: == 0 == false means flex, or firm == 1 == true.
+  firm = 1  << 0,  //!< bit 0: == 0 == false means flexible layout, or firm == 1 means true.
   setScaled = 1 << 1, //!< bit 1 Set scaled == 1 or not scaled == 0.
   //! by fixed factor SetScale and << scale ...
   //! power10 in range -max to +max.
@@ -285,8 +284,8 @@ enum uncertainflags
   // Usage: std::cout `<< adddegfree << u;`
   replicates = 1 << 0xA, //!< 0x400 If == 1, add output of replicates as [99] if > 1.
   limits = 1 << 0xB, //!< 0X800 add limits.
-  // 0xC, D, E and F spare - and iword is actually a long so could use 32 flags.
-}; // enum uncertainflags
+  // 0xC, D, E and F spare - and std::ios::iword is actually a long integer so could use 32 flags.
+}; // enum uncIOflags
 
 void outFpClass(double, std::ostream&);  // Special output for inf, NaN...
 
@@ -380,7 +379,7 @@ void outFpClass(double, std::ostream&);  // Special output for inf, NaN...
 //std::ostream operator<< (std::ostream, const setSigDigits&);
 //std::istream operator>> (std::istream, const setSigDigits&);
 //
-//void outUncFlags(long uncflags, std::ostream);
+//void outUncIOFlags(long uncflags, std::ostream);
 //
 class showUncFlags
 {  // Constructor & operator<< defined in unc.ipp
@@ -547,7 +546,7 @@ public:
 
 /*! Uncertain number template class unc,
    using mean and measure of uncertainty (perhaps standard deviation if pure Gaussian distribution),
-   but also includes information about uncertainty as degrees of freedom & distribution.
+   but also includes information about uncertainty as degrees of freedom & distribution (default Gaussian).
 
   \tparam is_correlated if true, standard deviation is correlated, else not correlated (the common case).
 */template <bool is_correlated = false>
@@ -561,6 +560,7 @@ public:
                    unsigned short int& degreesOfFreedom,  // Degrees of freedom -1. (Default zero for 1 observation).
                    unsigned short int& types, // 16 Uncertain type flags showing type of value.
                    std::istream& is);
+  // Previously used
   //friend void unc_output(double value, // Mean(central or most probable) value.
   //                  float stdDev, // Uncertainty estimate as Standard deviation.
   //                  unsigned short int degFree, // Degrees of freedom.
@@ -570,13 +570,13 @@ public:
   // using char_traits<char>::int_type; // Derivation from public \c std::char_traits<char> needed for \c int_type.
 
 public:
-  /*! \note It is convenient to use 64-bit floating-point value
+  /*! \note It is convenient to use 64-bit floating-point format for mean of central value
      (so even really accurate values like weights can be precise enough),
      32-bit floating-point is ample accuracy for standard deviation fractional variation,
      leaving two 16-bit for degrees of freedom and other flags,
      so that total is same as two doubles & can be efficiently aligned.
   */
-  double value_; //!< aka mean, estimate, or most likely value.
+  double value_; //!< aka mean, estimate, central or most likely value.
 
   //! Measure of uncertainty, typically, standard deviation, if known.
   //! \note Reduced precision (float guarantees 6 decimal digits not 15) and range e38 not E304
@@ -680,7 +680,7 @@ public:
     unctypes_ &= ~type;
   }  // Clear all type flag(s).
 
-  // Constructors.
+  // unc class Constructors.
 
  /*! Default constructor from double value & float uncertainty.
      Constructor from just a double value assumed exact,
@@ -1916,7 +1916,7 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
         << ' ' << diff
         << std::endl;
     }
-#endif
+#endif // BOOST_QUAN_DIAGNOSTICS
     return isLess;
   } // bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
 
@@ -1945,7 +1945,7 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
         << ' ' << diff
         << std::endl;
     }
-#endif
+#endif // BOOST_QUAN_DIAGNOSTICS
     return isLess;
   } // bool lessU2(const unc<is_correlated>& l, const unc<is_correlated>& r)
 
@@ -2047,7 +2047,6 @@ autoprefix_norm(const unc<false> & arg)
   return autoprefix_norm_impl<double, true>::call(arg);
 }
 
-
 //! 'Unique' value used to check xalloc initialised iwords are OK, and are not corrupted.
 static const long indexID = 0x48dbaf8;  //! Random id value.
 
@@ -2096,8 +2095,8 @@ void setUncDefaults(std::ios_base& os)
   { // Initialization of iwords failed!
     std::cerr << "os.iword(0) = "  << std::hex << os.iword(0)
       << " not expected ID " << indexID << '!'
-      << "\nMissing call of setUncDefaults(ostream)?" << std::endl;
-    // throw; some exception TODO
+      << "\nMissing call of setUncDefaults(ostream)?" 
+      << std::endl;
   }
 } // void setUncDefaults(std::ios_base& stream)
 
@@ -2105,18 +2104,28 @@ void setUncDefaults(std::ios_base& os)
   \param os Current @c std::ostream to be displayed in log.
   \param log @c std::ostream for log.
 */
-void outUncValues(std::ostream& os, std::ostream& log)
-{ // Output ALL the os.word() values to the ostream log.
-  log //<< hex << "zero " << os.iword(zeroIndex)  << dec // = indexID; // Mark if has been set to defaults.
+void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
+{ // Output ALL the os.word() values to the @c std::ostream log.
+  if (os.iword(zeroIndex) != indexID)
+  {
+    std::cout << "Magic index word is corrupted, should be " << std::hex << indexID << std::dec << "!" << std::endl;
+  }
+  if (os.iword(topIndex)  != indexID)
+  {
+    std::cout << "Magic index top word is corrupted, should be "  << std::hex << indexID << std::dec << "!" << std::endl;
+  }
+  log 
+    << std::hex << "zero " << os.iword(zeroIndex)  << std::dec // = indexID; // Mark if has been set to defaults.
     << " " "UncValues: "
     <<  "uncFlags " << std::hex << os.iword(uncFlagsIndex) << std::dec //= 0;  // iword(1)
+    // holding bits meaning: add_+/-  add_SI_symbol add_SI_prefix addnoisy set_sigDigits adddegfree replicates addlimits...
     << ", setSigDigits " << os.iword(setSigDigitsIndex) // = 3;  // Default set 3 sig digits.
     << ", uncWidth " << os.iword(uncWidthIndex) // = 10;  // Default width 10 to allow +1.234E12
     << ", uncSetWidth " << os.iword(oldUncSetWidthIndex) // = 0;  // Not used
     << ", uncScale " << os.iword(scaleIndex) // = 0;  // Zero scaling means was not scaled.
     << ", uncSetScale " << os.iword(setScaleIndex) // = 0;  // Zero scaling means not scaled.
     << ", uncUsed " << os.iword(usedIndex) // = 0; //  None used.
-    // Values saved by previous calls of uncprint.
+    // Values saved by previous calls of unc ouput.
     << ", uncOldFlags " << os.iword(oldUncFlagsIndex) // = 0;  // 0xFFFFFFFF to mean not valid?
     << ", uncOldUncWidth " << os.iword(oldUncWidthIndex) // = 0;
     << ", uncOldScale " << os.iword(oldScaleIndex) // = 0;
@@ -2127,12 +2136,19 @@ void outUncValues(std::ostream& os, std::ostream& log)
     << ", setUncSigDigits " << os.iword(setUncSigDigitsIndex)
     << ", roundingLossIndex " << os.iword(roundingLossIndex) / 1.e3
     << ", confidenceIndex " << os.iword(confidenceIndex) / 1.e6
-
-    // << ", top " << hex << os.iword(topIndex) << dec
+     << ", top " << std::hex << os.iword(topIndex) << std::dec
     << std::endl;// = indexID;  // last .iword(16) as check.
+  /* Before call of setUnc_defaults() all are zero (probably) and after call:
+  * zero 48dbaf8 UncValues: 
+      uncFlags 0, setSigDigits 3, uncWidth 10, uncSetWidth -1, uncScale 0, uncSetScale 0, uncUsed 0, uncOldFlags 0, uncOldUncWidth -1, uncOldScale -1, uncSigDigits 2, uncoldSigDigits -1, oldUncUsed -1, oldStdDevSigDigits -1, setUncSigDigits 2, roundingLossIndex 0.05, confidenceIndex 0.05, 
+    top 48dbaf8
+  */
 } // void outUncValues()
 
-//! Description as a word of each bit in @c unc_type, using enum unc_types.
+//! \ return Description as a word of each bit in @c unc_type, using enum unc_types.
+//! These bits record the type of value stored, for example: VALUE_ZERO, UNC_KNOWN, DEG_FREE_KNOWN, UNC_UNIFORM.
+//! Used by function outUncTypes.
+//! Example: \code   \endcode
 const char* uncTypeWords[16] =
 {
     "zero", //!< 0 VALUE_ZERO value is zero.
@@ -2161,7 +2177,7 @@ const char* uncTypeWords[16] =
   \param os @c std::ostream for output, default = cerr
 */
 void outUncTypes(unsigned short int uncTypes, std::ostream& os = std::cerr)
-{// Usage:  outUncTypes(unc.getUncTypes(), cerr); // logs to cerr.
+{// Usage:  \code outUncTypes(unc.getUncTypes(), cerr); \endcode // logs to cerr.
   const int count = 16;  // because using 16-bit unsigned short int.
   os << "uncTypes ("  << std::showbase << std::hex << uncTypes << std::dec << ")";
   for (int i = 0, j = 1; i < count; ++i)
@@ -2185,8 +2201,8 @@ showUncTypes::showUncTypes(unsigned short int t) : types(t)
 
 /*!
   Usage: \code out << showUncTypes(uncType) \endcode
-  \param ut Uncertain type flags.
-  \param os @c std::ostream for output of types as words, for example: integer, zero, df_exact.
+  \param ut Uncertain type flags for the @c std::ostream.
+  \param os @c std::ostream for output of uncertain types as words, for example: integer, zero, df_exact.
 */
 std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Define.
 {
@@ -2206,12 +2222,12 @@ std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Define.
 } // ostream& operator<< (ostream& os, const showUncTypes& ut)
 
 /*! Show all the @c std::ios stream flags settings as words, for example: true, dec, right.\n
-  Usage:   \code outIosFlags(std::cout.flags(), std::cerr); // logs cout's flag to cerr. \endcode
+  Usage:   \code outIosFmtFlags(std::cout.flags(), std::cerr); // logs cout's flag to cerr. \endcode
   \param flags Iostream flags.
   \param os @c std::ostream for output, default @c std::cerr
   */
-void outIosFlags(long flags, std::ostream& os = std::cerr)
-{ // Show all the std io stream flags settings as words.
+void outIosFmtFlags(long flags, std::ostream& os = std::cerr)
+{ // Show all the std::ios stream flags settings as words.
   os << "iosflags (" << flags << ")" << std::dec;
   if (flags & std::ios_base::boolalpha) //  Show bool as word strings "true" or "false".
     os << " boolalpha";
@@ -2250,30 +2266,31 @@ void outIosFlags(long flags, std::ostream& os = std::cerr)
 
 /*! Show the set uncertain class io stream flags settings as words, for examples: add_/-, set_scaled, addlimits .
   \param uncFlags Output flags to be displayed as words.
-  \param os Ostream for output.
+  \param os stream for output.
   Usage:   \code
-    outUncFlags(std::cout.flags(), std::cerr); // logs cout's flag to cerr.
+    outUncIOFlags(std::cout.flags(), std::cerr); // logs cout's flag to cerr.
    long& uncFlags = os.iword(uncFlagsIndex); \endcode
 */
-void outUncFlags(long uncFlags, std::ostream& os = std::cerr, std::string terminator = ".\n")
+void outUncIOFlags(long uncFlags, std::ostream& os = std::cerr, std::string terminator = ".\n")
 {
   os << "uncFlags (" << std::showbase << std::hex << uncFlags << std::dec << ")";
-  os << ((uncFlags & firm) ? " firm" : "");
+  os << ((uncFlags & firm) ? " firm" : ""); // bit 1 = 1
   if (uncFlags & setScaled) os << " set_scaled";
   if (uncFlags & autoScaled) os << " auto_scaled";
   if (uncFlags & plusMinus) os << " add_+/- ";
-  //if (uncFlags & addSISymbol) os << " add_SI_symbol";
-  //if (uncFlags & addSIPrefix) os << " add_SI_prefix";
-  if (uncFlags & limits) os << " addlimits";
+  if (uncFlags & addSISymbol) os << " add_SI_symbol";
+  if (uncFlags & addSIPrefix) os << " add_SI_prefix";
   if (uncFlags & noisyDigit) os << " addnoisy";
   if (uncFlags & useSetSigDigits) os << " set_sigDigits";
   if (uncFlags & useSetUncSigDigits) os << " set_uncsigDigits";
   if (uncFlags & degfree) os << " adddegfree";
+  if (uncFlags & degfree) os << " replicates";
+  if (uncFlags & limits) os << " addlimits"; // hex 800 = 2048
   os << terminator;
 } //
 
 // Parameterless manipulators to switch format to switch uncFlag bits,
-// flex - width just enough to display, suitable for non-tables,
+// flex - width just enough to display, suitable for in-line display non-tables,
 // or firm to fit into a set width, suitable for tables,
 // & similarly for scale and autoscale flag bits.
 // Note all lowercase to match convention of hex, oct ...
@@ -2889,21 +2906,21 @@ void unc_input(
     value = iv;
     types |= (UNC_KNOWN | VALUE_INTEGER | VALUE_RATIONAL);
     //   types |= (UNC_KNOWN | VALUE_INTEGER | VALUE_RATIONAL | UNC_NOPLUS | UNC_NOMINUS);
-#ifdef UNC_TRACE
+#ifdef BOOST_QUAN_UNC_TRACE
     { // Implicitly exact +/- 0
       std::cerr << "    URead: Exact integer = " << value << std::endl;
     }
-#endif
+#endif // BOOST_QUAN_UNC_TRACE
   }
   else
   { // Real NOT integer.
     types |= UNC_KNOWN; // Known.
     types &= ~(VALUE_INTEGER | VALUE_RATIONAL | UNC_NOPLUS | UNC_NOMINUS);
-#ifdef UNC_TRACE
+#ifdef BOOST_QUAN_UNC_TRACE
     {
       std::cerr << "    URead: " << value << " implicit +/- " << stdDev << ". ";
     }
-#endif
+#endif // BOOST_QUAN_UNC_TRACE
   } // integer or not.
 
   is >> std::ws; // Skip optional whitespace between "123.45" and "+/-".

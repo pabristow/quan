@@ -24,9 +24,9 @@ namespace boost {
 namespace quan {
 
   // This block of definitions MUST be positioned before main.
-  // 14 indexes of long iwords allocated by calls of ios_base.xalloc();
-  // 1st call of xalloc() returns 0 so ios_base.iword(0) used for magic id,
-  // 2nd call of xalloc() returns 1 so ios_base.iword(1) used for uncFlags,
+  // 14 indexes of long iwords allocated by calls of std::ios_base.xalloc();
+  // 1st call of xalloc() returns 0 so std::ios_base.iword(0) used for magic id,
+  // 2nd call of xalloc() returns 1 so std::ios_base.iword(1) used for uncFlags,
   // 3rd calls returns 2, so iosword(2) used for sigDigits ...
   // Order of assignment must ensure these match enum uncindex (if used).
   const long zeroIndex = std::ios_base::xalloc(); // 1st iword[0] to hold a 'magic' id.

@@ -14,7 +14,7 @@
 // Copyright Paul A. Bristow 1998, 2012, 2021.
 
 // unc_tests.cpp
-// #define BOOST_QUAN_UNC_TRACE // Diagnostic output.  (was UNC_TRACE?)
+// #define BOOST_QUAN_UNC_TRACE // Diagnostic output.
 
 #include <boost/config.hpp>
 #include <boost/cstdlib.hpp> // needed for boost::exit_failure;

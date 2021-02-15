@@ -77,10 +77,12 @@
 
 BOOST_STATIC_ASSERT (std::numeric_limits<double>::is_iec559); // Assume IEEE 754 ONLY.
 
-// const unsigned int maxdigits10 = 2 + std::numeric_limits<double>::digits * 3010/10000;
+//constexpr int maxdigits10 = 2 + std::numeric_limits<double>::digits * 3010/10000;
 constexpr double eps = std::numeric_limits<double>::epsilon();
 constexpr int digits10 = std::numeric_limits<double>::digits10;
 constexpr double tol = 0.001; // Fractional tolerance for  BOOST_CHECK_CLOSE_FRACTION.
+
+using namespace boost::quan;
 
 BOOST_AUTO_TEST_CASE(round_test_0)
 {
@@ -111,7 +113,9 @@ BOOST_AUTO_TEST_CASE(round_test_1)
     //  std::numeric_limits<double>::max_exponent10 = 308,
     //  std::numeric_limits<double>::max_exponent10 -1 = 307.
 
-    BOOST_CHECK_EQUAL(maxdigits10, 17U); // expected for 64-bit double.
+    BOOST_CHECK_EQUAL(std::numeric_limits<double>::max_digits10, 17U); // expected for 64-bit double.
+
+
 
 } //  BOOST_AUTO_TEST_CASE(round_test_1)
 
@@ -151,10 +155,10 @@ BOOST_AUTO_TEST_CASE(round_f_test)
     BOOST_CHECK_EQUAL(round_f(v, 16), "1.23456000000000"); //  Maximum significant digits is 15
     BOOST_CHECK_EQUAL(round_f(v, 17), "1.23456000000000"); // Maximum significant digits is 15
     BOOST_CHECK_EQUAL(round_f(v, std::numeric_limits<double>::digits10), "1.23456000000000"); //
-    BOOST_CHECK_EQUAL(round_f(v, maxdigits10), "1.23456000000000"); // Maximum significant digits is 15 (should be std::numeric_limits<double>::maxdigits10).
+    BOOST_CHECK_EQUAL(round_f(v, std::numeric_limits<double>::max_digits10), "1.23456000000000"); // Maximum significant digits is 15 (should be std::numeric_limits<double>::maxdigits10).
 
     v = 1.23456789012345678901234567890; // Check that all the digits are used, and rounded at digit 15
-    BOOST_CHECK_EQUAL(round_f(v, maxdigits10), "1.23456789012346"); // Maximum significant digits is 15 (should be std::numeric_limits<double>::maxdigits10).
+    BOOST_CHECK_EQUAL(round_f(v, std::numeric_limits<double>::max_digits10), "1.23456789012346"); // Maximum significant digits is 15 (should be std::numeric_limits<double>::maxdigits10).
 
     v = 0.12345678901234567890; // Value < unity.
     BOOST_CHECK_EQUAL(round_f(v, 1), "0.1"); //
@@ -164,8 +168,8 @@ BOOST_AUTO_TEST_CASE(round_f_test)
     BOOST_CHECK_EQUAL(round_f(v, 13), "0.1234567890123"); // 13
     BOOST_CHECK_EQUAL(round_f(v, digits10 -2), "0.1234567890123"); // 13
     BOOST_CHECK_EQUAL(round_f(v, 14), "0.12345678901235"); // 14
-    BOOST_CHECK_EQUAL(round_f(v, digits10 -1), "0.12345678901235"); // 14
-    BOOST_CHECK_EQUAL(round_f(v, maxdigits10), "0.123456789012346"); // Maximum significant digits is 15 (should be std::numeric_limits<double>::maxdigits10).
+    BOOST_CHECK_EQUAL(round_f(v, std::numeric_limits<double>::digits10 -1), "0.12345678901235"); // 14
+    BOOST_CHECK_EQUAL(round_f(v, std::numeric_limits<double>::max_digits10), "0.123456789012346"); // Maximum significant digits is 15 (should be std::numeric_limits<double>::maxdigits10).
 
     v = 0.0012345678901234567890; // Value much less than unity.
     BOOST_CHECK_EQUAL(round_f(v, 1), "0.001"); //
@@ -178,13 +182,13 @@ BOOST_AUTO_TEST_CASE(round_f_test)
     BOOST_CHECK_EQUAL(round_f(v, 13), "0.001234567890123"); //
     BOOST_CHECK_EQUAL(round_f(v, 14), "0.0012345678901235"); //
     BOOST_CHECK_EQUAL(round_f(v, digits10), "0.00123456789012346"); //
-    BOOST_CHECK_EQUAL(round_f(v, maxdigits10), "0.00123456789012346"); // Uncertain warning: Maximum significant digits is 15
+    BOOST_CHECK_EQUAL(round_f(v, std::numeric_limits<double>::max_digits10), "0.00123456789012346"); // Uncertain warning: Maximum significant digits is 15
 
     v = 12345678901234567890.0; // Value > max_digits10 digits.
     BOOST_CHECK_EQUAL(round_f(v, 4),           "12350000000000000000.");
     BOOST_CHECK_EQUAL(round_f(v, 10),          "12345678900000000000.");
     BOOST_CHECK_EQUAL(round_f(v, digits10), "12345678901234600000.");
-    BOOST_CHECK_EQUAL(round_f(v, maxdigits10), "12345678901234600000.");  // Uncertain warning: Maximum significant digits is 15
+    BOOST_CHECK_EQUAL(round_f(v, std::numeric_limits<double>::max_digits10), "12345678901234600000.");  // Uncertain warning: Maximum significant digits is 15
 
 
     v = 0.0000000012345678901234567890; // Value < max_digits10 digits.
@@ -212,9 +216,9 @@ BOOST_AUTO_TEST_CASE(round_e_test)  // Test round_e.
     BOOST_CHECK_EQUAL(round_e(d, 6), "1.12340"); //6 sigdigits.
     BOOST_CHECK_EQUAL(round_e(d, digits10-1), "1.1234012340123"); // 14 sigdigits.
     BOOST_CHECK_EQUAL(round_e(d, digits10),   "1.12340123401234"); // 15 sigdigits.
-    BOOST_CHECK_EQUAL(round_e(d, maxdigits10), "1.12340123401234"); // 15 sigdigits, because reached digits10.
-    BOOST_CHECK_EQUAL(round_e(d, maxdigits10+1), "1.12340123401234");  // 15 sigdigits, because reached digits10.
-    BOOST_CHECK_EQUAL(round_e(d, maxdigits10+2), "1.12340123401234");  // 15 sigdigits, because reached digits10.
+    BOOST_CHECK_EQUAL(round_e(d, std::numeric_limits<double>::max_digits10), "1.12340123401234"); // 15 sigdigits, because reached digits10.
+    BOOST_CHECK_EQUAL(round_e(d, std::numeric_limits<double>::max_digits10+1), "1.12340123401234");  // 15 sigdigits, because reached digits10.
+    BOOST_CHECK_EQUAL(round_e(d, std::numeric_limits<double>::max_digits10+2), "1.12340123401234");  // 15 sigdigits, because reached digits10.
   }
 
   {

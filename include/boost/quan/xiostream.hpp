@@ -60,7 +60,7 @@ private:
   int base;
 }; // class setupperbase
 
-void outIosFlags(long flags, std::ostream& os); // Show std iostream flags.
+void outIosFmtFlags(long flags, std::ostream& os); // Show std iostream flags.
 void outFpClass(double value, std::ostream& os);  // Show Floating-point type.
 
 void outIOstates(std::ios_base::iostate rdstate = std::cout.rdstate(), std::ostream& os = std::cerr, const char* term = ". ");

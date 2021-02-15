@@ -32,16 +32,34 @@ std::string versions()
 
 int main()
 {
-   std::cout << std::endl;
+   std::cout << "Trivial test of Quan uncertain type. "<< std::endl;
    using namespace boost::quan;
 
   std::cout << versions() << std::endl;
+ // outUncValues();  // All zero before setUncDefaults called.
+  // but calling this warns "Magic index word is corrupted, should be 76397304!"
   setUncDefaults(std::cout);
-  uncun u(1.23, 0.45F);
-  outUncFlags(std::cout.flags(), std::cerr);
-  std::cout << "URealCorr u(1.23, 0.45); = " << plusminus << addlimits << adddegfree << u << std::endl;
-  outUncFlags(std::cout.flags(), std::cerr, "\n");
+  outUncValues();
+  // zero 48dbaf8 UncValues: 
+  //   uncFlags 0, setSigDigits 3, uncWidth 10, uncSetWidth -1, uncScale 0, uncSetScale 0, uncUsed 0, uncOldFlags 0, uncOldUncWidth -1, uncOldScale -1, uncSigDigits 2, uncoldSigDigits -1, oldUncUsed -1, oldStdDevSigDigits -1, setUncSigDigits 2, roundingLossIndex 0.05, confidenceIndex 0.05, 
+  // top 48dbaf8
 
+  
+  uncun u(1.23, 0.45F);
+
+
+  outUncValues();
+
+
+ // outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0x201) firm adddegfree.
+  std::cout << "URealCorr u(1.23, 0.45); = " << plusminus << addlimits << adddegfree;
+  outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
+
+  std::cout << u << std::endl;
+  outUncIOFlags(std::cout.iword(1), std::cerr, "\n");
+
+
+  // add_+/-  add_SI_symbol add_SI_prefix addnoisy set_sigDigits adddegfree replicates addlimits
 } // int main()
 
 /*
