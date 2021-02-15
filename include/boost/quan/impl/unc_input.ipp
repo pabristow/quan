@@ -36,29 +36,29 @@ void unc_input(
   //is.setf(ios_base::failbit);
   //}
 
-  using std::istream;
-  using std::ostream;
-  using std::ios_base;
-  using std::char_traits;
-  using std::cout;
-  using std::cerr;
-  using std::cin;
-  using std::endl;
-  using std::flush;
-  using std::ws;
-  using std::streamsize;
-  using std::boolalpha;
-  using std::dec;
-  using std::hex;
-  using std::showbase;
-  using std::fixed;
-  using std::scientific;
-  using std::right;
-  using std::showpos;
-  using std::noshowpos;
-  using std::noshowbase;
-  using std::noshowpoint;
-  using std::showpoint;
+  //using std::istream;
+  //using std::ostream;
+  //using std::ios_base;
+  //using std::char_traits;
+  //using std::cout;
+  //using std::cerr;
+  //using std::cin;
+  //using std::endl;
+  //using std::flush;
+  //using std::ws;
+  //using std::streamsize;
+  //using std::boolalpha;
+  //using std::dec;
+  //using std::hex;
+  //using std::showbase;
+  //using std::fixed;
+  //using std::scientific;
+  //using std::right;
+  //using std::showpos;
+  //using std::noshowpos;
+  //using std::noshowbase;
+  //using std::noshowpoint;
+  //using std::showpoint;
 
   std::streamsize avail = is.rdbuf()->in_avail();
   if (avail == 0)
