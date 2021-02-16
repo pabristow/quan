@@ -113,16 +113,8 @@ and C++ include files are in folder:
   //using std::exception;
   //using std::bad_alloc;
 
-// File for Quan library:
+// Files for Quan library:
 #include <boost/quan/xiostream.hpp> // for extra manipulators, spaces.
-// These extra manipulators have been placed in std for convenience.
-  //using std::noadjust;  // Restore to default state.
-  //using std::nofixed;  // Restore to default state.
-  //using std::noscientific;  // Restore to default state.
-  //using std::defaultfloat; // Restore fixed & scientific to default state.
-  //using std::hexbase;
-  //using std::lowercase;
-
 #include <boost/quan/unc_init.hpp> // Defines indexes to xalloc iword(index) variables.
 #include <boost/quan/rounding.hpp> // Rounding functions.
 
@@ -382,10 +374,10 @@ void outFpClass(double, std::ostream&);  // Special output for inf, NaN...
 //void outUncIOFlags(long uncflags, std::ostream);
 //
 class showUncFlags
-{  // Constructor & operator<< defined in unc.ipp
+{  // Constructor & operator<< defined below
   friend std::ostream operator<< (std::ostream, const showUncFlags&);
 public:
-  showUncFlags(unsigned short int);  // Definition in unc.ipp.
+  showUncFlags(unsigned short int);  // Definition below.
   unsigned short int flags;
 };
 
@@ -394,7 +386,7 @@ class showUncTypes
   // Usage: out << showUncTypes(unc) ...
   friend std::ostream operator << (std::ostream, const showUncTypes&);
 public:
-  showUncTypes(unsigned short int);  // Definition in unc.ipp.
+  showUncTypes(unsigned short int);  // Definition below.
   unsigned short int types;
 };
 
@@ -557,21 +549,23 @@ class unc : public std::char_traits<char>
 public:
   typedef double value_type;
 
-  friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated == false>& val);
+  friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated == false>&);
+  friend std::istream& operator>> (std::istream& is, const unc<is_correlated == false>&);
 
   friend void unc_input(double& mean,  // Mean (central or most probable) value.
                    double& stdDev, // Uncertainty estimate as Standard deviation.
                    unsigned short int& degreesOfFreedom,  // Degrees of freedom -1. (Default zero for 1 observation).
                    unsigned short int& types, // 16 Uncertain type flags showing type of value.
                    std::istream& is);
-  // Previously used
-  //friend void unc_output(double value, // Mean(central or most probable) value.
-  //                  float stdDev, // Uncertainty estimate as Standard deviation.
-  //                  unsigned short int degFree, // Degrees of freedom.
-  //                  unsigned short int uncTypes, //  16 Uncertain type flags showing type of uncertain value.
-  //                  std::ostream& os);  // Output stream, default std::cout.
 
-  // using char_traits<char>::int_type; // Derivation from public \c std::char_traits<char> needed for \c int_type.
+  // Previously used
+  friend void unc_output(double value, // Mean(central or most probable) value.
+                    float stdDev, // Uncertainty estimate as Standard deviation.
+                    unsigned short int degFree, // Degrees of freedom.
+                    unsigned short int uncTypes, //  16 Uncertain type flags showing type of uncertain value.
+                    std::ostream& os);  // Output stream, default std::cout.
+
+   using std::char_traits<char>::int_type; // Derivation from public \c std::char_traits<char> needed for \c int_type.
 
 public:
   /*! \note It is convenient to use 64-bit floating-point format for mean of central value
@@ -1153,8 +1147,8 @@ public:
       \var bool isNoisyDigit
       \brief Add an extra 'noisy' guard digit to reduce risk of information loss.
     */
-    bool isNoisyDigit;  // Add an extra 'noisy' digit.
-    bool isDegFree;  //!  Append degrees of freedom.
+    bool isNoisyDigit;  //!< Add an extra 'noisy' digit.
+    bool isDegFree;  //!<  Append degrees of freedom.
     bool isPlusMinus; //!< Uncertainty as +/- is required too (but ignore if value is exact or integer).
     bool isUppercase; //!< Exponential format is, for example, 1E6 else 1e6.
     bool isScientificFormat;  //!< Taken to mean that exponential format wanted (always possible).
@@ -1514,6 +1508,7 @@ public:
     return os;
   } // friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated>& val)
 
+  //! Extract operator<< for unc type.
   friend std::istream& operator>> (std::istream& is, unc<is_correlated>& ud)
   {
     double mean;
@@ -1582,7 +1577,6 @@ public:
     return arg;
   }
 
-
   friend unc<is_correlated> ldexp(unc<is_correlated> arg,
     int intarg)  // Real from significand or mantissa arg & exponent intarg.
   {
@@ -1600,7 +1594,7 @@ public:
     arg.value_ = modf(arg.value_, intpart);  // value = fractional part.
     // Must assume not rational fraction, so clear many bits.
     arg.unctypes_ &= ~(VALUE_INTEGER | VALUE_RATIONAL | UNC_KNOWN | UNC_NOPLUS | UNC_NOMINUS | UNC_EXPLICIT | DEG_FREE_EXACT | DEG_FREE_KNOWN);
-    return arg; // Fractional part (mantissa or significant).
+    return arg; // Fractional part (mantissa or significand).
   }
 
   friend unc<is_correlated> frexp(unc<is_correlated> arg, int* intarg)
@@ -1972,7 +1966,12 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
      || (l.value_ + l.uncertainty_ + l.uncertainty_ < r.value_ - r.uncertainty_ - r.uncertainty_)); // <
   } // bool equalU2
 
-}; // class unc<is_correlated>
+}; // template <bool is_correlated> class unc
+
+//!  https://en.cppreference.com/w/cpp/language/operators operator<< must be non-member functions, 
+//! friend std::ostream& operator<<(std::ostream& os, const T& obj)
+//! https://en.cppreference.com/w/cpp/language/friend and may need to be friend  to access private data of the class
+//! 
 
 template <bool correlated>
 std::ostream& operator<< (std::ostream& os, const std::pair< unc<correlated>, unc<correlated> >& up)
@@ -2208,7 +2207,7 @@ showUncTypes::showUncTypes(unsigned short int t) : types(t)
   \param ut Uncertain type flags for the @c std::ostream.
   \param os @c std::ostream for output of uncertain types as words, for example: integer, zero, df_exact.
 */
-std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Define.
+std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Definition.
 {
   const int count = 16;  // because using 16-bit unsigned short int.
   unsigned short int uncTypes = ut.types;
@@ -2298,8 +2297,8 @@ void outUncIOFlags(long uncFlags, std::ostream& os = std::cerr, std::string term
 } //
 
 /*! Show the set uncertain class io stream flags settings as words, for examples: add_/-, set_scaled, addlimits .
-  \param os stream whose unc flags are to be output.
-  \param oslog stream to receive output.
+  \param os @c std::ostream whose unc flags are to be output.
+  \param oslog @c std::stream log to receive output.
   Usage:
     \code
       outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
@@ -2523,8 +2522,9 @@ showUncFlags::showUncFlags(unsigned short int f) : flags(f)
   //! Usage: out << showUncFlags(static_cast<long>(is.iword(uncFlagsIndex))) ...
 }
 
-std::ostream& operator<< (std::ostream& os, const showUncFlags& uf)  // Define.
-{ // Output uncFlags as descriptive word strings to this ostream.
+//! Output uncFlags as descriptive word strings to this @c std::ostream.
+std::ostream& operator<< (std::ostream& os, const showUncFlags& uf)  // Definition.
+{ 
   unsigned short uncFlags = uf.flags;
   os << "uncFlags ("<< std::hex << uncFlags << std::dec << ")";
   os << ((uncFlags & firm) ? " firm" : "");
@@ -2767,7 +2767,6 @@ std::istream& operator>> (std::istream& is, const setUncSigDigits& usf)
   return is;
 }
 
-
 /*! Inputs uncertainty as value, (implicitly exact, std deviation = 0).
    & optionally an explicit measure of uncertainty [[+]|[-] <standard deviation * 2. >],
    (1.0 implies 1. +|- 0.5 and sd of 0.5, 1.00 implies 1. +|- 0.05 and sd of 0.05)
@@ -2782,8 +2781,10 @@ std::istream& operator>> (std::istream& is, const setUncSigDigits& usf)
   cerr << "Unexpected characters encountered in reading "
   "value +/- stdDev !" << endl;
   is.setf(ios_base::failbit);
+
+  Used by std::istream& operator>> (std::istream& is, const unc
   }
-  */
+*/
 void unc_input(
   double& value,  // mean, central or most probable value.
   double& stdDev, // or float& perhaps?
@@ -2791,7 +2792,6 @@ void unc_input(
   unsigned short int& types, // TODO settings bits.
   std::istream& is = std::cin)
 {	
-
   std::streamsize avail = is.rdbuf()->in_avail();
   if (avail == 0)
   {
@@ -2800,7 +2800,7 @@ void unc_input(
     stdDev = std::numeric_limits<float>::quiet_NaN();
     degreesOfFreedom = 0;
     types = 0U;
-    return;  // todo
+    return;  // todo errno?
   }
 
   // 'Default' values for unc_input arguments.
@@ -3243,12 +3243,6 @@ const std::pair<float, float> uncs_of(std::pair<const T, T> vp)
   return std::make_pair(vp.first.unc(), vp.second.unc());
   //! \return uncs_of uncertainties (standard deviation) as a pair of @b float values.
 }
-
-
-
-
-//#include <boost/quan/impl/unc_input.ipp>  // Definitions.
-// #include <boost/quan/impl/unc_output.ipp>  // Definitions. (Obselete)
 
 } // namespace quan
 } //namespace boost

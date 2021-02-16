@@ -114,10 +114,10 @@ ofstream fout(outFilename, ios_base::out); // Use default ios_base::overwrite/re
 // toString concept works for some purposes,
 // but is flawed to combine several manipulators and it needs setUncDefaults.
 // Check using manips output expected string result, for example:
-// CHECK(hex << showbase << setw(10) << i, "       0xf")
-// CHECK(scientific << setw(20) << d, "       1.234568e+001");
+// CHECK(std::hex << std::showbase << std::setw(10) << i, "       0xf")
+// CHECK(std::scientific << std::setw(20) << d, "       1.234568e+001");
 // Note: sets uncertain defaults (& oss has ios defaults too).
-// BUT CHECK cannot check the number of chars output using unc_print "used", so use CHECK_USED for this.
+// BUT CHECK cannot check the number of chars output using unc_print "used", so can use CHECK_USED for this.
 
 using namespace boost::quan;
 
@@ -332,7 +332,6 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   std::cerr << '\t' << std::endl; // (\a shows as small square) Does 'Use' width, like << "use" or << 99
   BOOST_CHECK_EQUAL(std::cerr.width(), 0);// Check width has been reset to zero.
   } // BOOST_AUTO_TEST_CASE(unc_test_basic)
-
 
 BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
 { // Show 'C++ Standard' rounding of 9.95 and precision(6) is NOT "10."
