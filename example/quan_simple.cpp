@@ -90,6 +90,7 @@ int main()
     << ", Mean = " << u.value() << ", sd = " << u.std_dev()
     << ", df = " << u.degFree() << std::endl;
 
+  std::cout << "showuncTypes " << showUncTypes(u.types() ) << std::endl;
 
 
 

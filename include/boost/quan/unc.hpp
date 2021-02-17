@@ -384,7 +384,7 @@ public:
 class showUncTypes
 {  // Constructor & operator<< defined in unc.ipp
   // Usage: out << showUncTypes(unc) ...
-  friend std::ostream operator << (std::ostream, const showUncTypes&);
+  friend std::ostream& operator<< (std::ostream, const showUncTypes&);
 public:
   showUncTypes(unsigned short int);  // Definition below.
   unsigned short int types;
