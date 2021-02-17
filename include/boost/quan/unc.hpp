@@ -316,7 +316,7 @@ const char* uncTypeWords[16] =
 
 
 /*!
-* \brief Helper function for @c showUncTypes @c operator<<
+* \brief Helper function for @c showUncTypes friend @c operator<<
 */
 class showUncTypes
 {
@@ -332,8 +332,6 @@ public:
   Usage: \code std::cout << showUncTypes(uncType) \endcode
   \param ut Uncertain type flags (bits) for the @c std::ostream.
   \param os @c std::ostream& for output of uncertain types as words, for example: integer, zero, df_exact.
-  Link is
-  \link boost::quan::showUncTypes::operator<<()
 */
 std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Definition.
 {
@@ -1112,24 +1110,24 @@ public:
     // Note that these bools are NOT initialised here,
     // assuming compiler will warn if used before being initialised.
 
-    bool isNoisyDigit;  //! Add an extra 'noisy' guard digit to reduce risk of information loss.
-    bool isDegFree;  //!  Append degrees of freedom.
-    bool isPlusMinus; //! Uncertainty as +/- is required too (but ignore if value is exact or integer).
-    bool isUppercase; //! Exponential format is, for example, 1E6 else 1e6.
-    bool isScientificFormat;  //! Taken to mean that exponential format wanted (always possible).
-    bool isShowPoint;  //! Means decimal point is always shown, for example 900. even if not needed.
-    bool isShowPos; //! Show + sign always because ios flag was set with `<< showpo`s.
-    bool isFixed; //! `os << fixed ...` ios decimal fixed d.dddd format (rather than scientific).
-    bool isWidthSet; //! `os << setw(9)` has prescribed a width (rather than default width == 0).
-    bool isNoAdjust;  //! std = default but unc usage not defined yet, center?
-    bool isRightJustify; //! right justify, prepend leading pad before. << right << ...
-    bool isLeftJustify; //! left justify, append trailing pad after. << left ...
-    bool isInternalJustify;  //! Not defined yet, but use to center in field?
-    bool isCenter; //! center if BOTH left and right specified.
-    bool isAlign; //! Align on decimal point?
-    bool isConfidenceInterval; //! Append confidence interval, for example, "<1.23, 1.56>"
-    bool isSetSigDigits;  //! Use set sigdigits instead of calculate from uncertainty.
-    bool isSetUncSigDigits;  //!  Use setUNCsigdigits instead of calculate from uncertainty.
+    bool isNoisyDigit;  //! \var isNoisyDigit Add an extra 'noisy' guard digit to reduce risk of information loss.
+    bool isDegFree;  //!  \var isDegFree Append degrees of freedom.
+    bool isPlusMinus; //! \var isPlusMinus Uncertainty as +/- is required too (but ignore if value is exact or integer).
+    bool isUppercase; //! \var isUppercase Exponential format is, for example, 1E6 else 1e6.
+    bool isScientificFormat;  //! \var isScientificFormat Taken to mean that exponential format wanted (always possible).
+    bool isShowPoint;  //! \var isShowPoint Means decimal point is always shown, for example 900. even if not needed.
+    bool isShowPos; //! \var isShowPos Show + sign always because ios flag was set with `<< showpo`s.
+    bool isFixed; //! \var isFixed \code os << fixed ... \endcode ios decimal fixed d.dddd format (rather than scientific).
+    bool isWidthSet; //! \var isWidthSet \code os << setw(9) \endcode has prescribed a width (rather than default width == 0).
+    bool isNoAdjust;  //! \var std = default but unc usage not defined yet, center?
+    bool isRightJustify; //!\var isNoAdjust right justify, prepend leading pad before. \code << right << ... \endcode
+    bool isLeftJustify; //! \var isLeftJustify left justify, append trailing pad after.  \code << left ...\endcode
+    bool isInternalJustify;  //! \var isInternalJustify Not defined yet, but use to center in field?
+    bool isCenter; //! \var isCenter Center if BOTH left and right specified.
+    bool isAlign; //! \var isAlign Align on decimal point?
+    bool isConfidenceInterval; //! \var isConfidenceInterval Append confidence interval, for example, "<1.23, 1.56>"
+    bool isSetSigDigits;  //! \var isSetSigDigits Use set sigdigits instead of calculate from uncertainty.
+    bool isSetUncSigDigits;  //!  \varisSetUncSigDigits Use setUNCsigdigits instead of calculate from uncertainty.
 
     // Get print format requirements from std::ios flags. ****************************
     const int iosFlags = os.flags();  // Save fmtflags in case need to restore.
