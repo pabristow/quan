@@ -25,50 +25,59 @@ namespace quan {
 // stars done with simple way, NOT using template,
 // See S Teale p 181-3, said to be longer but faster.
 
-// Declarations.
-class stars;
-class chars;
 
-//! @brief Manipulator class to help to output a number of stars.
+//! \brief Manipulator class to help to output a number of stars.
  //! Usage:  \code out << stars(10) ... \endcode
-class stars  // Definition for this file.
+class stars
 {  
   friend std::ostream& operator<< (std::ostream&, const stars&);
 public:
-  stars(int n) : num(n)
+  stars(int n) : num_(n)
   { // Constructor.
   }
 private:
-  int num; // How many stars to output.
+  int num_; // How many stars to output.
 };
 
-//! @brief Manipulator to output a number of stars.
+//! \brief Manipulator to output a number of stars.
+ //! Usage:  \code out << stars(10) ... \endcode
 std::ostream& operator<< (std::ostream& os, const stars& s)
 {
-  for (int i = s.num; i > 0; i--) os << '*';
+  for (int i = s.num_; i > 0; i--) os << '*';
   return os;
 }
 
-
-// Manipulator class with int repeat count & character chars.
-class chars  // Definition for this file.
-{ // Usage:  out << chars(10, '_') ....
+//! Manipulator class to help output int repeat count & character chars.
+//! Usage: \code  out << chars(10, '_') .... for 10 underlines. \endcode
+class chars 
+{ 
   friend std::ostream& operator<< (std::ostream&, const chars&);
 public:
-  chars(int, char);  // Constructor defined below.
+  chars(int n, char c) : num_(n), character_(c)
+  { // Constructor.
+  }
 private:
-  int num;
-  char character;
+  int num_;
+  char character_;
 };
+
+//! Manipulator to help output int repeat count & character chars.
+//! Usage: \code  out << chars(10, '_') .... for 10 underlines. \endcode
+std::ostream& operator<< (std::ostream& os, const chars& s)
+{
+  for (int i = s.num_; i > 0; i--) os << s.character_;
+  return os;
+}
 
 class setupperbase
 {
   friend std::ostream& operator<< (std::ostream&, const setupperbase&);
   friend std::istream& operator>> (std::istream&, const setupperbase&);
 public:
-  setupperbase(int);  // Constructor defined in xiostream.ipp.
+  setupperbase(int b) : base_(b) // Constructor 
+  {}
 private:
-  int base;
+  int base_;
 }; // class setupperbase
 
 void outIosFmtFlags(long flags, std::ostream& os); // Show std iostream flags.
@@ -93,9 +102,9 @@ std::ios_base& lowercase(std::ios_base& _I)
   return _I;
 } // lowercase
 
-// Function to set base hex & showbase & uppercase too.
-// Usage: out << hexbase << ... for 1234ABCD
-// equivalent to out << hex << showbase << uppercase ...
+//! Function to set base hex & showbase & uppercase too.
+//! Usage: \code out << hexbase << ... for 1234ABCD \endcode
+//! equivalent to \code out << hex << showbase << uppercase ...  \endcode
 std::ios_base& hexbase(std::ios_base& _I)
 {
   _I.setf(std::ios_base::hex | std::ios_base::showbase | std::ios_base::uppercase, // set bits,
@@ -187,12 +196,6 @@ template<typename T> std::ostream& operator<< (std::ostream& os, const omanip<T>
 // istream& operator<<( std::ios_base&(*)(std::ios_base&) )
 // Eg std::ios_base& dec(std::ios_base& s){s.setf(std::ios_base::dec, std::ios_base::basefield);}
 
-// Two parameter manipulator chars (not using template, as spaces)
-// Usage: << chars(5,'_') ...  for 5 underlines.
-chars::chars(int n, char c) : num(n), character(c)
-{ // Constructor.
-}
-
 /*! \brief Output all std::ios iostates.
     \details Usages:
  Default logs @c std::cout iostate to @c std::cerr, for example "IOstate: good", or "IOstate: fail"
@@ -206,13 +209,7 @@ chars::chars(int n, char c) : num(n), character(c)
   */
 
 void outIOstates(std::ios_base::iostate rdState, std::ostream& os, const char* terminator)
-{ // Usages:
-  // Default logs @c std::cout iostate to @c std::cerr, for example "IOstate: good", or "IOstate: fail"
-  // outIOstates(); // Same as:
-  // outIOstates(cout.rdState(), cerr, ".\n");
-  // outIOstates(cin.rdState());
-  // outIOstates(cerr.rdState(), cout, ", ");
-  // outIOstates(cout.rdState(), cerr, " iostate.\n ");
+{ 
   std::ios_base::fmtflags const savedflags = os.flags();  // Save to restore.
   // Clear any unused and invalid bits in rdState.
   rdState &= std::ios_base::goodbit | std::ios_base::eofbit | std::ios_base::failbit | std::ios_base::goodbit;
@@ -301,16 +298,17 @@ void outFmtFlags(std::ios_base::fmtflags fmtFlags, std::ostream& os, const char*
   os.flags(flags);  // Restore.
 }  // outFmtFlags
 
+ //! Show std::IO stream state in words for this stream.
+  // Usage: \code std::cout << showiostate ... \endcode
 std::ostream& showiostate(std::ostream& os)
-{ // Show IO stream state in words for this stream.
-  // Usage: cout << showiostate ...
+{
   outIOstates(static_cast<std::ios_base::iostate>(os.rdstate()), os, ". ");
   // May be problem with output if state is bad!
   return os;
 }
 
 //! Show IO stream format flags descriptions in words for this stream.
- // Usage: \code std::cout << showformat  ... \endcode
+ //! Usage: \code std::cout << showformat  ... \endcode
 std::ostream& showformat(std::ostream& os)
 {
   outFmtFlags(static_cast<std::ios_base::fmtflags>(os.flags()), os, ". ");

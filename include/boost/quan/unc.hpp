@@ -316,7 +316,7 @@ const char* uncTypeWords[16] =
 
 
 /*!
-* brief Helper function for @c operator<<
+* \brief Helper function for @c operator<<
 */
 class showUncTypes
 {
