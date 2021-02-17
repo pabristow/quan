@@ -243,8 +243,6 @@ const unsigned short int UNC_DEF = (UNC_KNOWN | UNC_NOMINUS | UNC_NOPLUS | //!< 
                                     | UNC_UNIFORM | UNC_TRIANGULAR);  // default Guassian distribution.
 const unsigned short int DEG_FREE_DEF = (DEG_FREE_EXACT | DEG_FREE_KNOWN);
 
-// extern const char* uncTypeWords[];
-
 enum uncIOflags
 {  //! \enum uncIOflags Control of printing uncertain values, similar to std::ios flags.
   //! @brief  Can be output, for example:
@@ -281,98 +279,6 @@ enum uncIOflags
 
 void outFpClass(double, std::ostream&);  // Special output for inf, NaN...
 
-// Declarations of parameterless Manipulators,
-// similar to ios_base flags but for uncertain printing.
-// Use upperand lower case convention for these,
-// but all lowercase for manipulators like hex, oct ...
-// Usage:  out << scale << noscale << autoscale << noautoscale
-// firmform << flexform << plusminus << noplusminus ....
-
-//! All ios_base functions declared below are defined in unc.ipp
-//! \note that all of these are entirely lower case names, like std::ios manipulators.
-
-//std::ios_base& scale(std::ios_base&); //!< To use value set with setScale(int).
-//std::ios_base& noscale(std::ios_base&);  //!< or not scale (default is no scaling).
-//std::ios_base& autoscale(std::ios_base&); //!<  Automatically Scale to suitable prefix symbol like M, k, m...
-//std::ios_base& noautoscale(std::ios_base&);  // or not to scale to prefix symbol.
-//std::ios_base& firmform(std::ios_base&);  //!< Firm fixed layout using setUncWidth.
-//std::ios_base& flexform(std::ios_base&); //!< Flexible free format.
-//std::ios_base& plusminus(std::ios_base&);  //!< Add +/- uncertainty.
-//std::ios_base& noplusminus(std::ios_base&);  //!< Do not add +/- uncertainty
-//std::ios_base& addsiprefix(std::ios_base&); //!< Add SI prefix like kilo, micro ..
-//std::ios_base& nosiprefix(std::ios_base&);  //!< (Takes precedence over SI symbol if both set).
-//std::ios_base& addsisymbol(std::ios_base&); //!< Add SI symbol like M, k, m.
-//std::ios_base& nosisymbol(std::ios_base&);  //!< Do not add SI symbol like M, k, m.
-//std::ios_base& addnoisyDigit(std::ios_base&);  //!< Add an extra 'noisy' digit for less risk of loss.
-//std::ios_base& nonoisyDigit(std::ios_base&);  //!< No noisy to suit human reading.
-//std::ios_base& autosigdigits(std::ios_base&);  //!< Calculate sigdigits from uncertainty (default).
-//std::ios_base& setsigdigits(std::ios_base&);    //!< Use sig digits stored with `<< setSigDigits(6)` for value.
-//std::ios_base& autouncsigdigits(std::ios_base&);  //!< Calculate stdDev sig digits from uncertainty.
-//std::ios_base& uncsigdigits(std::ios_base&); //!< Use stdDev sigDigits stored with << useSetUncSigDigits(2) ...
-//std::ios_base& adddegfree(std::ios_base&);  //!< Add degrees of freedom as (99).
-//std::ios_base& nodegfree(std::ios_base&);  //!< Do not add degrees of freedom to output of value.
-////
-//std::ios_base& addlimits(std::ios_base&);  //!< Add lower and upper limits a 0.95 > 1.00 > 1.05.
-//std::ios_base& nolimits(std::ios_base&);  //!< Do not add lower and upper limits.
-
-// Obselete
-//std::ios_base& confidence(std::ios_base&);
-/*!< Use stdDev sigDigits stored with `<< setconfidence( 0.01) ...`
- or alpha to control estimation of confidence interval.  0.01 means 99% confidence.
- */
-//std::ios_base& roundingloss(std::ios_base&);  //!< Set the acceptable loss from rounding.
-//std::ios_base& addreplicates(std::ios_base&);  //!< Add degrees of replicates > 1 as [99].
-//std::ios_base& noreplicates(std::ios_base&);  //!< Do not add degrees of freedom or replicates >1.
-
-/*! Functions to change uncertain flags on specified ios_base.
-  Usage: \code f = uFlags(out); f = uFlags(out, 0xFF);
-  f = setuFlags(out, 0xFF); f = resetuFlags(out, 0xFF);
-  \endcode
-*/
-//long uFlags(std::ios_base&);  //!< Returns current uncertain flags.
-//long uFlags(std::ios_base&, long); //!< Assigns all uncertain flags & returns previous.
-//long setuFlags(std::ios_base&, long);  //!< Set specific flags = 1
-//long resetuFlags(std::ios_base&, long);  //!< Reset/clear specific flags = 0
-//
-//// Forward declarations, defined in unc.ipp.
-//class showUncFlags;  //!< Output uncertain flags to `ostream& << showUncFlags `.
-//class setAllUncFlags;  //!< Assign value to set (and/or clear) all unc flags.
-//class setUncFlags;  //!< Set specific unc flags bits.
-//class setMaskedUncFlags;  //!< Clear mask & then set unc flag bits.
-//class resetUncFlags;  //!< Reset all unc flags bits.
-//class resetMaskedUncFlags; //!< Reset specific unc flags bits.
-//class setUncWidth; //!< Set width of uncertainty output.
-//class setScale; //!< Set scaling factor like 1e3, 1e6 ... `<< setScale(6)`.
-//class setSigDigits;  //!< sigdigits to use for value if `<< setsigdigits(4)`.
-//class setUncSigDigits;  //!< sigdigits to use for uncertainty if `<< setuncsigdigits(1)`.
-//class setRoundingLoss;  //!< Set acceptable loss due to rounding.
-//class setConfidence;  //!< Set acceptable loss due to rounding.
-//
-//// Operator declarations, classes defined below, with constructors in unc.ipp.
-//std::ostream& operator<< (std::ostream&, const showUncFlags&);
-//std::ostream& operator<< (std::ostream&, const setAllUncFlags&);
-//std::istream& operator>> (std::istream&, const setAllUncFlags&);
-//std::ostream& operator<< (std::ostream&, const setUncFlags&);
-//std::istream& operator>> (std::istream&, const setUncFlags&);
-//std::ostream& operator<< (std::ostream&, const setMaskedUncFlags&);
-//std::istream& operator>> (std::istream&, const setMaskedUncFlags&);
-//std::ostream& operator<< (std::ostream&, const resetUncFlags&);
-//std::istream& operator>> (std::istream&, const resetUncFlags&);
-//std::ostream& operator<< (std::ostream&, const resetMaskedUncFlags&);
-//std::istream& operator>> (std::istream&, const resetMaskedUncFlags&);
-//std::ostream& operator<< (std::ostream&, const setUncWidth&);
-//std::istream& operator>> (std::istream&, const setUncWidth&);
-//std::ostream& operator<< (std::ostream&, const setScale&);
-//std::istream& operator>> (std::istream&, const setScale&);
-//std::ostream& operator<< (std::ostream&, const setUncSigDigits&);
-//std::istream& operator>> (std::istream&, const setUncSigDigits&);
-//std::ostream& operator<< (std::ostream&, const setRoundingLoss&);
-//std::ostream& operator<< (std::ostream&, const setConfidence&);
-//std::ostream& operator<< (std::ostream&, const setSigDigits&);
-//std::istream& operator>> (std::istream&, const setSigDigits&);
-//
-//void outUncIOFlags(long uncflags, std::ostream);
-//
 class showUncFlags
 {  // Constructor & operator<< defined below
   friend std::ostream& operator<< (std::ostream&, const showUncFlags&);
@@ -381,14 +287,69 @@ public:
   unsigned short int flags;
 };
 
+
+//!  Description as a word of each bit in @c unc_type, using enum unc_types.
+//! These bits record the type of value stored, for example: VALUE_ZERO, UNC_KNOWN, DEG_FREE_KNOWN, UNC_UNIFORM.
+//! Used by function outUncTypes.
+//! Example: \code   \endcode
+const char* uncTypeWords[16] =
+{
+    "zero", //!< 0 VALUE_ZERO value is zero.
+    "integer", //!< 1 VALUE_INTEGER value is an integer.
+    "rational", //!< 2 VALUE_RATIONAL value is rational.
+    "-only", //!< 3 VALUE_NEGATIVE_ONLY Value can ONLY be < 0.. ? or <=0?
+    "+only",  //!< 4 VALUE_POSITIVE_ONLY Value can ONLY be >=0.
+    "uncKnown", //!< 5 UNC_KNOWN Uncertainty known
+    "noPlus", //!< 6 UNC_NOPLUS Uncertainty can only be < value, + = zero.
+    "noMinus", //!< 7 UNC_NOMINUS certainty can only be > value - = zero.
+    "quantize10", //!< 8 UNC_QUAN_DECIMAL Quantised by least significant decimal digit.
+    "quantize2", //!< 9 UNC_QUAN_BINARY Quantised by least significant binary digit.
+    "explicit",  //!< 10 UNC_EXPLICIT not inferred from sig digits.
+    "uniform", //!< 11 UNC_UNIFORM uniform  (or rectangular) probability distribution.
+    "triangular", //!< 12 UNC_TRIANGULAR Triangular probability distribution.
+    //! If neither bits set, then distribution type is normal (or gaussian).
+    //! If BOTH bits are, the distribution is undefined (as yet).
+    "df_exact", //!< 13 DEG_FREE_EXACT Exactly known number of observations.
+    "df_known", //!< 14 DEG_FREE_KNOWN Degrees of freedom defined.
+    "spare" //!<  15 SPARE
+};
+
+
+/*!
+* brief Helper function for @c operator<<
+*/
 class showUncTypes
-{  // Constructor & operator<< defined in unc.ipp
-  // Usage: out << showUncTypes(unc) ...
-  friend std::ostream& operator << (std::ostream&, const showUncTypes&);
+{
+  friend std::ostream& operator<< (std::ostream&, const showUncTypes&);
 public:
-  showUncTypes(unsigned short int);  // Definition below.
+  showUncTypes(unsigned short int t) : types(t)
+  { // Constructor.
+  }
   unsigned short int types;
 };
+
+/*! \brief @c Extract operator<< to show all the  types of an uncertain item.
+  Usage: \code std::cout << showUncTypes(uncType) \endcode
+  \param ut Uncertain type flags (bits) for the @c std::ostream.
+  \param os @c std::ostream for output of uncertain types as words, for example: integer, zero, df_exact.
+*/
+std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Definition.
+{
+  const int count = 16;  // because using 16-bit unsigned short int.
+  unsigned short int uncTypes = ut.types;
+  os << "uncTypes (" << std::showbase << std::hex << uncTypes  << std::dec << ")";
+  for (int i = 0, j = 1; i < count; ++i)
+  {
+    if ((uncTypes & j) != 0)
+    {
+      os  << ' ' << uncTypeWords[i];
+    }
+    j <<= 1;
+  } // for
+  os << ".";
+  return os;
+} // ostream& operator<< (ostream& os, const showUncTypes& ut)
+
 
 // setAllUncflags(int flags, int mask);
 // Usage: out << setAllUncFlags(0x5a) ...
@@ -2148,33 +2109,9 @@ void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
   */
 } // void outUncValues()
 
-//! \ return Description as a word of each bit in @c unc_type, using enum unc_types.
-//! These bits record the type of value stored, for example: VALUE_ZERO, UNC_KNOWN, DEG_FREE_KNOWN, UNC_UNIFORM.
-//! Used by function outUncTypes.
-//! Example: \code   \endcode
-const char* uncTypeWords[16] =
-{
-    "zero", //!< 0 VALUE_ZERO value is zero.
-    "integer", //!< 1 VALUE_INTEGER value is an integer.
-    "rational", //!< 2 VALUE_RATIONAL value is rational.
-    "-only", //!< 3 VALUE_NEGATIVE_ONLY Value can ONLY be < 0.. ? or <=0?
-    "+only",  //!< 4 VALUE_POSITIVE_ONLY Value can ONLY be >=0.
-    "uncKnown", //!< 5 UNC_KNOWN Uncertainty known
-    "noPlus", //!< 6 UNC_NOPLUS Uncertainty can only be < value, + = zero.
-    "noMinus", //!< 7 UNC_NOMINUS certainty can only be > value - = zero.
-    "quantize10", //!< 8 UNC_QUAN_DECIMAL Quantised by least significant decimal digit.
-    "quantize2", //!< 9 UNC_QUAN_BINARY Quantised by least significant binary digit.
-    "explicit",  //!< 10 UNC_EXPLICIT not inferred from sig digits.
-    "uniform", //!< 11 UNC_UNIFORM uniform  (or rectangular) probability distribution.
-    "triangular", //!< 12 UNC_TRIANGULAR Triangular probability distribution.
-    //! If neither bits set, then distribution type is normal (or gaussian).
-    //! If BOTH bits are, the distribution is undefined (as yet).
-    "df_exact", //!< 13 DEG_FREE_EXACT Exactly known number of observations.
-    "df_known", //!< 14 DEG_FREE_KNOWN Degrees of freedom defined.
-    "spare" //!<  15 SPARE
-};
 
-/*! Output word description for each `unc_type` bit.\n
+
+  /*! Output word description for each `unc_type` bit.\n
   Usage:  outUncTypes(unc.getUncTypes(), cerr); // logs to cerr.
   \param uncTypes uncertain types as a short int.
   \param os @c std::ostream& for output, default = cerr
@@ -2194,35 +2131,27 @@ void outUncTypes(unsigned short int uncTypes, std::ostream& os = std::cerr)
   os << ".";
 }  // outUncTypes
 
-/*!
-   Usage: `out << showUncTypes(uncType)`
-  \param t Uncertain type flags.
-*/
-showUncTypes::showUncTypes(unsigned short int t) : types(t)
-{ // Constructor.
-}
-
-/*!
-  Usage: \code out << showUncTypes(uncType) \endcode
-  \param ut Uncertain type flags for the @c std::ostream.
-  \param os @c std::ostream& for output of uncertain types as words, for example: integer, zero, df_exact.
-*/
-std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Definition.
-{
-  const int count = 16;  // because using 16-bit unsigned short int.
-  unsigned short int uncTypes = ut.types;
-  os << "uncTypes (" << std::showbase << std::hex << uncTypes  << std::dec << ")";
-  for (int i = 0, j = 1; i < count; ++i)
-  {
-    if ((uncTypes & j) != 0)
-    {
-      os  << ' ' << uncTypeWords[i];
-    }
-    j <<= 1;
-  } // for
-  os << ".";
-  return os;
-} // ostream& operator<< (ostream& os, const showUncTypes& ut)
+//   /*!
+//  Usage: \code out << showUncTypes(uncType) \endcode
+//  \param ut Uncertain type flags for the @c std::ostream.
+//  \param os @c std::ostream& for output of uncertain types as words, for example: integer, zero, df_exact.
+//*/
+//std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Definition.
+//{
+//  const int count = 16;  // because using 16-bit unsigned short int.
+//  unsigned short int uncTypes = ut.types;
+//  os << "uncTypes (" << std::showbase << std::hex << uncTypes  << std::dec << ")";
+//  for (int i = 0, j = 1; i < count; ++i)
+//  {
+//    if ((uncTypes & j) != 0)
+//    {
+//      os  << ' ' << uncTypeWords[i];
+//    }
+//    j <<= 1;
+//  } // for
+//  os << ".";
+//  return os;
+//} // ostream& operator<< (ostream& os, const showUncTypes& ut)
 
 /*! Show all the @c std::ios stream& flags settings as words, for example: true, dec, right.\n
   Usage:   \code outIosFmtFlags(std::cout.flags(), std::cerr); // logs cout's flag to cerr. \endcode
