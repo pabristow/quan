@@ -14,7 +14,7 @@
 
 // SIunits.hpp
 
-// Copyright Paul A. Bristow 2009, 2012.
+// Copyright Paul A. Bristow 2009, 2012, 2021.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -64,8 +64,7 @@ const int SIprefixesLength = SImaxPowerTen + 1 + SImaxPowerTen;
 
 struct SImultiple;
 
-// Fundamental units: Mass, Length, Time, Charge, Temperature, Luminous Intensity & angle.
-
+//! Fundamental units: Mass, Length, Time, Charge, Temperature, Luminous Intensity & angle.
 struct unit
 {
 public:
@@ -95,15 +94,8 @@ public:
   // By convention, unitNames[0] is the base or full unit name, like meter,
   // & unitNames[1] is the abbreviation, like m.
   const double* unitToSIfactors;  // factors to convert to SI unit.
-  // Dimensions here? - see project algebra, but not workable with MSVC++5SP3.
-};
-
-// Attempts to define a structure
-// const char s[];
-// const int l;  // const here produces C2552
-// failed for compiler reasons - Quincy GNU seems to allow.
-// so for now keep array lengths separate from arrays themselves.
-
+}; // unit
+ 
 // Definitions in SIunits.cpp for separate compilation.
 
 // Dimensionless units.

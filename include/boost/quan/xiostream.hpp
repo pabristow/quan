@@ -26,18 +26,29 @@ namespace quan {
 // See S Teale p 181-3, said to be longer but faster.
 
 // Declarations.
-
 class stars;
 class chars;
 
+//! @brief Manipulator class to help to output a number of stars.
+ //! Usage:  \code out << stars(10) ... \endcode
 class stars  // Definition for this file.
-{   // Usage:  out << stars(10) ...
+{  
   friend std::ostream& operator<< (std::ostream&, const stars&);
 public:
-  stars(int);  // Constructor defined below.
-  // private:
-  int num;
+  stars(int n) : num(n)
+  { // Constructor.
+  }
+private:
+  int num; // How many stars to output.
 };
+
+//! @brief Manipulator to output a number of stars.
+std::ostream& operator<< (std::ostream& os, const stars& s)
+{
+  for (int i = s.num; i > 0; i--) os << '*';
+  return os;
+}
+
 
 // Manipulator class with int repeat count & character chars.
 class chars  // Definition for this file.
@@ -75,8 +86,6 @@ std::ostream& showiostate(std::ostream& os);  // Show IO stream state in words f
 
 std::ostream& showformat(std::ostream& os); // Show IO stream format flags in words for this stream.
 // Usage: cout << showformat ...
-
-
 
 std::ios_base& lowercase(std::ios_base& _I)
 { // lowercase is the inverse of std::ios_base::uppercase.
@@ -178,48 +187,23 @@ template<typename T> std::ostream& operator<< (std::ostream& os, const omanip<T>
 // istream& operator<<( std::ios_base&(*)(std::ios_base&) )
 // Eg std::ios_base& dec(std::ios_base& s){s.setf(std::ios_base::dec, std::ios_base::basefield);}
 
-//spaces::spaces(int n) : num(n)
-//{ // Constructor.
-//}
-//
-//std::ostream& operator<< (std::ostream& os, const spaces& s)
-//{
-//  for (int i = s.num; i > 0; i--) os << ' ';
-//  return os;
-//}
-//
-//tabs::tabs(int n) : num(n)
-//{ // Constructor.
-//}
-//
-//std::ostream& operator<< (std::ostream& os, const tabs& s)
-//{
-//  for (int i = s.num;  i > 0; i--) os << '\t';
-//  return os;
-//}
-
-stars::stars(int n) : num(n)
-{ // Constructor.
-}
-
-std::ostream& operator<< (std::ostream& os, const stars& s)
-{
-  for (int i = s.num; i > 0; i--) os << '*';
-  return os;
-}
-
 // Two parameter manipulator chars (not using template, as spaces)
 // Usage: << chars(5,'_') ...  for 5 underlines.
 chars::chars(int n, char c) : num(n), character(c)
 { // Constructor.
 }
 
-std::ostream& operator<< (std::ostream& os, const chars& s)
-{
-  for (int i = s.num; i > 0; i--) os << s.character;
-  return os;
-}
-
+/*! \brief Output all std::ios iostates.
+    \details Usages:
+ Default logs @c std::cout iostate to @c std::cerr, for example "IOstate: good", or "IOstate: fail"
+  \code
+    outIOstates(); // Same as:
+    outIOstates(cout.rdState(), cerr, ".\n");
+    outIOstates(cin.rdState());
+    outIOstates(cerr.rdState(), cout, ", ");
+    outIOstates(cout.rdState(), cerr, " iostate.\n ");
+  \endcode
+  */
 
 void outIOstates(std::ios_base::iostate rdState, std::ostream& os, const char* terminator)
 { // Usages:

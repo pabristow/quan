@@ -13,7 +13,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp> // include all types plus i/o.
 // using ptime and 'not_a_date_time'.
 
-#include <boost/quan/unc.hpp> // uncertain types, mainly
+#include <boost/quan/unc.hpp> // Uncertain class types, mainly
 // typedef unc<false> uncun; // Uncertain Uncorrelated (the normal case).
 
 // Forward Declaration.
@@ -32,6 +32,7 @@
 
 class Meas : public uncun
 {
+  //! Extract operator to output items of class Meas.
   friend std::ostream& operator<< (std::ostream&, const Meas&);
   friend std::istream& operator>> (std::istream&, Meas&);
 
@@ -122,18 +123,16 @@ public:
   static bool equal_toUnc(const Meas& l, const Meas& r); //
   static bool lessAbsM(const Meas& l, const Meas& r); // abs value < abs value.
 
- // Meas Member variables.
+ //! Meas Member variables.
+  //! Time and order values could be:
+  //! 1 no known order.
+  //! 2 known order, but no times.
+  //! 3 times, from which order can be calculated,
+  //! or both order and times given, so may need to be checked for consistency.
 public:
-  std::string id_; // Identification info, if any, else "".
-
-  // Time and order values could be:
-  // 1 no known order.
-  // 2 known order, but no times.
-  // 3 times, from which order can be calculated,
-  // or both order and times given, so may need to be checked for consistency.
-
-  boost::posix_time::ptime time_; // Posix time from Boost.Date_time.
-  int order_;  // Index from 0 (or 1 perhaps?)  -1 == unknown?
+  std::string id_; //!< Identification info, if any, else "".
+  boost::posix_time::ptime time_; //!< Posix time from Boost.Date_time.
+  int order_;  //!< Index from 0 (or 1 perhaps?)  -1 == unknown?
 
 }; // class Meas
 
@@ -194,7 +193,7 @@ typedef double real_type;  // or
 // class Meas definitions
 // Measured value, id and its order and/or time-date.
 
-std::ostream& operator<< (std::ostream& os, const unc<false>& ud);
+//std::ostream& operator<< (std::ostream& os, const unc<false>& ud);
 // Need to instantiate for UReal<false> (might need for UReal<true> too).
 
 /*
@@ -225,7 +224,7 @@ Meas::Meas(double d)
 }
 /*
 Meas::Meas(uncun u)
-{ // Constructor from uncertain.
+{ // Constructor from an item of class uncertain.
   value_ = u.value_;
   uncertainty_ = u.uncertainty_;
   degFree_ = u.degFree_;
@@ -523,6 +522,7 @@ bool Meas::equal_toUnc(const Meas& l, const Meas& r)
 } // bool Meas::greater(const Meas& l, const Meas& r)
 
 // Global Output Meas::operator<<
+//! Extract operator for output of items of class Meas.
 std::ostream& operator<< (std::ostream& os, const Meas& p)  // Definition.
 {
   // Uses:

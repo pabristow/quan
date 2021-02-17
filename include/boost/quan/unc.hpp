@@ -2771,7 +2771,7 @@ std::istream& operator>> (std::istream& is, const setUncSigDigits& usf)
    & optionally an explicit measure of uncertainty [[+]|[-] <standard deviation * 2. >],
    (1.0 implies 1. +|- 0.5 and sd of 0.5, 1.00 implies 1. +|- 0.05 and sd of 0.05)
 
-   & optionally degrees of freedom [(<short int>)] like (99)
+   & optionally degrees of freedom [(\<short int>)] like (99)
    Used by istream& operator>> (istream&, unc<is_correlated>&)
    Original simple version:
   char plus, slash, minus;
