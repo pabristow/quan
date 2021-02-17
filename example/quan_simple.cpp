@@ -54,6 +54,8 @@ int main()
   std::cout << u.mean () << std::endl;
   std::cout << u.std_dev() << std::endl;
   std::cout << u.degFree() << std::endl;
+  std::cout << "showuncTypes " << showUncTypes(u.types() ) << std::endl;  
+  std::cout << "showuncFlags " << showUncFlags(u.uncFlags() ) << std::endl; // uncFlags (0xa08) add_+/-  add_degfree add_replicates add_limits.
 
   //std::cout.operator<<(u);
  // operator<<(std::cout,  *u);
@@ -90,7 +92,6 @@ int main()
     << ", Mean = " << u.value() << ", sd = " << u.std_dev()
     << ", df = " << u.degFree() << std::endl;
 
-  std::cout << "showuncTypes " << showUncTypes(u.types() ) << std::endl;
 
 
 

@@ -195,7 +195,7 @@ inline Type pow4(const Type& a)
 // http://aurora.rg.iupui.edu/~schadow/units/UCUM/ucum.html
 
 void outUncValues(std::ostream& os, std::ostream& log); // Output uncertain values.
-void setUncDefaults(std::ios_base& os); // Set Unc class defaults for std::ostream os.
+void setUncDefaults(std::ios_base& os); // Set Unc class defaults for std::ostream& os.
 
  //! 16 type bits used by unc uncTypes. Bit set = 1 means a positive attribute.
  //! Unctypes are
@@ -335,7 +335,7 @@ void outFpClass(double, std::ostream&);  // Special output for inf, NaN...
 //long resetuFlags(std::ios_base&, long);  //!< Reset/clear specific flags = 0
 //
 //// Forward declarations, defined in unc.ipp.
-//class showUncFlags;  //!< Output uncertain flags to `ostream << showUncFlags `.
+//class showUncFlags;  //!< Output uncertain flags to `ostream& << showUncFlags `.
 //class setAllUncFlags;  //!< Assign value to set (and/or clear) all unc flags.
 //class setUncFlags;  //!< Set specific unc flags bits.
 //class setMaskedUncFlags;  //!< Clear mask & then set unc flag bits.
@@ -349,33 +349,33 @@ void outFpClass(double, std::ostream&);  // Special output for inf, NaN...
 //class setConfidence;  //!< Set acceptable loss due to rounding.
 //
 //// Operator declarations, classes defined below, with constructors in unc.ipp.
-//std::ostream operator<< (std::ostream, const showUncFlags&);
-//std::ostream operator<< (std::ostream, const setAllUncFlags&);
-//std::istream operator>> (std::istream, const setAllUncFlags&);
-//std::ostream operator<< (std::ostream, const setUncFlags&);
-//std::istream operator>> (std::istream, const setUncFlags&);
-//std::ostream operator<< (std::ostream, const setMaskedUncFlags&);
-//std::istream operator>> (std::istream, const setMaskedUncFlags&);
-//std::ostream operator<< (std::ostream, const resetUncFlags&);
-//std::istream operator>> (std::istream, const resetUncFlags&);
-//std::ostream operator<< (std::ostream, const resetMaskedUncFlags&);
-//std::istream operator>> (std::istream, const resetMaskedUncFlags&);
-//std::ostream operator<< (std::ostream, const setUncWidth&);
-//std::istream operator>> (std::istream, const setUncWidth&);
-//std::ostream operator<< (std::ostream, const setScale&);
-//std::istream operator>> (std::istream, const setScale&);
-//std::ostream operator<< (std::ostream, const setUncSigDigits&);
-//std::istream operator>> (std::istream, const setUncSigDigits&);
-//std::ostream operator<< (std::ostream, const setRoundingLoss&);
-//std::ostream operator<< (std::ostream, const setConfidence&);
-//std::ostream operator<< (std::ostream, const setSigDigits&);
-//std::istream operator>> (std::istream, const setSigDigits&);
+//std::ostream& operator<< (std::ostream&, const showUncFlags&);
+//std::ostream& operator<< (std::ostream&, const setAllUncFlags&);
+//std::istream& operator>> (std::istream&, const setAllUncFlags&);
+//std::ostream& operator<< (std::ostream&, const setUncFlags&);
+//std::istream& operator>> (std::istream&, const setUncFlags&);
+//std::ostream& operator<< (std::ostream&, const setMaskedUncFlags&);
+//std::istream& operator>> (std::istream&, const setMaskedUncFlags&);
+//std::ostream& operator<< (std::ostream&, const resetUncFlags&);
+//std::istream& operator>> (std::istream&, const resetUncFlags&);
+//std::ostream& operator<< (std::ostream&, const resetMaskedUncFlags&);
+//std::istream& operator>> (std::istream&, const resetMaskedUncFlags&);
+//std::ostream& operator<< (std::ostream&, const setUncWidth&);
+//std::istream& operator>> (std::istream&, const setUncWidth&);
+//std::ostream& operator<< (std::ostream&, const setScale&);
+//std::istream& operator>> (std::istream&, const setScale&);
+//std::ostream& operator<< (std::ostream&, const setUncSigDigits&);
+//std::istream& operator>> (std::istream&, const setUncSigDigits&);
+//std::ostream& operator<< (std::ostream&, const setRoundingLoss&);
+//std::ostream& operator<< (std::ostream&, const setConfidence&);
+//std::ostream& operator<< (std::ostream&, const setSigDigits&);
+//std::istream& operator>> (std::istream&, const setSigDigits&);
 //
 //void outUncIOFlags(long uncflags, std::ostream);
 //
 class showUncFlags
 {  // Constructor & operator<< defined below
-  friend std::ostream operator<< (std::ostream, const showUncFlags&);
+  friend std::ostream& operator<< (std::ostream&, const showUncFlags&);
 public:
   showUncFlags(unsigned short int);  // Definition below.
   unsigned short int flags;
@@ -384,7 +384,7 @@ public:
 class showUncTypes
 {  // Constructor & operator<< defined in unc.ipp
   // Usage: out << showUncTypes(unc) ...
-  friend std::ostream& operator<< (std::ostream, const showUncTypes&);
+  friend std::ostream& operator << (std::ostream&, const showUncTypes&);
 public:
   showUncTypes(unsigned short int);  // Definition below.
   unsigned short int types;
@@ -394,8 +394,8 @@ public:
 // Usage: out << setAllUncFlags(0x5a) ...
 class setAllUncFlags  // Set ALL uncertain flags (not just OR selected bits).
 {
-  friend std::ostream operator<< (std::ostream, const setAllUncFlags&);
-  friend std::istream operator>> (std::istream, const setAllUncFlags&);
+  friend std::ostream& operator<< (std::ostream&, const setAllUncFlags&);
+  friend std::istream& operator>> (std::istream&, const setAllUncFlags&);
 public:
   setAllUncFlags(int); // w) : flags(w) {}  // Constructor initialisation flags = w.
   int flags; // setAllUncFlags.flags used by operators << and >>
@@ -405,8 +405,8 @@ class setUncFlags  // Set selected uncertain flags.
 {// Usage: out << setUncFlags(0xFFFF, 0x7, 0x3) ...
   // or setUncFlags(out, 0x7);
 
-  friend std::ostream operator<< (std::ostream, const setUncFlags&);
-  friend std::istream operator>> (std::istream, const setUncFlags&);
+  friend std::ostream& operator<< (std::ostream&, const setUncFlags&);
+  friend std::istream& operator>> (std::istream&, const setUncFlags&);
 public:
   setUncFlags(int); // Constructor initialisation flags.
   int flags; // setUncFlags.flags used by operators << and >>
@@ -417,8 +417,8 @@ public:
 // or setUncFlags(out, 0x7);
 class setMaskedUncFlags
 {
-  friend std::ostream operator<< (std::ostream, const setMaskedUncFlags&);
-  friend std::istream operator>> (std::istream, const setMaskedUncFlags&);
+  friend std::ostream& operator<< (std::ostream&, const setMaskedUncFlags&);
+  friend std::istream& operator>> (std::istream&, const setMaskedUncFlags&);
 public:
   setMaskedUncFlags(int, int); // : flags(w), mask(m) {}  // Constructor initialisation flags = w.
   int flags; // setMaskedUncFlags.flags used by operators << and >>
@@ -429,8 +429,8 @@ class resetUncFlags  // Reset = 0 selected uncertain flags.
 {// Usage: out << resetUncFlags(0xFFFF, 0x7, 0x3) ...
   // or setUncFlags(out, 0x7);
 
-  friend std::ostream operator<< (std::ostream, const resetUncFlags&); // Declarations
-  friend std::istream operator>> (std::istream, const resetUncFlags&);
+  friend std::ostream& operator<< (std::ostream&, const resetUncFlags&); // Declarations
+  friend std::istream& operator>> (std::istream&, const resetUncFlags&);
 public:
   resetUncFlags(int);// w) : flags(w) {}  // Constructor initialisation flags = w.
   int flags; // setUncFlags.flags used by operators << and >>
@@ -441,8 +441,8 @@ public:
 // or setUncFlags(out, 0x7);
 class resetMaskedUncFlags
 {
-  friend std::ostream operator<< (std::ostream, const resetMaskedUncFlags&);
-  friend std::istream operator>> (std::istream, const resetMaskedUncFlags&);
+  friend std::ostream& operator<< (std::ostream&, const resetMaskedUncFlags&);
+  friend std::istream& operator>> (std::istream&, const resetMaskedUncFlags&);
 public:
   resetMaskedUncFlags(int, int); // : flags(w), mask(m) {}  // Constructor initialisation flags = w.
   int flags; // setMaskedUncFlags.flags used by operators << and >>
@@ -451,9 +451,9 @@ public:
 
 class setUncWidth // Set uncertain width.
 {
-  friend std::ostream operator<< (std::ostream, const setUncWidth&); // Declarations
-  friend std::istream operator>> (std::istream, const setUncWidth&); // Defined below.
-  // Allows ostream operator>> and << to access private member width.
+  friend std::ostream& operator<< (std::ostream&, const setUncWidth&); // Declarations
+  friend std::istream& operator>> (std::istream&, const setUncWidth&); // Defined below.
+  // Allows ostream& operator>> and << to access private member width.
 public:
   setUncWidth(int);
   int uncWidth; // setUncWidth used by operators << and >>
@@ -463,9 +463,9 @@ public:
 // Usage: out << setScale(6)  // == 10**6) ...
 class setScale  // Set uncertain scale.
 {
-  friend std::ostream operator<< (std::ostream, const setScale&); // Declarations
-  friend std::istream operator>> (std::istream, const setScale&); // Defined below.
-  // Allows @c std::ostream operator>> and << to access private member scale.
+  friend std::ostream& operator<< (std::ostream&, const setScale&); // Declarations
+  friend std::istream& operator>> (std::istream&, const setScale&); // Defined below.
+  // Allows @c std::ostream& operator>> and << to access private member scale.
 public:
   setScale(int); // n) : scale(n) {}  // Constructor - initialisation scale = n.
   int scale; // setScale.scale used by operators << and >>
@@ -475,8 +475,8 @@ public:
 // Usage via operator << : out << setSigDigits(6) ...
 class setSigDigits
 {
-  friend std::ostream operator<< (std::ostream, const setSigDigits&); // Declarations
-  friend std::istream operator>> (std::istream, const setSigDigits&);
+  friend std::ostream& operator<< (std::ostream&, const setSigDigits&); // Declarations
+  friend std::istream& operator>> (std::istream&, const setSigDigits&);
 public:
   setSigDigits(int);// w) : sigDigits(w) {}  // Constructor in unc.ipp
   // Initialisation means sigDigits = w.
@@ -498,8 +498,8 @@ public:
 */
 class setUncSigDigits
 {
-  friend std::ostream operator<< (std::ostream, const setUncSigDigits&); // Declarations
-  friend std::istream operator>> (std::istream, const setUncSigDigits&);
+  friend std::ostream& operator<< (std::ostream&, const setUncSigDigits&); // Declarations
+  friend std::istream& operator>> (std::istream&, const setUncSigDigits&);
 public:
   setUncSigDigits(int);// w) : uncSigDigits(w) {}  // Constructor
   // Initialisation means uncSigDigits = w.
@@ -512,8 +512,8 @@ public:
 
 class setRoundingLoss
 {
-  friend std::ostream operator<< (std::ostream, const setRoundingLoss&); // Declarations
-  friend std::istream operator>> (std::istream, const setRoundingLoss&);
+  friend std::ostream& operator<< (std::ostream&, const setRoundingLoss&); // Declarations
+  friend std::istream& operator>> (std::istream&, const setRoundingLoss&);
 public:
   setRoundingLoss(double);// eps) : setRoundingLoss(eps) {}  // Constructor
   // Initialisation means setRoundingLoss = round_loss
@@ -526,8 +526,8 @@ public:
 
 class setConfidence
 {
-  friend std::ostream operator<< (std::ostream, const setConfidence&); // Declarations
-  friend std::istream operator>> (std::istream, const setConfidence&);
+  friend std::ostream& operator<< (std::ostream&, const setConfidence&); // Declarations
+  friend std::istream& operator>> (std::istream&, const setConfidence&);
 public:
   setConfidence(double);// alpha) : setConfidence(alpha) {}  // Constructor
   // Initialisation means setConfidence = alpha
@@ -2102,12 +2102,12 @@ void setUncDefaults(std::ios_base& os)
   }
 } // void setUncDefaults(std::ios_base& stream)
 
-/*! Output ALL the @c os.word() values to the @c std::ostream log file, for example: setSigdigits, uncFlags, uncSigDigits.
-  \param os Current @c std::ostream to be displayed in log.
-  \param log @c std::ostream for log.
+/*! Output ALL the @c os.word() values to the @c std::ostream& log file, for example: setSigdigits, uncFlags, uncSigDigits.
+  \param os Current @c std::ostream& to be displayed in log.
+  \param log @c std::ostream& for log.
 */
 void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
-{ // Output ALL the os.word() values to the @c std::ostream log.
+{ // Output ALL the os.word() values to the @c std::ostream& log.
   if (os.iword(zeroIndex) != indexID)
   {
     std::cout << "Magic index word is corrupted, should be " << std::hex << indexID << std::dec << "!" << std::endl;
@@ -2177,7 +2177,7 @@ const char* uncTypeWords[16] =
 /*! Output word description for each `unc_type` bit.\n
   Usage:  outUncTypes(unc.getUncTypes(), cerr); // logs to cerr.
   \param uncTypes uncertain types as a short int.
-  \param os @c std::ostream for output, default = cerr
+  \param os @c std::ostream& for output, default = cerr
 */
 void outUncTypes(unsigned short int uncTypes, std::ostream& os = std::cerr)
 {// Usage:  \code outUncTypes(unc.getUncTypes(), cerr); \endcode // logs to cerr.
@@ -2205,7 +2205,7 @@ showUncTypes::showUncTypes(unsigned short int t) : types(t)
 /*!
   Usage: \code out << showUncTypes(uncType) \endcode
   \param ut Uncertain type flags for the @c std::ostream.
-  \param os @c std::ostream for output of uncertain types as words, for example: integer, zero, df_exact.
+  \param os @c std::ostream& for output of uncertain types as words, for example: integer, zero, df_exact.
 */
 std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Definition.
 {
@@ -2224,13 +2224,13 @@ std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Definiti
   return os;
 } // ostream& operator<< (ostream& os, const showUncTypes& ut)
 
-/*! Show all the @c std::ios stream flags settings as words, for example: true, dec, right.\n
+/*! Show all the @c std::ios stream& flags settings as words, for example: true, dec, right.\n
   Usage:   \code outIosFmtFlags(std::cout.flags(), std::cerr); // logs cout's flag to cerr. \endcode
-  \param flags Iostream flags.
-  \param os @c std::ostream for output, default @c std::cerr
+  \param flags Iostream& flags.
+  \param os @c std::ostream& for output, default @c std::cerr
   */
 void outIosFmtFlags(long flags, std::ostream& os = std::cerr)
-{ // Show all the std::ios stream flags settings as words.
+{ // Show all the std::ios stream& flags settings as words.
   os << "iosflags (" << flags << ")" << std::dec;
   if (flags & std::ios_base::boolalpha) //  Show bool as word strings "true" or "false".
     os << " boolalpha";
@@ -2267,15 +2267,15 @@ void outIosFmtFlags(long flags, std::ostream& os = std::cerr)
   os << ".";
 }  // out ios_base::flags(long flags, ostream&)
 
-/*! Show the set uncertain class io stream flags settings as words, for examples: add_/-, set_scaled, addlimits .
+/*! Show the set uncertain class io stream& flags settings as words, for examples: add_/-, set_scaled, addlimits .
   \param uncFlags Output flags value to be displayed as words.
-  \param os stream for output.
+  \param os std::ostream& for output.
   Usage:  
     \code
       outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
    \endcode
 
-   \sa Version that takes the std::ostream as parameter
+   \sa Version that takes the std::ostream& as parameter
    \code void outUncIOFlags(std::ostream& os = std::cout, std::ostream& osout = std::cerr, std::string terminator = ".\n") \endcode
 */
 void outUncIOFlags(long uncFlags, std::ostream& os = std::cerr, std::string terminator = ".\n")
@@ -2298,7 +2298,7 @@ void outUncIOFlags(long uncFlags, std::ostream& os = std::cerr, std::string term
 
 /*! Show the set uncertain class io stream flags settings as words, for examples: add_/-, set_scaled, addlimits .
   \param os @c std::ostream whose unc flags are to be output.
-  \param oslog @c std::stream log to receive output.
+  \param oslog @c std::ostream log to receive output.
   Usage:
     \code
       outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
@@ -2463,7 +2463,7 @@ std::ios_base& nolimits(std::ios_base& iostr)
   return (iostr);
 }
 
-// May need istream operator>> versions too?
+// May need istream& operator>> versions too?
 
 std::ios_base& showuncflags(std::ios_base& iostr)
 {
@@ -2771,7 +2771,7 @@ std::istream& operator>> (std::istream& is, const setUncSigDigits& usf)
    & optionally an explicit measure of uncertainty [[+]|[-] <standard deviation * 2. >],
    (1.0 implies 1. +|- 0.5 and sd of 0.5, 1.00 implies 1. +|- 0.05 and sd of 0.05)
 
-   & optionally degrees of freedom [(\<short int>)] like (99)
+   & optionally degrees of freedom [(<short int>)] like (99)
    Used by istream& operator>> (istream&, unc<is_correlated>&)
    Original simple version:
   char plus, slash, minus;
