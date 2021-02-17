@@ -316,7 +316,7 @@ const char* uncTypeWords[16] =
 
 
 /*!
-* \brief Helper function for @c operator<<
+* \brief Helper function for @c showUncTypes @c operator<<
 */
 class showUncTypes
 {
@@ -331,7 +331,9 @@ public:
 /*! \brief @c Extract operator<< to show all the  types of an uncertain item.
   Usage: \code std::cout << showUncTypes(uncType) \endcode
   \param ut Uncertain type flags (bits) for the @c std::ostream.
-  \param os @c std::ostream for output of uncertain types as words, for example: integer, zero, df_exact.
+  \param os @c std::ostream& for output of uncertain types as words, for example: integer, zero, df_exact.
+  Link is
+  \link boost::quan::showUncTypes::operator<<()
 */
 std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Definition.
 {
@@ -551,7 +553,7 @@ public:
 
   /*! Degrees of freedom, usually = number of observations -1, so zero if just one observation or measurement.
    Range from 0 (usually 1 observation) to 65534 = std::numeric_limits<unsigned short int>::max() - 1
-   so for 2 observations assign 1 to degFree_ degree of freedom,for 3 observations assing 2 ....
+   so for 2 observations assign 1 to degFree_ degree of freedom,for 3 observations assign 2 ....
    Higher numbers of observations are indistinguishable from infinite observations.
    Max unsigned value 0xFFFF == 65535 is used to indicate degFree_ is NOT meaningful.
    BUT many programs seem to use NON-integer degrees of freedom,
@@ -620,7 +622,7 @@ public:
     }
   } // void std_dev (float unc)
 
-  //! \param df Number of degrees of degrees of freedom, usually = number of observations -1, so = means just one observation.
+  //! \param df Number ofdegrees of freedom, usually = number of observations -1, so 0 = means just one observation.
   void deg_free (short unsigned int df)
   {
     degFree_ = df;
@@ -1079,6 +1081,8 @@ public:
     // Might also close_to compare within uncertainty - see equalU
   } // operator!=
 
+  //! Predicate compare operator< for use by std::sort etc.
+  //! (Note const needed to use with less!)
   inline bool operator< (const unc<is_correlated>& x) const
   { // Predicate compare operator< for use by std::sort etc.
     // (Note const needed to use with less!)
@@ -1087,8 +1091,11 @@ public:
     // Might also compare within uncertainty - see lessU
   } // operator<
 
-  //! Insert operator<< for unc.
-  //! (Should cover both correlated and uncorrelated cases?)
+  //! Extract @c operator<< for uncertain types.
+  //! (Should cover both correlated and uncorrelated cases?)\n
+  //! \ref boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated == false>& val) \n
+  //! \link boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated == false>& val)
+  //! 
   friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated == false>& val)
   {
     boost::io::ios_precision_saver precision_saver(os);
@@ -1101,36 +1108,34 @@ public:
     unsigned short int degFree = val.degFree();
     unsigned short int unc_flags = val.uncFlags();
 
-    // bools showing output requirements specified using unc additional ostream manipulators.
+    // bool showing output requirements specified using unc additional ostream manipulators.
     // Note that these bools are NOT initialised here,
     // assuming compiler will warn if used before being initialised.
-    /*!
-      \var bool isNoisyDigit
-      \brief Add an extra 'noisy' guard digit to reduce risk of information loss.
-    */
-    bool isNoisyDigit;  //!< Add an extra 'noisy' digit.
-    bool isDegFree;  //!<  Append degrees of freedom.
-    bool isPlusMinus; //!< Uncertainty as +/- is required too (but ignore if value is exact or integer).
-    bool isUppercase; //!< Exponential format is, for example, 1E6 else 1e6.
-    bool isScientificFormat;  //!< Taken to mean that exponential format wanted (always possible).
-    bool isShowPoint;  //!< Means decimal point is always shown, for example 900. even if not needed.
-    bool isShowPos; //!< Show + sign always because ios flag was set with `<< showpo`s.
-    bool isFixed; //!< `os << fixed ...` ios decimal fixed d.dddd format (rather than scientific).
-    bool isWidthSet; //!< `os << setw(9)` has prescribed a width (rather than default width == 0).
-    bool isNoAdjust;  //!< std = default but unc usage not defined yet, center?
-    bool isRightJustify; //!< right justify, prepend leading pad before. `<< right << ...`
-    bool isLeftJustify; //!< left justify, append trailing pad after. `<< left ...`
-    bool isInternalJustify;  //!< Not defined yet, but use to center in field?
-    bool isCenter; //!< center if BOTH left and right specified.
-    bool isAlign; //!< Align on decimal point?
-    bool isConfidenceInterval; //!<  Append confidence interval, for example, "<1.23, 1.56>"
-    bool isSetSigDigits;  //!<  Use set sigdigits instead of calculate from uncertainty.
-    bool isSetUncSigDigits;  //!<  Use set sigdigits instead of calculate from uncertainty.
+
+    bool isNoisyDigit;  //! Add an extra 'noisy' guard digit to reduce risk of information loss.
+    bool isDegFree;  //!  Append degrees of freedom.
+    bool isPlusMinus; //! Uncertainty as +/- is required too (but ignore if value is exact or integer).
+    bool isUppercase; //! Exponential format is, for example, 1E6 else 1e6.
+    bool isScientificFormat;  //! Taken to mean that exponential format wanted (always possible).
+    bool isShowPoint;  //! Means decimal point is always shown, for example 900. even if not needed.
+    bool isShowPos; //! Show + sign always because ios flag was set with `<< showpo`s.
+    bool isFixed; //! `os << fixed ...` ios decimal fixed d.dddd format (rather than scientific).
+    bool isWidthSet; //! `os << setw(9)` has prescribed a width (rather than default width == 0).
+    bool isNoAdjust;  //! std = default but unc usage not defined yet, center?
+    bool isRightJustify; //! right justify, prepend leading pad before. << right << ...
+    bool isLeftJustify; //! left justify, append trailing pad after. << left ...
+    bool isInternalJustify;  //! Not defined yet, but use to center in field?
+    bool isCenter; //! center if BOTH left and right specified.
+    bool isAlign; //! Align on decimal point?
+    bool isConfidenceInterval; //! Append confidence interval, for example, "<1.23, 1.56>"
+    bool isSetSigDigits;  //! Use set sigdigits instead of calculate from uncertainty.
+    bool isSetUncSigDigits;  //!  Use setUNCsigdigits instead of calculate from uncertainty.
+
     // Get print format requirements from std::ios flags. ****************************
     const int iosFlags = os.flags();  // Save fmtflags in case need to restore.
 
      // Width, precision, flags & fillChar data from stream os. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    std::streamsize iosWidth = os.width(); //!< \warning Width must be read BEFORE any use of os
+    std::streamsize iosWidth = os.width(); //! \warning Width must be read BEFORE any use of os
     // which would reset width back to zero!
     // & prevent any ios formatting during os << ...
     // because unc_output does all its own formatting.
@@ -1187,6 +1192,10 @@ public:
       distrib = gaussian;
     } // Distribution type set.
 
+    //! \var roundloss Confidence or alpha to compute confidence interval is similarly scaled.
+    //! Usage: \code std::cout << confidence(0.01) << ... \encode means 1 - confidence = 99% confidence.
+    //! \code  double confidence = os.iword(conf) / 1000.;  //  == << confidence(0.05) or 95% \endcode 
+
     long& roundloss = os.iword(roundingLossIndex);
     double round_loss;
     if (roundloss <= 0)
@@ -1199,10 +1208,6 @@ public:
       // so that 0.05 or 1% is stored as 50.
       round_loss = roundloss / 1000.;  // `<< roundingloss(0.05)`
     }
-    //! Confidence or alpha to compute confidence interval is similarly scaled.
-    //! Usage: `out << confidence(0.01) << ...` means 1 - confidence = 99% confidence.
-    //!   double confidence = os.iword(conf) / 1000.;  // `<< confidence(0.05)` aka 95%
-
     //int round_m(double round_loss = 0.01, double unc = 0., unsigned int uncsigdigits = 2, distribution_type distrib = gaussian);
     //void out_confidence_interval(std::pair<double, double> ci, int m, std::ostream& os = std::cout);
     //void out_value_limits(double mean, double unc, std::pair<double, double> ci, int m, std::ostream& os = std::cout);
