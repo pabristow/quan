@@ -287,7 +287,6 @@ public:
   unsigned short int flags;
 };
 
-
 //!  Description as a word of each bit in @c unc_type, using enum unc_types.
 //! These bits record the type of value stored, for example: VALUE_ZERO, UNC_KNOWN, DEG_FREE_KNOWN, UNC_UNIFORM.
 //! Used by function outUncTypes.
@@ -510,8 +509,8 @@ class unc : public std::char_traits<char>
 public:
   typedef double value_type;
 
-  friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated == false>&);
-  friend std::istream& operator>> (std::istream& is, const unc<is_correlated == false>&);
+ // friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated == false>&);
+ // friend std::istream& operator>> (std::istream& is, const unc<is_correlated == false>&);
 
   friend void unc_input(double& mean,  // Mean (central or most probable) value.
                    double& stdDev, // Uncertainty estimate as Standard deviation.
@@ -1094,7 +1093,7 @@ public:
   //! \ref boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated == false>& val) \n
   //! \link boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated == false>& val)
   //! 
-  friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated == false>& val)
+  friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated>& val)
   {
     boost::io::ios_precision_saver precision_saver(os);
     boost::io::ios_flags_saver flags_saver(os);
@@ -1984,7 +1983,7 @@ std::pair<double, double> uncs_of(std::pair<T1, T2>);
 template<typename Type> // Predicate Functor modelled on STL less in functional.
 // Used below by min_element, etc.
 // was struct lessAbs : public std::binary_function<Type, Type, bool>
-  struct lessAbs : public std::function<Type>
+struct lessAbs : public std::function<Type>
 {  // Usage: if (lessAbs<Meas>()(lm, hm)) ...
   bool operator() (const Type& a, const Type& b) const
   { // Note const to prevent modification - must be pure function.
@@ -1997,14 +1996,13 @@ template<typename Type> // Predicate Functor modelled on STL less in functional.
     // at price of conversion to double.
     // But will fail for other types,  so abs function written here using only operator< and operator-.
   }
-
-}; // template <bool is_correlated> class unc
+}; // struct lessAbs 
 
 // Specialization of autoprefix_norm for UDT boost::units::uncun
 // See /boost-trunk/libs/units/example/measurement.hpp
 // For autoprefix_norm see /boost/units/io.hpp.
 // This specialization is required to get autoprefix to work with this class.
-
+//
 using boost::units::autoprefix_norm_impl;
 
 autoprefix_norm_impl<unc<false>, true>::type
