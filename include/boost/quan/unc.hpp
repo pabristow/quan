@@ -151,8 +151,8 @@ void unc_input(double& mean,  // mean (central or most probable) value.
                    unsigned short int& uncTypes,
                    std::istream& is);
 
-void outIosFmtFlags(long, std::ostream&); // Output std::ios flags.
-void outUncTypes(unsigned short int, std::ostream&); // Output uncertain types.
+//void outIosFmtFlags(long, std::ostream&); // Output std::ios flags.
+//void outUncTypes(unsigned short int, std::ostream&); // Output uncertain types.
 
 // Implemented below.
 
@@ -1089,10 +1089,10 @@ public:
   } // operator<
 
   //! Extract @c operator<< for uncertain types.
+  //! Example: \code uncun u(1.23, 0.05, 9); std::cout << u << std::endl;  \endcode
   //! (Should cover both correlated and uncorrelated cases?)\n
-  //! \ref boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated == false>& val) \n
-  //! \link boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated == false>& val)
-  //! 
+  //! \ref boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated>& val) extract operator<<
+  //! \link boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated>& val) \endlink
   friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated>& val)
   {
     boost::io::ios_precision_saver precision_saver(os);
@@ -2110,12 +2110,10 @@ void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
   */
 } // void outUncValues()
 
-
-
   /*! Output word description for each `unc_type` bit.\n
-  Usage:  outUncTypes(unc.getUncTypes(), cerr); // logs to cerr.
+  Usage:  \code outUncTypes(unc.getUncTypes(), std::cerr); // logs to cerr. \endcode
   \param uncTypes uncertain types as a short int.
-  \param os @c std::ostream& for output, default = cerr
+  \param os @c std::ostream& for output string list of words, default = @c std::cerr.
 */
 void outUncTypes(unsigned short int uncTypes, std::ostream& os = std::cerr)
 {// Usage:  \code outUncTypes(unc.getUncTypes(), cerr); \endcode // logs to cerr.
@@ -2124,88 +2122,26 @@ void outUncTypes(unsigned short int uncTypes, std::ostream& os = std::cerr)
   for (int i = 0, j = 1; i < count; ++i)
   {
     if ((uncTypes & j) != 0)
-    {
+    { // bit is set = 1 so output the corresponding word.
       os << ' ' << uncTypeWords[i];
     }
     j <<= 1;
   } // for
   os << ".";
-}  // outUncTypes
+}  // void outUncTypes(unsigned short int uncTypes, std::ostream& os = std::cerr)
 
-//   /*!
-//  Usage: \code out << showUncTypes(uncType) \endcode
-//  \param ut Uncertain type flags for the @c std::ostream.
-//  \param os @c std::ostream& for output of uncertain types as words, for example: integer, zero, df_exact.
-//*/
-//std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Definition.
-//{
-//  const int count = 16;  // because using 16-bit unsigned short int.
-//  unsigned short int uncTypes = ut.types;
-//  os << "uncTypes (" << std::showbase << std::hex << uncTypes  << std::dec << ")";
-//  for (int i = 0, j = 1; i < count; ++i)
-//  {
-//    if ((uncTypes & j) != 0)
-//    {
-//      os  << ' ' << uncTypeWords[i];
-//    }
-//    j <<= 1;
-//  } // for
-//  os << ".";
-//  return os;
-//} // ostream& operator<< (ostream& os, const showUncTypes& ut)
 
-/*! Show all the @c std::ios stream& flags settings as words, for example: true, dec, right.\n
-  Usage:   \code outIosFmtFlags(std::cout.flags(), std::cerr); // logs cout's flag to cerr. \endcode
-  \param flags Iostream& flags.
-  \param os @c std::ostream& for output, default @c std::cerr
-  */
-void outIosFmtFlags(long flags, std::ostream& os = std::cerr)
-{ // Show all the std::ios stream& flags settings as words.
-  os << "iosflags (" << flags << ")" << std::dec;
-  if (flags & std::ios_base::boolalpha) //  Show bool as word strings "true" or "false".
-    os << " boolalpha";
-  if (flags & std::ios_base::skipws) //   Skip white space on input.
-    os << " skipwhite";
-  if (flags & std::ios_base::left) //  Left-align values; pad on the right with the fill character.
-    os << " left";
-  if (flags & std::ios_base::right) //   Right-align values; pad on the left with the fill character (default alignment).
-    os << " right";
-  if (flags & std::ios_base::internal) // Add fill characters after any leading sign or base indication, but before the value.
-    os << " internal";
-  if (flags & std::ios_base::dec) // Format numeric values as base 10 (decimal) (default radix).
-    os << " dec";
-  if (flags & std::ios_base::oct) // Format numeric values as base 8 (octal).
-    os << " oct";
-  if (flags & std::ios_base::hex) // Format numeric values as base 16 (hexadecimal).
-    os << " hex";
-  if (flags & std::ios_base::showbase) // Display numeric constants in a format that can be read by the C++ compiler.
-    os << " showbase";
-  if (flags & std::ios_base::showpoint) // Show decimal point and trailing zeros for floating-point values.
-    os << " showpoint";
-  if (flags & std::ios_base::showpos) // Display plus sign in non-negative field.
-    os << " showpos";
-  if (flags & std::ios_base::uppercase) //  Display uppercase A through F for hexadecimal values and E for scientific values.
-    os << " upper";
-  if (flags & std::ios_base::showpos) // Show plus signs (+) for positive values.
-    os << " show +";
-  if (flags & std::ios_base::scientific) // Display floating-point numbers in scientific format, for example: 1.23457e+001.
-    os << " scientific";
-  if (flags & std::ios_base::fixed) // Display floating-point numbers in fixed format, for example: 12.3456.
-    os << " fixed";
-  if ((flags & std::ios_base::scientific) && (flags & std::ios_base::fixed)) // Display floating-point numbers in hex format.
-    os << " hexfloat";
-  os << ".";
-}  // out ios_base::flags(long flags, ostream&)
 
-/*! Show the set uncertain class io stream& flags settings as words, for examples: add_/-, set_scaled, addlimits .
-  \param uncFlags Output flags value to be displayed as words.
-  \param os std::ostream& for output.
+/*! Show the set uncertain class io stream& flags settings as words, for examples: add_/-, set_scaled, addlimits.\n
+  \param uncFlags Output unc class uncertain IO flags value to be displayed as words.
+  \param os @c std::ostream& for output.
+  \param terminator String to append to the setting words string, default period and newline.
   Usage:  
     \code
       outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
-   \endcode
+    \endcode
 
-   \sa Version that takes the std::ostream& as parameter
+   \sa Version that takes the uncflags from @c std::ostream& as parameter.
    \code void outUncIOFlags(std::ostream& os = std::cout, std::ostream& osout = std::cerr, std::string terminator = ".\n") \endcode
 */
 void outUncIOFlags(long uncFlags, std::ostream& os = std::cerr, std::string terminator = ".\n")
@@ -2226,15 +2162,16 @@ void outUncIOFlags(long uncFlags, std::ostream& os = std::cerr, std::string term
   os << terminator;
 } //
 
-/*! Show the set uncertain class io stream flags settings as words, for examples: add_/-, set_scaled, addlimits .
-  \param os @c std::ostream whose unc flags are to be output.
-  \param oslog @c std::ostream log to receive output.
+/*! Show the set uncertain class io stream flags settings as words, for examples: add_/-, set_scaled, addlimits.
+  \param os @c std::ostream whose unc IO flags are to be output.
+  \param osout @c std::ostream log to receive output.
+  \param terminator @c std::string to be appended to the list of settings, default period and newline.
   Usage:
     \code
-      outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
+      outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits.
    \endcode
 
-   \sa Version that takes the long uncFlags as parameter
+   \sa Version that takes the long uncFlags as parameter.
    \code void outUncIOFlags(long uncFlags, std::ostream& osout = std::cerr, std::string terminator = ".\n") \endcode
 */
 void outUncIOFlags(std::ostream& os = std::cout, std::ostream& osout = std::cerr, std::string terminator = ".\n")
@@ -2701,7 +2638,7 @@ std::istream& operator>> (std::istream& is, const setUncSigDigits& usf)
    & optionally an explicit measure of uncertainty [[+]|[-] <standard deviation * 2. >],
    (1.0 implies 1. +|- 0.5 and sd of 0.5, 1.00 implies 1. +|- 0.05 and sd of 0.05)
 
-   & optionally degrees of freedom [(<short int>)] like (99)
+   & optionally degrees of freedom [(\<short int\>)] like (99)
    Used by istream& operator>> (istream&, unc<is_correlated>&)
    Original simple version:
   char plus, slash, minus;

@@ -148,14 +148,10 @@ template<typename FPT> FPT round_sig(FPT v, int n); // v rounded to n significan
 template<typename FPT> FPT round_to_n(FPT v, int p); // Round value v to p decimal digits *after the decimal point*.
 
 // Two rounding algorithms returning strings.
-template<typename FPT> std::string round_f(FPT v, int sigdigits); // Round fixed (not-exponential) to sigdigits decimal digits to string.
+//template<typename FPT> std::string round_f(FPT v, int sigdigits); // Round fixed (not-exponential) to sigdigits decimal digits to string.
 //template<typename FPT> std::string round_e(FPT v, int sigdigits); // Round fixed (exponential) to sigdigits decimal digits to string.
-// Not yet implemented?
-template<typename FPT> std::string round_ms(FPT v, int m); // Round not-exponential to order m.
+//template<typename FPT> std::string round_ms(FPT v, int m); // Round not-exponential to order m.
 
-template<typename FPT>
-FPT round_sig(FPT v, int n)
-{
 /*! \brief Returns v rounded to n significant decimal digits.\n
    http://www.jason.mock.ws/wordpress/2007/02/22/round-a-float-to-of-significant-digits,
    David A. Pimentel
@@ -170,7 +166,11 @@ FPT round_sig(FPT v, int n)
    \returns Binary representation of decimal rounded value.
 
    \tparam FPT Floating-point type, for example, fundamental float, double, long
-  */
+*/
+template<typename FPT>
+FPT round_sig(FPT v, int n)
+{
+
   // Will fail if FPT is not a floating-point type (because will not output in scientific format!).
   BOOST_STATIC_ASSERT(boost::is_floating_point<FPT>::value);
 
@@ -205,17 +205,18 @@ FPT round_sig(FPT v, int n)
   // return floor(v * pow(10., pow10) + 0.5) / pow(10., pow10);
 } // FPT round_sig(FPT v, int n)
 
+/*! Round value v to p decimal digits @b after the decimal point.
+  http://www.jason.mock.ws/wordpress/2007/02/22/round-a-float-to-of-significant-digits
+  \note These use log10 and pow and so are vulnerable to binary rounding errors,
+  as the value v may not be exactly representable for the type specified.
+  Should give the same value as printf precision.
+
+  \param v Value to round.
+  \param p Number of decimal digits @b after the decimal point.
+*/
 template<typename FPT>
 FPT round_to_n(FPT v, int p)
-{ /*! Round value v to p decimal digits @b after the decimal point.
-    http://www.jason.mock.ws/wordpress/2007/02/22/round-a-float-to-of-significant-digits
-    \note These use log10 and pow and so are vulnerable to binary rounding errors,
-    as the value v may not be exactly representable for the type specified.
-    Should give the same value as printf precision.
-
-    \param v Value to round.
-    \param p Number of decimal digits @b after the decimal point.
-  */
+{
   // Will fail if FPT is not a floating-point type (because will not output in scientific format!).
   BOOST_STATIC_ASSERT(boost::is_floating_point<FPT>::value);
 
@@ -663,9 +664,8 @@ std::string round_ms(FPT v, signed int m)
 
 bool scaled = true; // want to scale and use prefix to avoid >1000 or < 1.
 
-template <typename FPT>
-std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point value `v` (fixed, not-exponential) to `sigdigits` significant digits.
-   This is variously called 'common rounding', 'round_5_up'.
+/*! \brief Round floating-point value `v` (fixed, not-exponential) to `sigdigits` significant digits.
+   This is variously called 'common rounding', 'round_5_up' or 'proper' rounding.
 
   \details Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
     Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X\n
@@ -676,14 +676,15 @@ std::string round_f(FPT v, int sigdigits) { /*! \brief Round floating-point valu
 
     \param v Value to be converted to a decimal digit string, rounded to sigdigits significant digits.
     \param sigdigits Number of significant digits after rounding.
-    \return @c std::string containing decimal digit string, properly rounded.
+    \return @c std::string containing decimal digit string, properly decimally rounded.
 
     \note All these functions are templated on floating-point type and are not intended to be called
     (and thus instantiated) for integral (or other) types.
     This is because the value will not be output in scientific format, assumed by the code.
-    A check is_floating_point == true is provide that will fail in debug mode.
-    (A compile time check would be better).
+    A check is_floating_point == true is provided.
   */
+template <typename FPT>
+std::string round_f(FPT v, int sigdigits) { 
 
   // Will fail if FPT is not a floating-point type (because will not output in scientific format!).
   BOOST_STATIC_ASSERT(boost::is_floating_point<FPT>::value);
