@@ -50,25 +50,23 @@ int main()
   outUncIOFlags(std::cout, std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
 
   std::cout << u << std::endl;
-  //outUncIOFlags(std::cout, std::cerr, "\n");
-  //std::cout << u.mean () << std::endl;
-  //std::cout << u.std_dev() << std::endl;
-  //std::cout << u.degFree() << std::endl;
-  //std::cout << "showuncTypes " << showUncTypes(u.types() ) << std::endl;  // uncFlags (0xa08) add_+/-  add_degfree add_replicates add_limits.
-  //std::cout << "showuncFlags " << showUncFlags(u.uncFlags() ) << std::endl; // showuncFlags uncFlags (0x6420) add_SI_prefix.
+  outUncIOFlags(std::cout, std::cerr, "\n");
+  std::cout << u.mean () << std::endl;
+  std::cout << u.std_dev() << std::endl;
+  std::cout << u.degFree() << std::endl;
+  std::cout << "showuncTypes " << showUncTypes(u.types() ) << std::endl;  // uncFlags (0xa08) add_+/-  add_degfree add_replicates add_limits.
+  std::cout << "showuncFlags " << showUncFlags(u.uncFlags() ) << std::endl; // showuncFlags uncFlags (0x6420) add_SI_prefix.
 
-  //std::cout << stars(5)  << std::endl; // *****
-  //  
-  //std::cout << chars(9, '-') << std::endl; // ---------
-  //std::cout.operator<<(u);
- // operator<<(std::cout,  *u);
+  std::cout << stars(5)  << std::endl; // *****
+    
+  std::cout << chars(9, '-') << std::endl; // ---------
+  std::cout.operator<<(u);
+  operator<<(std::cout,  u);
 
-  //std::string intest_1 = "3.45 0.3 99";
+  std::string intest_1 = "3.45 0.3 99";
 
-  //int j;
-  //2 >> j;
-  //std::cout << "input " << j << std::endl;
-
+  int j = 0;
+  std::cout << "input " << j << std::endl;
 
   //void unc_input(
   //  double& value,  // mean, central or most probable value.
@@ -77,23 +75,26 @@ int main()
   //  unsigned short int& types, // TODO settings bits.
   //  std::istream& is = std::cin);
 
-  //   2.34 >> u;
+ //    2.34 >> u;
 
-//  std::stringstream ss("3.45 0.3 99");
-//
-////  ss.rdbuf() >> u;
-//
-//  std::cin >> u; // u = nan, Mean = nan, sd = nan, df = 0
-//
-//  double mean;
-//  double sd;
-//  unsigned short df;
-//  unsigned short flags;
-//  unc_input(mean, sd, df, flags, ss);
-//
-//  std::cout << "u = " << u 
-//    << ", Mean = " << u.value() << ", sd = " << u.std_dev()
-//    << ", df = " << u.degFree() << std::endl;
+  std::stringstream ss("3.45 0.3 99");
+
+  ss >> u;
+
+  std::cout << "std::stringstream ss(\"3.45 0.3 99\") << = " << plusminus << addlimits << adddegfree << u;
+  // std::stringstream ss("3.45 0.3 99") << = 3.450 +/-0.0050 <3.44, 3.46> (0)
+
+  //std::cin >> u; // u = nan, Mean = nan, sd = nan, df = 0
+
+  //double mean;
+  //double sd;
+  //unsigned short df;
+  //unsigned short flags;
+  //unc_input(mean, sd, df, flags, ss);
+
+  //std::cout << "u = " << u 
+  //  << ", Mean = " << u.value() << ", sd = " << u.std_dev()
+  //  << ", df = " << u.degFree() << std::endl;
 
 
   // add_+/-  add_SI_symbol add_SI_prefix addnoisy set_sigDigits adddegfree replicates addlimits

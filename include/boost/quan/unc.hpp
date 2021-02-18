@@ -509,8 +509,8 @@ class unc : public std::char_traits<char>
 public:
   typedef double value_type;
 
- // friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated == false>&);
- // friend std::istream& operator>> (std::istream& is, const unc<is_correlated == false>&);
+  friend std::ostream& operator<< (std::ostream&, const unc<is_correlated>&);
+  friend std::istream& operator>> (std::istream&, const unc<is_correlated>&);
 
   friend void unc_input(double& mean,  // Mean (central or most probable) value.
                    double& stdDev, // Uncertainty estimate as Standard deviation.
