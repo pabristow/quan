@@ -24,9 +24,6 @@
 
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report Boost.Test library file details.
-
-#include <boost/static_assert.hpp>
-
 //#include <boost/test/unit_test.hpp>
 #include <boost/test/included/unit_test.hpp>
 
@@ -35,6 +32,8 @@
 //
 //using boost::unit_test_framework::unit_test_log;
 //using boost::unit_test_framework::log_level;
+
+#include <boost/static_assert.hpp>
 
 #include <boost/quan/rounding.hpp>  // Proper rounding implementation under test.
 
@@ -101,10 +100,9 @@ BOOST_AUTO_TEST_CASE(round_test_1)
 #else
   message += ".";
 #endif
-
   std::cout << message << std::endl;
 
-  //BOOST_TEST_MESSAGE(message);
+  BOOST_TEST_MESSAGE(message);
   //BOOST_TEST_MESSAGE("double maxdigits10 is " << maxdigits10);
     //std::cout << "std::numeric_limits<double>::max_exponent = " << std::numeric_limits<double>::max_exponent
     //<< ", \nstd::numeric_limits<double>::max_exponent10 = " << std::numeric_limits<double>::max_exponent10
@@ -113,15 +111,12 @@ BOOST_AUTO_TEST_CASE(round_test_1)
     //  std::numeric_limits<double>::max_exponent10 = 308,
     //  std::numeric_limits<double>::max_exponent10 -1 = 307.
 
-    BOOST_CHECK_EQUAL(std::numeric_limits<double>::max_digits10, 17U); // expected for 64-bit double.
-
-
-
+    BOOST_CHECK_EQUAL(std::numeric_limits<double>::max_digits10, 17); // expected for 64-bit double.
 } //  BOOST_AUTO_TEST_CASE(round_test_1)
 
 BOOST_AUTO_TEST_CASE(round_f_test)
 {
-  // Removed as assume can do scaling with Boost,Units autoscaling.
+  // Removed as assume can do scaling with Boost.Units autoscaling.
   //{ // Test unc scaling to scientific and engineering powers.
   //    scaled = true;
   //    BOOST_CHECK_EQUAL(round_f(123.4567, 3), "123."); // No trailing space.

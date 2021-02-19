@@ -1,7 +1,0 @@
-Test Output from unc_tests.cpp Thu Jan 21 15:18:49 2021
-
-
-Test one parameter manips to set unc width, scale, sigdigits & unc sigdigits.
-
-
-Closed test output unc_tests.cpp Thu Jan 21 15:18:49 2021

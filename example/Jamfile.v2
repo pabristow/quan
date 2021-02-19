@@ -16,6 +16,7 @@ import ../../config/checks/config : requires ;
 
 project quan_example
   : requirements
+  [ requires cxx11_numeric_limits ]
     <include>$(boost-root)
     <include>../../..
     <link>static

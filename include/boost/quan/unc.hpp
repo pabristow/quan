@@ -1355,7 +1355,7 @@ public:
             // From table H page 457 in Oliver & Goldsmith, confidence interval
             // of standard deviation is about +/- 20% at 10 degrees of freedom,
             // and only < +/- 10% above 100 observations (needing 2 stdDev sig Digits).
-            uncSigDigits = abs(uncSigDigits);
+            uncSigDigits = std::abs(uncSigDigits);
             if (degFree > 100)
             {
               uncSigDigits = 3;
@@ -2064,9 +2064,9 @@ void setUncDefaults(std::ios_base& os)
   }
 } // void setUncDefaults(std::ios_base& stream)
 
-/*! Output ALL the @c os.word() values to the @c std::ostream& log file, for example: setSigdigits, uncFlags, uncSigDigits.
+/*! Output ALL the @c os.word() values to the @c std::ostream& log file.
   \param os Current @c std::ostream& to be displayed in log.
-  \param log @c std::ostream& for log.
+  \param log @c std::ostream& whose unc values are to be sent to log.
   \note Before call of setuncdefaults() all are zero (probably) and after call:
   \verbatim
         "UncValues: uncFlags 0, setSigDigits 3, uncWidth 10, uncSetWidth -1, uncScale 0, uncSetScale 0, uncUsed 0, uncOldFlags 0, uncOldUncWidth -1, uncOldScale -1, uncSigDigits 2, uncoldSigDigits -1, oldUncUsed -1, oldStdDevSigDigits -1, setUncSigDigits 2, roundingLossIndex 0.05, confidenceIndex 0.05.\n";
@@ -2176,7 +2176,7 @@ void outUncIOFlags(long uncFlags, std::ostream& os = std::cerr, std::string term
 */
 void outUncIOFlags(std::ostream& os = std::cout, std::ostream& osout = std::cerr, std::string terminator = ".\n")
 {
-  outUncIOFlags(os.iword(uncFlagsIndex));
+  outUncIOFlags(os.iword(uncFlagsIndex), osout, terminator);
 }
 
 // Parameterless manipulators to switch format to switch uncFlag bits,

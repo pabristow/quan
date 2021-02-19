@@ -27,6 +27,7 @@ import ../../config/checks/config : requires ;
 
 project quan_test
   : requirements
+     [ requires cxx11_numeric_limits ] 
     <include>$(boost-root)
     <include>../../..
     <link>static
@@ -79,5 +80,5 @@ test-suite "Quan and Unc library tests"
     [ run stdio_tests.cpp : : : [ requires cxx11_numeric_limits ] ]
     [ run test_rounding.cpp ]
     [ run unc_tests.cpp ]
-    # [ run TestQuan1.cpp ]
-  ;
+    [ run unc_tests_input.cpp ]
+;

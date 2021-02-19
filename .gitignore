@@ -8,7 +8,7 @@ doc/doxygen/html/
 **/*.bat
 **/*.bak
 **/*.old
-
+**/*.tmp
 
 
 #################
