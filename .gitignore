@@ -1,8 +1,14 @@
-doc/html/
-**/*.bat
-doc/*.pdf
+# boost\libs\quan\.gitignore
+
+doc/autodoc
 doc/autodoc.xml
+doc/*.pdf
+doc/html/
+doc/doxygen/html/
+**/*.bat
 **/*.bak
+**/*.old
+
 
 
 #################

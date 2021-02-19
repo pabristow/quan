@@ -2067,10 +2067,16 @@ void setUncDefaults(std::ios_base& os)
 /*! Output ALL the @c os.word() values to the @c std::ostream& log file, for example: setSigdigits, uncFlags, uncSigDigits.
   \param os Current @c std::ostream& to be displayed in log.
   \param log @c std::ostream& for log.
+  \note Before call of setuncdefaults() all are zero (probably) and after call:
+  \verbatim
+        "UncValues: uncFlags 0, setSigDigits 3, uncWidth 10, uncSetWidth -1, uncScale 0, uncSetScale 0, uncUsed 0, uncOldFlags 0, uncOldUncWidth -1, uncOldScale -1, uncSigDigits 2, uncoldSigDigits -1, oldUncUsed -1, oldStdDevSigDigits -1, setUncSigDigits 2, roundingLossIndex 0.05, confidenceIndex 0.05.\n";
+  \endverbatim
+
+
 */
 void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
-{ // Output ALL the os.word() values to the @c std::ostream& log.
-  if (os.iword(zeroIndex) != indexID)
+{ 
+  if (os.iword(zeroIndex) != indexID) // indexID == 48dbaf8
   {
     std::cout << "Magic index word is corrupted, should be " << std::hex << indexID << std::dec << "!" << std::endl;
   }
@@ -2080,7 +2086,7 @@ void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
   }
   log 
    // << std::hex << "indexID " << os.iword(zeroIndex)  << std::dec // = indexID; // Mark if has been set to defaults.
-    << " UncValues: "
+    << "UncValues: "
     <<  "uncFlags " << std::hex << os.iword(uncFlagsIndex) << std::dec //= 0;  // iword(1) holding
     //  bits meaning: add_+/-  add_SI_symbol add_SI_prefix addnoisy set_sigDigits adddegfree replicates addlimits...
     << ", setSigDigits " << os.iword(setSigDigitsIndex) // = 3;  // Default set 3 sig digits.
@@ -2100,14 +2106,8 @@ void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
     << ", setUncSigDigits " << os.iword(setUncSigDigitsIndex)
     << ", roundingLossIndex " << os.iword(roundingLossIndex) / 1.e3
     << ", confidenceIndex " << os.iword(confidenceIndex) / 1.e6
-     << ", top " << std::hex << os.iword(topIndex) << std::dec // = indexID;  // last .iword(16) as check.
-    << std::endl;
-  /* Before call of setUnc_defaults() all are zero (probably) and after call:
-  * indexID 48dbaf8
-    UncValues: 
-      uncFlags 0, setSigDigits 3, uncWidth 10, uncSetWidth -1, uncScale 0, uncSetScale 0, uncUsed 0, uncOldFlags 0, uncOldUncWidth -1, uncOldScale -1, uncSigDigits 2, uncoldSigDigits -1, oldUncUsed -1, oldStdDevSigDigits -1, setUncSigDigits 2, roundingLossIndex 0.05, confidenceIndex 0.05, 
-    top 48dbaf8
-  */
+    << std::dec << "." << std::endl; // 
+
 } // void outUncValues()
 
   /*! Output word description for each `unc_type` bit.\n

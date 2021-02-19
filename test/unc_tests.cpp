@@ -1013,7 +1013,7 @@ BOOST_AUTO_TEST_CASE(unc_test_setscale)
 } //   BOOST_AUTO_TEST_CASE(unc_test_setscale)
 
 BOOST_AUTO_TEST_CASE(unc_test_asym)
-{ // Some asymetric uncertainties.
+{ // Some asymmetric uncertainties.
   uncun notMore(1.71, 0.2f, 0, UNC_NOPLUS);  // Only minus.
   BOOST_CHECK((notMore.types() & UNC_NOPLUS));  //
   CHECK_USED(plusminus << notMore, "1.71 +0/-0.20");
@@ -1146,6 +1146,7 @@ BOOST_AUTO_TEST_CASE(unc_test_unc_Nan_inf)
   CHECK_USED(plusminus << infUnknown, "9.8000000000000007 +/-inf");
 } // BOOST_AUTO_TEST_CASE(unc_test_unc_Nan_inf)
 
+// Output of Confidence limits/interval tests.
 BOOST_AUTO_TEST_CASE(unc_test_ci_outputs)
 {
   uncun ud1(1.23, 0.56F, 7); // Uncertain type.
@@ -1160,7 +1161,6 @@ BOOST_AUTO_TEST_CASE(unc_test_ci_outputs)
   CHECK(addlimits << ud1, "1.2 <0.82, 1.64>");
   CHECK(plusminus << ud1, "1.2 +/-0.56");
 } // BOOST_AUTO_TEST_CASE(unc_test_ci_outputs)
-
 
 
 BOOST_AUTO_TEST_CASE(unc_test_setsegdigits)
