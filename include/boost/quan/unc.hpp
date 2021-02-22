@@ -509,10 +509,14 @@ class unc : public std::char_traits<char>
 public:
   typedef double value_type;
 
-  friend std::ostream& operator<< (std::ostream&, const unc<is_correlated>&);
-  friend std::istream& operator>> (std::istream&, const unc<is_correlated>&);
+  friend std::ostream& operator<< (std::ostream&, const unc<>&);
+  friend std::istream& operator>> (std::istream&, const unc<>&);
+  //friend std::ostream& operator<< (std::ostream&, const unc<is_correlated>&);
+  //friend std::istream& operator>> (std::istream&, const unc<is_correlated>&);
 
-  friend void unc_input(double& mean,  // Mean (central or most probable) value.
+ /*  friend std::ostream& operator<< (std::ostream&, const unc<is_correlated>&);
+  friend std::istream& operator>> (std::istream&, const unc<is_correlated>&);*/
+ friend void unc_input(double& mean,  // Mean (central or most probable) value.
                    double& stdDev, // Uncertainty estimate as Standard deviation.
                    unsigned short int& degreesOfFreedom,  // Degrees of freedom -1. (Default zero for 1 observation).
                    unsigned short int& types, // 16 Uncertain type flags showing type of value.
@@ -898,7 +902,7 @@ public:
       // Guidelines for Evaluating & Expressing the Uncertainty of Measurements.
       // http:// physics.nist.gov/pubs/guidelines.appa.html
       // 'Combined uncertainty' Appendix A formula A-3 = "sqrt(sum of squares)"
-      double comb_uncertainty = sqrtSumSqrs(uncertainty_, ud.uncertainty_);
+      double comb_uncertainty = hypot(uncertainty_, ud.uncertainty_);
       degFree_ =  // Welch-Satterthwaite - see NIST Appendix A3 & Appendix B-1.
         // Effective degrees of freedom <= - see Eq B-2, so use floor function.
         static_cast<unsigned short>( // Degrees of freedom must be integer by definition.
@@ -942,7 +946,8 @@ public:
     }
     else
     {  // Uncorrelated.
-      float comb_uncertainty = sqrtSumSqrs(uncertainty_, ud.uncertainty_);
+      float comb_uncertainty = hypotf(uncertainty_, ud.uncertainty_);
+  //    float comb_uncertainty = sqrtSumSqrs(uncertainty_, ud.uncertainty_);
       degFree_ =  // Welch-Satterthwaite - see NIST Appendix A3 Appendix B-1.
         (unsigned short)  // Must be integer by definition.
         floor(   // Round or floor?
@@ -978,7 +983,7 @@ public:
     else  // Uncorrelated.
     {
       double comb_uncertainty =
-        sqrtSumSqrs(uncertainty_ * ud.value_, ud.uncertainty_ * value_);
+        hypotf(uncertainty_ * ud.value_, ud.uncertainty_ * value_);
       degFree_ =  // Welch-Satterthwaite - see NIST Appendix A3 Appendix B-1.
         static_cast<unsigned short> ( // must be integer by definition.  Round or floor?
         pow4(comb_uncertainty)/
@@ -1012,7 +1017,7 @@ public:
     }
     else
     { // Uncorrelated.
-      float comb_uncertainty = sqrtSumSqrs(uncertainty_ / ud.value_,
+      float comb_uncertainty = hypotf(uncertainty_ / ud.value_,
         (ud.uncertainty_ * value_) / (ud.value_ * ud.value_));
       degFree_ =  // Welch-Satterthwaite - see NIST Appendix A3 Appendix B-1.
         (int)  // must be integer by definition.  Round or floor?
@@ -1087,403 +1092,6 @@ public:
     // Use normal signed values (no allowance for uncertainties).
     // Might also compare within uncertainty - see lessU
   } // operator<
-
-  //! Extract @c operator<< for uncertain types.
-  //! Example: \code uncun u(1.23, 0.05, 9); std::cout << u << std::endl;  \endcode
-  //! (Should cover both correlated and uncorrelated cases?)\n
-  //! \ref boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated>& val) extract operator<<
-  //! \link boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated>& val) \endlink
-  friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated>& val)
-  {
-    boost::io::ios_precision_saver precision_saver(os);
-    boost::io::ios_flags_saver flags_saver(os);
-    // both ios_flags and precision are restored by destructor.
-    std::ostringstream oss; // Build up string to output.
-
-    double mean = val.mean();
-    float uncertainty = val.deviation();
-    unsigned short int degFree = val.degFree();
-    unsigned short int unc_flags = val.uncFlags();
-
-    // bool showing output requirements specified using unc additional ostream manipulators.
-    // Note that these bools are NOT initialised here,
-    // assuming compiler will warn if used before being initialised.
-
-    bool isNoisyDigit;  //! \var isNoisyDigit Add an extra 'noisy' guard digit to reduce risk of information loss.
-    bool isDegFree;  //!  \var isDegFree Append degrees of freedom.
-    bool isPlusMinus; //! \var isPlusMinus Uncertainty as +/- is required too (but ignore if value is exact or integer).
-    bool isUppercase; //! \var isUppercase Exponential format is, for example, 1E6 else 1e6.
-    bool isScientificFormat;  //! \var isScientificFormat Taken to mean that exponential format wanted (always possible).
-    bool isShowPoint;  //! \var isShowPoint Means decimal point is always shown, for example 900. even if not needed.
-    bool isShowPos; //! \var isShowPos Show + sign always because ios flag was set with `<< showpo`s.
-    bool isFixed; //! \var isFixed \code os << fixed ... \endcode ios decimal fixed d.dddd format (rather than scientific).
-    bool isWidthSet; //! \var isWidthSet \code os << setw(9) \endcode has prescribed a width (rather than default width == 0).
-    bool isNoAdjust;  //! \var std = default but unc usage not defined yet, center?
-    bool isRightJustify; //!\var isNoAdjust right justify, prepend leading pad before. \code << right << ... \endcode
-    bool isLeftJustify; //! \var isLeftJustify left justify, append trailing pad after.  \code << left ...\endcode
-    bool isInternalJustify;  //! \var isInternalJustify Not defined yet, but use to center in field?
-    bool isCenter; //! \var isCenter Center if BOTH left and right specified.
-    bool isAlign; //! \var isAlign Align on decimal point?
-    bool isConfidenceInterval; //! \var isConfidenceInterval Append confidence interval, for example, "<1.23, 1.56>"
-    bool isSetSigDigits;  //! \var isSetSigDigits Use set sigdigits instead of calculate from uncertainty.
-    bool isSetUncSigDigits;  //!  \varisSetUncSigDigits Use setUNCsigdigits instead of calculate from uncertainty.
-
-    // Get print format requirements from std::ios flags. ****************************
-    const int iosFlags = os.flags();  // Save fmtflags in case need to restore.
-
-     // Width, precision, flags & fillChar data from stream os. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    std::streamsize iosWidth = os.width(); //! \warning Width must be read BEFORE any use of os
-    // which would reset width back to zero!
-    // & prevent any ios formatting during os << ...
-    // because unc_output does all its own formatting.
-    isWidthSet = (iosWidth > 0); // For example by os << setw(99)
-
-    isUppercase = static_cast<bool>(iosFlags & std::ios_base::uppercase); // E not e.
-    // TODO No mechanism to change uppercase at present in round_* functions.
-    isScientificFormat = static_cast<bool>(iosFlags & std::ios_base::scientific); // exp format wanted.
-    isFixed = static_cast<bool>(iosFlags & std::ios_base::fixed); // `<< fixed` Fixed format wanted.
-    // means d.dddd format wanted, if possible, rather than scientific or exp format.
-    isNoAdjust = !static_cast<bool>(iosFlags & std::ios_base::adjustfield); // `<< noadjust`
-    // no adjustfield flags are set (default, and == << right - a waste!).
-    isLeftJustify = static_cast<bool>(iosFlags & std::ios_base::left);
-    // left justify, append trailing padding with fillchar after.
-    isRightJustify = static_cast<bool>(iosFlags & std::ios_base::right);
-    // right justify, prepend leading padding with fillchar before.
-    isInternalJustify = static_cast<bool>(iosFlags & std::ios_base::internal);
-    // IO streams use to output fill char between sign and 1st digit.
-    // And meaning of more than one bit is specially defined for unc_output:
-    isCenter = isLeftJustify && isRightJustify;
-    // center if BOTH left and right ios specified.
-    // Done with ` << ` center rather than `<< left << right ... `.
-    isAlign = isInternalJustify && isLeftJustify && isRightJustify;
-    // Align decimal point with previous value?
-
-    isShowPoint = static_cast<bool>(iosFlags & std::ios_base::showpoint);
-    // Means decimal point is always shown, for example 900. even if not needed.
-    isShowPos = static_cast<bool>(iosFlags & std::ios_base::showpos);
-    // Show + sign always.
-
-    // Get print format requirements from unc flags.
-    long& uncFlags = os.iword(uncFlagsIndex); //
-    isPlusMinus = static_cast<bool>(uncFlags & plusMinus); // `<< plusminus`
-    isNoisyDigit = static_cast<bool>(uncFlags & noisyDigit); // `<< addNoisyDigit`
-    isConfidenceInterval = static_cast<bool>(uncFlags & limits); // `<< addlimits`
-    isDegFree = static_cast<bool>(uncFlags & degfree); // `<< addDegrees`
-    isSetSigDigits = static_cast<bool>(uncFlags & useSetSigDigits); // `<< setsigdigits`
-    isSetUncSigDigits = static_cast<bool>(uncFlags & useSetUncSigDigits); // `<< setsigdigits`
-
-    // Pick up distribution type from unc_flags.
-    // UNC_UNIFORM = 1 << 11, //!< Uncertainty has rectangular or uniform probability distribution.
-    // UNC_TRIANGULAR = 1 << 12, //!< Uncertainty has triangular probability distribution.
-    distribution_type distrib;
-    if (unc_flags & UNC_UNIFORM)
-    {
-      distrib = uniform;
-    }
-    else if (unc_flags & UNC_TRIANGULAR)
-    {
-      distrib = triangular;
-    }
-    else
-    {
-      distrib = gaussian;
-    } // Distribution type set.
-
-    //! \var roundloss Confidence or alpha to compute confidence interval is similarly scaled.
-    //! Usage: \code std::cout << confidence(0.01) << ... \encode means 1 - confidence = 99% confidence.
-    //! \code  double confidence = os.iword(conf) / 1000.;  //  == << confidence(0.05) or 95% \endcode 
-
-    long& roundloss = os.iword(roundingLossIndex);
-    double round_loss;
-    if (roundloss <= 0)
-    { // Not been set (or silly),
-      round_loss = 0.05; // so use a default.
-    }
-    else
-    { // Has been set by a call like `out << confidence(0.01);`.
-      // rounding loss is stored as a long, so scaled by 1000,
-      // so that 0.05 or 1% is stored as 50.
-      round_loss = roundloss / 1000.;  // `<< roundingloss(0.05)`
-    }
-    //int round_m(double round_loss = 0.01, double unc = 0., unsigned int uncsigdigits = 2, distribution_type distrib = gaussian);
-    //void out_confidence_interval(std::pair<double, double> ci, int m, std::ostream& os = std::cout);
-    //void out_value_limits(double mean, double unc, std::pair<double, double> ci, int m, std::ostream& os = std::cout);
-
-    long& conf = os.iword(confidenceIndex);
-    double confidence;
-    if (conf <= 0)
-    { // Has not been set, so use default.
-      confidence = 0.05;  // 95% confidence.
-    }
-    else
-    {
-      confidence = conf / 1.e6;  // Unscale the scaled value stored as an int - back into a double.
-    }
-    using boost::math::isfinite;
-    using boost::math::isnan;
-    using boost::math::isinf;
-
-    constexpr int max_digits10 = std::numeric_limits<double>::max_digits10; // std::numeric_limits<double>::digits10 * 3010/10000;
-
-    double intpart;
-    if (boost::math::isfinite(mean))
-    {
-      if(isSetSigDigits)
-      { // Use explicit number of digits of precision.
-        long& sigDigits = os.iword(setSigDigitsIndex);
-        if ((sigDigits <= 0) || (sigDigits > max_digits10) )
-        { // Show all potentially significant digits.
-          sigDigits = max_digits10;
-        }
-        oss << std::showpoint << std::setprecision(sigDigits) << mean;
-      }
-      else
-      { // Use uncertainty of value to control digits of precision output.
-        if (mean == 0)
-        { // isValueZero = true;
-          if (uncertainty == 0.F )
-          { // Is exact integer zero, so not rounded, and no decimal point.
-            oss << "0";
-          }
-          else if (!isfinite(uncertainty))
-          { // Show all possibly significant digits for NaN and inf uncertainty.
-            oss << std::showpoint << std::setprecision(max_digits10) << mean;
-          }
-          else
-          { // Inexact zero.
-            int m = round_m(round_loss, uncertainty, 2, distrib);
-            if (isNoisyDigit)
-            { // Move rounding digit to one less significant position.
-              m--;
-            }
-            oss << round_ms(0., m);
-          }
-        } // mean == 0
-        else if(unc_flags & VALUE_INTEGER)
-        { // Value is flagged as an integer (used integer constructor or set flag).
-          double fracpart = std::modf(mean, &intpart);
-          oss << std::noshowpoint << static_cast<long>(intpart); // Integer, so not rounded, and no decimal point,
-          // even if decimal point was specified by showpoint!
-        }
-        else if (unc_flags & VALUE_EXACT)
-        { // Value flagged as exact like 2.54 because constructor std_dev == 0 (but NOT integer)
-          // (used double constructor or set flag) so show decimal point.
-          oss.unsetf(std::ios_base::showpoint); // Ignore showpoint so NO trailing zeros (because exact).
-          if (isShowPos)
-          { // User specified showing + sign;
-            oss << std::showpos;
-          }
-          // Kinda want a decimal point here, but causes trouble with setw :-(
-          oss << std::setprecision(std::numeric_limits<double>::digits10) << mean;
-          double fracpart = std::modf(mean, &intpart);
-          if (fracpart == 0.)
-          { // Avoid two decimal points!
-            oss << '.';
-          }
-        }
-        else
-        { // Non-zero uncertainty, sd != 0.
-          if (isfinite(uncertainty))
-          {
-            int m = std::numeric_limits<double>::digits10; // Effectively no rounding?
-            if (uncertainty > 0.F)
-            { // Rounding is appropriate.
-              m = round_m(round_loss, uncertainty, 2, distrib); // m is rounding digit index.
-            }
-            if (isNoisyDigit)
-            { // Move rounding digit to one less significant position.
-              m--;
-            }
-            if (isShowPos == true)
-            {
-              oss << '+';
-            }
-            if (mean < 1e+15)
-            { // Will fit into 1000000000000 (digits10 = 15).
-              if (uncertainty > 0.F)
-              {
-                oss << round_ms(mean, m);
-              }
-              else
-              {
-                oss  << mean;
-              }
-            }
-            else
-            { // Won't fit into 1000000000000 (digits10 = 15), so switch to exponent format.
-              oss << mean;
-              //round_e(mean, m); // This value of m is wrong TODO !!!
-              // Need to round but and not display exp as "e+009"  TODO.
-            }
-          }
-          else
-          { // Uncertainty NAN or infinite, so show all possibly significant digits.
-            oss << std::showpoint << std::setprecision(max_digits10) << mean;
-          }
-        }
-      }
-    }
-    else
-    { // Mean is NaN or infinity.
-      if (isnan(mean))
-      {
-        oss << "NaN" ;
-      }
-      else if (isinf(mean))
-      {
-         oss << ((mean < 0) ? "-inf" : (isShowPos) ? "+inf" : "inf");
-      }
-      // Or could leave as native output, but MSVC format is ugly.
-    } // Mean
-
-    if (isPlusMinus && !(unc_flags & VALUE_INTEGER))
-    { // Want estimate of uncertainty.
-      if (isfinite(uncertainty))
-      {
-        if (uncertainty == 0.F)
-        { // Special case short version.
-          oss << " +/-0";
-        }
-        else
-        { // Non-zero uncertainty.
-          int uncSigDigits = os.iword(setUncSigDigitsIndex);
-          // Default is round to 2 sig digit - ISO rule.
-          if (uncSigDigits <= 0)
-          { // Automatically choose uncSigDigits based on degrees of freedom.
-            // Passed negative values through to allow
-            // an auto mode for w < 0 that chooses from degrees of freedom,
-            // From table H page 457 in Oliver & Goldsmith, confidence interval
-            // of standard deviation is about +/- 20% at 10 degrees of freedom,
-            // and only < +/- 10% above 100 observations (needing 2 stdDev sig Digits).
-            uncSigDigits = std::abs(uncSigDigits);
-            if (degFree > 100)
-            {
-              uncSigDigits = 3;
-            }
-            else if (degFree > 10)
-            {
-              uncSigDigits = 2;
-            }
-            else
-            { // degFree in common range 1 to 10.
-              // Choose between 1 and 2 digits based on 1st digit of uncertainty.
-              // Would be too big a step if most significant digit was 1 or 2.
-              // std::ostringstream oss; ??
-              oss << std::scientific << std::setprecision (1) << uncertainty; // Assume sd positive.
-              if(oss.str()[0] == '1') // Check 1st digit before decimal point.
-              { // Would be too big a step if most significant digit was 1 or 2.
-                uncSigDigits = 2;
-              }
-              else if (oss.str()[0] == '2')
-              {
-                uncSigDigits = 2;
-              }
-              else
-              { // 1st digit > 2 so can use just 1 digit.
-                 uncSigDigits = 1;
-              }
-            }
-          }
-         if (unc_flags & UNC_NOPLUS)
-          {
-            oss << " +0/-";
-          }
-          else if (unc_flags & UNC_NOMINUS)
-          {
-            oss << " -0/+";
-          }
-          else
-          { // normal plus and minus.
-            oss << " +/-";
-          }
-          //oss.unsetf(std::ios_base::scientific);
-          oss << std::noshowpos  // Prefixed by " +/-" so never add +.
-            << std::fixed // << std::noscientific
-            << std::showpoint
-            << std::setprecision(uncSigDigits); // switches to e format :-(
-          //double unc_rounded = round_sig(uncertainty, uncSigDigits);
-          //oss << unc_rounded;
-           //std::string round_f<FPT>(FPT v, int sigdigits);
-         std::string s = round_f<float>(uncertainty, uncSigDigits);
-          oss << s;
-        }
-      }
-      else
-      { // Not finite uncertainty - NaN or inf.
-        if (isnan(uncertainty))
-        {
-          oss << " +/-?";
-        }
-        else if (isinf(uncertainty))
-        {
-          oss << " +/-inf";
-        }
-      }
-    } // uncertainty.
-
-    if(isConfidenceInterval)
-    { // Want to append confidence interval as <1.23, 2.34>.
-      if (boost::math::isfinite(mean) && boost::math::isfinite(uncertainty) && degFree >= 0)
-      { // degfree 1 means 2 observations, so possible to compute confidence limits or interval in < > angle brackets.
-       // std::streamsize osprec = os.precision(); // Save precision. TODO but don't seem to restore?
-       // oss.precision(3); //
-        //std::pair<double, double> conf_interval(double mean, double unc, double df = 1., double alpha = 0.05, distribution_type distrib = gaussian);
-        double alpha = os.iword(confidenceIndex) / 1.e6; // Pick up and unscale alpha.
-       // double round_loss = os.iword(roundingLossIndex) / 1.e3; // Pick up and rounding loss and unscale.
-        // TODO check has already been set above at line 1503
-        int uncSigDigits = os.iword(setUncSigDigitsIndex);  // Pick up significant digits for uncertainty.
-        if(isNoisyDigit)
-        {
-          uncSigDigits++;
-        }
-        std::pair<double, double> ci  = conf_interval(mean, uncertainty, degFree, alpha, distrib);
-        int m = round_m(round_loss, uncertainty, uncSigDigits, distrib);  // Compute roundER digit number.
-        using boost::lexical_cast;
-        oss << " <"
-            << lexical_cast<double>(round_ms(ci.first, m-1)) << ", "
-            << lexical_cast<double>(round_ms(ci.second, m-1))
-            << ">";
-      }
-      else
-      { // Not possible to compute confidence limits or interval.
-        oss << " < ?, ? >" ;
-      }
-    } // Appended confidence interval.
-
-    if (isDegFree)
-    { // Add any degrees of freedom information (in brackets, for example: "(99)" )
-      if (degFree == (std::numeric_limits<unsigned short int>::max)())
-      { // Is valid.
-         oss << " (?)";
-      }
-      else if (degFree == 0u)
-      { // Might show that this is implied by default? with oss << (" (0?)" ?
-         oss << " (0)";
-
-      }
-      else
-      {
-        oss << " (" << degFree << ")"; // " (99)"
-      }
-
-    }
-    os << oss.str();
-    return os;
-  } // friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated>& val)
-
-  //! Extract operator<< for unc type.
-  friend std::istream& operator>> (std::istream& is, unc<is_correlated>& ud)
-  {
-    double mean;
-    double stdDev;
-    unsigned short int degreesOfFreedom;
-    unsigned short unctypes;
-    unc_input(mean, stdDev, degreesOfFreedom, unctypes, is);
-    // At present, uses a separate function for input (unlike output).
-    ud = unc<is_correlated>(mean, float(stdDev), degreesOfFreedom, unctypes);
-    // Inputs mean, SD & degrees of freedom & set unc types... as a string from file.
-    return is;
-  }
 
   // Math functions for uncertain class.
   friend unc<is_correlated> ceil(unc<is_correlated> arg)
@@ -1591,7 +1199,7 @@ public:
         remainder.uncertainty_ = float(slope1 * arg.uncertainty_
         + slope2 * divisor.uncertainty_);
       else
-        remainder.uncertainty_ = float(sqrtSumSqrs(slope1 * arg.uncertainty_,
+        remainder.uncertainty_ = float(hypotf(slope1 * arg.uncertainty_,
         slope2 * divisor.uncertainty_));
       remainder.value_ = fmod(arg.value_, divisor.value_);
       remainder.unctypes_ = arg.unctypes_;  // Better choice than divisor?
@@ -1684,7 +1292,7 @@ public:
     }
     else
     { // Uncorrelated.
-      retval.uncertainty_ = sqrtSumSqrs(slope1 * arg1.uncertainty_,
+      retval.uncertainty_ = hypotf(slope1 * arg1.uncertainty_,
         slope2 * arg2.uncertainty_);
     }
     retval.value_ = atan2(arg1.value_, arg2.value_);
@@ -1776,7 +1384,7 @@ public:
       retval.uncertainty_ = slope1 * arg1.uncertainty_
       + slope2 * arg2.uncertainty_;
     else
-      retval.uncertainty_ = sqrtSumSqrs(slope1 * arg1.uncertainty_,
+      retval.uncertainty_ = hypotf(slope1 * arg1.uncertainty_,
       slope2 * arg2.uncertainty_);
     return retval;
   }
@@ -1837,7 +1445,7 @@ public:
         arg2.value_ + arg2.uncertainty_);
       double down_val2 = certain_func(arg1.value_,
         arg2.value_ - arg2.uncertainty_);
-      retval.uncertainty_ = 0.5 * sqrtSumSqrs(up_val1 - down_val1,
+      retval.uncertainty_ = 0.5 * hypotf(up_val1 - down_val1,
         up_val2 - down_val2);
     }
     return retval;
@@ -1935,6 +1543,405 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
 //! friend std::ostream& operator<<(std::ostream& os, const T& obj)
 //! https://en.cppreference.com/w/cpp/language/friend and may need to be friend  to access private data of the class
 //! 
+
+  //! Extract operator<< for unc type.
+//template <bool is_correlated>
+std::istream& operator>> (std::istream& is, unc<false>& ud)
+{
+  double mean;
+  double stdDev;
+  unsigned short int degreesOfFreedom;
+  unsigned short unctypes;
+  unc_input(mean, stdDev, degreesOfFreedom, unctypes, is);
+  // At present, uses a separate function for input (unlike output).
+  ud = unc<false>(mean, float(stdDev), degreesOfFreedom, unctypes);
+  // Inputs mean, SD & degrees of freedom & set unc types... as a string from file.
+  return is;
+}
+
+//! Extract @c operator<< for uncertain types.
+//! Example: \code uncun u(1.23, 0.05, 9); std::cout << u << std::endl;  \endcode
+//! (Should cover both correlated and uncorrelated cases?)\n
+//! \ref boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated>& val) extract operator<<
+//! \link boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated>& val) \endlink
+std::ostream& operator<< (std::ostream& os, const unc<false>& val)
+{
+  boost::io::ios_precision_saver precision_saver(os);
+  boost::io::ios_flags_saver flags_saver(os);
+  // both ios_flags and precision are restored by destructor.
+  std::ostringstream oss; // Build up string to output.
+
+  double mean = val.mean();
+  float uncertainty = val.deviation();
+  unsigned short int degFree = val.degFree();
+  unsigned short int unc_flags = val.uncFlags();
+
+  // bool showing output requirements specified using unc additional ostream manipulators.
+  // Note that these bools are NOT initialised here,
+  // assuming compiler will warn if used before being initialised.
+
+  bool isNoisyDigit;  //! \var isNoisyDigit Add an extra 'noisy' guard digit to reduce risk of information loss.
+  bool isDegFree;  //!  \var isDegFree Append degrees of freedom.
+  bool isPlusMinus; //! \var isPlusMinus Uncertainty as +/- is required too (but ignore if value is exact or integer).
+  bool isUppercase; //! \var isUppercase Exponential format is, for example, 1E6 else 1e6.
+  bool isScientificFormat;  //! \var isScientificFormat Taken to mean that exponential format wanted (always possible).
+  bool isShowPoint;  //! \var isShowPoint Means decimal point is always shown, for example 900. even if not needed.
+  bool isShowPos; //! \var isShowPos Show + sign always because ios flag was set with `<< showpo`s.
+  bool isFixed; //! \var isFixed \code os << fixed ... \endcode ios decimal fixed d.dddd format (rather than scientific).
+  bool isWidthSet; //! \var isWidthSet \code os << setw(9) \endcode has prescribed a width (rather than default width == 0).
+  bool isNoAdjust;  //! \var std = default but unc usage not defined yet, center?
+  bool isRightJustify; //!\var isNoAdjust right justify, prepend leading pad before. \code << right << ... \endcode
+  bool isLeftJustify; //! \var isLeftJustify left justify, append trailing pad after.  \code << left ...\endcode
+  bool isInternalJustify;  //! \var isInternalJustify Not defined yet, but use to center in field?
+  bool isCenter; //! \var isCenter Center if BOTH left and right specified.
+  bool isAlign; //! \var isAlign Align on decimal point?
+  bool isConfidenceInterval; //! \var isConfidenceInterval Append confidence interval, for example, "<1.23, 1.56>"
+  bool isSetSigDigits;  //! \var isSetSigDigits Use set sigdigits instead of calculate from uncertainty.
+  bool isSetUncSigDigits;  //!  \varisSetUncSigDigits Use setUNCsigdigits instead of calculate from uncertainty.
+
+  // Get print format requirements from std::ios flags. ****************************
+  const int iosFlags = os.flags();  // Save fmtflags in case need to restore.
+
+   // Width, precision, flags & fillChar data from stream os. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  std::streamsize iosWidth = os.width(); //! \warning Width must be read BEFORE any use of os
+  // which would reset width back to zero!
+  // & prevent any ios formatting during os << ...
+  // because unc_output does all its own formatting.
+  isWidthSet = (iosWidth > 0); // For example by os << setw(99)
+
+  isUppercase = static_cast<bool>(iosFlags & std::ios_base::uppercase); // E not e.
+  // TODO No mechanism to change uppercase at present in round_* functions.
+  isScientificFormat = static_cast<bool>(iosFlags & std::ios_base::scientific); // exp format wanted.
+  isFixed = static_cast<bool>(iosFlags & std::ios_base::fixed); // `<< fixed` Fixed format wanted.
+  // means d.dddd format wanted, if possible, rather than scientific or exp format.
+  isNoAdjust = !static_cast<bool>(iosFlags & std::ios_base::adjustfield); // `<< noadjust`
+  // no adjustfield flags are set (default, and == << right - a waste!).
+  isLeftJustify = static_cast<bool>(iosFlags & std::ios_base::left);
+  // left justify, append trailing padding with fillchar after.
+  isRightJustify = static_cast<bool>(iosFlags & std::ios_base::right);
+  // right justify, prepend leading padding with fillchar before.
+  isInternalJustify = static_cast<bool>(iosFlags & std::ios_base::internal);
+  // IO streams use to output fill char between sign and 1st digit.
+  // And meaning of more than one bit is specially defined for unc_output:
+  isCenter = isLeftJustify && isRightJustify;
+  // center if BOTH left and right ios specified.
+  // Done with ` << ` center rather than `<< left << right ... `.
+  isAlign = isInternalJustify && isLeftJustify && isRightJustify;
+  // Align decimal point with previous value?
+
+  isShowPoint = static_cast<bool>(iosFlags & std::ios_base::showpoint);
+  // Means decimal point is always shown, for example 900. even if not needed.
+  isShowPos = static_cast<bool>(iosFlags & std::ios_base::showpos);
+  // Show + sign always.
+
+  // Get print format requirements from unc flags.
+  long& uncFlags = os.iword(uncFlagsIndex); //
+  isPlusMinus = static_cast<bool>(uncFlags & plusMinus); // `<< plusminus`
+  isNoisyDigit = static_cast<bool>(uncFlags & noisyDigit); // `<< addNoisyDigit`
+  isConfidenceInterval = static_cast<bool>(uncFlags & limits); // `<< addlimits`
+  isDegFree = static_cast<bool>(uncFlags & degfree); // `<< addDegrees`
+  isSetSigDigits = static_cast<bool>(uncFlags & useSetSigDigits); // `<< setsigdigits`
+  isSetUncSigDigits = static_cast<bool>(uncFlags & useSetUncSigDigits); // `<< setsigdigits`
+
+  // Pick up distribution type from unc_flags.
+  // UNC_UNIFORM = 1 << 11, //!< Uncertainty has rectangular or uniform probability distribution.
+  // UNC_TRIANGULAR = 1 << 12, //!< Uncertainty has triangular probability distribution.
+  distribution_type distrib;
+  if (unc_flags & UNC_UNIFORM)
+  {
+    distrib = uniform;
+  }
+  else if (unc_flags & UNC_TRIANGULAR)
+  {
+    distrib = triangular;
+  }
+  else
+  {
+    distrib = gaussian;
+  } // Distribution type set.
+
+  //! \var roundloss Confidence or alpha to compute confidence interval is similarly scaled.
+  //! Usage: \code std::cout << confidence(0.01) << ... \encode means 1 - confidence = 99% confidence.
+  //! \code  double confidence = os.iword(conf) / 1000.;  //  == << confidence(0.05) or 95% \endcode 
+
+  long& roundloss = os.iword(roundingLossIndex);
+  double round_loss;
+  if (roundloss <= 0)
+  { // Not been set (or silly),
+    round_loss = 0.05; // so use a default.
+  }
+  else
+  { // Has been set by a call like `out << confidence(0.01);`.
+    // rounding loss is stored as a long, so scaled by 1000,
+    // so that 0.05 or 1% is stored as 50.
+    round_loss = roundloss / 1000.;  // `<< roundingloss(0.05)`
+  }
+  //int round_m(double round_loss = 0.01, double unc = 0., unsigned int uncsigdigits = 2, distribution_type distrib = gaussian);
+  //void out_confidence_interval(std::pair<double, double> ci, int m, std::ostream& os = std::cout);
+  //void out_value_limits(double mean, double unc, std::pair<double, double> ci, int m, std::ostream& os = std::cout);
+
+  long& conf = os.iword(confidenceIndex);
+  double confidence;
+  if (conf <= 0)
+  { // Has not been set, so use default.
+    confidence = 0.05;  // 95% confidence.
+  }
+  else
+  {
+    confidence = conf / 1.e6;  // Unscale the scaled value stored as an int - back into a double.
+  }
+  using boost::math::isfinite;
+  using boost::math::isnan;
+  using boost::math::isinf;
+
+  constexpr int max_digits10 = std::numeric_limits<double>::max_digits10; // std::numeric_limits<double>::digits10 * 3010/10000;
+
+  double intpart;
+  if (boost::math::isfinite(mean))
+  {
+    if (isSetSigDigits)
+    { // Use explicit number of digits of precision.
+      long& sigDigits = os.iword(setSigDigitsIndex);
+      if ((sigDigits <= 0) || (sigDigits > max_digits10))
+      { // Show all potentially significant digits.
+        sigDigits = max_digits10;
+      }
+      oss << std::showpoint << std::setprecision(sigDigits) << mean;
+    }
+    else
+    { // Use uncertainty of value to control digits of precision output.
+      if (mean == 0)
+      { // isValueZero = true;
+        if (uncertainty == 0.F)
+        { // Is exact integer zero, so not rounded, and no decimal point.
+          oss << "0";
+        }
+        else if (!isfinite(uncertainty))
+        { // Show all possibly significant digits for NaN and inf uncertainty.
+          oss << std::showpoint << std::setprecision(max_digits10) << mean;
+        }
+        else
+        { // Inexact zero.
+          int m = round_m(round_loss, uncertainty, 2, distrib);
+          if (isNoisyDigit)
+          { // Move rounding digit to one less significant position.
+            m--;
+          }
+          oss << round_ms(0., m);
+        }
+      } // mean == 0
+      else if (unc_flags & VALUE_INTEGER)
+      { // Value is flagged as an integer (used integer constructor or set flag).
+        double fracpart = std::modf(mean, &intpart);
+        oss << std::noshowpoint << static_cast<long>(intpart); // Integer, so not rounded, and no decimal point,
+        // even if decimal point was specified by showpoint!
+      }
+      else if (unc_flags & VALUE_EXACT)
+      { // Value flagged as exact like 2.54 because constructor std_dev == 0 (but NOT integer)
+        // (used double constructor or set flag) so show decimal point.
+        oss.unsetf(std::ios_base::showpoint); // Ignore showpoint so NO trailing zeros (because exact).
+        if (isShowPos)
+        { // User specified showing + sign;
+          oss << std::showpos;
+        }
+        // Kinda want a decimal point here, but causes trouble with setw :-(
+        oss << std::setprecision(std::numeric_limits<double>::digits10) << mean;
+        double fracpart = std::modf(mean, &intpart);
+        if (fracpart == 0.)
+        { // Avoid two decimal points!
+          oss << '.';
+        }
+      }
+      else
+      { // Non-zero uncertainty, sd != 0.
+        if (isfinite(uncertainty))
+        {
+          int m = std::numeric_limits<double>::digits10; // Effectively no rounding?
+          if (uncertainty > 0.F)
+          { // Rounding is appropriate.
+            m = round_m(round_loss, uncertainty, 2, distrib); // m is rounding digit index.
+          }
+          if (isNoisyDigit)
+          { // Move rounding digit to one less significant position.
+            m--;
+          }
+          if (isShowPos == true)
+          {
+            oss << '+';
+          }
+          if (mean < 1e+15)
+          { // Will fit into 1000000000000 (digits10 = 15).
+            if (uncertainty > 0.F)
+            {
+              oss << round_ms(mean, m);
+            }
+            else
+            {
+              oss  << mean;
+            }
+          }
+          else
+          { // Won't fit into 1000000000000 (digits10 = 15), so switch to exponent format.
+            oss << mean;
+            //round_e(mean, m); // This value of m is wrong TODO !!!
+            // Need to round but and not display exp as "e+009"  TODO.
+          }
+        }
+        else
+        { // Uncertainty NAN or infinite, so show all possibly significant digits.
+          oss << std::showpoint << std::setprecision(max_digits10) << mean;
+        }
+      }
+    }
+  }
+  else
+  { // Mean is NaN or infinity.
+    if (isnan(mean))
+    {
+      oss << "NaN";
+    }
+    else if (isinf(mean))
+    {
+      oss << ((mean < 0) ? "-inf" : (isShowPos) ? "+inf" : "inf");
+    }
+    // Or could leave as native output, but MSVC format is ugly.
+  } // Mean
+
+  if (isPlusMinus && !(unc_flags & VALUE_INTEGER))
+  { // Want estimate of uncertainty.
+    if (isfinite(uncertainty))
+    {
+      if (uncertainty == 0.F)
+      { // Special case short version.
+        oss << " +/-0";
+      }
+      else
+      { // Non-zero uncertainty.
+        int uncSigDigits = os.iword(setUncSigDigitsIndex);
+        // Default is round to 2 sig digit - ISO rule.
+        if (uncSigDigits <= 0)
+        { // Automatically choose uncSigDigits based on degrees of freedom.
+          // Passed negative values through to allow
+          // an auto mode for w < 0 that chooses from degrees of freedom,
+          // From table H page 457 in Oliver & Goldsmith, confidence interval
+          // of standard deviation is about +/- 20% at 10 degrees of freedom,
+          // and only < +/- 10% above 100 observations (needing 2 stdDev sig Digits).
+          uncSigDigits = std::abs(uncSigDigits);
+          if (degFree > 100)
+          {
+            uncSigDigits = 3;
+          }
+          else if (degFree > 10)
+          {
+            uncSigDigits = 2;
+          }
+          else
+          { // degFree in common range 1 to 10.
+            // Choose between 1 and 2 digits based on 1st digit of uncertainty.
+            // Would be too big a step if most significant digit was 1 or 2.
+            // std::ostringstream oss; ??
+            oss << std::scientific << std::setprecision(1) << uncertainty; // Assume sd positive.
+            if (oss.str()[0] == '1') // Check 1st digit before decimal point.
+            { // Would be too big a step if most significant digit was 1 or 2.
+              uncSigDigits = 2;
+            }
+            else if (oss.str()[0] == '2')
+            {
+              uncSigDigits = 2;
+            }
+            else
+            { // 1st digit > 2 so can use just 1 digit.
+              uncSigDigits = 1;
+            }
+          }
+        }
+        if (unc_flags & UNC_NOPLUS)
+        {
+          oss << " +0/-";
+        }
+        else if (unc_flags & UNC_NOMINUS)
+        {
+          oss << " -0/+";
+        }
+        else
+        { // normal plus and minus.
+          oss << " +/-";
+        }
+        //oss.unsetf(std::ios_base::scientific);
+        oss << std::noshowpos  // Prefixed by " +/-" so never add +.
+          << std::fixed // << std::noscientific
+          << std::showpoint
+          << std::setprecision(uncSigDigits); // switches to e format :-(
+        //double unc_rounded = round_sig(uncertainty, uncSigDigits);
+        //oss << unc_rounded;
+         //std::string round_f<FPT>(FPT v, int sigdigits);
+        std::string s = round_f<float>(uncertainty, uncSigDigits);
+        oss << s;
+      }
+    }
+    else
+    { // Not finite uncertainty - NaN or inf.
+      if (isnan(uncertainty))
+      {
+        oss << " +/-?";
+      }
+      else if (isinf(uncertainty))
+      {
+        oss << " +/-inf";
+      }
+    }
+  } // uncertainty.
+
+  if (isConfidenceInterval)
+  { // Want to append confidence interval as <1.23, 2.34>.
+    if (boost::math::isfinite(mean) && boost::math::isfinite(uncertainty) && degFree >= 0)
+    { // degfree 1 means 2 observations, so possible to compute confidence limits or interval in < > angle brackets.
+     // std::streamsize osprec = os.precision(); // Save precision. TODO but don't seem to restore?
+     // oss.precision(3); //
+      //std::pair<double, double> conf_interval(double mean, double unc, double df = 1., double alpha = 0.05, distribution_type distrib = gaussian);
+      double alpha = os.iword(confidenceIndex) / 1.e6; // Pick up and unscale alpha.
+     // double round_loss = os.iword(roundingLossIndex) / 1.e3; // Pick up and rounding loss and unscale.
+      // TODO check has already been set above at line 1503
+      int uncSigDigits = os.iword(setUncSigDigitsIndex);  // Pick up significant digits for uncertainty.
+      if (isNoisyDigit)
+      {
+        uncSigDigits++;
+      }
+      std::pair<double, double> ci  = conf_interval(mean, uncertainty, degFree, alpha, distrib);
+      int m = round_m(round_loss, uncertainty, uncSigDigits, distrib);  // Compute roundER digit number.
+      using boost::lexical_cast;
+      oss << " <"
+        << lexical_cast<double>(round_ms(ci.first, m-1)) << ", "
+        << lexical_cast<double>(round_ms(ci.second, m-1))
+        << ">";
+    }
+    else
+    { // Not possible to compute confidence limits or interval.
+      oss << " < ?, ? >";
+    }
+  } // Appended confidence interval.
+
+  if (isDegFree)
+  { // Add any degrees of freedom information (in brackets, for example: "(99)" )
+    if (degFree == (std::numeric_limits<unsigned short int>::max)())
+    { // Is valid.
+      oss << " (?)";
+    }
+    else if (degFree == 0u)
+    { // Might show that this is implied by default? with oss << (" (0?)" ?
+      oss << " (0)";
+
+    }
+    else
+    {
+      oss << " (" << degFree << ")"; // " (99)"
+    }
+
+  }
+  os << oss.str();
+  return os;
+} // friend std::ostream& operator<< (std::ostream& os, const unc<is_correlated>& val)
+
 
 template <bool correlated>
 std::ostream& operator<< (std::ostream& os, const std::pair< unc<correlated>, unc<correlated> >& up)
