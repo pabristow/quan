@@ -54,7 +54,7 @@ namespace quan {
 
   const long topIndex = std::ios_base::xalloc(); // long& topIndex = iword(21] == iword(0] check!
 
-  extern const long indexID;  // 'Magic' value defined in unc_init.hpp.
+  //const long indexID;  // 'Magic' value defined in unc_init.hpp.
   bool isIndexed = true; // Above indexes have been initialised.
 
 } // namespace boost
