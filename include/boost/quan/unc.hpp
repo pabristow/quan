@@ -1546,10 +1546,19 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
 //! https://en.cppreference.com/w/cpp/language/friend and may need to be friend  to access private data of the class
 //!
 
+//! 'Unique' value used to check xalloc initialised iwords are OK, and are not corrupted.
+static const long indexID = 0x48dbaf8;  //! Random id value.
+void setUncDefaults(std::ios_base& os);
+
   //! Extract operator<< for unc type.
 //template <bool is_correlated>
 std::istream& operator>> (std::istream& is, unc<false>& ud)
 {
+  if (is.iword(zeroIndex) != indexID)
+  { // Need to initialize the Unc class iword defaults for this stream.
+    setUncDefaults(is);
+  }
+
   double mean;
   double stdDev;
   unsigned short int degreesOfFreedom;
@@ -1561,7 +1570,6 @@ std::istream& operator>> (std::istream& is, unc<false>& ud)
   return is;
 }
 
-void setUncDefaults(std::ios_base& os);
 
 //! Extract @c operator<< for uncertain types.
 //! Example: \code uncun u(1.23, 0.05, 9); std::cout << u << std::endl;  \endcode
@@ -1579,7 +1587,10 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
   // At price of making not thread safe.
   //setUncDefaults(os);
 
-
+  if (os.iword(zeroIndex) != indexID)
+  { // Need to initialize the Unc class iword defaults for this stream.
+    setUncDefaults(os);
+  }
 
   std::ostringstream oss; // Build up string to output.
 
@@ -2030,9 +2041,6 @@ autoprefix_norm(const unc<false> & arg)
   return autoprefix_norm_impl<double, true>::call(arg);
 }
 
-//! 'Unique' value used to check xalloc initialised iwords are OK, and are not corrupted.
-static const long indexID = 0x48dbaf8;  //! Random id value.
-
 /*!
   \brief Set 16 default flag bit values for uncertain output flags.
   Usage: \code setUncDefaults(cout); \endcode
@@ -2046,42 +2054,39 @@ static const long indexID = 0x48dbaf8;  //! Random id value.
 */
 void setUncDefaults(std::ios_base& os)
 {
+  os.iword(zeroIndex) = indexID; // Mark stream starting to set to defaults:
+
+  os.iword(uncFlagsIndex) = 0;  // long& uncFlags == iword(1)
+  // uncFlags defaults mean flex, not set_scaled, not auto_scaled, not +/-,
+  // no symbol, no prefix, no noisy, not setSigDigits.
+  os.iword(oldUncFlagsIndex) = 0;  // Old  - not set yet. long& oldUncFlagsIndex == iword(2)
+  os.iword(sigDigitsIndex) = 3;  // Default 3 significant digits for value.
+  os.iword(oldSigDigitsIndex) = 3;  // Old @b set 3 significant digits for value.
+  os.iword(setSigDigitsIndex) = 3;  // Default @b set 3 significant digits for value.
+  os.iword(uncSigDigitsIndex) = 2;  // Default @b set 3 significant digits for value.
+  os.iword(setUncSigDigitsIndex) = 2;  // Default 2 significant digits, as ISO standard.
+  os.iword(oldUncSigDigitsIndex) = -1;  // No previous value for unc stdDev.
+  os.iword(scaleIndex) = 0;  // Zero scale means was not scaled.
+  os.iword(oldScaleIndex) = -1;  // No previous scale.
+  os.iword(setScaleIndex) = 0;  // Assigned by uncSetScale(9).
+  os.iword(uncWidthIndex) = 10;  // Default width 10 to allow +1.23E+12 & 1 fill_char.
+  os.iword(oldUncWidthIndex) = -1;
+  os.iword(oldUncSetWidthIndex) = -1;  // Not used?
+  os.iword(usedIndex) = 0; //  No chars output = used.
+  os.iword(oldUncUsedIndex) = -1;  //  No previous value.
+  os.iword(widthIndex) = -1; // ios setwidth
+  os.iword(oldWidthIndex) = -1; // previous ios setwidth
+  os.iword(roundingLossIndex) = 50; // 0.01 * 1000; // == 0.01
+  os.iword(confidenceIndex) = 50000; // == 0.05 * 1e6
+
+  os.iword(topIndex) = indexID;  // last .iword(16) == iword(0)
+  // marking that all have been set to defaults.
   if (os.iword(zeroIndex) != indexID)
-  { // Need to initialize the Unc class iword defaults.
-    os.iword(zeroIndex) = indexID; // Mark stream starting to set to defaults:
-
-    os.iword(uncFlagsIndex) = 0;  // long& uncFlags == iword(1)
-    // uncFlags defaults mean flex, not set_scaled, not auto_scaled, not +/-,
-    // no symbol, no prefix, no noisy, not setSigDigits.
-    os.iword(oldUncFlagsIndex) = 0;  // Old  - not set yet. long& oldUncFlagsIndex == iword(2)
-    os.iword(sigDigitsIndex) = 3;  // Default 3 significant digits for value.
-    os.iword(oldSigDigitsIndex) = 3;  // Old @b set 3 significant digits for value.
-    os.iword(setSigDigitsIndex) = 3;  // Default @b set 3 significant digits for value.
-    os.iword(uncSigDigitsIndex) = 2;  // Default @b set 3 significant digits for value.
-    os.iword(setUncSigDigitsIndex) = 2;  // Default 2 significant digits, as ISO standard.
-    os.iword(oldUncSigDigitsIndex) = -1;  // No previous value for unc stdDev.
-    os.iword(scaleIndex) = 0;  // Zero scale means was not scaled.
-    os.iword(oldScaleIndex) = -1;  // No previous scale.
-    os.iword(setScaleIndex) = 0;  // Assigned by uncSetScale(9).
-    os.iword(uncWidthIndex) = 10;  // Default width 10 to allow +1.23E+12 & 1 fill_char.
-    os.iword(oldUncWidthIndex) = -1;
-    os.iword(oldUncSetWidthIndex) = -1;  // Not used?
-    os.iword(usedIndex) = 0; //  No chars output = used.
-    os.iword(oldUncUsedIndex) = -1;  //  No previous value.
-    os.iword(widthIndex) = -1; // ios setwidth
-    os.iword(oldWidthIndex) = -1; // previous ios setwidth
-    os.iword(roundingLossIndex) = 50; // 0.01 * 1000; // == 0.01
-    os.iword(confidenceIndex) = 50000; // == 0.05 * 1e6
-
-    os.iword(topIndex) = indexID;  // last .iword(16) == iword(0)
-    // marking that all have been set to defaults.
-    if (os.iword(zeroIndex) != indexID)
-    { // Initialization of iwords failed!
-      std::cerr << "os.iword(0) = "  << std::hex << os.iword(0)
-        << " not expected ID " << indexID << '!'
-        << "\nMissing call of setUncDefaults(ostream)?"
-        << std::endl;
-    }
+  { // Initialization of iwords failed!
+    std::cerr << "os.iword(0) = "  << std::hex << os.iword(0)
+      << " not expected ID " << indexID << '!'
+      << "\nMissing call of setUncDefaults(ostream)?"
+      << std::endl;
   }
 } // void setUncDefaults(std::ios_base& stream)
 
