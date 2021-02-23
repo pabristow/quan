@@ -23,7 +23,7 @@
 //#define BOOST_LIB_DIAGNOSTIC "on"// Show library file details.
 // Linking to lib file: libboost_unit_test_framework-vc100-mt-s-1_49.lib
 
-#include <boost/test/included/unit_test.hpp> // 
+#include <boost/test/included/unit_test.hpp> //
 //#include <boost/core/lightweight_test.hpp >  does not support BOOST_AUTO_TEST_CASE' so can't use without big changes.
 
 
@@ -286,13 +286,14 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   //BOOST_CHECK_EQUAL(fout.flags() & ios_base::boolalpha, 0); // no boolapha.
 
   // Basic checks on re-initialisation of ios and unc using.
-  void setiosDefaults(std::ostream&); // &
-  void setUncDefaults(ios_base&);
+//  void setiosDefaults(std::ostream&); // &
+
+ // void boost::quan::setUncDefaults(std::ios_base&);
 
   std::ostringstream oss;
   std::ios_base::fmtflags init_flags = oss.flags();
   //outFmtFlags(init_flags); // Default flags after initializing stream: skipws & dec.
-  setUncDefaults(oss);
+  boost::quan::setUncDefaults(oss);
   long init_uflags = uFlags(oss);
   oss.flags(~init_flags); // Alter all the flags.
   //outFmtFlags(oss.flags()); // Show altered flags.
@@ -306,7 +307,7 @@ BOOST_AUTO_TEST_CASE(unc_test_basic)
   //showUncFlags(oss);
   // Restore as initialised.
   setiosDefaults(oss);
-  setUncDefaults(oss);
+  boost::quan::setUncDefaults(oss);
   //outFmtFlags(oss.flags());
   //outUncFlags(oss);
   BOOST_CHECK_EQUAL(oss.rdstate(), ios_base::goodbit);
@@ -477,7 +478,7 @@ BOOST_AUTO_TEST_CASE(unc_test_std_rounding)
     // Uncertain warning : value 1 flagged as uncTypeFlags == VALUE_EXACT, but degfree 2 is not zero!
     // BOOST_CHECK(exact.types() & VALUE_EXACT); // Should still be flagged as exact.
     // BOOST_CHECK_EQUAL(exact.value(), 1.); // value
-    // BOOST_CHECK_EQUAL(exact.std_dev(), 0.f);//  StdDeviation should be over-ridden by VALUE_EXACT, 
+    // BOOST_CHECK_EQUAL(exact.std_dev(), 0.f);//  StdDeviation should be over-ridden by VALUE_EXACT,
    // BOOST_CHECK_EQUAL(exact.deg_free(), 0); // deg_free should be overwritten by VALUE_EXACT, hence warning.
 
     uncun iminus1(-1); // Exact minus 1 from integer -1 value.
@@ -1080,7 +1081,7 @@ BOOST_AUTO_TEST_CASE(unc_test_more_naninf)
   CHECK(numeric_limits<double>::infinity(), "inf");
   CHECK(-numeric_limits<double>::infinity(), "-inf");
   CHECK(numeric_limits<float>::quiet_NaN(), "nan");
-  
+
  // CHECK(-numeric_limits<float>::quiet_NaN(), "-nan(ind)");  // nan for gcc.
 //#endif
 
@@ -1123,7 +1124,7 @@ BOOST_AUTO_TEST_CASE(unc_test_more_naninf)
 
 BOOST_AUTO_TEST_CASE(unc_test_unc_Nan_inf)
 {
-  uncun zeroMaybe(0., numeric_limits<float>::quiet_NaN() ); 
+  uncun zeroMaybe(0., numeric_limits<float>::quiet_NaN() );
   //CHECK_USED(zeroMaybe, "0.0000000000000000");  //  Show std::max_digits10 because uncertainty is NaN.
   //CHECK_USED(plusminus << zeroMaybe, "0.0000000000000000 +/-?");
 
@@ -1150,7 +1151,7 @@ BOOST_AUTO_TEST_CASE(unc_test_ci_outputs)
 {
   uncun ud1(1.23, 0.56F, 7); // Uncertain type.
 
-  CHECK(ud1, "1.2"); // 
+  CHECK(ud1, "1.2"); //
   CHECK(plusminus << ud1, "1.2 +/-0.56"); // From "plusminus << ud1" Got  expected 1.2 +/-0.56 == 1.2 +/-0.56 : true
   CHECK(addlimits << ud1, "1.2 <0.82, 1.64>"); // From "addlimits << ud1" Got  expected 1.2 <0.82, 1.64> == 1.2 <0.82, 1.64> : true
   CHECK(plusminus << addlimits << ud1, "1.2 +/-0.56 <0.82, 1.64>");

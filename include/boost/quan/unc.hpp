@@ -57,7 +57,7 @@ and C++ include files are in folder:
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // Copyright Paul A. Bristow 1998, 2012, 2021
-// 
+//
 //#define BOOST_QUAN_DIAGNOSTICS if diagnositics required.
 
 #ifndef BOOST_QUAN_UNC_HPP
@@ -194,8 +194,8 @@ inline Type pow4(const Type& a)
 // A critique and proposals of ISO and ANSI, and ENV 12435
 // http://aurora.rg.iupui.edu/~schadow/units/UCUM/ucum.html
 
-void outUncValues(std::ostream& os, std::ostream& log); // Output uncertain values.
-void setUncDefaults(std::ios_base& os); // Set Unc class defaults for std::ostream& os.
+//void outUncValues(std::ostream& os, std::ostream& log); // Output uncertain values.
+//void setUncDefaults(std::ios_base& os); // Set Unc class defaults for std::ostream& os.
 
  //! 16 type bits used by unc uncTypes. Bit set = 1 means a positive attribute.
  //! Unctypes are
@@ -1539,10 +1539,10 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
 
 }; // template <bool is_correlated> class unc
 
-//!  https://en.cppreference.com/w/cpp/language/operators operator<< must be non-member functions, 
+//!  https://en.cppreference.com/w/cpp/language/operators operator<< must be non-member functions,
 //! friend std::ostream& operator<<(std::ostream& os, const T& obj)
 //! https://en.cppreference.com/w/cpp/language/friend and may need to be friend  to access private data of the class
-//! 
+//!
 
   //! Extract operator<< for unc type.
 //template <bool is_correlated>
@@ -1569,6 +1569,11 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
   boost::io::ios_precision_saver precision_saver(os);
   boost::io::ios_flags_saver flags_saver(os);
   // both ios_flags and precision are restored by destructor.
+
+  // Check if (os.iword(zeroIndex) != indexID) // not yet initialized.
+  // and init if not?
+
+
   std::ostringstream oss; // Build up string to output.
 
   double mean = val.mean();
@@ -1599,10 +1604,10 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
   bool isSetSigDigits;  //! \var isSetSigDigits Use set sigdigits instead of calculate from uncertainty.
   bool isSetUncSigDigits;  //!  \varisSetUncSigDigits Use setUNCsigdigits instead of calculate from uncertainty.
 
-  // Get print format requirements from std::ios flags. ****************************
+  // Get print format requirements from std::ios flags.
   const int iosFlags = os.flags();  // Save fmtflags in case need to restore.
 
-   // Width, precision, flags & fillChar data from stream os. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   // Width, precision, flags & fillChar data from std::stream os.
   std::streamsize iosWidth = os.width(); //! \warning Width must be read BEFORE any use of os
   // which would reset width back to zero!
   // & prevent any ios formatting during os << ...
@@ -1662,7 +1667,7 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
 
   //! \var roundloss Confidence or alpha to compute confidence interval is similarly scaled.
   //! Usage: \code std::cout << confidence(0.01) << ... \encode means 1 - confidence = 99% confidence.
-  //! \code  double confidence = os.iword(conf) / 1000.;  //  == << confidence(0.05) or 95% \endcode 
+  //! \code  double confidence = os.iword(conf) / 1000.;  //  == << confidence(0.05) or 95% \endcode
 
   long& roundloss = os.iword(roundingLossIndex);
   double round_loss;
@@ -2003,7 +2008,7 @@ struct lessAbs : public std::function<Type>
     // at price of conversion to double.
     // But will fail for other types,  so abs function written here using only operator< and operator-.
   }
-}; // struct lessAbs 
+}; // struct lessAbs
 
 // Specialization of autoprefix_norm for UDT boost::units::uncun
 // See /boost-trunk/libs/units/example/measurement.hpp
@@ -2066,7 +2071,7 @@ void setUncDefaults(std::ios_base& os)
   { // Initialization of iwords failed!
     std::cerr << "os.iword(0) = "  << std::hex << os.iword(0)
       << " not expected ID " << indexID << '!'
-      << "\nMissing call of setUncDefaults(ostream)?" 
+      << "\nMissing call of setUncDefaults(ostream)?"
       << std::endl;
   }
 } // void setUncDefaults(std::ios_base& stream)
@@ -2082,7 +2087,7 @@ void setUncDefaults(std::ios_base& os)
 
 */
 void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
-{ 
+{
   if (os.iword(zeroIndex) != indexID) // indexID == 48dbaf8
   {
     std::cout << "Magic index word is corrupted, should be " << std::hex << indexID << std::dec << "!" << std::endl;
@@ -2091,7 +2096,7 @@ void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
   {
     std::cout << "Magic index top word is corrupted, should be "  << std::hex << indexID << std::dec << "!" << std::endl;
   }
-  log 
+  log
    // << std::hex << "indexID " << os.iword(zeroIndex)  << std::dec // = indexID; // Mark if has been set to defaults.
     << "UncValues: "
     <<  "uncFlags " << std::hex << os.iword(uncFlagsIndex) << std::dec //= 0;  // iword(1) holding
@@ -2113,7 +2118,7 @@ void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
     << ", setUncSigDigits " << os.iword(setUncSigDigitsIndex)
     << ", roundingLossIndex " << os.iword(roundingLossIndex) / 1.e3
     << ", confidenceIndex " << os.iword(confidenceIndex) / 1.e6
-    << std::dec << "." << std::endl; // 
+    << std::dec << "." << std::endl; //
 
 } // void outUncValues()
 
@@ -2143,7 +2148,7 @@ void outUncTypes(unsigned short int uncTypes, std::ostream& os = std::cerr)
   \param uncFlags Output unc class uncertain IO flags value to be displayed as words.
   \param os @c std::ostream& for output.
   \param terminator String to append to the setting words string, default period and newline.
-  Usage:  
+  Usage:
     \code
       outUncIOFlags(std::cout.iword(1), std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
     \endcode
@@ -2398,7 +2403,7 @@ showUncFlags::showUncFlags(unsigned short int f) : flags(f)
 
 //! Output uncFlags as descriptive word strings to this @c std::ostream.
 std::ostream& operator<< (std::ostream& os, const showUncFlags& uf)  // Definition.
-{ 
+{
   unsigned short uncFlags = uf.flags;
   os << "uncFlags ("<< std::hex << uncFlags << std::dec << ")";
   os << ((uncFlags & firm) ? " firm" : "");
@@ -2665,7 +2670,7 @@ void unc_input(
   unsigned short int& degreesOfFreedom,  // = observations -1 .
   unsigned short int& types, // TODO settings bits.
   std::istream& is = std::cin)
-{	
+{
   std::streamsize avail = is.rdbuf()->in_avail();
   if (avail == 0)
   {
@@ -2830,7 +2835,7 @@ void unc_input(
   if (!is.eof())
   { // Uncertainty (standard deviation) and degrees of freedom may follow.
     if ((is.peek() == '+') || (is.peek() == '-'))
-    { // Some uncertainty follows, for example: +0.123, -0.456 or "+/-2.34" +|-3.45 
+    { // Some uncertainty follows, for example: +0.123, -0.456 or "+/-2.34" +|-3.45
       std::char_traits<char>::int_type cusign = is.get(); // '+' or '-' read and discard.
       if (cusign == '+')
       {
