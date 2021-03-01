@@ -53,8 +53,7 @@ and C++ include files are in folder:
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt
-// or copy at http://www.boost.org/LICENSE_1_0.txt)
+// (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // Copyright Paul A. Bristow 1998, 2012, 2021
 //
@@ -1547,7 +1546,8 @@ static bool lessU(const unc<is_correlated>& l, const unc<is_correlated>& r)
 //!
 
 //! 'Unique' value used to check xalloc initialised iwords are OK, and are not corrupted.
-static const long indexID = 0x48dbaf8;  //! Random id value.
+static const long indexID = 0x48dbaf8;  //! Random id value bracketing the various uncertain class display attributes.
+
 void setUncDefaults(std::ios_base& os);
 
   //! Extract operator<< for unc type.
@@ -1570,7 +1570,6 @@ std::istream& operator>> (std::istream& is, unc<false>& ud)
   return is;
 }
 
-
 //! Extract @c operator<< for uncertain types.
 //! Example: \code uncun u(1.23, 0.05, 9); std::cout << u << std::endl;  \endcode
 //! (Should cover both correlated and uncorrelated cases?)\n
@@ -1584,11 +1583,11 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
 
   // Check if (os.iword(zeroIndex) != indexID) // not yet initialized.
   // and init if not? 
-  // At price of making not thread safe.
+  // At price of making not thread safe?
   //setUncDefaults(os);
 
   if (os.iword(zeroIndex) != indexID)
-  { // Need to initialize the Unc class iword defaults for this stream.
+  { // Need to initialize the Unc class iword defaults for this @c std::ostream.
     setUncDefaults(os);
   }
 

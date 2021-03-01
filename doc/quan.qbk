@@ -52,6 +52,24 @@ This is a placeholder at present.
 
 [endsect] [/section:preface Preface]
 
+[section:Starting Getting started]
+
+[h5:windows_install Windows]
+
+If you not have Boost installed already, start with 
+[@https://www.boost.org/doc/libs/release/more/getting_started/windows.html Getting started on Windows (and Mingw, Msys, Cygwin)]
+but stop at the end of section 3: Header-Only Libraries.  There are NO libraries to build.
+
+But you do need to identify your Boost root location.  Something like X:my_boost/ as explained in section 2.
+You might have this saved in a variable $BOOST_ROOT.
+
+The download the quan library from github.
+
+
+[endsect] [/section:Starting Getting started]
+
+
+
 [include how_to_use.qbk]
 [xinclude autodoc.xml] [/ Using Doxygen reference documentation.]
 

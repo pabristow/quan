@@ -9,8 +9,8 @@
   \file
   \brief Initialisation of std::stream iword to store uncertainty information.
    \details This sets the index values for data stored using the xalloc mechanism.
-   This is included from unc.hpp and accessed from unc.ipp for many functions.
-   Function setUncdefaults is used to set default values for these items for an iostream.
+   This is included from unc.hpp for many functions.
+   Function setUncdefaults is used to set default values for these items for a specified @c std::iostream.
 */
 
 #ifndef BOOST_QUAN_UNC_INIT
