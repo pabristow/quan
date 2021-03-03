@@ -471,11 +471,11 @@ std::ostream& operator<< (std::ostream& os, const std::pair<Meas, Meas>& mp)
       // Uses Uncertain measured value, not order.
       double lhi = (l.value_ + l.uncertainty_);  // Upper confidence limit of left.
       double rlo = (r.value_ - r.uncertainty_); // Lower confidence limit of right.
-      double diff = (l.value_ + l.uncertainty_) - (r.value_ - r.uncertainty_);
+    //  double diff = (l.value_ + l.uncertainty_) - (r.value_ - r.uncertainty_);
       float tol = std::hypot(l.uncertainty_, r.uncertainty_);
       // Might chose smallest, or largest uncertainty, or this compromise.
       // Reverses the order when small uncertainty compared to large uncertainty and large chosen for tol.
-      bool isLess =  lhi < (rlo + 0.5 * hypotf(l.uncertainty_, r.uncertainty_)); // == less
+      bool isLess =  lhi < (rlo + 0.5 * tol); // == less
       return isLess;
     } // bool Meas::greater(const Meas& l, const Meas& r)
 

@@ -461,16 +461,13 @@ std::string round_ms(FPT v, signed int m)
   BOOST_STATIC_ASSERT(boost::is_floating_point<FPT>::value);
   // Will fail if FPT is not a floating-point type (because will not output in scientific format!).
 
-  // Use Boost.Math portable functions for testing infinity, NaN and their signs.
-  using boost::math::signbit;
-  using boost::math::isnan;
-  using boost::math::isinf;
-  int is_neg = signbit(v);
-  if (isnan(v)) { //! \note that the most significant sign bit of NaN is recognized by using function signbit,
+  int is_neg = std::signbit(v);
+  if (std::isnan(v)) { //! \note that the most significant sign bit of NaN is recognized by using function signbit,
     //! 'sign' of NaNs cannot reliably and portably be tested using "x < 0"
     //! because ALL comparisons using NaN are false - by definition.
     return (is_neg) ? "-NaN" : "NaN";
-  } else if (isinf(v)) {
+  } else if (std::isinf(v)) 
+  {
     return (is_neg) ? "-inf" : "inf";
   }
   // Treat denormal differently too?
@@ -522,17 +519,7 @@ std::string round_ms(FPT v, signed int m)
     s.erase(is); // is++;
   }
   // std::cout <<'|' << s <<'|' << ' ' << s.size() << std::endl; // For example: |1.797693134862316e+308| 22
-  /*
-  MSVC was always 3 exponent digits  (not longer true, now following the C++ standard).
-  Recent MSVC and GCC and Clang may now have two or three exponent digits 2021
-  0.00000000000000000e+00
-  1.23456789012345669e+00
-  1.23456789012345666e+03
-  1.23456789012345671e-03
-  1.23456789012345658e+200
-  1.23456789012345671e-200
-   */
-
+  
   // Format varies with size of exponent part that may use either two or three digits: +e99 or +e300.
   if ((s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 4) // e+00
           && (s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 5)) // e+308
@@ -563,7 +550,7 @@ std::string round_ms(FPT v, signed int m)
   { // Exponent tens.
     exp += (*se - '0') * 10; // Exponent tens.
   }
-  se--; // Previous might be exponent hundreds digit (always for MSVC), or sign.
+  se--; // Previous might be exponent hundreds digit, or sign.
   if (std::isdigit(*se, loc))
   { // Exponent tens digit.
     exp += (*se - '0') * 100; // Exponent hundreds.
@@ -573,7 +560,8 @@ std::string round_ms(FPT v, signed int m)
     exp = -exp;
   } else if (*se == '+') {
     exp = +exp;
-  } else {
+  } else 
+  {
     std::cout << "Function round_ms expected digit or sign!" << *se << std::endl;
   }
   se--; // Must be the letter 'e' next forward.
@@ -657,8 +645,7 @@ std::string round_ms(FPT v, signed int m)
   if (is_neg) {
     s.insert(s.begin(), '-');
   }
-  //std::cout << "Final digits string " << s << std::endl;
-
+  // std::cout << "Final digits string " << s << std::endl; // 156.5
   return s;
 } // template <typename FPT> string round_ms(FPT v, signed int m)
 
@@ -689,17 +676,14 @@ std::string round_f(FPT v, int sigdigits) {
   // Will fail if FPT is not a floating-point type (because will not output in scientific format!).
   BOOST_STATIC_ASSERT(boost::is_floating_point<FPT>::value);
 
-  // Use Boost.Math TR1 portable functions for testing infinity, NaN and their signs.
-  using boost::math::signbit;
-  int is_neg = signbit(v);
-  using boost::math::isnan;
-  using boost::math::isinf;
+  int is_neg = std::signbit(v);
 
-  if (isnan(v)) { // Note that the most significant sign bit of NaN is recognized by using function signbit.
+
+  if (std::isnan(v)) { // Note that the most significant sign bit of NaN is recognized by using function signbit.
     return (is_neg) ? "-NaN" : "NaN";
     // 'sign' of NaNs cannot reliably and portably be tested using "x < 0"
     // because all comparisons using NaN are false - by definition.
-  } else if (isinf(v)) {
+  } else if (std::isinf(v)) {
     return (is_neg) ? "-infinity" : "infinity";
   }
   // Treat denormal differently too?
@@ -1400,11 +1384,11 @@ void out_value_limits(double mean, double unc, std::pair<double, double> ci, int
   */
   std::streamsize osp = os.precision(); // Save to restore.
   os.precision(2); // Uncertainty always rounded to 2 decimal digits.
-  double unc_rounded = round_sig(unc, 2); // Round to 2 significant digit - ISO rules.
+  double unc_rounded = round_sig(unc, 3); // Round to 2 significant digit - ISO rules.
   // TODO Would be useful to be able to increase here if a noisydigit wanted,
   // and/or if degrees of freedom > 100.
   os << round_ms(mean, m) << " +/- " << unc_rounded;
-  os.precision(6); //
+  os.precision(6); //  
   using boost::lexical_cast;
   os << " <" << lexical_cast<double>(round_ms(ci.first, m - 1)) << ", "
           << lexical_cast<double>(round_ms(ci.second, m - 1)) << ">";

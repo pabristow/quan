@@ -1754,8 +1754,8 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
       } // mean == 0
       else if (unc_flags & VALUE_INTEGER)
       { // Value is flagged as an integer (used integer constructor or set flag).
-        double fracpart = std::modf(mean, &intpart);
-        oss << std::noshowpoint << static_cast<long>(intpart); // Integer, so not rounded, and no decimal point,
+        std::modf(mean, &intpart);
+        oss << std::noshowpoint << static_cast<long>(intpart); // Integer, so not rounded, and NO decimal point,
         // even if decimal point was specified by showpoint!
       }
       else if (unc_flags & VALUE_EXACT)
@@ -2709,7 +2709,7 @@ void unc_input(
   int iv = 0;  // Integer part of floating point number.
   double fv = 0.;  // Fractional part of floating point number.
   int exponent = 0; // Exponent power of 10, default 10 ^ 0 = 1.
-  bool isPositive = true; // Value input is >= 0.
+//  bool isPositive = true; // Value input is >= 0.
   bool isNegativeValue = false; // Value input < 0.
   bool isPlusMinus = false;  // Normal case is +/- or +|-.
   bool isPlus = false; // +0
