@@ -36,7 +36,7 @@ int main()
 
   std::cout << versions() << std::endl;
  // outUncValues();  // All zero before setUncDefaults called.
-  // but calling this warns "Magic index word is corrupted, should be 76397304!"
+  // but calling this before std::ios_base::allow words warns "Magic index word is corrupted, should be 76397304!"
   setUncDefaults(std::cout);
   outUncValues();
   // zero 48dbaf8 UncValues: 
@@ -46,10 +46,9 @@ int main()
   uncun u(1.23, 0.45F, 9);
   outUncIOFlags(); // uncFlags (0).  default state, no flags set.
 
-  std::cout << "URealCorr u(1.23, 0.45); = " << plusminus << addlimits << adddegfree ;
-  outUncIOFlags(std::cout, std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
+  std::cout << "URealCorr u(1.23, 0.45); = " << plusminus << addlimits << adddegfree << u << std::endl;
 
-  std::cout << u << std::endl;
+ // outUncIOFlags(std::cout, std::cerr); // uncFlags (0xa08) add_+/-  adddegfree replicates addlimits
   outUncIOFlags(std::cout, std::cerr, "\n");
   std::cout << u.mean () << std::endl;
   std::cout << u.std_dev() << std::endl;
@@ -103,24 +102,6 @@ int main()
 /*
  Output:
 
-  quan_simple.cpp
-  quan_simple.vcxproj -> I:\Cpp\quan\quan_skeleton\Debug\quan_simple.exe
-  Autorun "I:\Cpp\quan\quan_skeleton\Debug\quan_simple.exe"
-
-  Program: I:\boost\libs\quan\example\quan_simple.cpp
-  Thu Jan 14 17:39:36 2021
-  BuildInfo:
-    Platform Win32
-    Compiler Microsoft Visual C++ version 14.2
-    MSVC version 192829515.
-    STL Dinkumware standard library version 650
-    Boost version 1.75.0
-
-  URealCorr u(1.23, 0.45); = 1.2 +/-0.45 <0.3500, 2.1100> (1)
-*/
-
-
-/*
 Rebuild started...
 1>------ Rebuild All started: Project: quan_simple, Configuration: Debug x64 ------
 1>quan_simple.cpp

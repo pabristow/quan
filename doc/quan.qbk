@@ -1,4 +1,4 @@
-[article Quantitation
+[article Quantitation - a library of Uncertain classes
     [quickbook 1.7]
     [id quan]
     [authors [Bristow, Paul A.]]
@@ -10,6 +10,11 @@
     ]
     [source-mode c++]
 ]
+
+[import ../../../tools/auto_index/include/auto_index_helpers.qbk]
+[/ auto_index_helpers.qbk MUST be FIRST included file!]
+
+[import html4_symbols.qbk] [/ Unicode math symbols etc]
 
 [/ Images]
 [/ $images is reference to a folder where images are held.]
@@ -40,39 +45,174 @@
 [def __howtouse [link svg_plot.howtouse  Document conventions]]
 
 [def __rationale [link quan.implementation Implementation]]
-[def __caution Boost.Quan is not (yet) an official Boost library, but remains a library under construction,
-     the code is functional, but interfaces, library structure, and function and distribution names
-     may still be changed without notice.]
+
+[def __uniform_distrib [@https://www.boost.org/doc/libs/1_75_0/libs/math/doc/html/math_toolkit/dist_ref/dists/uniform_dist.html uniform distribution]]
+[def __normal_distrib [@https://www.boost.org/doc/libs/1_75_0/libs/math/doc/html/math_toolkit/dist_ref/dists/normal_dist.html normal_distribution]]  
+[def __triangular_distrib [@https://www.boost.org/doc/libs/1_75_0/libs/math/doc/html/math_toolkit/dist_ref/dists/triangular_dist.html triangular distribution]]
 
 [section:preface Preface]
 
 [heading Preface]
 
-This is a placeholder at present.
+This library provides a collection of classes and functions for handling uncertain reals and measurements.
+
+Uncertainty as standard deviation and degrees of freedom are
+propagated through calculations using the uncertain type,
+and are input and output including the uncertainty estimates typically from standard deviation and degrees of freedom,
+usually the number of observations less one.
+
+See Boost.Quan HTML Manual at
+
+  /quan/libs/quan/index.html
+
+and/or equivalent PDF Manual at:
+
+  quan/libs/quan/doc/quan.pdf
+
+Examples are in folder (and subfolders):
+
+ /quan/example/
+
+and C++ include files are in folder (and subfolders):
+
+  /quan/include/
 
 [endsect] [/section:preface Preface]
+
+[section:history History and status]
+
+[h4:status Status]
+
+[important This is NOT an official Boost library, but remains a library under construction and enhancement 
+the code is functional, but interfaces, library structure, and function and distribution names
+may still be changed without notice.
+]
+
+[note Comments and suggestions (even bugs!) to Paul.A.Bristow (at) hetp (dot) u-net (dot) com 
+or preferably raise a Github issue [@https://github.com/pabristow/quan Github repository Quan].
+]
+
+It was proposed for Boost as a partner of the SVG_plot library, but rejected as being out-of-scope for Boost.
+
+[h4:history History]
+
+The library was started informed by a post of a C++ class for uncertain values by Evan Manning in 1996.
+
+Over the years since it has been enhanced, in particular to handle measurements and observations of uncertain data,
+and to use the display features with the SVG_plot library to show not just mathematical functions, 
+but plots showing uncertainties, boxplots and confidence intervals or ellipses.
+
+In 2021, a major refactoring and reburbishment has been done, both to documentation and the code.
+Numerous bugs have been squashed, new features added and more examples added. 
+This has permitted improvements in the svg_plot library that uses Quan to label data-points.
+
+[endsect] [/section:history History and status]
 
 [section:Starting Getting started]
 
 [h5:windows_install Windows]
 
 If you not have Boost installed already, start with 
-[@https://www.boost.org/doc/libs/release/more/getting_started/windows.html Getting started on Windows (and Mingw, Msys, Cygwin)]
-but stop at the end of section 3: Header-Only Libraries.  There are NO libraries to build.
+[@https://www.boost.org/doc/libs/release/more/getting_started/windows.html Getting started on Windows (and Mingw, Mingw-w64, Msys, Cygwin)]
+but stop at the end of section 3: Header-Only Libraries.  
+
+In order to use uncertain and measure classes, there are NO libraries to be built.
 
 But you do need to identify your Boost root location.  Something like X:my_boost/ as explained in section 2.
 You might have this saved in a variable $BOOST_ROOT.
 
-The download the quan library from github.
+You can obtain a zip or clone from [@https://github.com/pabristow/quan Github repository Quan].
+The download or clone of the quan library from github can put wherever you like.
+It fits into the Boost filestructure tree, but can be elsewhere provided that the include path for the compiler is specified. 
+(Placing in a different partition (different drive letter) make cause difficulties).
 
+If using Visual Studio, the include folder for your project can be set thus:
+Configuration Properties, VC++ Directories, Include directories, X:/boost ($BOOST_ROOT) 
+and also add X:/svg_plot/include/boost/quan for the location of the Quan library.
+  
+If using CodeBlocks, for your project, Build Options...  Search directories tab, Add and chose folder containing Quan /include.
+
+There are no addtional linker options required.
+
+You will need to select options to  use C++14 (the current default for Visual Studio 2019).
+
+And finally, do not forget that all the Quan features are in `namespace boost::quan` 
+so you will need to either specify the entire namespace `using namespace boost::quan;`
+or items that you use specifically, for example:  `using boost::quan::unc;`.
+Use of a private namespace should prevent C++ type name collisions and/or name ambiguities.
 
 [endsect] [/section:Starting Getting started]
 
+[section:Uncertains Uncertain Classes for Propagation of Uncertainties according to a pure Gaussian model.]
 
+This was originally based on code by Evan Manning (manning@alumni.caltech.edu)
+Evan Marshal Manning, C/C++ Users Journal, March 1996 page 29 to 38.
+original downloaded from [@ftp://beowulf.jpl.nasa.gov/pub/manning].
+
+This is a simple model of uncertainties, designed to accompany an article published in C/C++ Users Journal March 1996
+at [@http://www.ddj.com/cpp/184403147 C/C++ Users Journal March 1996].
+
+A fuller collection of even fancier classes also given in Evan Marshal Manning's code in `unc.h`.
+
+Other information about the observation of measurement Standard deviation & its uncertainty, 
+for example, degrees of freedom were added by Paul A Bristow in Mar 1998,
+and have been refined further since then.
+
+A simple example is construction of an uncertain value
+
+  uncun u(1.23, 0.45F, 9);
+  
+and output using operator<< adding uncertainty, +/- confidence interval <in angle brackets> and degrees of freedom (in round brackets):
+
+  std::cout << "URealCorr u(1.23, 0.45); = " << plusminus << addlimits << adddegfree << u << std::endl;
+  
+to display
+
+  URealCorr u(1.23, 0.45F, 9) = 1.2 +/-0.45 <0.94, 1.52> (9)
+
+The extensive output features have been informed by
+"Uncertainty as Applied to Measurements and Calculations", John Denker, [@http://www.av8n.com/physics/uncertainty.htm#sec-crank3].
+
+Some simple rules that apply whenever you are displaying a number:
+
+# Use many enough digits to avoid unintended loss of information.
+# Use few enough digits to be reasonably convenient.
+# For other calculations, keep all potentially significant digits (C++ std::numeric_limits<>::max_digits10, 17 for type double).
+
+An additional objective was to avoid using [*more] than enough digits to avoid clutter, and more importantly, 
+to avoid giving an impression of more precision or accuracy than the underlying data implies.
+
+There are far too many examples in real life of entirely unwarranted decimal digits, for example, 
+quoting a value of 94% when in fact, there is an uncertainty of 10%, an important uncertainty obscured by the digit 4, 
+when the 'true' value might  lie anywhere between 80% and 100%.
+A more informative representation would be 90%.
+
+The term 'uncertainty' has been used in preference to the more common word 'error' and 'error bars' to express confidence intervals.
+[*This chosen mainly because there are no errors involved! - only a lack of certainty.]
+There are many possible values that approximate the 'true' value (if such a 'true' thing exists).
+
+So the software provides options to display not only the 'best' or 'mean' or 'central' estimate, 
+but also the uncertainty, degrees of freedom and confidence intervals taking the distribution of the observations.
+Distributions of types 'normal' or Gaussian (common noisy observations), triangular, and uniform are considered.
+
+Values that are [*exact] by definition, for example, the inch-mm conversion factor is exactly 2.54.
+A value like 2.54 cannot be represented exactly as a floating-point type `double`, so it is useful to be able to
+distinguish any computational uncertainty [@https://en.wikipedia.org/wiki/Machine_epsilon machine epsilon]
+(2[super[-53]] [cong] 1.1e-16) from real uncertainty.
+Conversely exact integral values should be distinguishable from real observations that happen to have a integral value.
+To achieve this, specialized constructors are provided for both `int` and `double`.
+
+Many measurements suffer from quantization (uncertainty from analog-to-digital convertors that are too few above the random noise level).
+To avoid quantization of values read in by other system, 
+it is also possible to ensure that potentially noisy random digits can be output adding at least one extra digit for the mean value.
+
+[endsect] [/section:Uncertains Uncertain Classes]
 
 [include how_to_use.qbk]
+
 [xinclude autodoc.xml] [/ Using Doxygen reference documentation.]
 
+[section:indexes Indexes]
 [/Include the indexes (class, function and everything) ]
 '''
    <index type="class_name">
@@ -83,20 +223,17 @@ The download the quan library from github.
      <title>Function Index</title>
     </index>
 
+    <index type="typdef">
+    <title>typedef Index</title>
+    </index>
+
    <index/>
 
 '''
-
-[important This is not (yet) an official Boost library. It remains a library under construction,
-the code is quite functional, but interfaces, library structure, and names
-may still be changed without notice.
-]
-
-[note Comments and suggestions (even bugs!) to Paul.A.Bristow (at) hetp (dot) u-net (dot) com]
-
+[endsect] [/section:indexes Indexes]
 
 [/ quan.qbk
-  Copyright 2008 Jake Voytko and Paul A. Bristow 2008, 2009, 2010, 2011, 2012, 2021
+  Copyright Paul A. Bristow 2008, 2009, 2010, 2011, 2012, 2021
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

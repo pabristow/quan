@@ -7,29 +7,31 @@
 
 /*!
   \file
-  \brief Initialisation of std::stream iword to store uncertainty information.
-   \details This sets the index values for data stored using the xalloc mechanism.
-   This is included from unc.hpp for many functions.
-   Function setUncdefaults is used to set default values for these items for a specified @c std::iostream.
+  \brief Initialisation of @c std::stream iword to store uncertainty information.
+   \details This sets the index values for data stored using the @c std::ios_base::xalloc mechanism.
+   This allows a memory of stream state from previous calls of a @c std::iostream.
+   This file @unc_init.hpp is included from @c unc.hpp for many functions.
+   Function @c setUncdefaults() is used to set default values for these xallowitems for a specified @c std::iostream (default @c std::cout).
 */
 
 #ifndef BOOST_QUAN_UNC_INIT
 #define BOOST_QUAN_UNC_INIT
 
-#include <ios> // for ios_base.
-
+#include <ios> // for std::ios_base.
 // unc_init.hpp is called by unc.hpp
 
 namespace boost {
 namespace quan {
 
-  // This block of definitions MUST be positioned before main.
-  // 14 indexes of long iwords allocated by calls of std::ios_base.xalloc();
-  // 1st call of xalloc() returns 0 so std::ios_base.iword(0) used for magic id,
-  // 2nd call of xalloc() returns 1 so std::ios_base.iword(1) used for uncFlags,
-  // 3rd calls returns 2, so iosword(2) used for sigDigits ...
-  // Order of assignment must ensure these match enum uncindex (if used).
-  const long zeroIndex = std::ios_base::xalloc(); // 1st iword[0] to hold a 'magic' id.
+  //! This block of definitions MUST be positioned before function main() is called.
+  //! 14 indexes of long iwords allocated by calls of std::ios_base::xalloc();
+  //! 1st call of xalloc() returns 0 so std::ios_base.iword(0) used for magic ID,
+  //! 2nd call of xalloc() returns 1 so std::ios_base.iword(1) used for uncFlags,
+  //! 3rd calls returns 2, so iosword(2) used for sigDigits ...
+  //! Order of assignment must ensure these match enum uncindex (if used).
+  //! zero_index and top_index are used to hold a 'magic' unique number 
+  //! to show that the @c std::ios_base::xalloc values have been initialised, and not corrupted.
+  const long zeroIndex = std::ios_base::xalloc(); // 1st iword[0] to hold a 'magic' ID.
 
   const long uncFlagsIndex = std::ios_base::xalloc(); // long& uncFlags = iword(1)
   const long oldUncFlagsIndex = std::ios_base::xalloc(); // long& olduncFlags = iword(2)

@@ -283,8 +283,8 @@ public:
   unsigned short int flags;
 };
 
-//!  Description as a word of each bit in @c unc_type, using enum unc_types.
-//! These bits record the type of value stored, for example: VALUE_ZERO, UNC_KNOWN, DEG_FREE_KNOWN, UNC_UNIFORM.
+//! \brief Description as a word of each bit in @c unc_type, using enum unc_types.[br]
+//! \details These bits record the type of value stored, for example: VALUE_ZERO, UNC_KNOWN, DEG_FREE_KNOWN, UNC_UNIFORM...
 //! Used by function outUncTypes.
 //! Example: \code   \endcode
 const char* uncTypeWords[16] =
@@ -1683,7 +1683,7 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
   } // Distribution type set.
 
   //! \var roundloss Confidence or alpha to compute confidence interval is similarly scaled.
-  //! Usage: \code std::cout << confidence(0.01) << ... \encode means 1 - confidence = 99% confidence.
+  //! Usage: \code std::cout << confidence(0.01) << ... \endcode means 1 - confidence = 99% confidence.
   //! \code  double confidence = os.iword(conf) / 1000.;  //  == << confidence(0.05) or 95% \endcode
 
   long& roundloss = os.iword(roundingLossIndex);
@@ -2295,43 +2295,45 @@ std::ios_base& nonoisyDigit(std::ios_base& iostr)
 }
 
 std::ios_base& autosigdigits(std::ios_base& iostr)
-{ // Use auto (calculated from uncertainty) not sig digits stored with `<< setSigDigits(6)` for value.
+{ //! Use auto (calculated from uncertainty) not sig digits stored with `<< setSigDigits(6)` for value.
   iostr.iword(uncFlagsIndex) &= ~useSetSigDigits;  // clear bit 7 = 0 for auto sigdigits.
   return iostr;
 }
 
 std::ios_base& setsigdigits(std::ios_base& iostr)
-{ // Use sig digits stored with `<< setSigDigits(6)` for value (not calculated from uncertainty).
+{ //" Use sig digits stored with `<< setSigDigits(6)` for value (not calculated from uncertainty).
   iostr.iword(uncFlagsIndex) |= useSetSigDigits;  // set bit 7 = 1 to use set sigdigits.
   return iostr;
 }
 
 std::ios_base& autouncsigdigits(std::ios_base& iostr)
-{ // Calculate stdDev sig digits from uncertainty.
+{ //! Calculate stdDev sig digits from uncertainty.
   iostr.iword(uncFlagsIndex) &= ~useSetUncSigDigits;  // clear bit 8 = 0 for auto unc sigdigits.
   return iostr;
 }
 
 std::ios_base& setuncsigdigits(std::ios_base& iostr)
-{ //!< Use stdDev sigDigits stored with `<< useSetUncSigDigits(2) ...`
+{ //!< Use stdDev sigDigits stored with  \code << useSetUncSigDigits(2) ... \endcode
   iostr.iword(uncFlagsIndex) |= useSetUncSigDigits;  // set bit 8 = 1 to use set uncsigdigits.
   return iostr;
 }
 
+//! Add degrees of freedom as `(99)` using manipulator \code << adddegfree ... \endcode
 std::ios_base& adddegfree(std::ios_base& iostr)
-{  // Add degrees of freedom as `(99)`.
+{  
   iostr.iword(uncFlagsIndex) |= degfree;  // set bit 9 = 1 to mean show degrees of freedom.
   return (iostr);
 }
 
+//! Do not add degrees of freedom
 std::ios_base& nodegfree(std::ios_base& iostr)
-{ // Do not add degrees of freedom
+{
   iostr.iword(uncFlagsIndex) &= ~degfree;  // clear bit 9 = 0 to mean no degrees of freedom.
   return (iostr);
 }
 
 std::ios_base& addreplicates(std::ios_base& iostr)
-{ // Show replicates (but only if if > 1).
+{ //! Show replicates (but only if if > 1).
   iostr.iword(uncFlagsIndex) |= replicates;  // set bit 0xA = 1 to mean replicates > 1.
   return (iostr);
 }
@@ -2339,10 +2341,14 @@ std::ios_base& addreplicates(std::ios_base& iostr)
 std::ios_base& noreplicates(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) &= ~replicates;  // clear bit 0xA = 0 to mean no replicates.
-  // BUT still show degrees of freedom if required.
+  //! BUT still show degrees of freedom if required.
   return (iostr);
 }
 
+//! @brief Set stream to add confidence limits as interval for example: <1.23, 1.26>. 
+//! Example: Using @c std::ostream manipulator: \code std::cout << addlimits << u << std::endl; \endcode
+//! @param iostr @c std::ostream for confidence limits.
+//! @return  @c std::ostream to make chainable.
 std::ios_base& addlimits(std::ios_base& iostr)
 {
   iostr.iword(uncFlagsIndex) |= limits;  // Set bit 0xB = 0 to mean show limits.
@@ -2351,7 +2357,7 @@ std::ios_base& addlimits(std::ios_base& iostr)
 
 std::ios_base& nolimits(std::ios_base& iostr)
 {
-  iostr.iword(uncFlagsIndex) &= ~limits;  // clear bit 0xB = 0 to mean no limits shown.
+  iostr.iword(uncFlagsIndex) &= ~limits;  // Clear bit 0xB = 0 to mean no limits shown.
   return (iostr);
 }
 
