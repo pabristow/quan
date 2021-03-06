@@ -78,9 +78,6 @@ xml quan
 doxygen autodoc
   :
     [ glob ../../../boost/quan/*.*pp ]
-   # [ glob ../../../boost/quan/*.hpp ]
-   # [ glob ../../../boost/quan/impl/*.ipp ]
-
   :
     #<doxygen:param>INPUT="filename1 directoryname2" # Separate with spaces.
     # But also see paths specified above.

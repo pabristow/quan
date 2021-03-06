@@ -96,13 +96,13 @@ It was proposed for Boost as a partner of the SVG_plot library, but rejected as 
 
 [h4:history History]
 
-The library was started informed by a post of a C++ class for uncertain values by Evan Manning in 1996.
+The library was initially informed by a post of a C++ class for uncertain values by Evan Manning in 1996.
 
 Over the years since it has been enhanced, in particular to handle measurements and observations of uncertain data,
-and to use the display features with the SVG_plot library to show not just mathematical functions, 
-but plots showing uncertainties, boxplots and confidence intervals or ellipses.
+and then to use the display features with the SVG_plot library to show not just mathematical functions, 
+but plots showing uncertainties, boxplots and confidence intervals or confidence ellipses.
 
-In 2021, a major refactoring and reburbishment has been done, both to documentation and the code.
+In 2021, a major refactoring and reburbishment of both documentation and the code has been undertaken.
 Numerous bugs have been squashed, new features added and more examples added. 
 This has permitted improvements in the svg_plot library that uses Quan to label data-points.
 
@@ -158,13 +158,14 @@ Other information about the observation of measurement Standard deviation & its 
 for example, degrees of freedom were added by Paul A Bristow in Mar 1998,
 and have been refined further since then.
 
-A simple example is construction of an uncertain value
+A simple example is construction of an uncertain value with a best estimated value of 1.23, and uncertainty (standard deviation) of 0.45,
+being the result of 10 observations (so 9 degrees of freedom:
 
   uncun u(1.23, 0.45F, 9);
   
-and output using operator<< adding uncertainty, +/- confidence interval <in angle brackets> and degrees of freedom (in round brackets):
+and output using `operator<<` adding uncertainty, +/- confidence interval <in angle brackets> and degrees of freedom (in round brackets):
 
-  std::cout << "URealCorr u(1.23, 0.45); = " << plusminus << addlimits << adddegfree << u << std::endl;
+  std::cout << "URealCorr u(1.23, 0.45, 9); = " << plusminus << addlimits << adddegfree << u << std::endl;
   
 to display
 

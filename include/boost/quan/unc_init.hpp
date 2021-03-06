@@ -10,15 +10,16 @@
   \brief Initialisation of @c std::stream iword to store uncertainty information.
    \details This sets the index values for data stored using the @c std::ios_base::xalloc mechanism.
    This allows a memory of stream state from previous calls of a @c std::iostream.
-   This file @unc_init.hpp is included from @c unc.hpp for many functions.
-   Function @c setUncdefaults() is used to set default values for these xallowitems for a specified @c std::iostream (default @c std::cout).
+   This file @c unc_init.hpp is included from @c unc.hpp for many functions.
+   Function @c setUncdefaults() is used to set default values for these xalloc items
+   for a specified @c std::iostream (default @c std::cout).
 */
 
 #ifndef BOOST_QUAN_UNC_INIT
 #define BOOST_QUAN_UNC_INIT
 
 #include <ios> // for std::ios_base.
-// unc_init.hpp is called by unc.hpp
+// unc_init.hpp is called from unc.hpp semi-automatically on first use of output of a @c class @c unc for a @c std::ostream.
 
 namespace boost {
 namespace quan {
@@ -29,7 +30,7 @@ namespace quan {
   //! 2nd call of xalloc() returns 1 so std::ios_base.iword(1) used for uncFlags,
   //! 3rd calls returns 2, so iosword(2) used for sigDigits ...
   //! Order of assignment must ensure these match enum uncindex (if used).
-  //! zero_index and top_index are used to hold a 'magic' unique number 
+  //! zero_index and top_index are used to hold a 'magic' unique number
   //! to show that the @c std::ios_base::xalloc values have been initialised, and not corrupted.
   const long zeroIndex = std::ios_base::xalloc(); // 1st iword[0] to hold a 'magic' ID.
 
@@ -55,12 +56,12 @@ namespace quan {
   const long confidenceIndex = std::ios_base::xalloc(); // roundingLoss = iword(20)
 
   const long topIndex = std::ios_base::xalloc(); // long& topIndex = iword(21] == iword(0] check!
-
-  //const long indexID;  // 'Magic' value defined in unc_init.hpp.
-  bool isIndexed = true; // Above indexes have been initialised.
+  //const long indexID;  //!< 'Magic' value defined in unc_init.hpp.
+  bool isIndexed = true; //!< Above indexes have been initialised.
+  // This is tested to on each use of @c std::ostream to check that it has been initialised.
 
 } // namespace boost
-} //  namespace quan 
+} //  namespace quan
 
 #endif // BOOST_QUAN_UNC_INIT
 
