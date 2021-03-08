@@ -9,7 +9,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-import testing ;  # Bring in rules for testing
+import testing ;  # Bring in rules for testing.
 import feature ;
 #  Rules for checking compiler C++ standard requirements.
 import ../../config/checks/config : requires ;
@@ -55,7 +55,7 @@ project quan_example
     <toolset>clang:<cxxflags>-DBOOST_ALL_NO_LIB=1  
     
     # GCC
-   # <toolset>gcc:<cxxflags>-std=c++14 Minimum
+    # <toolset>gcc:<cxxflags>-std=c++14 Minimum
     # <toolset>gcc:<cxxflags>-Wno-unused-local-typedef
     <toolset>gcc:<cxxflags>-Wno-unused-variable
     <toolset>gcc:<cxxflags>-Wno-unused-but-set-variable

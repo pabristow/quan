@@ -50,6 +50,14 @@
 [def __normal_distrib [@https://www.boost.org/doc/libs/1_75_0/libs/math/doc/html/math_toolkit/dist_ref/dists/normal_dist.html normal_distribution]]  
 [def __triangular_distrib [@https://www.boost.org/doc/libs/1_75_0/libs/math/doc/html/math_toolkit/dist_ref/dists/triangular_dist.html triangular distribution]]
 
+[def __quan_github [@https://github.com/pabristow/quan Github repository Quan library]]  
+[def __quan_github_doc [@https://github.com/pabristow/quan Quan library documentation]]  
+[def __svg_plot_github [@https://github.com/pabristow/quan Github repository SVG_plot library]]  
+[def __svg_plot_doc [@https://github.com/pabristow/quan SVG_plot library documentation]]  
+
+[def __b2bjam_github  [@https://github.com/bfgroup/b2  B2/bjam GigHub]]
+[def __b2bjam_doc  [@https://www.bfgroup.xyz/b2/manual/release/index.html  B2/bjam documentation]]
+
 [section:preface Preface]
 
 [heading Preface]
@@ -83,28 +91,28 @@ and C++ include files are in folder (and subfolders):
 
 [h4:status Status]
 
-[important This is NOT an official Boost library, but remains a library under construction and enhancement 
+[important This is NOT an official __boost library, but remains a library under construction and enhancement 
 the code is functional, but interfaces, library structure, and function and distribution names
 may still be changed without notice.
 ]
 
 [note Comments and suggestions (even bugs!) to Paul.A.Bristow (at) hetp (dot) u-net (dot) com 
-or preferably raise a Github issue [@https://github.com/pabristow/quan Github repository Quan].
+or preferably raise a Github issue __quan_github.
 ]
 
-It was proposed for Boost as a partner of the SVG_plot library, but rejected as being out-of-scope for Boost.
+It was proposed for __boost as a partner of the __svg_plot_github , but rejected as being out-of-scope for __boost.
 
 [h4:history History]
 
 The library was initially informed by a post of a C++ class for uncertain values by Evan Manning in 1996.
 
 Over the years since it has been enhanced, in particular to handle measurements and observations of uncertain data,
-and then to use the display features with the SVG_plot library to show not just mathematical functions, 
+and then to use the display features with the __svg_plot_github to show not just mathematical functions, 
 but plots showing uncertainties, boxplots and confidence intervals or confidence ellipses.
 
 In 2021, a major refactoring and reburbishment of both documentation and the code has been undertaken.
 Numerous bugs have been squashed, new features added and more examples added. 
-This has permitted improvements in the svg_plot library that uses Quan to label data-points.
+This has permitted improvements in the __svg_plot_github that uses __quan_github to label data-points.
 
 [endsect] [/section:history History and status]
 
@@ -112,40 +120,79 @@ This has permitted improvements in the svg_plot library that uses Quan to label 
 
 [h5:windows_install Windows]
 
-If you not have Boost installed already, start with 
+If you not have __boost installed already, start with 
 [@https://www.boost.org/doc/libs/release/more/getting_started/windows.html Getting started on Windows (and Mingw, Mingw-w64, Msys, Cygwin)]
 but stop at the end of section 3: Header-Only Libraries.  
 
-In order to use uncertain and measure classes, there are NO libraries to be built.
+In order to use uncertain and measure classes, there are NO libraries to be built - it is header-only.
 
-But you do need to identify your Boost root location.  Something like X:my_boost/ as explained in section 2.
+But you do need to identify your __boost root location. Something like X:my_boost/ as explained in section 2.
 You might have this saved in a variable $BOOST_ROOT.
 
-You can obtain a zip or clone from [@https://github.com/pabristow/quan Github repository Quan].
-The download or clone of the quan library from github can put wherever you like.
-It fits into the Boost filestructure tree, but can be elsewhere provided that the include path for the compiler is specified. 
-(Placing in a different partition (different drive letter) make cause difficulties).
+You can obtain a zip or clone from __quan_github.
+The download or clone of the quan library from __quan_github - you can put wherever you like.
+It fits neatly into the __boost filestructure tree, but can be elsewhere provided that the include path for the compiler is specified. 
+(Placing in a different partition (different drive letter) may cause difficulties).
 
 If using Visual Studio, the include folder for your project can be set thus:
 Configuration Properties, VC++ Directories, Include directories, X:/boost ($BOOST_ROOT) 
 and also add X:/svg_plot/include/boost/quan for the location of the Quan library.
   
-If using CodeBlocks, for your project, Build Options...  Search directories tab, Add and chose folder containing Quan /include.
+If using CodeBlocks and similar IDEs, for your Project, Build Options...  Search directories tab, Add and chose folder containing Quan /include.
 
-There are no addtional linker options required.
+If you are using Boost's __b2bjam_doc, then you need to ensure that your jamfile (system, user or project) 
+contains an <include> [~<path-to-quan>].
 
-You will need to select options to  use C++14 (the current default for Visual Studio 2019).
+See an example in [@../../example/Jamfile.v2 Jamfile.v2] containing an include folder specified the BOOST_ROOT
 
-And finally, do not forget that all the Quan features are in `namespace boost::quan` 
+  <include>../../..
+  
+tests and examples can be run by listing in the folder's `Jamfile.v2` thus  
+
+``
+  test-suite "Quan and Unc library examples"
+    :
+      [ run quan_simple.cpp : : : [ requires cxx11_numeric_limits ] ]
+      [ run quan_complex.cpp : : : [ requires cxx11_numeric_limits ] ]
+      # ...  more targets to run 
+      [ exe quan_executable.cpp : : : [ requires cxx11_numeric_limits ] ]   # (or just build quan_executable.exe)
+    ;
+``
+
+To run all these, cd to the folder containing the jamfile and type
+
+  b2 
+  
+This will display its output to the console.  You will probably want to send to a log file thus:
+
+  b2 > quan_stuff_1apr2022.log
+  
+This will build all the targets in the jamfile that need (re-)building.  If you want to build just one target, specify the target name
+
+  b2 quan_simple > quan_stuff_1apr2022.log
+  
+[note The target name is normally just the filename [*without] the file type, and not quan_simple.cpp.]
+
+After going through the 'edit-compile-run-crash-cycle' for a single troublesome target,
+you will also want to (re-)build all the targets with the -a option.
+
+  b2 -a > all_quan_stuff_1apr2022.log
+
+There are no additional linker options required by the quan library.
+
+You will need to select options to use C++14 (the current default C++ Standard for Visual Studio 2019 Community).
+
+And finally, when writing your examples using Quan library, 
+do not forget that all the Quan features are in `namespace boost::quan` 
 so you will need to either specify the entire namespace `using namespace boost::quan;`
-or items that you use specifically, for example:  `using boost::quan::unc;`.
+or individual items that you use specifically, for example:  `using boost::quan::unc;`.
 Use of a private namespace should prevent C++ type name collisions and/or name ambiguities.
 
 [endsect] [/section:Starting Getting started]
 
 [section:Uncertains Uncertain Classes for Propagation of Uncertainties according to a pure Gaussian model.]
 
-This was originally based on code by Evan Manning (manning@alumni.caltech.edu)
+This library was originally based on code by Evan Manning (manning@alumni.caltech.edu)
 Evan Marshal Manning, C/C++ Users Journal, March 1996 page 29 to 38.
 original downloaded from [@ftp://beowulf.jpl.nasa.gov/pub/manning].
 
@@ -203,7 +250,8 @@ distinguish any computational uncertainty [@https://en.wikipedia.org/wiki/Machin
 Conversely exact integral values should be distinguishable from real observations that happen to have a integral value.
 To achieve this, specialized constructors are provided for both `int` and `double`.
 
-Many measurements suffer from quantization (uncertainty from analog-to-digital convertors that are too few above the random noise level).
+Many measurements suffer from quantization 
+(uncertainty from analog-to-digital convertors that have too few bits of resolution above the random noise level).
 To avoid quantization of values read in by other system, 
 it is also possible to ensure that potentially noisy random digits can be output adding at least one extra digit for the mean value.
 

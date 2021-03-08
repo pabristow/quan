@@ -1,5 +1,5 @@
 /*! \file xiostream.hpp
-  \brief Extra iostream manipulators and output of descriptions.
+  \brief Extra iostream manipulators and output of stream state descriptions.
   \details 
 
   \author Paul A. Bristow
@@ -68,18 +68,19 @@ std::ostream& operator<< (std::ostream& os, const chars& s)
   return os;
 }
 
+//! @brief class setupperbase to output uppercase or capital letter B, X and O when using base other than 10
 class setupperbase
 {
   friend std::ostream& operator<< (std::ostream&, const setupperbase&);
   friend std::istream& operator>> (std::istream&, const setupperbase&);
 public:
-  setupperbase(int b) : base_(b) // Constructor 
+  setupperbase(int base) : base_(base) // Constructor.
   {}
 private:
   int base_;
 }; // class setupperbase
 
-void outIosFmtFlags(long flags, std::ostream& os); // Show std iostream flags.
+void outIosFmtFlags(long flags, std::ostream& os); // Show all std iostream flags.
 
 void outIOstates(std::ios_base::iostate rdstate = std::cout.rdstate(), std::ostream& os = std::cerr, const char* term = ". ");
 // Outputs rdstate as words "good", "eof", "fail" and/or "bad".
@@ -100,14 +101,14 @@ std::ios_base& lowercase(std::ios_base& _I)
   return _I;
 } // lowercase
 
-//! Function to set base hex & showbase & uppercase too.
+//! Function to set base to std::hex & std::showbase & std::uppercase too.
 //! Example: \code out << hexbase << ... for 1234ABCD \endcode
-//! equivalent to \code out << hex << showbase << uppercase ...  \endcode
+//! equivalent to \code std::cout << std::hex << std::showbase << std::uppercase ...  \endcode
 std::ios_base& hexbase(std::ios_base& _I)
 {
-  _I.setf(std::ios_base::hex | std::ios_base::showbase | std::ios_base::uppercase, // set bits,
+  _I.setf(std::ios_base::hex | std::ios_base::showbase | std::ios_base::uppercase, // 3 bits to set == 1,
     std::ios_base::basefield | std::ios_base::showbase | std::ios_base::uppercase); // mask.
-  // Care: std::ios_base::basefield); doesn't set showbase & uppercase!
+  // Note: std::ios_base::basefield); doesn't set showbase & uppercase!
   return _I;
 }
 
@@ -336,11 +337,11 @@ std::ostream& FPclass(std::ostream& os, T value)
   return os;
 } // std::ostream& FPclass(std::ostream& os, T value)
 
-//! Custom outputs for non-finite values NaN, inf ... (rather than Microsoft default 1#IND ...)
+//! Custom outputs for non-finite values NaN, inf ... (rather than Microsoft default \"1\#IND ...\")
 //! Example: \code outFpClass(x, std::cerr); \endcode
-//! \param x value to be output.
-//! \tparam T Floating-point not-finite type (@c double or @c float) to be described.
-
+//! \param value Floating-point value to be output to @c std::ostream.
+//! \param os @c std::ostream for output.
+//! \tparam T Floating-point not-finite type (usually @c double or @c float) to be described.
 template<typename T>
 void outFpClass(T value, std::ostream& os = std::cerr)
 { 

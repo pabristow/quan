@@ -2053,33 +2053,30 @@ std::pair<double, double> uncs_of(std::pair<T, T>);
 template <class T1, class T2> //! \tparam T Built-in floating-point type, float, double, long double or unc or Meas.
 std::pair<double, double> uncs_of(std::pair<T1, T2>);
 
-// Predicate compare operators for use by sort etc.
-// Functors are _preferred_ to functions for STL algorithms.
-// Scott Meyers, ESTL, item 46, page 201..
+//! Predicate comparison operators for use by sort etc.
+//! Functors are _preferred_ to functions for STL algorithms: Scott Meyers, ESTL, item 46, page 201...
 
 template<typename Type> // Predicate Functor modelled on STL less in functional.
-// Used below by min_element, etc.
-// was struct lessAbs : public std::binary_function<Type, Type, bool>
+//! Used below by min_element, etc.
 struct lessAbs : public std::function<Type>
 {  // Usage: if (lessAbs<Meas>()(lm, hm)) ...
   bool operator() (const Type& a, const Type& b) const
-  { // Note const to prevent modification - must be pure function.
+  { // Note const to prevent modification - must be a pure function.
     // (Implies operator< for Type must also be const!)
     return ((a < static_cast<Type>(0)) ? -a : a) < ((b < static_cast<Type>(0)) ? -b : b);
     // Allows use with both POD like int and double,
-    // and other types for which both operator< and operator- are defined.
+    // and other types like class @c unc for which both operator< and operator- are defined.
     // Instead of:
     // return fabs(a) < fabs(b); // fabs allows use with int and double,
     // at price of conversion to double.
-    // But will fail for other types,  so abs function written here using only operator< and operator-.
+    // But will fail for other types,  so abs function written here using only operator< and unary negate operator-.
   }
 }; // struct lessAbs
 
-// Specialization of autoprefix_norm for UDT boost::units::uncun
-// See /boost-trunk/libs/units/example/measurement.hpp
-// For autoprefix_norm see /boost/units/io.hpp.
-// This specialization is required to get autoprefix to work with this class.
-//
+//! Specialization of autoprefix_norm for UDT @c boost::units::uncun.
+//! See <path-to-boost>/libs/units/example/measurement.hpp
+//! For autoprefix_norm see /boost/units/io.hpp.
+//! This specialization is required to get Quan autoprefix to work with this class.
 using boost::units::autoprefix_norm_impl;
 
 autoprefix_norm_impl<unc<false>, true>::type
@@ -2420,10 +2417,10 @@ std::ios_base& nonoisyDigit(std::ios_base& iostr)
   return iostr;
 }
 //! @brief Set @c std::ostream so that the number of significant digits (prcision)
-//! for output of @b value (mean) of class @c unc is computed from the uncertain class @unc itself.
+//! for output of @b value (mean) of class @c unc is computed from the uncertain class @c unc itself.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << autosigdigits ... \endcode
-//! will use precision computed from an estimate of the  uncertainty (standard deviation) and degrees fo freedom.
-//! @param iostr @c std::ostream for which to set precision to show uncertainty.
+//! will use precision computed from an estimate of the  uncertainty (standard deviation) and degrees of freedom.
+//! @param iostr @c std::ostream for which to set precision to use to show uncertainty.
 //! @return  @c std::ostream to make chainable.
 std::ios_base& autosigdigits(std::ios_base& iostr)
 { //! Use auto (calculated from uncertainty) not sig digits stored with `<< setSigDigits(6)` for value.
@@ -2434,7 +2431,7 @@ std::ios_base& autosigdigits(std::ios_base& iostr)
 //! @brief Set @c std::ostream so that the number of significant digits (precision)
 //! for output of @b value of class @c unc is controlled by the set precision.
 //!\details  Example: Using @c std::ostream manipulator:  \code << setsigdigits ... \endcode
-//! will use precision computed from a set precision.
+//! Will use precision computed from a previously set precision for this stream.
 //! @param iostr @c std::ostream for which to set precision to show value.
 //! @return  @c std::ostream to make chainable.
 std::ios_base& setsigdigits(std::ios_base& iostr)
@@ -2443,7 +2440,7 @@ std::ios_base& setsigdigits(std::ios_base& iostr)
   return iostr;
 }
 //! @brief Set @c std::ostream so that the number of significant digits (prcision)
-//! for output of uncertainty (standard deviation) of class @c unc is computed from the uncertain class @unc itself.
+//! for output of uncertainty (standard deviation) of class @c unc is computed from the uncertain class @c unc itself.
 //!\details  Example: Using @c std::ostream manipulator:  \code << autouncsigdigits ... \endcode
 //! will use precision computed from an estimate of the  uncertainty of standard deviation and degrees of freedom.
 //! @param iostr @c std::ostream for which to set precision to show uncertainty.
@@ -2467,7 +2464,7 @@ std::ios_base& setuncsigdigits(std::ios_base& iostr)
 
 //! @brief Set @c std::ostream to add degrees of freedom to output of uncertain class @c unc as, for example: (99).
 //! \details Example: Using @c std::ostream manipulator: \code std::cout << nodegreefree << u << std::endl; \endcode
-//! @param iostr @c std::ostream for output of uncertain class @unc value.
+//! @param iostr @c std::ostream for output of uncertain class @c unc value.
 //! @return  @c std::ostream to make chainable.
 std::ios_base& adddegfree(std::ios_base& iostr)
 {
