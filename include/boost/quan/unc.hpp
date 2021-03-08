@@ -273,7 +273,7 @@ enum uncIOflags
   // 0xC, D, E and F spare - and std::ios::iword is actually a long integer so could use 32 flags.
 }; // enum uncIOflags
 
-void outFpClass(double, std::ostream&);  // Special output for inf, NaN...
+template<typename T> void outFpClass(T, std::ostream&);  // Special output for inf, NaN...
 
 class showUncFlags
 {  // Constructor & operator<< defined below
@@ -309,29 +309,28 @@ const char* uncTypeWords[16] =
     "spare" //!<  15 SPARE
 };
 
-
 /*!
-* \brief Helper function for @c showUncTypes friend @c operator<<
+* \brief Helper function for @c showUncTypes friend @c std::ostream operator<<
 */
 class showUncTypes
 {
   friend std::ostream& operator<< (std::ostream&, const showUncTypes&);
 public:
-  showUncTypes(unsigned short int t) : types(t)
+  showUncTypes(unsigned short int t) : types_(t)
   { // Constructor.
   }
-  unsigned short int types;
+  unsigned short int types_;
 };
 
-/*! \brief @c Extract operator<< to show all the  types of an uncertain item.
-  Usage: \code std::cout << showUncTypes(uncType) \endcode
+/*! \brief @c Extract operator<< to show all the 16 types of an uncertain item.
+  Example: \code std::cout << showUncTypes(uncType) \endcode
   \param ut Uncertain type flags (bits) for the @c std::ostream.
-  \param os @c std::ostream& for output of uncertain types as words, for example: integer, zero, df_exact.
+  \param os @c std::ostream& for output of uncertain types as descriptive words, for example: integer, zero, df_exact.
 */
 std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Definition.
 {
-  const int count = 16;  // because using 16-bit unsigned short int.
-  unsigned short int uncTypes = ut.types;
+  const int count = 16;  // because using 16-bit unsigned short int in uncertain class.
+  unsigned short int uncTypes = ut.types_;
   os << "uncTypes (" << std::showbase << std::hex << uncTypes  << std::dec << ")";
   for (int i = 0, j = 1; i < count; ++i)
   {
@@ -345,14 +344,16 @@ std::ostream& operator<< (std::ostream& os, const showUncTypes& ut)  // Definiti
   return os;
 } // ostream& operator<< (ostream& os, const showUncTypes& ut)
 
-//! setAllUncflags(int flags, int mask);
+//! setAllUncflags(int flags);
 //! \details Example Usage: \code  std::cout << setAllUncFlags(0x5a) ... \endcode
+//! \param flags flags to set.
+//! Used by @c std::stream operator<< and >>
 class setAllUncFlags  // Set ALL uncertain flags (not just OR selected bits).
 {
   friend std::ostream& operator<< (std::ostream&, const setAllUncFlags&);
   friend std::istream& operator>> (std::istream&, const setAllUncFlags&);
 public:
-  setAllUncFlags(int w) : flags_(w) {}  // Constructor initialisation flags = w.
+  setAllUncFlags(int flags) : flags_(flags) {}  // Constructor initialisation flags_.
   int flags_; // setAllUncFlags.flags used by operators << and >>
 };
 
@@ -370,17 +371,17 @@ std::istream& operator>> (std::istream& is, const setAllUncFlags& sf)
   return is;
 }
 
-
-// Set selected uncertain flags.
-// \details  Usage: \code out << setUncFlags(0xFFFF, 0x7, 0x3) ... \endcode
-  // or setUncFlags(out, 0x7);
+//! Set selected uncertain flags.
+//! \details  Usage: \code out << setUncFlags(0x7) ... \endcode
+//! \param flags Flags to set.
+//! Used by @c std::stream operators << and >>.
 class setUncFlags 
 {
   friend std::ostream& operator<< (std::ostream&, const setUncFlags&);
   friend std::istream& operator>> (std::istream&, const setUncFlags&);
 public:
-  setUncFlags(int f) : flags_(f)
-  {} // Constructor initialisation flags_.
+  setUncFlags(int flags) : flags_(flags)
+  {} // Constructor initialises flags_.
   int flags_; // setUncFlags.flags used by operators << and >>
 };
 
@@ -398,9 +399,11 @@ std::istream& operator>> (std::istream& is, const setUncFlags& sf)
   return is;
 }
 
-// setMaskedUncflags(int flags, int mask);
-// Usage: \code std::cout << setMaskedUncFlags(0xFFFF, 0x7, 0x3) ... \endcode
-// or setUncFlags(out, 0x7);
+//! setMaskedUncflags(int flags, int mask);
+//! \details Example: \code std::cout << setMaskedUncFlags(0x7, 0x3) ... \endcode
+//! \sa setUncFlags if no mask is required.
+//! \param flags Bits to set = 1 in uncflag stored in std::stream.
+//! \param mask 
 class setMaskedUncFlags
 {
   friend std::ostream& operator<< (std::ostream&, const setMaskedUncFlags&);
@@ -411,12 +414,11 @@ public:
   int mask_;  // Selected bits to deal with by zeroing before setting flags.
 };
 
-//! Reset (clear = 0) selected uncertain flags.
-//! \details Usage: \code std::cout << resetUncFlags(0x7, 0x3 ... \endcode
-//! \sa @c setUncFlags
+//! Reset (clear = 0) selected uncertain class flags for a std::stream.
+//! \details Usage: \code std::cout << resetUncFlags(0x7) ... \endcode
+//! \sa @c setUncFlags to set uncertain class flags.
 class resetUncFlags 
 {
-
   friend std::ostream& operator<< (std::ostream&, const resetUncFlags&);
   friend std::istream& operator>> (std::istream&, const resetUncFlags&);
 public:

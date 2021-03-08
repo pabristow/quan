@@ -21,13 +21,12 @@ namespace boost {
 namespace quan {
 
 // Single int parameter manipulators.
-// Usage: out << chars(12, '_') << stars(8) ) ...
+// Example: out << chars(12, '_') << stars(8) ) ...
 // stars done with simple way, NOT using template,
 // See S Teale p 181-3, said to be longer but faster.
 
-
 //! \brief Manipulator class to help to output a number of stars.
- //! Usage:  \code out << stars(10) ... \endcode
+ //! Example:  \code out << stars(10) ... \endcode
 class stars
 {  
   friend std::ostream& operator<< (std::ostream&, const stars&);
@@ -40,7 +39,7 @@ private:
 };
 
 //! \brief Manipulator to output a number of stars.
- //! Usage:  \code out << stars(10) ... \endcode
+//! Example:  \code out << stars(10) ... \endcode
 std::ostream& operator<< (std::ostream& os, const stars& s)
 {
   for (int i = s.num_; i > 0; i--) os << '*';
@@ -48,7 +47,7 @@ std::ostream& operator<< (std::ostream& os, const stars& s)
 }
 
 //! Manipulator class to help output int repeat count & character chars.
-//! Usage: \code  out << chars(10, '_') .... for 10 underlines. \endcode
+//! Example: \code  out << chars(10, '_') .... for 10 underlines. \endcode
 class chars 
 { 
   friend std::ostream& operator<< (std::ostream&, const chars&);
@@ -62,7 +61,7 @@ private:
 };
 
 //! Manipulator to help output int repeat count & character chars.
-//! Usage: \code  out << chars(10, '_') .... for 10 underlines. \endcode
+//! Example: \code  out << chars(10, '_') .... for 10 underlines. \endcode
 std::ostream& operator<< (std::ostream& os, const chars& s)
 {
   for (int i = s.num_; i > 0; i--) os << s.character_;
@@ -81,7 +80,6 @@ private:
 }; // class setupperbase
 
 void outIosFmtFlags(long flags, std::ostream& os); // Show std iostream flags.
-void outFpClass(double value, std::ostream& os);  // Show Floating-point type.
 
 void outIOstates(std::ios_base::iostate rdstate = std::cout.rdstate(), std::ostream& os = std::cerr, const char* term = ". ");
 // Outputs rdstate as words "good", "eof", "fail" and/or "bad".
@@ -91,10 +89,10 @@ void outFmtFlags(std::ios_base::fmtflags fmtFlags = std::cout.flags(), std::ostr
 
 // Ostream manipulators to show state of stream.
 std::ostream& showiostate(std::ostream& os);  // Show IO stream state in words for this stream.
-// Usage: cout << showiostate ...
+// Example: cout << showiostate ...
 
 std::ostream& showformat(std::ostream& os); // Show IO stream format flags in words for this stream.
-// Usage: cout << showformat ...
+// Example: cout << showformat ...
 
 std::ios_base& lowercase(std::ios_base& _I)
 { // lowercase is the inverse of std::ios_base::uppercase.
@@ -103,7 +101,7 @@ std::ios_base& lowercase(std::ios_base& _I)
 } // lowercase
 
 //! Function to set base hex & showbase & uppercase too.
-//! Usage: \code out << hexbase << ... for 1234ABCD \endcode
+//! Example: \code out << hexbase << ... for 1234ABCD \endcode
 //! equivalent to \code out << hex << showbase << uppercase ...  \endcode
 std::ios_base& hexbase(std::ios_base& _I)
 {
@@ -115,7 +113,7 @@ std::ios_base& hexbase(std::ios_base& _I)
 
 // Manipulator template.
 // Copy of template for manipulator (from std iomanip)
-// Usage:  omanip<int>setw(int);
+// Example:  omanip<int>setw(int);
 template<typename T> class omanip  // Manipulator for ostream.
 {
   // friend std::ostream& operator<< (std::ostream&, const omanip<T>&);
@@ -175,7 +173,7 @@ template<typename T> std::ostream& operator<< (std::ostream& os, const omanip<T>
 //  function type, for example, std::ostream& bold(std::ostream&); declared in unc.h
 //  inline std::ostream& ostream::operator<<(std::ostream& (__cdecl * _f)(std::ostream&)) { (*_f)(*this); return *this; }
 //  inline std::ostream& ostream::operator<<(std::ios_base& (__cdecl * _f)(std::ios_base& )) { (*_f)(*this); return *this; }
-//  Usage: cout << "regular" << bold << "now bold" << endl;
+//  Example: cout << "regular" << bold << "now bold" << endl;
 // std::ostream& bold(std::ostream& os)  // perhaps inline
 // {
 //  return os << '\033' << '[';  // Use if have ANSI terminal emulation.
@@ -215,7 +213,7 @@ void outIOstates(std::ios_base::iostate rdState, std::ostream& os, const char* t
   rdState &= std::ios_base::goodbit | std::ios_base::eofbit | std::ios_base::failbit | std::ios_base::goodbit;
   // enum _Iostate {goodbit = 0x0, eofbit = 0x1,  failbit = 0x2, badbit = 0x4, _Statmask = 0x7};
   // but use std::ios_base::goodbit; for portability.
-  // MSVC /Dinkumware defines _Statmask 0x17, _Hardfail also added recently.
+  // MSVC/Dinkumware defines _Statmask 0x17, _Hardfail also added recently.
   os << "rdState ("<< std::showbase << std::hex << rdState << ") " << std::dec;
   if (rdState == std::ios_base::goodbit)
   {
@@ -273,7 +271,7 @@ const char* fmtFlagWords[16] =
 }; // const char* fmtFlagWords
 
 /*! Output string descriptions of @c std::ios::fmtflags.
- Usage:  outFmtFlags(flags, cerr);
+* \details
   For example, logs to std::cerr \verbatim "FormatFlags: skipws showbase right dec" \endverbatim
   \code void outFmtFlags(fmtflags fmtFlags = cout.flags(), std::ostream& os = cerr, const char* term = ".\n"); \endcode
   */
@@ -298,8 +296,8 @@ void outFmtFlags(std::ios_base::fmtflags fmtFlags, std::ostream& os, const char*
   os.flags(flags);  // Restore.
 }  // outFmtFlags
 
- //! Show std::IO stream state in words for this stream.
-  // Usage: \code std::cout << showiostate ... \endcode
+ //! Show std::IO stream state in descriptive words for this stream.
+ //! Example: \code std::cout << showiostate ... \endcode
 std::ostream& showiostate(std::ostream& os)
 {
   outIOstates(static_cast<std::ios_base::iostate>(os.rdstate()), os, ". ");
@@ -308,7 +306,7 @@ std::ostream& showiostate(std::ostream& os)
 }
 
 //! Show IO stream format flags descriptions in words for this stream.
- //! Usage: \code std::cout << showformat  ... \endcode
+//! Example: \code std::cout << showformat  ... \endcode
 std::ostream& showformat(std::ostream& os)
 {
   outFmtFlags(static_cast<std::ios_base::fmtflags>(os.flags()), os, ". ");
@@ -330,35 +328,38 @@ void setiosDefaults(std::ostream& os)
   os.flags(std::ios_base::dec | std::ios_base::skipws); // All others are zero (cleared bits).
 } // setiosDefaults(std::ostream& os)
 
-std::ostream& FPclass(std::ostream& os, double value)
-{ // Show Floating point type or value.
-  // Usage: cout << FPclass(NaN) ...
+template<typename T>
+std::ostream& FPclass(std::ostream& os, T value)
+{ // Show description of non-finite Floating-point type or value.
+  // Example: \code std::cout << FPclass(NaN) ... \endcode
   outFpClass(value, os);
   return os;
-} // std::ostream& FPclass(std::ostream& os, double value)
+} // std::ostream& FPclass(std::ostream& os, T value)
 
-void outFpClass(double value, std::ostream& os);
+//! Custom outputs for non-finite values NaN, inf ... (rather than Microsoft default 1#IND ...)
+//! Example: \code outFpClass(x, std::cerr); \endcode
+//! \param x value to be output.
+//! \tparam T Floating-point not-finite type (@c double or @c float) to be described.
 
-void outFpClass(double value, std::ostream& os = std::cerr)
-// Usage: outFpClass(x, std::cerr);
-{  // Custom outputs for NaN, inf ... (rather than Microsoft default 1#IND ...)
-
-  if (boost::math::isfinite(value))
+template<typename T>
+void outFpClass(T value, std::ostream& os = std::cerr)
+{ 
+  if (std::isfinite(value))
   {
     os << value;
   }
-  else if (boost::math::isnan(value))
+  else if (std::isnan(value))
   {
     os << "NaN";
 
   }
-  else if (boost::math::isinf(value))
+  else if (std::isinf(value))
   {
     os << "inf";
   }
   else
   {
-    os << "?" << value << "?";
+    os << "?" << value << "?";  // Normal value is unexpected if this function is called.
   }
 }  // OutFpclass
 
