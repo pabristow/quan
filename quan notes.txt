@@ -1,38 +1,4 @@
-"I:\boost\libs\quan\quan notes.txt"  Quan project (using by SVG_plot)  started 11May2020 14:39
-
-http://www.av8n.com/physics/uncertainty.htm#sec-crank3
-
- Uncertainty as Applied to Measurements and Calculations  John S. Denker Copyright © 2003–2011 jsd
-
- https://en.wikipedia.org/wiki/Significance_arithmetic#Transcendental_functions
-
-
- http://www.av8n.com/physics/log-units.htm  Logarithmic Units, e.g. Centinepers
-
- 11Sep2020 15:28  Problem with unc and Doxygen.
-
- svg_plot.auto_index.docbook:5497: element anchor: validity error : ID uncun already defined
-
- and didn't finally build svg_plot docs.
-
- 15Nov2020 17:38  Now building docs OK.
- 13Jan2021 14:00 Cannot return a rounding m because epsilon 0.05 is too small!
-
- in I:\boost\libs\quan\include\boost\quan\rounding.hpp
-
- 13Jan2021 17:14 parameters sigma etc are zero???  But why?
-
- jamfile writtem for quan/unc tests but many errors.
-
- But commit work so far.13Jan2021 17:45
-
-
-28Jan2021 15:27 Tried to push changes branch develop to remote but failed because no verification method available.
-SHA-1: d53c3f78c18e567ec57ccceedfd7b208c4f7e7ee
-
-08Feb2021 16:21 added get and set members to Meas and tested using 1d and 2d Meas demos.
-
-[develop 817e3b6] Added set and get member functions to Meas and used in 1d and 2 demos.
+\quan\quan notes.txt  Quan project (using by SVG_plot)  re-started 11May2020 14:39
 
 
 
