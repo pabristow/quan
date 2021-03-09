@@ -46,25 +46,24 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">xiostream.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Extra iostream manipulators.  
+<p>Extra iostream manipulators and output of stream state descriptions.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;iostream&gt;</code><br />
-<code>#include &lt;<a class="el" href="xiostream_8ipp_source.html">boost/quan/impl/xiostream.ipp</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for xiostream.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="xiostream_8hpp__incl.png" border="0" usemap="#a_i_1_2boost_2boost_2quan_2xiostream_8hpp" alt=""/></div>
 <map name="a_i_1_2boost_2boost_2quan_2xiostream_8hpp" id="a_i_1_2boost_2boost_2quan_2xiostream_8hpp">
-<area shape="rect" title="Extra iostream manipulators." alt="" coords="53,5,187,47"/>
-<area shape="rect" title=" " alt="" coords="5,95,77,121"/>
-<area shape="rect" href="xiostream_8ipp.html" title="Extra iostream manipulators." alt="" coords="102,95,298,121"/>
-<area shape="rect" title=" " alt="" coords="118,169,282,211"/>
+<area shape="rect" title="Extra iostream manipulators and output of stream state descriptions." alt="" coords="5,5,139,47"/>
+<area shape="rect" title=" " alt="" coords="36,95,108,121"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -72,13 +71,8 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="xiostream_8hpp__dep__incl.png" border="0" usemap="#a_i_1_2boost_2boost_2quan_2xiostream_8hppdep" alt=""/></div>
 <map name="a_i_1_2boost_2boost_2quan_2xiostream_8hppdep" id="a_i_1_2boost_2boost_2quan_2xiostream_8hppdep">
-<area shape="rect" title="Extra iostream manipulators." alt="" coords="163,5,296,47"/>
-<area shape="rect" href="rounding_8hpp.html" title="Common rounding and &#39;proper&#39; rounding." alt="" coords="111,95,244,136"/>
-<area shape="rect" href="unc_8hpp.html" title=" " alt="" coords="163,184,296,225"/>
-<area shape="rect" href="unc_8ipp.html" title="Uncertain class definitions." alt="" coords="5,273,139,315"/>
-<area shape="rect" href="meas_8ipp.html" title="Class for measurement using uncertain class &#45; definitions." alt="" coords="163,273,296,315"/>
-<area shape="rect" href="meas_8hpp.html" title="Class for measurement using uncertain class." alt="" coords="163,363,296,404"/>
-<area shape="rect" href="unc__output_8ipp.html" title="Output of uncertain values." alt="" coords="371,273,509,315"/>
+<area shape="rect" title="Extra iostream manipulators and output of stream state descriptions." alt="" coords="5,5,139,47"/>
+<area shape="rect" href="rounding_8hpp.html" title="Common rounding and &#39;proper&#39; rounding." alt="" coords="5,95,139,136"/>
 </map>
 </div>
 </div>
@@ -86,219 +80,72 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstars.html">stars</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1stars.html">boost::quan::stars</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manipulator class to help to output a number of stars.  <a href="classboost_1_1quan_1_1stars.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchars.html">chars</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1chars.html">boost::quan::chars</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsetupperbase.html">setupperbase</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1setupperbase.html">boost::quan::setupperbase</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">class setupperbase to output uppercase or capital letter B, X and O when using base other than 10  <a href="classboost_1_1quan_1_1setupperbase.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1omanip.html">boost::quan::omanip&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1oapp.html">boost::quan::oapp&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceboost"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost.html">boost</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceboost_1_1quan"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html">boost::quan</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a61a0fd253710e79febe1735b7f729e84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xiostream_8hpp.html#a61a0fd253710e79febe1735b7f729e84">outIosFlags</a> (long flags, std::ostream &amp;os)</td></tr>
-<tr class="separator:a61a0fd253710e79febe1735b7f729e84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a544c569f2f0c2bbca62330b200279aae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xiostream_8hpp.html#a544c569f2f0c2bbca62330b200279aae">outFpClass</a> (double value, std::ostream &amp;os)</td></tr>
-<tr class="separator:a544c569f2f0c2bbca62330b200279aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad09ef6f99a1d6683208d9ced3618da1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xiostream_8hpp.html#ad09ef6f99a1d6683208d9ced3618da1f">outIOstates</a> (std::ios_base::iostate rdstate=std::cout.rdstate(), std::ostream &amp;os=std::cerr, const char *term=&quot;. &quot;)</td></tr>
-<tr class="separator:ad09ef6f99a1d6683208d9ced3618da1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46d3754822ec1110c707a858aeeba361"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xiostream_8hpp.html#a46d3754822ec1110c707a858aeeba361">outFmtFlags</a> (std::ios_base::fmtflags fmtFlags=std::cout.flags(), std::ostream &amp;os=std::cerr, const char *term=&quot;. &quot;)</td></tr>
-<tr class="separator:a46d3754822ec1110c707a858aeeba361"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c334fc154a938354cb4e4276a148f3b"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xiostream_8hpp.html#a0c334fc154a938354cb4e4276a148f3b">showiostate</a> (std::ostream &amp;os)</td></tr>
-<tr class="separator:a0c334fc154a938354cb4e4276a148f3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d8d701dd1cb07877b041b1f6d42fe2b"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xiostream_8hpp.html#a2d8d701dd1cb07877b041b1f6d42fe2b">showformat</a> (std::ostream &amp;os)</td></tr>
-<tr class="separator:a2d8d701dd1cb07877b041b1f6d42fe2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86607e365d5afc21bcceb93ebc06e0d7"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a86607e365d5afc21bcceb93ebc06e0d7">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const stars &amp;s)</td></tr>
+<tr class="memdesc:a86607e365d5afc21bcceb93ebc06e0d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manipulator to output a number of stars. Example:  <a href="namespaceboost_1_1quan.html#a86607e365d5afc21bcceb93ebc06e0d7">More...</a><br /></td></tr>
+<tr class="separator:a86607e365d5afc21bcceb93ebc06e0d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1644af3cf3e321e01593c5c7031be8a6"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a1644af3cf3e321e01593c5c7031be8a6">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const chars &amp;s)</td></tr>
+<tr class="separator:a1644af3cf3e321e01593c5c7031be8a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d439acdd519151cc6ee82ca60e4ab25"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a3d439acdd519151cc6ee82ca60e4ab25">boost::quan::outIosFmtFlags</a> (long flags, std::ostream &amp;os)</td></tr>
+<tr class="separator:a3d439acdd519151cc6ee82ca60e4ab25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9778d49bf821938a97a86da0c97f4be2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a9778d49bf821938a97a86da0c97f4be2">boost::quan::outIOstates</a> (std::ios_base::iostate rdState, std::ostream &amp;os, const char *terminator)</td></tr>
+<tr class="memdesc:a9778d49bf821938a97a86da0c97f4be2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output all std::ios iostates.  <a href="namespaceboost_1_1quan.html#a9778d49bf821938a97a86da0c97f4be2">More...</a><br /></td></tr>
+<tr class="separator:a9778d49bf821938a97a86da0c97f4be2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26d8352e0f80776172d38bb0f8c0a30c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a26d8352e0f80776172d38bb0f8c0a30c">boost::quan::outFmtFlags</a> (std::ios_base::fmtflags fmtFlags=std::cout.flags(), std::ostream &amp;os=std::cerr, const char *term=&quot;. &quot;)</td></tr>
+<tr class="separator:a26d8352e0f80776172d38bb0f8c0a30c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe8321b322d05e7921d513ee897d4c4a"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#abe8321b322d05e7921d513ee897d4c4a">boost::quan::showiostate</a> (std::ostream &amp;os)</td></tr>
+<tr class="separator:abe8321b322d05e7921d513ee897d4c4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61246221d3d2ee613b8d2971f4454c91"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a61246221d3d2ee613b8d2971f4454c91">boost::quan::showformat</a> (std::ostream &amp;os)</td></tr>
+<tr class="separator:a61246221d3d2ee613b8d2971f4454c91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab347745e75598773e997e076257d5ada"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ab347745e75598773e997e076257d5ada">boost::quan::lowercase</a> (std::ios_base &amp;_I)</td></tr>
+<tr class="separator:ab347745e75598773e997e076257d5ada"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9237da97628ec92045bd2a2402dae1b1"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a9237da97628ec92045bd2a2402dae1b1">boost::quan::hexbase</a> (std::ios_base &amp;_I)</td></tr>
+<tr class="separator:a9237da97628ec92045bd2a2402dae1b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03d92f0dc45112a49100ef43f0ab59af"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a03d92f0dc45112a49100ef43f0ab59af"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a03d92f0dc45112a49100ef43f0ab59af">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const omanip&lt; T &gt; &amp;m)</td></tr>
+<tr class="separator:a03d92f0dc45112a49100ef43f0ab59af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace9e46b51ba3b77f4a39e130800b1f11"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ace9e46b51ba3b77f4a39e130800b1f11">boost::quan::setiosDefaults</a> (std::ostream &amp;os)</td></tr>
+<tr class="separator:ace9e46b51ba3b77f4a39e130800b1f11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a316fb7506ff36e215d5e55813a9e8d21"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a316fb7506ff36e215d5e55813a9e8d21"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a316fb7506ff36e215d5e55813a9e8d21">boost::quan::FPclass</a> (std::ostream &amp;os, T value)</td></tr>
+<tr class="separator:a316fb7506ff36e215d5e55813a9e8d21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a580af4a675227f3784636fc806c52c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a5a580af4a675227f3784636fc806c52c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a5a580af4a675227f3784636fc806c52c">boost::quan::outFpClass</a> (T, std::ostream &amp;)</td></tr>
+<tr class="separator:a5a580af4a675227f3784636fc806c52c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a3c4c5f8408dae4ff6ccaeb2307323f57"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a3c4c5f8408dae4ff6ccaeb2307323f57">boost::quan::fmtFlagWords</a> [16]</td></tr>
+<tr class="separator:a3c4c5f8408dae4ff6ccaeb2307323f57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Extra iostream manipulators. </p>
-<p>Definitions in xiostream.cpp</p>
+<div class="textblock"><p>Extra iostream manipulators and output of stream state descriptions. </p>
 <dl class="section author"><dt>Author</dt><dd>Paul A. Bristow </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>Sep 2009 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>Sep 2009, 2021 </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="xiostream_8hpp_source.html">xiostream.hpp</a>.</p>
-</div><h2 class="groupheader">Function Documentation</h2>
-<a id="a46d3754822ec1110c707a858aeeba361"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46d3754822ec1110c707a858aeeba361">&#9670;&nbsp;</a></span>outFmtFlags()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void outFmtFlags </td>
-          <td>(</td>
-          <td class="paramtype">std::ios_base::fmtflags&#160;</td>
-          <td class="paramname"><em>fmtFlags</em> = <code>std::cout.flags()</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em> = <code>std::cerr</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>term</em> = <code>&quot;.&#160;&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="xiostream_8ipp_source.html#l00256">256</a> of file <a class="el" href="xiostream_8ipp_source.html">xiostream.ipp</a>.</p>
-
-</div>
-</div>
-<a id="a544c569f2f0c2bbca62330b200279aae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a544c569f2f0c2bbca62330b200279aae">&#9670;&nbsp;</a></span>outFpClass()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void outFpClass </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="xiostream_8ipp_source.html#l00319">319</a> of file <a class="el" href="xiostream_8ipp_source.html">xiostream.ipp</a>.</p>
-
-</div>
-</div>
-<a id="a61a0fd253710e79febe1735b7f729e84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61a0fd253710e79febe1735b7f729e84">&#9670;&nbsp;</a></span>outIosFlags()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void outIosFlags </td>
-          <td>(</td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>flags</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em> = <code>std::cerr</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Show all the <code>std::ios</code> stream flags settings as words, for example: true, dec, right.<br  />
-Usage:</p><div class="fragment"><div class="line"><a class="code" href="unc_8ipp.html#a922241811e1ce6f6d4342e977fb3d8ed">outIosFlags</a>(cout.flags(), cerr); <span class="comment">// logs cout&#39;s flag to cerr. </span></div>
-<div class="ttc" id="aunc_8ipp_html_a922241811e1ce6f6d4342e977fb3d8ed"><div class="ttname"><a href="unc_8ipp.html#a922241811e1ce6f6d4342e977fb3d8ed">outIosFlags</a></div><div class="ttdeci">void outIosFlags(long flags, std::ostream &amp;os=std::cerr)</div><div class="ttdef"><b>Definition:</b> <a href="unc_8ipp_source.html#l00189">unc.ipp:189</a></div></div>
-</div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">flags</td><td>Iostream flags. </td></tr>
-    <tr><td class="paramname">os</td><td><code>std::ostream</code> for output, default <code>std::cerr</code> </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="unc_8ipp_source.html#l00189">189</a> of file <a class="el" href="unc_8ipp_source.html">unc.ipp</a>.</p>
-
-</div>
-</div>
-<a id="ad09ef6f99a1d6683208d9ced3618da1f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad09ef6f99a1d6683208d9ced3618da1f">&#9670;&nbsp;</a></span>outIOstates()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void outIOstates </td>
-          <td>(</td>
-          <td class="paramtype">std::ios_base::iostate&#160;</td>
-          <td class="paramname"><em>rdstate</em> = <code>std::cout.rdstate()</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em> = <code>std::cerr</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>term</em> = <code>&quot;.&#160;&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="xiostream_8ipp_source.html#l00186">186</a> of file <a class="el" href="xiostream_8ipp_source.html">xiostream.ipp</a>.</p>
-
-</div>
-</div>
-<a id="a2d8d701dd1cb07877b041b1f6d42fe2b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d8d701dd1cb07877b041b1f6d42fe2b">&#9670;&nbsp;</a></span>showformat()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream&amp; showformat </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="xiostream_8ipp_source.html#l00288">288</a> of file <a class="el" href="xiostream_8ipp_source.html">xiostream.ipp</a>.</p>
-
-</div>
-</div>
-<a id="a0c334fc154a938354cb4e4276a148f3b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c334fc154a938354cb4e4276a148f3b">&#9670;&nbsp;</a></span>showiostate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream&amp; showiostate </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="xiostream_8ipp_source.html#l00280">280</a> of file <a class="el" href="xiostream_8ipp_source.html">xiostream.ipp</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 <!-- custom Doxygen footer quan_doxygen_footer.html  -->-
 <!-- Copyright 2012 Paul A. Bristow -->
 <!-- Distributed under the Boost Software License, Version 1.0. -->
@@ -317,7 +164,7 @@ Usage:</p><div class="fragment"><div class="line"><a class="code" href="unc_8ipp
       <!-- 2021 becomes the current year, for example 2010, so claims copyright for a range of years, 2009 - 2010. -->
      <p>Doxygen Documentation generated by&nbsp;<a href="https://www.doxygen.org/index.html"> 
      <img src="https://www.doxygen.nl/images/doxygen.png"   width="100" height="20"
-     alt="Doxygen logo" align="middle" border="1"/>&nbsp; 1.9.1</a>, Revised at Fri Feb 12 2021 12:57:05</p>
+     alt="Doxygen logo" align="middle" border="1"/>&nbsp; 1.9.1</a>, Revised at Tue Mar 9 2021 11:58:57</p>
   </address>
   </tr>
 </tbody>

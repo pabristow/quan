@@ -34,11 +34,11 @@ and are input and output including the uncertainty estimates.
 
 See Boost.Quan HTML Manual at
 
-  https://svn.boost.org/svn/boost/sandbox/quan/libs/quan/doc/html/index.html
+  quan/libs/quan/doc/html/index.html
 
 and/or equivalent PDF Manual at:
 
-  https://svn.boost.org/svn/boost/sandbox/quan/libs/quan/doc/quan.pdf
+  quan/libs/quan/doc/quan.pdf
 
 Examples are in folder:
 
@@ -239,10 +239,12 @@ const unsigned short int UNC_DEF = (UNC_KNOWN | UNC_NOMINUS | UNC_NOPLUS | //!< 
                                     | UNC_UNIFORM | UNC_TRIANGULAR);  // default Guassian distribution.
 const unsigned short int DEG_FREE_DEF = (DEG_FREE_EXACT | DEG_FREE_KNOWN);
 
+//! \enum uncIOflags 
+//! @brief Control of printing uncertain values, similar to @c std::ios flags. 
+//! \details Can be output for diagnostic use, for example:
+//! \code outUncIOFlags(std::cout.flags(), std::cerr); // uncFlags (0x201) firm adddegfree.  \endcode
 enum uncIOflags
-{  //! \enum uncIOflags Control of printing uncertain values, similar to std::ios flags.
-  //! @brief  Can be output for diagnostic use, for example:
-  //! \code outUncIOFlags(std::cout.flags(), std::cerr); // uncFlags (0x201) firm adddegfree.  \endcode
+{  
   defaults = 0, //!< Default.
   firm = 1  << 0,  //!< bit 0: == 0 == false means flexible layout, or firm == 1 means true.
   setScaled = 1 << 1, //!< bit 1 Set scaled == 1 or not scaled == 0.
@@ -1621,8 +1623,8 @@ std::istream& operator>> (std::istream& is, unc<false>& ud)
 //! Extract @c operator<< for uncertain types.
 //! Example: \code uncun u(1.23, 0.05, 9); std::cout << u << std::endl;  \endcode
 //! (Should cover both correlated and uncorrelated cases?)\n
-//! \ref boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated>& val) extract operator<<
-//! \link boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated>& val) \endlink
+//! boost::quan::unc::operator<<(std::ostream& os, const unc<false>& val)
+//! boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated>& val) 
 std::ostream& operator<< (std::ostream& os, const unc<false>& val)
 {
   boost::io::ios_precision_saver precision_saver(os);
@@ -1646,28 +1648,26 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
   unsigned short int degFree = val.degFree();
   unsigned short int unc_flags = val.uncFlags();
 
-  // bool showing output requirements specified using unc additional ostream manipulators.
-  // Note that these bools are NOT initialised here,
-  // assuming compiler will warn if used before being initialised.
-
-  bool isNoisyDigit;  //! \var isNoisyDigit Add an extra 'noisy' guard digit to reduce risk of information loss.
-  bool isDegFree;  //!  \var isDegFree Append degrees of freedom.
-  bool isPlusMinus; //! \var isPlusMinus Uncertainty as +/- is required too (but ignore if value is exact or integer).
-  bool isUppercase; //! \var isUppercase Exponential format is, for example, 1E6 else 1e6.
-  bool isScientificFormat;  //! \var isScientificFormat Taken to mean that exponential format wanted (always possible).
-  bool isShowPoint;  //! \var isShowPoint Means decimal point is always shown, for example 900. even if not needed.
-  bool isShowPos; //! \var isShowPos Show + sign always because ios flag was set with `<< showpo`s.
-  bool isFixed; //! \var isFixed \code os << fixed ... \endcode ios decimal fixed d.dddd format (rather than scientific).
-  bool isWidthSet; //! \var isWidthSet \code os << setw(9) \endcode has prescribed a width (rather than default width == 0).
-  bool isNoAdjust;  //! \var std = default but unc usage not defined yet, center?
-  bool isRightJustify; //!\var isNoAdjust right justify, prepend leading pad before. \code << right << ... \endcode
-  bool isLeftJustify; //! \var isLeftJustify left justify, append trailing pad after.  \code << left ...\endcode
-  bool isInternalJustify;  //! \var isInternalJustify Not defined yet, but use to center in field?
-  bool isCenter; //! \var isCenter Center if BOTH left and right specified.
-  bool isAlign; //! \var isAlign Align on decimal point?
-  bool isConfidenceInterval; //! \var isConfidenceInterval Append confidence interval, for example, "<1.23, 1.56>"
-  bool isSetSigDigits;  //! \var isSetSigDigits Use set sigdigits instead of calculate from uncertainty.
-  bool isSetUncSigDigits;  //!  \varisSetUncSigDigits Use setUNCsigdigits instead of calculate from uncertainty.
+  // bool showing output requirements specified using unc additional @c std::ostream manipulators.
+  // Note that these bools are NOT initialised here, assuming compiler will warn if used before being initialised.
+  bool isNoisyDigit;    //!< Add an extra 'noisy' guard digit to reduce risk of information loss.
+  bool isDegFree;    //!< Append degrees of freedom.
+  bool isPlusMinus;  //!< Uncertainty as +/- is required too (but ignore if value is exact or integer).
+  bool isUppercase;  //! Exponential format is, for example, 1E6 else 1e6.
+  bool isScientificFormat;  //!  Taken to mean that exponential format wanted (always possible).
+  bool isShowPoint;    //!<  Means decimal point is always shown, for example 900. even if not needed.
+  bool isShowPos;   //!< Show + sign always because @c std::ios flag was set with @c << showpoint.
+  bool isFixed; //!< \code os << fixed ... \endcode ios decimal fixed d.dddd format (rather than scientific).
+  bool isWidthSet; //!< \code os << setw(9) \endcode has prescribed a width (rather than default width == 0).
+  bool isNoAdjust;  //!<  = default but unc usage not defined yet, center?
+  bool isRightJustify; //!< Right justify, prepend leading pad before. \code << right << ... \endcode
+  bool isLeftJustify; //!< Left justify, append trailing pad after.  \code << left ...\endcode
+  bool isInternalJustify;  //!< Not defined yet, but use to center in field?
+  bool isCenter; //!< Center if BOTH left and right specified.
+  bool isAlign; //!<  Align on decimal point?
+  bool isConfidenceInterval; //!< Append confidence interval, for example, "<1.23, 1.56>"
+  bool isSetSigDigits;  //!< Use set sigdigits instead of calculate from uncertainty.
+  bool isSetUncSigDigits;  //!< Use setUNCsigdigits instead of calculate from uncertainty.
 
   // Get print format requirements from std::ios flags.
   const int iosFlags = os.flags();  // Save fmtflags in case need to restore.
@@ -1675,9 +1675,9 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
    // Width, precision, flags & fillChar data from std::stream os.
   std::streamsize iosWidth = os.width(); //! \warning Width must be read BEFORE any use of os
   // which would reset width back to zero!
-  // & prevent any ios formatting during os << ...
+  // & prevent any ios formatting during \code os << ... \endcode
   // because unc_output does all its own formatting.
-  isWidthSet = (iosWidth > 0); // For example by os << setw(99)
+  isWidthSet = (iosWidth > 0); // For example by \code os << setw(99) \endcode
 
   isUppercase = static_cast<bool>(iosFlags & std::ios_base::uppercase); // E not e.
   // TODO No mechanism to change uppercase at present in round_* functions.
@@ -1730,9 +1730,12 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
     distrib = gaussian;
   } // Distribution type set.
 
-  //! \var roundloss Confidence or alpha to compute confidence interval is similarly scaled.
-  //! Usage: \code std::cout << confidence(0.01) << ... \endcode means 1 - confidence = 99% confidence.
-  //! \code  double confidence = os.iword(conf) / 1000.;  //  == << confidence(0.05) or 95% \endcode
+  /*! Confidence or alpha to compute confidence interval is similarly scaled.
+  Example: \code std::cout << confidence(0.01) << ... \endcode means 1 - confidence = 99% confidence.\n
+  The confidence is stored in a @c long integer scaled by 1000 thus:\n
+     \code double confidence = os.iword(conf) / 1000.; \endcode
+  */
+
 
   long& roundloss = os.iword(roundingLossIndex);
   double round_loss;
@@ -1741,7 +1744,7 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
     round_loss = 0.05; // so use a default.
   }
   else
-  { // Has been set by a call like `out << confidence(0.01);`.
+  { // Has been set by a call like \code out << confidence(0.01); \endcode
     // rounding loss is stored as a long, so scaled by 1000,
     // so that 0.05 or 1% is stored as 50.
     round_loss = roundloss / 1000.;  // `<< roundingloss(0.05)`
@@ -1760,9 +1763,9 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
   {
     confidence = conf / 1.e6;  // Unscale the scaled value stored as an int - back into a double.
   }
-  using boost::math::isfinite;
-  using boost::math::isnan;
-  using boost::math::isinf;
+  using std::isfinite;
+  using std::isnan;
+  using std::isinf;
 
   constexpr int max_digits10 = std::numeric_limits<double>::max_digits10; // std::numeric_limits<double>::digits10 * 3010/10000;
 

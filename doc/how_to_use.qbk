@@ -10,8 +10,7 @@ often producing examples of outstandingly bad taste!
 * Several indexes (especially the function index) will also help you find which of the several hundred options you need.
 
 * If you have a feature request, or if it appears that the implementation
-is in error, please check the TODO page first, as well
-as the rationale section.
+is in error, please check the TODO page first, as well as the rationale section.
 
 If you do not find your idea/complaint, please reach me either through the Boost
 development list, or email me direct at pbristow (at) hetp (dot) u-net (dot) com
@@ -29,7 +28,7 @@ Failure to follow suggestions in these blocks will probably result in undesired 
 Read all of these you find.]
 
 [warning It is imperative that you follow these. Failure to do so will lead to
-incorrect, and very likely undesired, results in the plot.]
+incorrect, and very likely undesired, results.]
 
 [endsect] [/section:howtouse How To Use This Documentation]
 

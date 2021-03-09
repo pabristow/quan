@@ -116,6 +116,8 @@ This has permitted improvements in the __svg_plot_github that uses __quan_github
 
 [endsect] [/section:history History and status]
 
+[include how_to_use.qbk]
+
 [section:Starting Getting started]
 
 [h5:windows_install Windows]
@@ -188,6 +190,10 @@ so you will need to either specify the entire namespace `using namespace boost::
 or individual items that you use specifically, for example:  `using boost::quan::unc;`.
 Use of a private namespace should prevent C++ type name collisions and/or name ambiguities.
 
+[h5:nix_install \*Nix Installation] 
+
+Most of the procedure is the same as for Windows 10.
+
 [endsect] [/section:Starting Getting started]
 
 [section:Uncertains Uncertain Classes for Propagation of Uncertainties according to a pure Gaussian model.]
@@ -199,14 +205,16 @@ original downloaded from [@ftp://beowulf.jpl.nasa.gov/pub/manning].
 This is a simple model of uncertainties, designed to accompany an article published in C/C++ Users Journal March 1996
 at [@http://www.ddj.com/cpp/184403147 C/C++ Users Journal March 1996].
 
-A fuller collection of even fancier classes also given in Evan Marshal Manning's code in `unc.h`.
+(A fuller collection of even fancier classes also given in Evan Marshal Manning's code in `unc.h`).
 
-Other information about the observation of measurement Standard deviation & its uncertainty, 
-for example, degrees of freedom were added by Paul A Bristow in Mar 1998,
+[*The key benefit of using an uncertain class is that all uncertainties are properly propagated through calculations].
+
+Other information about the observation or measurement standard deviation & its uncertainty, 
+for example, degrees of freedom, were added by Paul A. Bristow in Mar 1998,
 and have been refined further since then.
 
 A simple example is construction of an uncertain value with a best estimated value of 1.23, and uncertainty (standard deviation) of 0.45,
-being the result of 10 observations (so 9 degrees of freedom:
+being the result of 10 observations (so 9 degrees of freedom):
 
   uncun u(1.23, 0.45F, 9);
   
@@ -221,10 +229,11 @@ to display
 The extensive output features have been informed by
 "Uncertainty as Applied to Measurements and Calculations", John Denker, [@http://www.av8n.com/physics/uncertainty.htm#sec-crank3].
 
-Some simple rules that apply whenever you are displaying a number:
+Some simple rules that apply whenever displaying a number:
 
 # Use many enough digits to avoid unintended loss of information.
 # Use few enough digits to be reasonably convenient.
+# Avoid excessive 'noisy' digits that imply unwarranted precision.  
 # For other calculations, keep all potentially significant digits (C++ std::numeric_limits<>::max_digits10, 17 for type double).
 
 An additional objective was to avoid using [*more] than enough digits to avoid clutter, and more importantly, 
@@ -246,7 +255,7 @@ Distributions of types 'normal' or Gaussian (common noisy observations), triangu
 Values that are [*exact] by definition, for example, the inch-mm conversion factor is exactly 2.54.
 A value like 2.54 cannot be represented exactly as a floating-point type `double`, so it is useful to be able to
 distinguish any computational uncertainty [@https://en.wikipedia.org/wiki/Machine_epsilon machine epsilon]
-(2[super[-53]] [cong] 1.1e-16) from real uncertainty.
+(2[super -53] [cong] 1.1e-16) from real uncertainty.
 Conversely exact integral values should be distinguishable from real observations that happen to have a integral value.
 To achieve this, specialized constructors are provided for both `int` and `double`.
 
@@ -257,9 +266,7 @@ it is also possible to ensure that potentially noisy random digits can be output
 
 [endsect] [/section:Uncertains Uncertain Classes]
 
-[include how_to_use.qbk]
-
-[xinclude autodoc.xml] [/ Using Doxygen reference documentation.]
+[xinclude autodoc.xml] [/ Using Doxygen reference documentation]
 
 [section:indexes Indexes]
 [/Include the indexes (class, function and everything) ]

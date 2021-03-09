@@ -46,6 +46,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
@@ -54,76 +55,13 @@ $(function() {
 <div class="title">unc.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;boost/math/special_functions/fpclassify.hpp&gt;</code><br />
-<code>#include &lt;cstdlib&gt;</code><br />
-<code>#include &lt;cmath&gt;</code><br />
-<code>#include &lt;iostream&gt;</code><br />
-<code>#include &lt;iomanip&gt;</code><br />
-<code>#include &lt;algorithm&gt;</code><br />
-<code>#include &lt;sstream&gt;</code><br />
-<code>#include &lt;limits&gt;</code><br />
-<code>#include &lt;exception&gt;</code><br />
-<code>#include &lt;<a class="el" href="xiostream_8hpp_source.html">boost/quan/xiostream.hpp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="unc__init_8hpp_source.html">boost/quan/unc_init.hpp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="rounding_8hpp_source.html">boost/quan/rounding.hpp</a>&gt;</code><br />
-<code>#include &lt;boost/lexical_cast.hpp&gt;</code><br />
-<code>#include &lt;boost/static_assert.hpp&gt;</code><br />
-<code>#include &lt;boost/io/ios_state.hpp&gt;</code><br />
-<code>#include &lt;boost/units/io.hpp&gt;</code><br />
-<code>#include &lt;boost/units/static_rational.hpp&gt;</code><br />
-<code>#include &lt;boost/type_traits.hpp&gt;</code><br />
-<code>#include &lt;<a class="el" href="unc_8ipp_source.html">boost/quan/impl/unc.ipp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="unc__input_8ipp_source.html">boost/quan/impl/unc_input.ipp</a>&gt;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for unc.hpp:</div>
-<div class="dyncontent">
-<div class="center"><img src="unc_8hpp__incl.png" border="0" usemap="#a_i_1_2boost_2boost_2quan_2unc_8hpp" alt=""/></div>
-<map name="a_i_1_2boost_2boost_2quan_2unc_8hpp" id="a_i_1_2boost_2boost_2quan_2unc_8hpp">
-<area shape="rect" title=" " alt="" coords="776,5,909,47"/>
-<area shape="rect" title=" " alt="" coords="154,348,318,389"/>
-<area shape="rect" title=" " alt="" coords="881,102,941,129"/>
-<area shape="rect" title=" " alt="" coords="312,191,371,218"/>
-<area shape="rect" title=" " alt="" coords="41,273,113,300"/>
-<area shape="rect" title=" " alt="" coords="395,191,461,218"/>
-<area shape="rect" title=" " alt="" coords="965,102,1040,129"/>
-<area shape="rect" title=" " alt="" coords="485,191,555,218"/>
-<area shape="rect" title=" " alt="" coords="579,191,632,218"/>
-<area shape="rect" title=" " alt="" coords="1065,102,1143,129"/>
-<area shape="rect" href="xiostream_8hpp.html" title="Extra iostream manipulators." alt="" coords="115,191,287,218"/>
-<area shape="rect" href="unc__init_8hpp.html" title="Initialisation of std::stream iword to store uncertainty information." alt="" coords="1168,102,1328,129"/>
-<area shape="rect" href="rounding_8hpp.html" title="Common rounding and &#39;proper&#39; rounding." alt="" coords="641,102,805,129"/>
-<area shape="rect" title=" " alt="" coords="2171,191,2330,218"/>
-<area shape="rect" title=" " alt="" coords="1352,102,1504,129"/>
-<area shape="rect" title=" " alt="" coords="1529,102,1679,129"/>
-<area shape="rect" title=" " alt="" coords="1704,102,1829,129"/>
-<area shape="rect" title=" " alt="" coords="1853,95,1976,136"/>
-<area shape="rect" title=" " alt="" coords="2000,102,2144,129"/>
-<area shape="rect" href="unc_8ipp.html" title="Uncertain class definitions." alt="" coords="203,102,363,129"/>
-<area shape="rect" href="unc__input_8ipp.html" title="Input of uncertain classes, used to implement operator&gt;&gt; ." alt="" coords="2273,95,2412,136"/>
-<area shape="rect" href="xiostream_8ipp.html" title="Extra iostream manipulators." alt="" coords="138,273,334,300"/>
-<area shape="rect" title=" " alt="" coords="2354,191,2393,218"/>
-<area shape="rect" title=" " alt="" coords="758,184,893,225"/>
-<area shape="rect" title=" " alt="" coords="917,184,1078,225"/>
-<area shape="rect" title=" " alt="" coords="1102,184,1263,225"/>
-<area shape="rect" title=" " alt="" coords="1287,184,1449,225"/>
-<area shape="rect" title=" " alt="" coords="1473,184,1634,225"/>
-<area shape="rect" title=" " alt="" coords="1659,184,1792,225"/>
-<area shape="rect" title=" " alt="" coords="1816,191,1987,218"/>
-<area shape="rect" title=" " alt="" coords="2011,191,2066,218"/>
-<area shape="rect" title=" " alt="" coords="2091,191,2147,218"/>
-<area shape="rect" title=" " alt="" coords="2417,191,2476,218"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
+<div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="unc_8hpp__dep__incl.png" border="0" usemap="#a_i_1_2boost_2boost_2quan_2unc_8hppdep" alt=""/></div>
 <map name="a_i_1_2boost_2boost_2quan_2unc_8hppdep" id="a_i_1_2boost_2boost_2quan_2unc_8hppdep">
-<area shape="rect" title=" " alt="" coords="163,5,296,47"/>
-<area shape="rect" href="unc_8ipp.html" title="Uncertain class definitions." alt="" coords="5,95,139,136"/>
-<area shape="rect" href="meas_8ipp.html" title="Class for measurement using uncertain class &#45; definitions." alt="" coords="163,95,296,136"/>
-<area shape="rect" href="meas_8hpp.html" title="Class for measurement using uncertain class." alt="" coords="163,184,296,225"/>
-<area shape="rect" href="unc__output_8ipp.html" title="Output of uncertain values." alt="" coords="371,95,509,136"/>
+<area shape="rect" title=" " alt="" coords="5,5,139,47"/>
+<area shape="rect" href="meas_8hpp.html" title="Class Meas for measurements using an uncertain class unc." alt="" coords="5,95,139,136"/>
 </map>
 </div>
 </div>
@@ -131,313 +69,338 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classshow_unc_flags.html">showUncFlags</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1show_unc_flags.html">boost::quan::showUncFlags</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classshow_unc_types.html">showUncTypes</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1show_unc_types.html">boost::quan::showUncTypes</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function for <code><a class="el" href="classboost_1_1quan_1_1show_unc_types.html" title="Helper function for showUncTypes friend std::ostream operator&lt;&lt;.">showUncTypes</a></code> friend <code>std::ostream</code> operator&lt;&lt;.  <a href="classboost_1_1quan_1_1show_unc_types.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classset_all_unc_flags.html">setAllUncFlags</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_all_unc_flags.html">boost::quan::setAllUncFlags</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">setAllUncflags(int flags);  <a href="classboost_1_1quan_1_1set_all_unc_flags.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classset_unc_flags.html">setUncFlags</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_unc_flags.html">boost::quan::setUncFlags</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set selected uncertain flags.  <a href="classboost_1_1quan_1_1set_unc_flags.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classset_masked_unc_flags.html">setMaskedUncFlags</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_masked_unc_flags.html">boost::quan::setMaskedUncFlags</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">setMaskedUncflags(int flags, int mask);  <a href="classboost_1_1quan_1_1set_masked_unc_flags.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classreset_unc_flags.html">resetUncFlags</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1reset_unc_flags.html">boost::quan::resetUncFlags</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset (clear = 0) selected uncertain class flags for a std::stream.  <a href="classboost_1_1quan_1_1reset_unc_flags.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classreset_masked_unc_flags.html">resetMaskedUncFlags</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1reset_masked_unc_flags.html">boost::quan::resetMaskedUncFlags</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classset_unc_width.html">setUncWidth</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_unc_width.html">boost::quan::setUncWidth</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classset_scale.html">setScale</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_scale.html">boost::quan::setScale</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classset_sig_digits.html">setSigDigits</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_sig_digits.html">boost::quan::setSigDigits</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classset_unc_sig_digits.html">setUncSigDigits</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_unc_sig_digits.html">boost::quan::setUncSigDigits</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classset_rounding_loss.html">setRoundingLoss</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_rounding_loss.html">boost::quan::setRoundingLoss</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">setRoundingLoss(int setRoundingLoss); to control the acceptable rounding loss. Usage: `out &lt;&lt; <a class="el" href="classboost_1_1quan_1_1set_rounding_loss.html" title="setRoundingLoss(int setRoundingLoss); to control the acceptable rounding loss. Usage: `out &lt;&lt; setRoun...">setRoundingLoss</a>(0.01)` ...  <a href="classboost_1_1quan_1_1set_rounding_loss.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classset_confidence.html">setConfidence</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_confidence.html">boost::quan::setConfidence</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">setConfidence(int setConfidence); to control the confidence interval. Usage: `out &lt;&lt; <a class="el" href="classboost_1_1quan_1_1set_confidence.html" title="setConfidence(int setConfidence); to control the confidence interval. Usage: `out &lt;&lt; setConfidence(0....">setConfidence</a>(0.01)` ...  <a href="classboost_1_1quan_1_1set_confidence.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunc.html">unc&lt; is_correlated &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1unc.html">boost::quan::unc&lt; is_correlated &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structless_abs.html">lessAbs&lt; Type &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboost_1_1quan_1_1less_abs.html">boost::quan::lessAbs&lt; Type &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Predicate comparison operators for use by sort etc. Functors are _preferred_ to functions for STL algorithms: Scott Meyers, ESTL, item 46, page 201...  <a href="structboost_1_1quan_1_1less_abs.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceboost"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost.html">boost</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceboost_1_1quan"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html">boost::quan</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a90ab32c41dc3c49bb95cf7a6ee9ab4c1"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classunc.html">unc</a>&lt; false &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a90ab32c41dc3c49bb95cf7a6ee9ab4c1">uncun</a></td></tr>
-<tr class="separator:a90ab32c41dc3c49bb95cf7a6ee9ab4c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70b7f4fcdd8eea3edba835bcedd5aec1"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classunc.html">unc</a>&lt; true &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a70b7f4fcdd8eea3edba835bcedd5aec1">unccorr</a></td></tr>
-<tr class="memdesc:a70b7f4fcdd8eea3edba835bcedd5aec1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uncorrelated is the normal case when uncertainties add.  <a href="unc_8hpp.html#a70b7f4fcdd8eea3edba835bcedd5aec1">More...</a><br /></td></tr>
-<tr class="separator:a70b7f4fcdd8eea3edba835bcedd5aec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dd711cf8113866a5c2bf0b48255056e"><td class="memItemLeft" align="right" valign="top">typedef unc&lt; false &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a6dd711cf8113866a5c2bf0b48255056e">boost::quan::uncun</a></td></tr>
+<tr class="separator:a6dd711cf8113866a5c2bf0b48255056e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acca6f05d21ad8cba1761bacbab7b7a53"><td class="memItemLeft" align="right" valign="top">typedef unc&lt; true &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#acca6f05d21ad8cba1761bacbab7b7a53">boost::quan::unccorr</a></td></tr>
+<tr class="memdesc:acca6f05d21ad8cba1761bacbab7b7a53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uncertainties are NOT correlated. Uncorrelated is the normal case when uncertainties add.  <a href="namespaceboost_1_1quan.html#acca6f05d21ad8cba1761bacbab7b7a53">More...</a><br /></td></tr>
+<tr class="separator:acca6f05d21ad8cba1761bacbab7b7a53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a4bfdeee65812d9cc73f9ee7c4c1ca387"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387">unc_types</a> { <br />
-&#160;&#160;<a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a337716cbaec2ab4cce519e694f2724f3">VALUE_ZERO</a> = 1 &lt;&lt; 0
-, <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a4dbdbb9f0703c560765df0b495e2e08e">VALUE_INTEGER</a> = 1 &lt;&lt; 1
-, <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387af56de87cd01d5725c429f2fc72f855da">VALUE_RATIONAL</a> = 1 &lt;&lt; 2
-, <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387aa80f0d3ea1ff26dd8a4c600582cd5587">VALUE_NEGATIVE_ONLY</a> = 1 &lt;&lt; 3
+<tr class="memitem:a6501d4271a4bac72773682ce981ed6cb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cb">boost::quan::unc_types</a> { <br />
+&#160;&#160;<a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cbac3e04578a3172ef65d8bb2c34407cfc5">boost::quan::VALUE_ZERO</a> = 1 &lt;&lt; 0
+, <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cbac95d084b95b029bb4ad921a291f7f167">boost::quan::VALUE_INTEGER</a> = 1 &lt;&lt; 1
+, <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cba163abf3bce6a7f1321c913df6b7f12cd">boost::quan::VALUE_RATIONAL</a> = 1 &lt;&lt; 2
+, <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cbab2143604741d1c61e27ac9effa101aeb">boost::quan::VALUE_NEGATIVE_ONLY</a> = 1 &lt;&lt; 3
 , <br />
-&#160;&#160;<a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a06a996d8ddb7aa959bc7648718e55168">VALUE_POSITIVE_ONLY</a> = 1 &lt;&lt; 4
-, <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a3468dd60340b5a8782fcb9e9ac211eec">UNC_KNOWN</a> = 1 &lt;&lt; 5
-, <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a10120ed09bb2013a9640635f2a799fbc">UNC_NOPLUS</a> = 1 &lt;&lt; 6
-, <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a5d47c395882673b486113eb7de38a73f">UNC_NOMINUS</a> = 1 &lt;&lt; 7
+&#160;&#160;<a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cba0c1ac9bf5de74b55daf28e894a86726b">boost::quan::VALUE_POSITIVE_ONLY</a> = 1 &lt;&lt; 4
+, <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cbad570df32697a0ff5c4b07b2a02d2d36d">boost::quan::UNC_KNOWN</a> = 1 &lt;&lt; 5
+, <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cba47607bc10404eaab2029a582f7998bae">boost::quan::UNC_NOPLUS</a> = 1 &lt;&lt; 6
+, <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cba7b433f293cbad34b0759ce6fb76e0711">boost::quan::UNC_NOMINUS</a> = 1 &lt;&lt; 7
 , <br />
-&#160;&#160;<a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387ad390fdd921c136180ceb271f498f450b">UNC_QUAN_DECIMAL</a> = 1 &lt;&lt; 8
-, <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a4cf174c7d02ea9c53ef092e7eff71f6d">UNC_QUAN_BINARY</a> = 1 &lt;&lt; 9
-, <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387aba4b122167825b83c4de2ac5190d5c7f">UNC_EXPLICIT</a> = 1 &lt;&lt; 10
-, <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a93554056759edc80e835e2c3d9d7a097">UNC_UNIFORM</a> = 1 &lt;&lt; 11
+&#160;&#160;<a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cba0e471c84e01dda2121d929a03baa54e1">boost::quan::UNC_QUAN_DECIMAL</a> = 1 &lt;&lt; 8
+, <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cba5eadb8e4e54a50454a4012dd9b33745b">boost::quan::UNC_QUAN_BINARY</a> = 1 &lt;&lt; 9
+, <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cba724aa597142cb3aa5a0e898bb6723571">boost::quan::UNC_EXPLICIT</a> = 1 &lt;&lt; 10
+, <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cbab0573ee28b085c16b7a34dcf722f4ca6">boost::quan::UNC_UNIFORM</a> = 1 &lt;&lt; 11
 , <br />
-&#160;&#160;<a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387af426cf32f3cbb354af02e42c2685e7a0">UNC_TRIANGULAR</a> = 1 &lt;&lt; 12
-, <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a6d646b27d92c48dec8b1e8723131f600">DEG_FREE_EXACT</a> = 1 &lt;&lt; 13
-, <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387ac81ce34078572393881cc54d19c6a7b8">DEG_FREE_KNOWN</a> = 1 &lt;&lt; 14
-, <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a8f865e9237999e15c90cbf4ede10a9f0">SPARE</a> = 1 &lt;&lt; 15
+&#160;&#160;<a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cba0ece96d8ae6b6d7aa1ead7cfaaa96043">boost::quan::UNC_TRIANGULAR</a> = 1 &lt;&lt; 12
+, <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cbaf28bf250f843a195993713fc82b96cf2">boost::quan::DEG_FREE_EXACT</a> = 1 &lt;&lt; 13
+, <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cba14c62c3c704d84a73fc5f00bf70a6241">boost::quan::DEG_FREE_KNOWN</a> = 1 &lt;&lt; 14
+, <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cbad176f7f851b04183d21beb2193dad29d">boost::quan::SPARE</a> = 1 &lt;&lt; 15
 <br />
  }</td></tr>
-<tr class="memdesc:a4bfdeee65812d9cc73f9ee7c4c1ca387"><td class="mdescLeft">&#160;</td><td class="mdescRight">16 type bits used by unc uncTypes. Bit set = 1 means a positive attribute.  <a href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387">More...</a><br /></td></tr>
-<tr class="separator:a4bfdeee65812d9cc73f9ee7c4c1ca387"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68335ca359c326cfad799912892984fd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fd">uncertainflags</a> { <br />
-&#160;&#160;<a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fda81f62e3d9993ecb7a6028a3b5621f229">defaults</a> = 0
-, <a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fda88b7d5932278a29836942737aca6888d">firm</a> = 1 &lt;&lt; 0
-, <a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fda4f01a573a3bde4134360c61b86e0deb9">setScaled</a> = 1 &lt;&lt; 1
-, <a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fdabcf7e726f642019083e91a3e3b394bfc">autoScaled</a> = 1 &lt;&lt; 2
+<tr class="memdesc:a6501d4271a4bac72773682ce981ed6cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">16 type bits used by unc class uncTypes. Bit set = 1 means a positive attribute. Unctypes are  <a href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cb">More...</a><br /></td></tr>
+<tr class="separator:a6501d4271a4bac72773682ce981ed6cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a998aae9ae06af93365c48a8ff1eabe49"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49">boost::quan::uncIOflags</a> { <br />
+&#160;&#160;<a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49a90a240dddb6bf9dc272919fdacb03d66">boost::quan::defaults</a> = 0
+, <a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49a719e77296a3d6bba0d60905060ac0f9a">boost::quan::firm</a> = 1 &lt;&lt; 0
+, <a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49aeee2aaef5f1abcdcbb7f7e68fd3efda1">boost::quan::setScaled</a> = 1 &lt;&lt; 1
+, <a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49a2e68acb2d822782a52a53802ed6d6f20">boost::quan::autoScaled</a> = 1 &lt;&lt; 2
 , <br />
-&#160;&#160;<a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fda8df10473f985e1e141fe13ce1da4b2e7">plusMinus</a> = 1 &lt;&lt; 3
-, <a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fda6baa1727b244f9c27c5fa1ffcac571d0">addSISymbol</a> = 1 &lt;&lt; 4
-, <a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fdac5a6d576327602677949982970a66740">addSIPrefix</a> = 1 &lt;&lt; 5
-, <a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fdab5a6082eb1bac1b504465d874da18664">noisyDigit</a> = 1 &lt;&lt; 6
+&#160;&#160;<a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49a403a2e0f528416d0462d0defb9305da7">boost::quan::plusMinus</a> = 1 &lt;&lt; 3
+, <a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49ab8ce4dd0a5d1376d7494a3c190c0ea89">boost::quan::addSISymbol</a> = 1 &lt;&lt; 4
+, <a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49a93959d5e227423bcb4c92af3773f703f">boost::quan::addSIPrefix</a> = 1 &lt;&lt; 5
+, <a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49ab24a9224dae06add991e2739bbebfb55">boost::quan::noisyDigit</a> = 1 &lt;&lt; 6
 , <br />
-&#160;&#160;<a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fdab2a25bb3fa47a96152d836fba7ae10d8">useSetSigDigits</a> = 1 &lt;&lt; 7
-, <a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fda88b407bc85e58b05ead828678f88924f">useSetUncSigDigits</a> = 1 &lt;&lt; 8
-, <a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fdaac97fd648aedffb05975e58a9531eee9">degfree</a> = 1 &lt;&lt; 9
-, <a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fdaff39f67935d3386b19b8a89be2eb711a">replicates</a> = 1 &lt;&lt; 0xA
+&#160;&#160;<a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49ab29098167bf15be4cc95ec46b0df67dd">boost::quan::useSetSigDigits</a> = 1 &lt;&lt; 7
+, <a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49a4b34e535ad85a7873713e245d46ae1bf">boost::quan::useSetUncSigDigits</a> = 1 &lt;&lt; 8
+, <a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49a7c7fa16b6a06f506a3f043f0a75ea2ff">boost::quan::degfree</a> = 1 &lt;&lt; 9
+, <a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49a4aabd019b9e098a0fc2307b7291e12df">boost::quan::replicates</a> = 1 &lt;&lt; 0xA
 , <br />
-&#160;&#160;<a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fda12e427a814d05cf13103a609ef21c2f0">limits</a> = 1 &lt;&lt; 0xB
+&#160;&#160;<a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49a4d7927d51dc5e74ff792215b1a522498">boost::quan::limits</a> = 1 &lt;&lt; 0xB
 <br />
  }</td></tr>
-<tr class="memdesc:a68335ca359c326cfad799912892984fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control of printing uncertain values, similar to ios flags.  <a href="unc_8hpp.html#a68335ca359c326cfad799912892984fd">More...</a><br /></td></tr>
-<tr class="separator:a68335ca359c326cfad799912892984fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:a998aae9ae06af93365c48a8ff1eabe49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control of printing uncertain values, similar to <code>std::ios</code> flags.  <a href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49">More...</a><br /></td></tr>
+<tr class="separator:a998aae9ae06af93365c48a8ff1eabe49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ad8206ee286a5c7483d0dfcbc8a8e7122"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#ad8206ee286a5c7483d0dfcbc8a8e7122">BOOST_STATIC_ASSERT</a> (std::numeric_limits&lt; double &gt;::is_iec559)</td></tr>
 <tr class="separator:ad8206ee286a5c7483d0dfcbc8a8e7122"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6440079e98dd8887d51fab1ef9f699eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a6440079e98dd8887d51fab1ef9f699eb">outIosFlags</a> (long, std::ostream &amp;)</td></tr>
-<tr class="separator:a6440079e98dd8887d51fab1ef9f699eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60103b79b2bd1aa73fff30a75e2f1fbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a60103b79b2bd1aa73fff30a75e2f1fbd">outUncTypes</a> (unsigned short int, std::ostream &amp;)</td></tr>
-<tr class="separator:a60103b79b2bd1aa73fff30a75e2f1fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad21d0dc98d92fab16eb1508f0cfaf1c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#ad21d0dc98d92fab16eb1508f0cfaf1c3">unc_input</a> (double &amp;mean, double &amp;stdDev, unsigned short int &amp;degreesOfFreedom, unsigned short int &amp;uncTypes, std::istream &amp;is)</td></tr>
-<tr class="separator:ad21d0dc98d92fab16eb1508f0cfaf1c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae04b5aa8a8645edd72d28e39bdb1c22"><td class="memTemplParams" colspan="2">template&lt;typename Type &gt; </td></tr>
-<tr class="memitem:aae04b5aa8a8645edd72d28e39bdb1c22"><td class="memTemplItemLeft" align="right" valign="top">Type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#aae04b5aa8a8645edd72d28e39bdb1c22">pow4</a> (const Type &amp;a)</td></tr>
-<tr class="separator:aae04b5aa8a8645edd72d28e39bdb1c22"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a86dfe3fd8645366d8c70e03f72079e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a9a86dfe3fd8645366d8c70e03f72079e">outUncValues</a> (std::ostream &amp;os, std::ostream &amp;log)</td></tr>
-<tr class="separator:a9a86dfe3fd8645366d8c70e03f72079e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab30b71d13d47a081eb250591116da869"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#ab30b71d13d47a081eb250591116da869">setUncDefaults</a> (std::ios_base &amp;os)</td></tr>
-<tr class="memdesc:ab30b71d13d47a081eb250591116da869"><td class="mdescLeft">&#160;</td><td class="mdescRight">Random id value.  <a href="unc_8hpp.html#ab30b71d13d47a081eb250591116da869">More...</a><br /></td></tr>
-<tr class="separator:ab30b71d13d47a081eb250591116da869"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29ef9ce3cc2cef3cf823d4d8ce7cde73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a29ef9ce3cc2cef3cf823d4d8ce7cde73">outFpClass</a> (double, std::ostream &amp;)</td></tr>
-<tr class="separator:a29ef9ce3cc2cef3cf823d4d8ce7cde73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bbeee3fe2cf3695b86d1b5c144eea16"><td class="memTemplParams" colspan="2">template&lt;bool correlated&gt; </td></tr>
-<tr class="memitem:a8bbeee3fe2cf3695b86d1b5c144eea16"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a8bbeee3fe2cf3695b86d1b5c144eea16">operator&lt;&lt;</a> (std::ostream &amp;os, const std::pair&lt; <a class="el" href="classunc.html">unc</a>&lt; correlated &gt;, <a class="el" href="classunc.html">unc</a>&lt; correlated &gt; &gt; &amp;up)</td></tr>
-<tr class="separator:a8bbeee3fe2cf3695b86d1b5c144eea16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6afcb34dd5547f26e554971b977df3ce"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a6afcb34dd5547f26e554971b977df3ce"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a6afcb34dd5547f26e554971b977df3ce">value_of</a> (T)</td></tr>
-<tr class="memdesc:a6afcb34dd5547f26e554971b977df3ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">&lt;  <a href="unc_8hpp.html#a6afcb34dd5547f26e554971b977df3ce">More...</a><br /></td></tr>
-<tr class="separator:a6afcb34dd5547f26e554971b977df3ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5afef577fbbe8eb573ca040b88fec19e"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a5afef577fbbe8eb573ca040b88fec19e"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a5afef577fbbe8eb573ca040b88fec19e">unc_of</a> (T)</td></tr>
-<tr class="separator:a5afef577fbbe8eb573ca040b88fec19e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc2e58d832c6dcd11d32274b1c448884"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:afc2e58d832c6dcd11d32274b1c448884"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#afc2e58d832c6dcd11d32274b1c448884">values_of</a> (std::pair&lt; T, T &gt;)</td></tr>
-<tr class="separator:afc2e58d832c6dcd11d32274b1c448884"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5f610a935fed85b63b0711cee607ac7"><td class="memTemplParams" colspan="2">template&lt;class T1 , class T2 &gt; </td></tr>
-<tr class="memitem:ab5f610a935fed85b63b0711cee607ac7"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#ab5f610a935fed85b63b0711cee607ac7">values_of</a> (std::pair&lt; T1, T2 &gt;)</td></tr>
-<tr class="separator:ab5f610a935fed85b63b0711cee607ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2665049be81d198070abebf59d569a8"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:ae2665049be81d198070abebf59d569a8"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#ae2665049be81d198070abebf59d569a8">uncs_of</a> (std::pair&lt; T, T &gt;)</td></tr>
-<tr class="memdesc:ae2665049be81d198070abebf59d569a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get uncertainties (standard deviation) as a pair of const float values.  <a href="unc_8hpp.html#ae2665049be81d198070abebf59d569a8">More...</a><br /></td></tr>
-<tr class="separator:ae2665049be81d198070abebf59d569a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac928d7fc3a9818f34780f0d20a12f60"><td class="memTemplParams" colspan="2">template&lt;class T1 , class T2 &gt; </td></tr>
-<tr class="memitem:aac928d7fc3a9818f34780f0d20a12f60"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#aac928d7fc3a9818f34780f0d20a12f60">uncs_of</a> (std::pair&lt; T1, T2 &gt;)</td></tr>
-<tr class="separator:aac928d7fc3a9818f34780f0d20a12f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b7ae8995d3d0392d66ccb3f4fba41cb"><td class="memItemLeft" align="right" valign="top">autoprefix_norm_impl&lt; <a class="el" href="classunc.html">unc</a>&lt; false &gt;, true &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a6b7ae8995d3d0392d66ccb3f4fba41cb">autoprefix_norm</a> (const <a class="el" href="classunc.html">unc</a>&lt; false &gt; &amp;arg)</td></tr>
-<tr class="separator:a6b7ae8995d3d0392d66ccb3f4fba41cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebcaf3a92e6c8be9c774b1ed6b84c239"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aebcaf3a92e6c8be9c774b1ed6b84c239">boost::quan::unc_input</a> (double &amp;mean, double &amp;stdDev, unsigned short int &amp;degreesOfFreedom, unsigned short int &amp;uncTypes, std::istream &amp;is)</td></tr>
+<tr class="memdesc:aebcaf3a92e6c8be9c774b1ed6b84c239"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uncertainties ARE correlated. This is the unusual case where the sum must be exact, so the uncertainties are subtracted. Example: two blocks which fit into a box perfectly. So if both have an uncertainties, they must cancel when the uncertainties are added. Also applies to items like concentrations which must add up to 100% or unity.  <a href="namespaceboost_1_1quan.html#aebcaf3a92e6c8be9c774b1ed6b84c239">More...</a><br /></td></tr>
+<tr class="separator:aebcaf3a92e6c8be9c774b1ed6b84c239"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afaa8acafded6d9b3669084126ce0114e"><td class="memTemplParams" colspan="2">template&lt;typename Type &gt; </td></tr>
+<tr class="memitem:afaa8acafded6d9b3669084126ce0114e"><td class="memTemplItemLeft" align="right" valign="top">Type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#afaa8acafded6d9b3669084126ce0114e">boost::quan::pow4</a> (const Type &amp;a)</td></tr>
+<tr class="memdesc:afaa8acafded6d9b3669084126ce0114e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Quaded function, notationally convenient for x^4, but overflow possible? Used by Welch-Satterthwaite formula.  <a href="namespaceboost_1_1quan.html#afaa8acafded6d9b3669084126ce0114e">More...</a><br /></td></tr>
+<tr class="separator:afaa8acafded6d9b3669084126ce0114e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a580af4a675227f3784636fc806c52c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a5a580af4a675227f3784636fc806c52c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a5a580af4a675227f3784636fc806c52c">boost::quan::outFpClass</a> (T, std::ostream &amp;)</td></tr>
+<tr class="separator:a5a580af4a675227f3784636fc806c52c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf2289c1a1a1fec1b7de35397a006722"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aaf2289c1a1a1fec1b7de35397a006722">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const showUncTypes &amp;ut)</td></tr>
+<tr class="memdesc:aaf2289c1a1a1fec1b7de35397a006722"><td class="mdescLeft">&#160;</td><td class="mdescRight"><code>Extract</code> operator&lt;&lt; to show all the 16 types of an uncertain item. Example:  <a href="namespaceboost_1_1quan.html#aaf2289c1a1a1fec1b7de35397a006722">More...</a><br /></td></tr>
+<tr class="separator:aaf2289c1a1a1fec1b7de35397a006722"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1663c22d877e50c72b46eef904223f04"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a1663c22d877e50c72b46eef904223f04">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const setAllUncFlags &amp;sf)</td></tr>
+<tr class="separator:a1663c22d877e50c72b46eef904223f04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d69cb3b9089d0a30abe8fd0e4b924d2"><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a1d69cb3b9089d0a30abe8fd0e4b924d2">boost::quan::operator&gt;&gt;</a> (std::istream &amp;is, const setAllUncFlags &amp;sf)</td></tr>
+<tr class="separator:a1d69cb3b9089d0a30abe8fd0e4b924d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24953db28b9e2596c0651aeaee322b30"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a24953db28b9e2596c0651aeaee322b30">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const setUncFlags &amp;sf)</td></tr>
+<tr class="separator:a24953db28b9e2596c0651aeaee322b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66d254faa779275736ba31c5cf4bd7da"><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a66d254faa779275736ba31c5cf4bd7da">boost::quan::operator&gt;&gt;</a> (std::istream &amp;is, const setUncFlags &amp;sf)</td></tr>
+<tr class="separator:a66d254faa779275736ba31c5cf4bd7da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a274dfffa98c02bf8d8117fb07f4648be"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a274dfffa98c02bf8d8117fb07f4648be">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const resetUncFlags &amp;sf)</td></tr>
+<tr class="separator:a274dfffa98c02bf8d8117fb07f4648be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24382fdfd3a64c235878ded379ad2e09"><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a24382fdfd3a64c235878ded379ad2e09">boost::quan::operator&gt;&gt;</a> (std::istream &amp;is, const resetUncFlags &amp;sf)</td></tr>
+<tr class="separator:a24382fdfd3a64c235878ded379ad2e09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a129940974a375ea38a066068a962ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a5a129940974a375ea38a066068a962ef">boost::quan::setUncDefaults</a> (std::ios_base &amp;os)</td></tr>
+<tr class="memdesc:a5a129940974a375ea38a066068a962ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Random id value bracketing the various uncertain class display attributes.  <a href="namespaceboost_1_1quan.html#a5a129940974a375ea38a066068a962ef">More...</a><br /></td></tr>
+<tr class="separator:a5a129940974a375ea38a066068a962ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a416ffcff06eb51d06caadd376d2ecf63"><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a416ffcff06eb51d06caadd376d2ecf63">boost::quan::operator&gt;&gt;</a> (std::istream &amp;is, unc&lt; false &gt; &amp;ud)</td></tr>
+<tr class="memdesc:a416ffcff06eb51d06caadd376d2ecf63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract operator&lt;&lt; for unc type.  <a href="namespaceboost_1_1quan.html#a416ffcff06eb51d06caadd376d2ecf63">More...</a><br /></td></tr>
+<tr class="separator:a416ffcff06eb51d06caadd376d2ecf63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5ab04fc0ffceb72abe8daeb8c2472a6"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ae5ab04fc0ffceb72abe8daeb8c2472a6">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const unc&lt; false &gt; &amp;val)</td></tr>
+<tr class="memdesc:ae5ab04fc0ffceb72abe8daeb8c2472a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract <code>operator&lt;&lt;</code> for uncertain types. Example:  <a href="namespaceboost_1_1quan.html#ae5ab04fc0ffceb72abe8daeb8c2472a6">More...</a><br /></td></tr>
+<tr class="separator:ae5ab04fc0ffceb72abe8daeb8c2472a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed864b416f2b73bf7d506430e61e8ab8"><td class="memTemplParams" colspan="2">template&lt;bool correlated&gt; </td></tr>
+<tr class="memitem:aed864b416f2b73bf7d506430e61e8ab8"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aed864b416f2b73bf7d506430e61e8ab8">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const std::pair&lt; unc&lt; correlated &gt;, unc&lt; correlated &gt; &gt; &amp;up)</td></tr>
+<tr class="separator:aed864b416f2b73bf7d506430e61e8ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ce80ee18589e4770b7e7b9640e69ecc"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a9ce80ee18589e4770b7e7b9640e69ecc"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a9ce80ee18589e4770b7e7b9640e69ecc">boost::quan::value_of</a> (T)</td></tr>
+<tr class="memdesc:a9ce80ee18589e4770b7e7b9640e69ecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Two helper functions to provide values and uncertainties as pairs.  <a href="namespaceboost_1_1quan.html#a9ce80ee18589e4770b7e7b9640e69ecc">More...</a><br /></td></tr>
+<tr class="separator:a9ce80ee18589e4770b7e7b9640e69ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2129103efec2f2bf8507576e56287240"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a2129103efec2f2bf8507576e56287240"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a2129103efec2f2bf8507576e56287240">boost::quan::unc_of</a> (T)</td></tr>
+<tr class="separator:a2129103efec2f2bf8507576e56287240"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dbbb5aa36191b1222742268cfc169f2"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a6dbbb5aa36191b1222742268cfc169f2"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a6dbbb5aa36191b1222742268cfc169f2">boost::quan::values_of</a> (std::pair&lt; T, T &gt;)</td></tr>
+<tr class="separator:a6dbbb5aa36191b1222742268cfc169f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa47cb024b8f7b00c3b1e1baa30040f92"><td class="memTemplParams" colspan="2">template&lt;class T1 , class T2 &gt; </td></tr>
+<tr class="memitem:aa47cb024b8f7b00c3b1e1baa30040f92"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aa47cb024b8f7b00c3b1e1baa30040f92">boost::quan::values_of</a> (std::pair&lt; T1, T2 &gt;)</td></tr>
+<tr class="separator:aa47cb024b8f7b00c3b1e1baa30040f92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9235ae3a74de17fc157b297c35edc68"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:ad9235ae3a74de17fc157b297c35edc68"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ad9235ae3a74de17fc157b297c35edc68">boost::quan::uncs_of</a> (std::pair&lt; T, T &gt;)</td></tr>
+<tr class="memdesc:ad9235ae3a74de17fc157b297c35edc68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get uncertainties (standard deviation) as a pair of const float values.  <a href="namespaceboost_1_1quan.html#ad9235ae3a74de17fc157b297c35edc68">More...</a><br /></td></tr>
+<tr class="separator:ad9235ae3a74de17fc157b297c35edc68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2c9d0066fb08fadf879a71e07e0c050"><td class="memTemplParams" colspan="2">template&lt;class T1 , class T2 &gt; </td></tr>
+<tr class="memitem:aa2c9d0066fb08fadf879a71e07e0c050"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aa2c9d0066fb08fadf879a71e07e0c050">boost::quan::uncs_of</a> (std::pair&lt; T1, T2 &gt;)</td></tr>
+<tr class="separator:aa2c9d0066fb08fadf879a71e07e0c050"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf28b1820e85e0a299a2f8f8d9cb0a7f"><td class="memItemLeft" align="right" valign="top">autoprefix_norm_impl&lt; unc&lt; false &gt;, true &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#acf28b1820e85e0a299a2f8f8d9cb0a7f">boost::quan::autoprefix_norm</a> (const unc&lt; false &gt; &amp;arg)</td></tr>
+<tr class="separator:acf28b1820e85e0a299a2f8f8d9cb0a7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea452c74371a964e82d1d1f79b45874f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aea452c74371a964e82d1d1f79b45874f">boost::quan::outUncValues</a> (std::ostream &amp;os=std::cout, std::ostream &amp;log=std::cerr)</td></tr>
+<tr class="separator:aea452c74371a964e82d1d1f79b45874f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd7603afe4a56b3501e4f856460cf2b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#afd7603afe4a56b3501e4f856460cf2b3">boost::quan::outUncTypes</a> (unsigned short int uncTypes, std::ostream &amp;os=std::cerr)</td></tr>
+<tr class="separator:afd7603afe4a56b3501e4f856460cf2b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa780e72c53ab35260f94ffad0dd35b01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aa780e72c53ab35260f94ffad0dd35b01">boost::quan::outUncIOFlags</a> (long uncFlags, std::ostream &amp;os=std::cerr, std::string terminator=&quot;.\n&quot;)</td></tr>
+<tr class="separator:aa780e72c53ab35260f94ffad0dd35b01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ffed5d1647ffffdcd0a7bff8d298138"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a0ffed5d1647ffffdcd0a7bff8d298138">boost::quan::outUncIOFlags</a> (std::ostream &amp;os=std::cout, std::ostream &amp;osout=std::cerr, std::string terminator=&quot;.\n&quot;)</td></tr>
+<tr class="separator:a0ffed5d1647ffffdcd0a7bff8d298138"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefd45ac0473bbf0ecd3dc32e5f6bb9f7"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aefd45ac0473bbf0ecd3dc32e5f6bb9f7">boost::quan::flexform</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:aefd45ac0473bbf0ecd3dc32e5f6bb9f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameterless manipulators to switch format by changing uncFlag bits, flex - adjust width just enough to display, suitable for in-line display of non-tables, or firm to fit into a set width, suitable for tables.  <a href="namespaceboost_1_1quan.html#aefd45ac0473bbf0ecd3dc32e5f6bb9f7">More...</a><br /></td></tr>
+<tr class="separator:aefd45ac0473bbf0ecd3dc32e5f6bb9f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69b801bd38cb8d8361c1c722c191a010"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a69b801bd38cb8d8361c1c722c191a010">boost::quan::firmform</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="separator:a69b801bd38cb8d8361c1c722c191a010"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31ac02a9a1b63fb1749b8ddd87aff295"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a31ac02a9a1b63fb1749b8ddd87aff295">boost::quan::scale</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a31ac02a9a1b63fb1749b8ddd87aff295"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that scaling of output values to a preset factor takes place for output of <b>value</b> (mean) of class <code>unc</code>. This is NOT the default.  <a href="namespaceboost_1_1quan.html#a31ac02a9a1b63fb1749b8ddd87aff295">More...</a><br /></td></tr>
+<tr class="separator:a31ac02a9a1b63fb1749b8ddd87aff295"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac08dabc7211ec75b9462f9d2288b059f"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ac08dabc7211ec75b9462f9d2288b059f">boost::quan::noscale</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:ac08dabc7211ec75b9462f9d2288b059f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that NO scaling of output values to a preset factor takes place for output of <b>value</b> (mean) of class <code>unc</code>. This is the default.  <a href="namespaceboost_1_1quan.html#ac08dabc7211ec75b9462f9d2288b059f">More...</a><br /></td></tr>
+<tr class="separator:ac08dabc7211ec75b9462f9d2288b059f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a446b894ab9721cbf2173a5ebcc55d6c2"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a446b894ab9721cbf2173a5ebcc55d6c2">boost::quan::autoscale</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a446b894ab9721cbf2173a5ebcc55d6c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that autoscaling of output values takes place for output of <b>value</b> (mean) of class <code>unc</code>. This is NOT the default.  <a href="namespaceboost_1_1quan.html#a446b894ab9721cbf2173a5ebcc55d6c2">More...</a><br /></td></tr>
+<tr class="separator:a446b894ab9721cbf2173a5ebcc55d6c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e0f3a5504ffd1435d64876ba04f89b4"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a6e0f3a5504ffd1435d64876ba04f89b4">boost::quan::noautoscale</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a6e0f3a5504ffd1435d64876ba04f89b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that no autoscaling of output values takes place for output of <b>value</b> (mean) of class <code>unc</code>. This is the default.  <a href="namespaceboost_1_1quan.html#a6e0f3a5504ffd1435d64876ba04f89b4">More...</a><br /></td></tr>
+<tr class="separator:a6e0f3a5504ffd1435d64876ba04f89b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96f7b027d04b0b3e2616a0fb400e3c3a"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a96f7b027d04b0b3e2616a0fb400e3c3a">boost::quan::plusminus</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a96f7b027d04b0b3e2616a0fb400e3c3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that uncertainty estimate, usually standard deviation, is added when for output of <b>value</b> (mean) of class <code>unc</code>. This is NOT the default.  <a href="namespaceboost_1_1quan.html#a96f7b027d04b0b3e2616a0fb400e3c3a">More...</a><br /></td></tr>
+<tr class="separator:a96f7b027d04b0b3e2616a0fb400e3c3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67c048524e825a05107bc60f2956c328"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a67c048524e825a05107bc60f2956c328">boost::quan::noplusminus</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a67c048524e825a05107bc60f2956c328"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that NO uncertainty estimate, usually standard deviation, is added when for output of <b>value</b> (mean) of class <code>unc</code>. This is the default.  <a href="namespaceboost_1_1quan.html#a67c048524e825a05107bc60f2956c328">More...</a><br /></td></tr>
+<tr class="separator:a67c048524e825a05107bc60f2956c328"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54215934ff33e147ecf0e5a1a3bf2f20"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a54215934ff33e147ecf0e5a1a3bf2f20">boost::quan::addsisymbol</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a54215934ff33e147ecf0e5a1a3bf2f20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that an appropriate SI symbol is added when for output of <b>value</b> (mean) of class <code>unc</code>. This is NOT the default.  <a href="namespaceboost_1_1quan.html#a54215934ff33e147ecf0e5a1a3bf2f20">More...</a><br /></td></tr>
+<tr class="separator:a54215934ff33e147ecf0e5a1a3bf2f20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2355674618d2ef62d6d6acb5aa4f3d57"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a2355674618d2ef62d6d6acb5aa4f3d57">boost::quan::nosisymbol</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a2355674618d2ef62d6d6acb5aa4f3d57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that no SI symbol is added when for output of <b>value</b> (mean) of class <code>unc</code>. This is the default.  <a href="namespaceboost_1_1quan.html#a2355674618d2ef62d6d6acb5aa4f3d57">More...</a><br /></td></tr>
+<tr class="separator:a2355674618d2ef62d6d6acb5aa4f3d57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55b9b239d73bdfde3b255daaa013992c"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a55b9b239d73bdfde3b255daaa013992c">boost::quan::addsiprefix</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a55b9b239d73bdfde3b255daaa013992c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that an appropriate SI prefix is added when for output of <b>value</b> (mean) of class <code>unc</code>. This is NOT the default.  <a href="namespaceboost_1_1quan.html#a55b9b239d73bdfde3b255daaa013992c">More...</a><br /></td></tr>
+<tr class="separator:a55b9b239d73bdfde3b255daaa013992c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abff97ba8836577653d78466c81145483"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#abff97ba8836577653d78466c81145483">boost::quan::nosiprefix</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:abff97ba8836577653d78466c81145483"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that no SI prefix is added when for output of <b>value</b> (mean) of class <code>unc</code>. This is the default.  <a href="namespaceboost_1_1quan.html#abff97ba8836577653d78466c81145483">More...</a><br /></td></tr>
+<tr class="separator:abff97ba8836577653d78466c81145483"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bc5f0377f257a986da8330e1d27271c"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a9bc5f0377f257a986da8330e1d27271c">boost::quan::addnoisyDigit</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a9bc5f0377f257a986da8330e1d27271c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that an extra probably 'noisy' digit is added when for output of <b>value</b> (mean) of class <code>unc</code>. This is useful if the value is being read into some other system thus avoiding digital quantization errors.  <a href="namespaceboost_1_1quan.html#a9bc5f0377f257a986da8330e1d27271c">More...</a><br /></td></tr>
+<tr class="separator:a9bc5f0377f257a986da8330e1d27271c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a0ee3cff2be917ff7278a1c4f657068"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a3a0ee3cff2be917ff7278a1c4f657068">boost::quan::nonoisyDigit</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a3a0ee3cff2be917ff7278a1c4f657068"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that an extra probably 'noisy' digit is NOT added when for output of <b>value</b> (mean) of class <code>unc</code>. (This is only useful if the value is being read into some other system thus avoiding digital quantization errors). No noisy digit is the default.  <a href="namespaceboost_1_1quan.html#a3a0ee3cff2be917ff7278a1c4f657068">More...</a><br /></td></tr>
+<tr class="separator:a3a0ee3cff2be917ff7278a1c4f657068"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f5148d369a7811e29e7d2dd6913b83c"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a5f5148d369a7811e29e7d2dd6913b83c">boost::quan::autosigdigits</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a5f5148d369a7811e29e7d2dd6913b83c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that the number of significant digits (prcision) for output of <b>value</b> (mean) of class <code>unc</code> is computed from the uncertain class <code>unc</code> itself.  <a href="namespaceboost_1_1quan.html#a5f5148d369a7811e29e7d2dd6913b83c">More...</a><br /></td></tr>
+<tr class="separator:a5f5148d369a7811e29e7d2dd6913b83c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6d16bda9ad94f8ac23594ebc487f13d"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ab6d16bda9ad94f8ac23594ebc487f13d">boost::quan::setsigdigits</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:ab6d16bda9ad94f8ac23594ebc487f13d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that the number of significant digits (precision) for output of <b>value</b> of class <code>unc</code> is controlled by the set precision.  <a href="namespaceboost_1_1quan.html#ab6d16bda9ad94f8ac23594ebc487f13d">More...</a><br /></td></tr>
+<tr class="separator:ab6d16bda9ad94f8ac23594ebc487f13d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac846067ffa6ca178e019ea5d19225d70"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ac846067ffa6ca178e019ea5d19225d70">boost::quan::autouncsigdigits</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:ac846067ffa6ca178e019ea5d19225d70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> so that the number of significant digits (prcision) for output of uncertainty (standard deviation) of class <code>unc</code> is computed from the uncertain class <code>unc</code> itself.  <a href="namespaceboost_1_1quan.html#ac846067ffa6ca178e019ea5d19225d70">More...</a><br /></td></tr>
+<tr class="separator:ac846067ffa6ca178e019ea5d19225d70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abaf665f9a0c50fc51ca8c042c89a82df"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#abaf665f9a0c50fc51ca8c042c89a82df">boost::quan::setuncsigdigits</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:abaf665f9a0c50fc51ca8c042c89a82df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> to set the number of significant digits for output of uncertainty of class <code>unc</code>, for example: +/- 1.23.  <a href="namespaceboost_1_1quan.html#abaf665f9a0c50fc51ca8c042c89a82df">More...</a><br /></td></tr>
+<tr class="separator:abaf665f9a0c50fc51ca8c042c89a82df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64da16bcf5b3a051928d2c90944c2711"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a64da16bcf5b3a051928d2c90944c2711">boost::quan::adddegfree</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a64da16bcf5b3a051928d2c90944c2711"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <code>std::ostream</code> to add degrees of freedom to output of uncertain class <code>unc</code> as, for example: (99).  <a href="namespaceboost_1_1quan.html#a64da16bcf5b3a051928d2c90944c2711">More...</a><br /></td></tr>
+<tr class="separator:a64da16bcf5b3a051928d2c90944c2711"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11ed183453cb013d530cb4a1e15b99b7"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a11ed183453cb013d530cb4a1e15b99b7">boost::quan::nodegfree</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a11ed183453cb013d530cb4a1e15b99b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set stream to NOT add degrees of freedom as for example: (99).  <a href="namespaceboost_1_1quan.html#a11ed183453cb013d530cb4a1e15b99b7">More...</a><br /></td></tr>
+<tr class="separator:a11ed183453cb013d530cb4a1e15b99b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7be1cb7bdd2d6c3a0f1752fc4d4d515"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aa7be1cb7bdd2d6c3a0f1752fc4d4d515">boost::quan::addlimits</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:aa7be1cb7bdd2d6c3a0f1752fc4d4d515"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set stream to add confidence limits as interval for example: &lt;1.23, 1.26&gt;.  <a href="namespaceboost_1_1quan.html#aa7be1cb7bdd2d6c3a0f1752fc4d4d515">More...</a><br /></td></tr>
+<tr class="separator:aa7be1cb7bdd2d6c3a0f1752fc4d4d515"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a587084653f2bd2b327c0a6af66acc556"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a587084653f2bd2b327c0a6af66acc556">boost::quan::nolimits</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="memdesc:a587084653f2bd2b327c0a6af66acc556"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set stream to NOT add confidence limits as interval for example: &lt;1.23, 1.26&gt;.  <a href="namespaceboost_1_1quan.html#a587084653f2bd2b327c0a6af66acc556">More...</a><br /></td></tr>
+<tr class="separator:a587084653f2bd2b327c0a6af66acc556"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b92adab7befb911b0c4c6fcdfa904d8"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a2b92adab7befb911b0c4c6fcdfa904d8">boost::quan::showuncflags</a> (std::ios_base &amp;iostr)</td></tr>
+<tr class="separator:a2b92adab7befb911b0c4c6fcdfa904d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f9df4eb4d8eb9dba2676fa6e6d97abc"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a0f9df4eb4d8eb9dba2676fa6e6d97abc">boost::quan::uFlags</a> (std::ios_base &amp;str)</td></tr>
+<tr class="separator:a0f9df4eb4d8eb9dba2676fa6e6d97abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2383d6b1d36dfc697f5586b9bdabcfdc"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a2383d6b1d36dfc697f5586b9bdabcfdc">boost::quan::uFlags</a> (std::ios_base &amp;str, long flags)</td></tr>
+<tr class="separator:a2383d6b1d36dfc697f5586b9bdabcfdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f38274d4a338cfecce55d4c1f6405c"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#af8f38274d4a338cfecce55d4c1f6405c">boost::quan::setuFlags</a> (std::ios_base &amp;str, long flags)</td></tr>
+<tr class="separator:af8f38274d4a338cfecce55d4c1f6405c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5541d1702dd1aaaf2820a8b6781032a"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aa5541d1702dd1aaaf2820a8b6781032a">boost::quan::resetuFlags</a> (std::ios_base &amp;str, long flags)</td></tr>
+<tr class="separator:aa5541d1702dd1aaaf2820a8b6781032a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33eab81bacd27fcfe3afd680994fa5e8"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a33eab81bacd27fcfe3afd680994fa5e8">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const showUncFlags &amp;uf)</td></tr>
+<tr class="memdesc:a33eab81bacd27fcfe3afd680994fa5e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output uncFlags as descriptive word strings to this <code>std::ostream</code>.  <a href="namespaceboost_1_1quan.html#a33eab81bacd27fcfe3afd680994fa5e8">More...</a><br /></td></tr>
+<tr class="separator:a33eab81bacd27fcfe3afd680994fa5e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1958d7c24640a1c8b9125f8c6849328c"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a1958d7c24640a1c8b9125f8c6849328c">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const setMaskedUncFlags &amp;sf)</td></tr>
+<tr class="separator:a1958d7c24640a1c8b9125f8c6849328c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6c2b23f16804ee269e9ef4487f01e6d"><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ac6c2b23f16804ee269e9ef4487f01e6d">boost::quan::operator&gt;&gt;</a> (std::istream &amp;is, const setMaskedUncFlags &amp;sf)</td></tr>
+<tr class="separator:ac6c2b23f16804ee269e9ef4487f01e6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97c3d8f27efcd29b33ceb7759c5eec1b"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a97c3d8f27efcd29b33ceb7759c5eec1b">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const resetMaskedUncFlags &amp;sf)</td></tr>
+<tr class="memdesc:a97c3d8f27efcd29b33ceb7759c5eec1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset (clear) the bits specified in the <code>uncFlagsIndex</code>.  <a href="namespaceboost_1_1quan.html#a97c3d8f27efcd29b33ceb7759c5eec1b">More...</a><br /></td></tr>
+<tr class="separator:a97c3d8f27efcd29b33ceb7759c5eec1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ed9d9920835d5f451ce8418edd80c5e"><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a2ed9d9920835d5f451ce8418edd80c5e">boost::quan::operator&gt;&gt;</a> (std::istream &amp;is, const resetMaskedUncFlags &amp;sf)</td></tr>
+<tr class="separator:a2ed9d9920835d5f451ce8418edd80c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac71285b7279c3f53ce181c475539c82c"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ac71285b7279c3f53ce181c475539c82c">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const setUncWidth &amp;sw)</td></tr>
+<tr class="separator:ac71285b7279c3f53ce181c475539c82c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fe0466eca00a18a7ad931a12e9443ce"><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a4fe0466eca00a18a7ad931a12e9443ce">boost::quan::operator&gt;&gt;</a> (std::istream &amp;is, const setUncWidth &amp;sw)</td></tr>
+<tr class="separator:a4fe0466eca00a18a7ad931a12e9443ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac219cefde3728cf98a5a4b218e6c381c"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ac219cefde3728cf98a5a4b218e6c381c">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const setScale &amp;sc)</td></tr>
+<tr class="separator:ac219cefde3728cf98a5a4b218e6c381c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94b8142c030336e718a16587a7b4fb24"><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a94b8142c030336e718a16587a7b4fb24">boost::quan::operator&gt;&gt;</a> (std::istream &amp;is, const setScale &amp;sc)</td></tr>
+<tr class="separator:a94b8142c030336e718a16587a7b4fb24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a683a9b69cc8aac28ea5b4841612ae749"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a683a9b69cc8aac28ea5b4841612ae749">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const setSigDigits &amp;sf)</td></tr>
+<tr class="separator:a683a9b69cc8aac28ea5b4841612ae749"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac16489c677974a35ff1f6e7287d81ffd"><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ac16489c677974a35ff1f6e7287d81ffd">boost::quan::operator&gt;&gt;</a> (std::istream &amp;is, const setSigDigits &amp;sf)</td></tr>
+<tr class="separator:ac16489c677974a35ff1f6e7287d81ffd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5549e6389ee10b4cdaf9d4caa051730d"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a5549e6389ee10b4cdaf9d4caa051730d">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const setUncSigDigits &amp;usf)</td></tr>
+<tr class="separator:a5549e6389ee10b4cdaf9d4caa051730d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae3803057d58196071e1a26b85e63e9f"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aae3803057d58196071e1a26b85e63e9f">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const setRoundingLoss &amp;sl)</td></tr>
+<tr class="separator:aae3803057d58196071e1a26b85e63e9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ba600a770e273c3383a38a7a9b79229"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a6ba600a770e273c3383a38a7a9b79229">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const setConfidence &amp;sl)</td></tr>
+<tr class="separator:a6ba600a770e273c3383a38a7a9b79229"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60874c232305c659ab9bcf5e7351c3c9"><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a60874c232305c659ab9bcf5e7351c3c9">boost::quan::operator&gt;&gt;</a> (std::istream &amp;is, const setUncSigDigits &amp;usf)</td></tr>
+<tr class="separator:a60874c232305c659ab9bcf5e7351c3c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d04e006a8b10ae5c2c031d6913b3dd6"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a1d04e006a8b10ae5c2c031d6913b3dd6"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a1d04e006a8b10ae5c2c031d6913b3dd6">boost::quan::value_of</a> (double v)</td></tr>
+<tr class="memdesc:a1d04e006a8b10ae5c2c031d6913b3dd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">&lt;  <a href="namespaceboost_1_1quan.html#a1d04e006a8b10ae5c2c031d6913b3dd6">More...</a><br /></td></tr>
+<tr class="separator:a1d04e006a8b10ae5c2c031d6913b3dd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26fb6802e4a43f00ab5637a2795ec293"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a26fb6802e4a43f00ab5637a2795ec293"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a26fb6802e4a43f00ab5637a2795ec293">boost::quan::value_of</a> (unc&lt; true &gt; v)</td></tr>
+<tr class="separator:a26fb6802e4a43f00ab5637a2795ec293"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7541d80573018c04e96a948d8299658f"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a7541d80573018c04e96a948d8299658f"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a7541d80573018c04e96a948d8299658f">boost::quan::value_of</a> (unc&lt; false &gt; v)</td></tr>
+<tr class="separator:a7541d80573018c04e96a948d8299658f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09e79eb37ef0c73f7e54c9b590a1770f"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a09e79eb37ef0c73f7e54c9b590a1770f"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a09e79eb37ef0c73f7e54c9b590a1770f">boost::quan::unc_of</a> (double)</td></tr>
+<tr class="separator:a09e79eb37ef0c73f7e54c9b590a1770f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91c281342b13193f0b4b780d2cf628a9"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a91c281342b13193f0b4b780d2cf628a9"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a91c281342b13193f0b4b780d2cf628a9">boost::quan::unc_of</a> (float)</td></tr>
+<tr class="separator:a91c281342b13193f0b4b780d2cf628a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a696ef49bcc9a7ebf803dbcb0b4ed24ae"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a696ef49bcc9a7ebf803dbcb0b4ed24ae"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a696ef49bcc9a7ebf803dbcb0b4ed24ae">boost::quan::unc_of</a> (uncun u)</td></tr>
+<tr class="separator:a696ef49bcc9a7ebf803dbcb0b4ed24ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a5183ce15f771e17aaf1c5575193434"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a0a5183ce15f771e17aaf1c5575193434"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a0a5183ce15f771e17aaf1c5575193434">boost::quan::values_of</a> (std::pair&lt; double, double &gt; vp)</td></tr>
+<tr class="separator:a0a5183ce15f771e17aaf1c5575193434"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a604ab577ac5affa37c1d2bc44307a8f5"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a604ab577ac5affa37c1d2bc44307a8f5"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a604ab577ac5affa37c1d2bc44307a8f5">boost::quan::values_of</a> (std::pair&lt; uncun, uncun &gt; vp)</td></tr>
+<tr class="separator:a604ab577ac5affa37c1d2bc44307a8f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63cc7a25d0a8e8a87ff342c59dde7865"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a63cc7a25d0a8e8a87ff342c59dde7865"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a63cc7a25d0a8e8a87ff342c59dde7865">boost::quan::uncs_of</a> (std::pair&lt; double, double &gt; vp)</td></tr>
+<tr class="memdesc:a63cc7a25d0a8e8a87ff342c59dde7865"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get uncertainties (standard deviation) of a pair of values.  <a href="namespaceboost_1_1quan.html#a63cc7a25d0a8e8a87ff342c59dde7865">More...</a><br /></td></tr>
+<tr class="separator:a63cc7a25d0a8e8a87ff342c59dde7865"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6b8e9259a1d9ef812c210b57b824bed"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:aa6b8e9259a1d9ef812c210b57b824bed"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aa6b8e9259a1d9ef812c210b57b824bed">boost::quan::uncs_of</a> (std::pair&lt; uncun, uncun &gt; vp)</td></tr>
+<tr class="memdesc:aa6b8e9259a1d9ef812c210b57b824bed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get uncertainties (standard deviation) as a pair of double values.  <a href="namespaceboost_1_1quan.html#aa6b8e9259a1d9ef812c210b57b824bed">More...</a><br /></td></tr>
+<tr class="separator:aa6b8e9259a1d9ef812c210b57b824bed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5af1368f48959e42b1e2b11866534f56"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a5af1368f48959e42b1e2b11866534f56"><td class="memTemplItemLeft" align="right" valign="top">const std::pair&lt; float, float &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a5af1368f48959e42b1e2b11866534f56">boost::quan::uncs_of</a> (std::pair&lt; const T, T &gt; vp)</td></tr>
+<tr class="memdesc:a5af1368f48959e42b1e2b11866534f56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get uncertainties (standard deviation) as a pair of const float values.  <a href="namespaceboost_1_1quan.html#a5af1368f48959e42b1e2b11866534f56">More...</a><br /></td></tr>
+<tr class="separator:a5af1368f48959e42b1e2b11866534f56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a886bb517d4f002810556894e0f4536da"><td class="memItemLeft" align="right" valign="top">const unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a886bb517d4f002810556894e0f4536da">VALUE_EXACT</a> = (<a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a5d47c395882673b486113eb7de38a73f">UNC_NOMINUS</a> | <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a10120ed09bb2013a9640635f2a799fbc">UNC_NOPLUS</a>)</td></tr>
-<tr class="memdesc:a886bb517d4f002810556894e0f4536da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Both set.  <a href="unc_8hpp.html#a886bb517d4f002810556894e0f4536da">More...</a><br /></td></tr>
-<tr class="separator:a886bb517d4f002810556894e0f4536da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a395a5ae7ec18f711824750df602b9cb2"><td class="memItemLeft" align="right" valign="top">const unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a395a5ae7ec18f711824750df602b9cb2">UNC_DEF</a></td></tr>
-<tr class="separator:a395a5ae7ec18f711824750df602b9cb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcd4ef7d9998155973b32860e11ddb0d"><td class="memItemLeft" align="right" valign="top">const unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#adcd4ef7d9998155973b32860e11ddb0d">DEG_FREE_DEF</a> = (<a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a6d646b27d92c48dec8b1e8723131f600">DEG_FREE_EXACT</a> | <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387ac81ce34078572393881cc54d19c6a7b8">DEG_FREE_KNOWN</a>)</td></tr>
-<tr class="separator:adcd4ef7d9998155973b32860e11ddb0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ffd3414006535af47645122a93ab014"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#a4ffd3414006535af47645122a93ab014">uncTypeWords</a> []</td></tr>
-<tr class="memdesc:a4ffd3414006535af47645122a93ab014"><td class="mdescLeft">&#160;</td><td class="mdescRight">Description as a word of each bit in <code>unc_type</code>, using enum unc_types.  <a href="unc_8hpp.html#a4ffd3414006535af47645122a93ab014">More...</a><br /></td></tr>
-<tr class="separator:a4ffd3414006535af47645122a93ab014"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac73917079990bef734d21267fbc51fa6"><td class="memItemLeft" align="right" valign="top">const unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ac73917079990bef734d21267fbc51fa6">boost::quan::VALUE_EXACT</a> = (UNC_NOMINUS | UNC_NOPLUS)</td></tr>
+<tr class="memdesc:ac73917079990bef734d21267fbc51fa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Both set.  <a href="namespaceboost_1_1quan.html#ac73917079990bef734d21267fbc51fa6">More...</a><br /></td></tr>
+<tr class="separator:ac73917079990bef734d21267fbc51fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1274dcac1a3b61649c9b3033463bd683"><td class="memItemLeft" align="right" valign="top">const unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a1274dcac1a3b61649c9b3033463bd683">boost::quan::UNC_DEF</a></td></tr>
+<tr class="separator:a1274dcac1a3b61649c9b3033463bd683"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89463131f13803971a19b9c30136ce3d"><td class="memItemLeft" align="right" valign="top">const unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a89463131f13803971a19b9c30136ce3d">boost::quan::DEG_FREE_DEF</a> = (DEG_FREE_EXACT | DEG_FREE_KNOWN)</td></tr>
+<tr class="separator:a89463131f13803971a19b9c30136ce3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a803b189355f9344b79914c95bf14ad35"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a803b189355f9344b79914c95bf14ad35">boost::quan::uncTypeWords</a> [16]</td></tr>
+<tr class="memdesc:a803b189355f9344b79914c95bf14ad35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Description as a word of each bit in <code>unc_type</code>, using enum unc_types.[br].  <a href="namespaceboost_1_1quan.html#a803b189355f9344b79914c95bf14ad35">More...</a><br /></td></tr>
+<tr class="separator:a803b189355f9344b79914c95bf14ad35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Typedef Documentation</h2>
-<a id="a70b7f4fcdd8eea3edba835bcedd5aec1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a70b7f4fcdd8eea3edba835bcedd5aec1">&#9670;&nbsp;</a></span>unccorr</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef <a class="el" href="classunc.html">unc</a>&lt;true&gt; <a class="el" href="unc_8hpp.html#a70b7f4fcdd8eea3edba835bcedd5aec1">unccorr</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Uncorrelated is the normal case when uncertainties add. </p>
-<p>Uncertainties are NOT correlated. </p>
-
-<p class="definition">Definition at line <a class="el" href="unc_8hpp_source.html#l00149">149</a> of file <a class="el" href="unc_8hpp_source.html">unc.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a90ab32c41dc3c49bb95cf7a6ee9ab4c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90ab32c41dc3c49bb95cf7a6ee9ab4c1">&#9670;&nbsp;</a></span>uncun</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef <a class="el" href="classunc.html">unc</a>&lt;false&gt; <a class="el" href="unc_8hpp.html#a90ab32c41dc3c49bb95cf7a6ee9ab4c1">uncun</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="unc_8hpp_source.html#l00146">146</a> of file <a class="el" href="unc_8hpp_source.html">unc.hpp</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="a4bfdeee65812d9cc73f9ee7c4c1ca387"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4bfdeee65812d9cc73f9ee7c4c1ca387">&#9670;&nbsp;</a></span>unc_types</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387">unc_types</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>16 type bits used by unc uncTypes. Bit set = 1 means a positive attribute. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387a337716cbaec2ab4cce519e694f2724f3"></a>VALUE_ZERO&#160;</td><td class="fielddoc"><p>bit zero = 1 means value is zero. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387a4dbdbb9f0703c560765df0b495e2e08e"></a>VALUE_INTEGER&#160;</td><td class="fielddoc"><p>Exact integer 2,3,4 ... may not be possible to store `int` into `double`? </p>
-<p>(Too near zero to allow relsd = sd /mean.) A few times std::numeric_limits&lt;float&gt;::min() may be a suitable limit? </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387af56de87cd01d5725c429f2fc72f855da"></a>VALUE_RATIONAL&#160;</td><td class="fielddoc"><p>Integers &amp; Fractions 1/2, 1/3, 2/3, 5/4 ... so don't need irrational - must be if not rational. Irrational like pi, e ... represented as accurately as possible by the double floating-point type, usually for 64-bit double, 15 to 17 decimal digits. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387aa80f0d3ea1ff26dd8a4c600582cd5587"></a>VALUE_NEGATIVE_ONLY&#160;</td><td class="fielddoc"><p>Value can ONLY be &lt; 0.. ? or &lt;=0? </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387a06a996d8ddb7aa959bc7648718e55168"></a>VALUE_POSITIVE_ONLY&#160;</td><td class="fielddoc"><p>Value can ONLY be &gt;=0.. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387a3468dd60340b5a8782fcb9e9ac211eec"></a>UNC_KNOWN&#160;</td><td class="fielddoc"><p>Uncertainty known (but if not, value may still be known OK). </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387a10120ed09bb2013a9640635f2a799fbc"></a>UNC_NOPLUS&#160;</td><td class="fielddoc"><p>Uncertainty can only be &lt; value, + = zero. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387a5d47c395882673b486113eb7de38a73f"></a>UNC_NOMINUS&#160;</td><td class="fielddoc"><p>Uncertainty can only be &gt; value - = zero. Integer, Rational or Exact by definition like 25.4 mm per inch, if unc = 0.0f or both UNC_NOPLUS &amp; UNC_NOMINUS. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387ad390fdd921c136180ceb271f498f450b"></a>UNC_QUAN_DECIMAL&#160;</td><td class="fielddoc"><p>Quantised by least significant decimal digit. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387a4cf174c7d02ea9c53ef092e7eff71f6d"></a>UNC_QUAN_BINARY&#160;</td><td class="fielddoc"><p>Quantised by least significant binary digit. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387aba4b122167825b83c4de2ac5190d5c7f"></a>UNC_EXPLICIT&#160;</td><td class="fielddoc"><p>If bit set = 1, uncertainty implicit from read significant digits, for example: unc_input of 10.0 will set this bit and set uncertainty = 0.05, or explicit if +/- or calculated (normal default case, bit = 0). </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387a93554056759edc80e835e2c3d9d7a097"></a>UNC_UNIFORM&#160;</td><td class="fielddoc"><p>Uncertainty has rectangular or uniform probability distribution. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387af426cf32f3cbb354af02e42c2685e7a0"></a>UNC_TRIANGULAR&#160;</td><td class="fielddoc"><p>Uncertainty has triangular probability distribution. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387a6d646b27d92c48dec8b1e8723131f600"></a>DEG_FREE_EXACT&#160;</td><td class="fielddoc"><p>If not rectangular or triangular bits set, then normal or Gaussian distribution, the default. Both bits 11 and 12 == 1 then has distribution un-defined as yet. Distribution type is used to estimate confidence intervals and rounding. Known number of observations -1, </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387ac81ce34078572393881cc54d19c6a7b8"></a>DEG_FREE_KNOWN&#160;</td><td class="fielddoc"><p>Degrees of freedom is defined. </p>
-<p>so default zero means 1 observation. else estimated, for example, using Welch-Satterthwaite. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4bfdeee65812d9cc73f9ee7c4c1ca387a8f865e9237999e15c90cbf4ede10a9f0"></a>SPARE&#160;</td><td class="fielddoc"><p>This last unc_type is spare. </p>
-</td></tr>
-</table>
-
-<p class="definition">Definition at line <a class="el" href="unc_8hpp_source.html#l00210">210</a> of file <a class="el" href="unc_8hpp_source.html">unc.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a68335ca359c326cfad799912892984fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68335ca359c326cfad799912892984fd">&#9670;&nbsp;</a></span>uncertainflags</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="unc_8hpp.html#a68335ca359c326cfad799912892984fd">uncertainflags</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Control of printing uncertain values, similar to ios flags. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fda81f62e3d9993ecb7a6028a3b5621f229"></a>defaults&#160;</td><td class="fielddoc"><p>Default. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fda88b7d5932278a29836942737aca6888d"></a>firm&#160;</td><td class="fielddoc"><p>bit 0: == 0 == false means flex, or firm == 1 == true. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fda4f01a573a3bde4134360c61b86e0deb9"></a>setScaled&#160;</td><td class="fielddoc"><p>bit 1 Set scaled == 1 or not scaled == 0. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fdabcf7e726f642019083e91a3e3b394bfc"></a>autoScaled&#160;</td><td class="fielddoc"><p>bit 2: auto = 1 with &lt;&lt; autoscale ... </p>
-<p>by fixed factor SetScale and &lt;&lt; scale ... power10 in range -max to +max. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fda8df10473f985e1e141fe13ce1da4b2e7"></a>plusMinus&#160;</td><td class="fielddoc"><p>bit 3 = 1 means add +/- uncertainty Usage:</p><div class="fragment"><div class="line">std::cout &lt;&lt; plusminus &lt;&lt; u; </div>
-</div><!-- fragment --> </td></tr>
-<tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fda6baa1727b244f9c27c5fa1ffcac571d0"></a>addSISymbol&#160;</td><td class="fielddoc"><p>bit 4 = 1, add suffix SI symbol G, M, k, m, u, n, p ... </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fdac5a6d576327602677949982970a66740"></a>addSIPrefix&#160;</td><td class="fielddoc"><p>If one is applicable, else = 0 do nothing. </p>
-<p>bit 5 = 1, add suffix SI prefix Giga, Mega, kilo ... </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fdab5a6082eb1bac1b504465d874da18664"></a>noisyDigit&#160;</td><td class="fielddoc"><p>Add extra 'noisy' decimal digit to value &amp; sd. Usage: std::cout `&lt;&lt; addnoisyDigit &lt;&lt; u;` This means is suitable for input to other calculations because the random extra 2 to 3 bits will approximate a continuous function. Quantization to fewer digits would distort statistical calculations. Default is to use minimum decimal digits for clearer display. Extra digit also added when degrees of freedom &gt; 10. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fdab2a25bb3fa47a96152d836fba7ae10d8"></a>useSetSigDigits&#160;</td><td class="fielddoc"><p>if bit 7 = 1 use set sig digits else calculate from sd(isUseSetSigDigits). </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fda88b407bc85e58b05ead828678f88924f"></a>useSetUncSigDigits&#160;</td><td class="fielddoc"><p>if bit 8 = 1 use set Unc sigfig (isStdDevSigDigitsSet). </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fdaac97fd648aedffb05975e58a9531eee9"></a>degfree&#160;</td><td class="fielddoc"><p>else calculate from degrees of freedom. </p>
-<p>0x200, If bit 9 == 1, add output of degrees of freedom as (99). </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fdaff39f67935d3386b19b8a89be2eb711a"></a>replicates&#160;</td><td class="fielddoc"><p>0x400 If == 1, add output of replicates as [99] if &gt; 1. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a68335ca359c326cfad799912892984fda12e427a814d05cf13103a609ef21c2f0"></a>limits&#160;</td><td class="fielddoc"><p>0X800 add limits. </p>
-</td></tr>
-</table>
-
-<p class="definition">Definition at line <a class="el" href="unc_8hpp_source.html#l00256">256</a> of file <a class="el" href="unc_8hpp_source.html">unc.hpp</a>.</p>
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a6b7ae8995d3d0392d66ccb3f4fba41cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b7ae8995d3d0392d66ccb3f4fba41cb">&#9670;&nbsp;</a></span>autoprefix_norm()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">autoprefix_norm_impl&lt;<a class="el" href="classunc.html">unc</a>&lt;false&gt;, true&gt;::type autoprefix_norm </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classunc.html">unc</a>&lt; false &gt; &amp;&#160;</td>
-          <td class="paramname"><em>arg</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="unc_8hpp_source.html#l02042">2042</a> of file <a class="el" href="unc_8hpp_source.html">unc.hpp</a>.</p>
-
-</div>
-</div>
 <a id="ad8206ee286a5c7483d0dfcbc8a8e7122"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8206ee286a5c7483d0dfcbc8a8e7122">&#9670;&nbsp;</a></span>BOOST_STATIC_ASSERT()</h2>
 
@@ -453,547 +416,6 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8bbeee3fe2cf3695b86d1b5c144eea16"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8bbeee3fe2cf3695b86d1b5c144eea16">&#9670;&nbsp;</a></span>operator&lt;&lt;()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;bool correlated&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream&amp; operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::pair&lt; <a class="el" href="classunc.html">unc</a>&lt; correlated &gt;, <a class="el" href="classunc.html">unc</a>&lt; correlated &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>up</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Output a pair (X and Y) of uncertain values with (if defined) uncertainty and degrees of freedom.</p>
-<p>For example: "1.23 +/- 0.01 (13), 3.45 +/- 0.06 (78)".</p>
-
-<p class="definition">Definition at line <a class="el" href="unc_8hpp_source.html#l01972">1972</a> of file <a class="el" href="unc_8hpp_source.html">unc.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a29ef9ce3cc2cef3cf823d4d8ce7cde73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29ef9ce3cc2cef3cf823d4d8ce7cde73">&#9670;&nbsp;</a></span>outFpClass()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void outFpClass </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="xiostream_8ipp_source.html#l00319">319</a> of file <a class="el" href="xiostream_8ipp_source.html">xiostream.ipp</a>.</p>
-
-</div>
-</div>
-<a id="a6440079e98dd8887d51fab1ef9f699eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6440079e98dd8887d51fab1ef9f699eb">&#9670;&nbsp;</a></span>outIosFlags()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void outIosFlags </td>
-          <td>(</td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>flags</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em> = <code>std::cerr</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Show all the <code>std::ios</code> stream flags settings as words, for example: true, dec, right.<br  />
-Usage:</p><div class="fragment"><div class="line"><a class="code" href="unc_8ipp.html#a922241811e1ce6f6d4342e977fb3d8ed">outIosFlags</a>(cout.flags(), cerr); <span class="comment">// logs cout&#39;s flag to cerr. </span></div>
-<div class="ttc" id="aunc_8ipp_html_a922241811e1ce6f6d4342e977fb3d8ed"><div class="ttname"><a href="unc_8ipp.html#a922241811e1ce6f6d4342e977fb3d8ed">outIosFlags</a></div><div class="ttdeci">void outIosFlags(long flags, std::ostream &amp;os=std::cerr)</div><div class="ttdef"><b>Definition:</b> <a href="unc_8ipp_source.html#l00189">unc.ipp:189</a></div></div>
-</div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">flags</td><td>Iostream flags. </td></tr>
-    <tr><td class="paramname">os</td><td><code>std::ostream</code> for output, default <code>std::cerr</code> </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="unc_8ipp_source.html#l00189">189</a> of file <a class="el" href="unc_8ipp_source.html">unc.ipp</a>.</p>
-
-</div>
-</div>
-<a id="a60103b79b2bd1aa73fff30a75e2f1fbd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60103b79b2bd1aa73fff30a75e2f1fbd">&#9670;&nbsp;</a></span>outUncTypes()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void outUncTypes </td>
-          <td>(</td>
-          <td class="paramtype">unsigned short int&#160;</td>
-          <td class="paramname"><em>uncTypes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em> = <code>std::cerr</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Output word description for each `unc_type` bit.<br  />
-Usage: outUncTypes(unc.getUncTypes(), cerr); // logs to cerr. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">uncTypes</td><td>uncertain types as a short int. </td></tr>
-    <tr><td class="paramname">os</td><td><code>std::ostream</code> for output, default = cerr </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="unc_8ipp_source.html#l00139">139</a> of file <a class="el" href="unc_8ipp_source.html">unc.ipp</a>.</p>
-
-</div>
-</div>
-<a id="a9a86dfe3fd8645366d8c70e03f72079e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a86dfe3fd8645366d8c70e03f72079e">&#9670;&nbsp;</a></span>outUncValues()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void outUncValues </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>log</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Output ALL the <code>os.word()</code> values to the <code>std::ostream</code> log file, for example: setSigdigits, uncFlags, uncSigDigits. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">os</td><td>Current <code>std::ostream</code> to be displayed in log. </td></tr>
-    <tr><td class="paramname">log</td><td><code>std::ostream</code> for log. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="unc_8ipp_source.html#l00084">84</a> of file <a class="el" href="unc_8ipp_source.html">unc.ipp</a>.</p>
-
-</div>
-</div>
-<a id="aae04b5aa8a8645edd72d28e39bdb1c22"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aae04b5aa8a8645edd72d28e39bdb1c22">&#9670;&nbsp;</a></span>pow4()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Type &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">Type pow4 </td>
-          <td>(</td>
-          <td class="paramtype">const Type &amp;&#160;</td>
-          <td class="paramname"><em>a</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Quaded function, notationally convenient for x^4, but overflow possible? Used by Welch-Satterthwaite formula. </p>
-
-<p class="definition">Definition at line <a class="el" href="unc_8hpp_source.html#l00169">169</a> of file <a class="el" href="unc_8hpp_source.html">unc.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ab30b71d13d47a081eb250591116da869"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab30b71d13d47a081eb250591116da869">&#9670;&nbsp;</a></span>setUncDefaults()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void setUncDefaults </td>
-          <td>(</td>
-          <td class="paramtype">std::ios_base &amp;&#160;</td>
-          <td class="paramname"><em>os</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Random id value. </p>
-<p>Set 16 default flag bit values for uncertain output flags. Might be best to make setUncDefaults also set std::ios_base defaults with void setiosDefaults(ostream&amp;);<br  />
-Usage:</p><div class="fragment"><div class="line"><a class="code" href="unc_8ipp.html#ab30b71d13d47a081eb250591116da869">setUncDefaults</a>(cout); </div>
-<div class="ttc" id="aunc_8ipp_html_ab30b71d13d47a081eb250591116da869"><div class="ttname"><a href="unc_8ipp.html#ab30b71d13d47a081eb250591116da869">setUncDefaults</a></div><div class="ttdeci">void setUncDefaults(std::ios_base &amp;os)</div><div class="ttdoc">Random id value.</div><div class="ttdef"><b>Definition:</b> <a href="unc_8ipp_source.html#l00042">unc.ipp:42</a></div></div>
-</div><!-- fragment --> <dl class="section warning"><dt>Warning</dt><dd><code><a class="el" href="unc_8ipp.html#ab30b71d13d47a081eb250591116da869" title="Random id value.">setUncDefaults()</a></code> MUST be called before using a stream.</dd></dl>
-<p>Default iword(*) values are all zero - these are not usable. Function <code><a class="el" href="unc_8ipp.html#ab30b71d13d47a081eb250591116da869" title="Random id value.">setUncDefaults()</a></code> sets some defaults Can set individual value, for example, for 3 sig Digits, os.iword(sigDigitsIndex) = 3; </p><dl class="section note"><dt>Note</dt><dd>Index values must have been initialised by xalloc calls. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="unc_8ipp_source.html#l00042">42</a> of file <a class="el" href="unc_8ipp_source.html">unc.ipp</a>.</p>
-
-</div>
-</div>
-<a id="ad21d0dc98d92fab16eb1508f0cfaf1c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad21d0dc98d92fab16eb1508f0cfaf1c3">&#9670;&nbsp;</a></span>unc_input()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void unc_input </td>
-          <td>(</td>
-          <td class="paramtype">double &amp;&#160;</td>
-          <td class="paramname"><em>mean</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double &amp;&#160;</td>
-          <td class="paramname"><em>stdDev</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">unsigned short int &amp;&#160;</td>
-          <td class="paramname"><em>degreesOfFreedom</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">unsigned short int &amp;&#160;</td>
-          <td class="paramname"><em>uncTypes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::istream &amp;&#160;</td>
-          <td class="paramname"><em>is</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Uncertainties ARE correlated. This is the unusual case where the sum must be exact, so the uncertainties are subtracted. Example: two blocks which fit into a box perfectly. So if both have an uncertainties, they must cancel when the uncertainties are added. Also applies to items like concentrations which must add up to 100% or unity. </p>
-
-<p class="definition">Definition at line <a class="el" href="unc__input_8ipp_source.html#l00556">556</a> of file <a class="el" href="unc__input_8ipp_source.html">unc_input.ipp</a>.</p>
-
-</div>
-</div>
-<a id="a5afef577fbbe8eb573ca040b88fec19e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5afef577fbbe8eb573ca040b88fec19e">&#9670;&nbsp;</a></span>unc_of()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">double unc_of </td>
-          <td>(</td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Allow uncertainty (standard deviation) part of variables of class unc to be assigned to, and compared with float. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>Built-in floating-point type, float, double or long double, or uncertain type unc. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>zero if no uncertainty information is available (for built-in double, float, or long double). </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="unc_8ipp_source.html#l00736">736</a> of file <a class="el" href="unc_8ipp_source.html">unc.ipp</a>.</p>
-
-</div>
-</div>
-<a id="ae2665049be81d198070abebf59d569a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae2665049be81d198070abebf59d569a8">&#9670;&nbsp;</a></span>uncs_of() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt;double, double&gt; uncs_of </td>
-          <td>(</td>
-          <td class="paramtype">std::pair&lt; const T, T &gt;&#160;</td>
-          <td class="paramname"><em>vp</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Get uncertainties (standard deviation) as a pair of const float values. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>Built-in floating-point type, float, double, long double or unc or <a class="el" href="class_meas.html" title="Measured uncertain value AND its id and order and/or time-date stamp.">Meas</a>.</td></tr>
-    <tr><td class="paramname">T</td><td>Builtin-floating point type or unc. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>uncertainty parts (if any) as a pair of floats.</dd>
-<dd>
-uncs_of uncertainties (standard deviation) as a pair of <b>float</b> values. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="unc_8ipp_source.html#l00802">802</a> of file <a class="el" href="unc_8ipp_source.html">unc.ipp</a>.</p>
-
-</div>
-</div>
-<a id="aac928d7fc3a9818f34780f0d20a12f60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac928d7fc3a9818f34780f0d20a12f60">&#9670;&nbsp;</a></span>uncs_of() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T1 , class T2 &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt;double, double&gt; uncs_of </td>
-          <td>(</td>
-          <td class="paramtype">std::pair&lt; T1, T2 &gt;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>Built-in floating-point type, float, double, long double or unc or <a class="el" href="class_meas.html" title="Measured uncertain value AND its id and order and/or time-date stamp.">Meas</a>. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a6afcb34dd5547f26e554971b977df3ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6afcb34dd5547f26e554971b977df3ce">&#9670;&nbsp;</a></span>value_of()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">double value_of </td>
-          <td>(</td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>&lt; </p>
-<p>Two helper functions to provide values and uncertainties as pairs. </p><dl class="section note"><dt>Note</dt><dd>Names: value_of (single value) and plural valueS_of (pair).</dd></dl>
-<p>Allow value part of variables of class unc to be assigned to, and compared with double. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>Built-in floating-point type, float, double or long double, or uncertain type unc.</td></tr>
-    <tr><td class="paramname">T</td><td>value type convertible to double. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>value as a double. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="unc_8ipp_source.html#l00717">717</a> of file <a class="el" href="unc_8ipp_source.html">unc.ipp</a>.</p>
-
-</div>
-</div>
-<a id="afc2e58d832c6dcd11d32274b1c448884"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc2e58d832c6dcd11d32274b1c448884">&#9670;&nbsp;</a></span>values_of() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt;double, double&gt; values_of </td>
-          <td>(</td>
-          <td class="paramtype">std::pair&lt; T, T &gt;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>Built-in floating-point type, float, double, long double or unc or <a class="el" href="class_meas.html" title="Measured uncertain value AND its id and order and/or time-date stamp.">Meas</a>. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ab5f610a935fed85b63b0711cee607ac7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab5f610a935fed85b63b0711cee607ac7">&#9670;&nbsp;</a></span>values_of() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T1 , class T2 &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt;double, double&gt; values_of </td>
-          <td>(</td>
-          <td class="paramtype">std::pair&lt; T1, T2 &gt;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>Built-in floating-point type, float, double, long double or unc or <a class="el" href="class_meas.html" title="Measured uncertain value AND its id and order and/or time-date stamp.">Meas</a>. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="adcd4ef7d9998155973b32860e11ddb0d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adcd4ef7d9998155973b32860e11ddb0d">&#9670;&nbsp;</a></span>DEG_FREE_DEF</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const unsigned short int DEG_FREE_DEF = (<a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a6d646b27d92c48dec8b1e8723131f600">DEG_FREE_EXACT</a> | <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387ac81ce34078572393881cc54d19c6a7b8">DEG_FREE_KNOWN</a>)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="unc_8hpp_source.html#l00252">252</a> of file <a class="el" href="unc_8hpp_source.html">unc.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a395a5ae7ec18f711824750df602b9cb2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a395a5ae7ec18f711824750df602b9cb2">&#9670;&nbsp;</a></span>UNC_DEF</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const unsigned short int UNC_DEF</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= (<a class="code" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a3468dd60340b5a8782fcb9e9ac211eec">UNC_KNOWN</a> | <a class="code" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a5d47c395882673b486113eb7de38a73f">UNC_NOMINUS</a> | <a class="code" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a10120ed09bb2013a9640635f2a799fbc">UNC_NOPLUS</a> | </div>
-<div class="line">                                    <a class="code" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387ad390fdd921c136180ceb271f498f450b">UNC_QUAN_DECIMAL</a> | <a class="code" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a4cf174c7d02ea9c53ef092e7eff71f6d">UNC_QUAN_BINARY</a> |</div>
-<div class="line">                                    <a class="code" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387aba4b122167825b83c4de2ac5190d5c7f">UNC_EXPLICIT</a> </div>
-<div class="line">                                    | <a class="code" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a93554056759edc80e835e2c3d9d7a097">UNC_UNIFORM</a> | <a class="code" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387af426cf32f3cbb354af02e42c2685e7a0">UNC_TRIANGULAR</a>)</div>
-<div class="ttc" id="aunc_8hpp_html_a4bfdeee65812d9cc73f9ee7c4c1ca387a10120ed09bb2013a9640635f2a799fbc"><div class="ttname"><a href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a10120ed09bb2013a9640635f2a799fbc">UNC_NOPLUS</a></div><div class="ttdeci">@ UNC_NOPLUS</div><div class="ttdoc">Uncertainty can only be &lt; value, + = zero.</div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00224">unc.hpp:224</a></div></div>
-<div class="ttc" id="aunc_8hpp_html_a4bfdeee65812d9cc73f9ee7c4c1ca387a3468dd60340b5a8782fcb9e9ac211eec"><div class="ttname"><a href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a3468dd60340b5a8782fcb9e9ac211eec">UNC_KNOWN</a></div><div class="ttdeci">@ UNC_KNOWN</div><div class="ttdoc">Uncertainty known (but if not, value may still be known OK).</div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00223">unc.hpp:223</a></div></div>
-<div class="ttc" id="aunc_8hpp_html_a4bfdeee65812d9cc73f9ee7c4c1ca387a4cf174c7d02ea9c53ef092e7eff71f6d"><div class="ttname"><a href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a4cf174c7d02ea9c53ef092e7eff71f6d">UNC_QUAN_BINARY</a></div><div class="ttdeci">@ UNC_QUAN_BINARY</div><div class="ttdoc">Quantised by least significant binary digit.</div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00230">unc.hpp:230</a></div></div>
-<div class="ttc" id="aunc_8hpp_html_a4bfdeee65812d9cc73f9ee7c4c1ca387a5d47c395882673b486113eb7de38a73f"><div class="ttname"><a href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a5d47c395882673b486113eb7de38a73f">UNC_NOMINUS</a></div><div class="ttdeci">@ UNC_NOMINUS</div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00228">unc.hpp:225</a></div></div>
-<div class="ttc" id="aunc_8hpp_html_a4bfdeee65812d9cc73f9ee7c4c1ca387a93554056759edc80e835e2c3d9d7a097"><div class="ttname"><a href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a93554056759edc80e835e2c3d9d7a097">UNC_UNIFORM</a></div><div class="ttdeci">@ UNC_UNIFORM</div><div class="ttdoc">Uncertainty has rectangular or uniform probability distribution.</div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00235">unc.hpp:235</a></div></div>
-<div class="ttc" id="aunc_8hpp_html_a4bfdeee65812d9cc73f9ee7c4c1ca387aba4b122167825b83c4de2ac5190d5c7f"><div class="ttname"><a href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387aba4b122167825b83c4de2ac5190d5c7f">UNC_EXPLICIT</a></div><div class="ttdeci">@ UNC_EXPLICIT</div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00234">unc.hpp:231</a></div></div>
-<div class="ttc" id="aunc_8hpp_html_a4bfdeee65812d9cc73f9ee7c4c1ca387ad390fdd921c136180ceb271f498f450b"><div class="ttname"><a href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387ad390fdd921c136180ceb271f498f450b">UNC_QUAN_DECIMAL</a></div><div class="ttdeci">@ UNC_QUAN_DECIMAL</div><div class="ttdoc">Quantised by least significant decimal digit.</div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00229">unc.hpp:229</a></div></div>
-<div class="ttc" id="aunc_8hpp_html_a4bfdeee65812d9cc73f9ee7c4c1ca387af426cf32f3cbb354af02e42c2685e7a0"><div class="ttname"><a href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387af426cf32f3cbb354af02e42c2685e7a0">UNC_TRIANGULAR</a></div><div class="ttdeci">@ UNC_TRIANGULAR</div><div class="ttdef"><b>Definition:</b> <a href="unc_8hpp_source.html#l00236">unc.hpp:236</a></div></div>
-</div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="unc_8hpp_source.html#l00248">248</a> of file <a class="el" href="unc_8hpp_source.html">unc.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a4ffd3414006535af47645122a93ab014"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4ffd3414006535af47645122a93ab014">&#9670;&nbsp;</a></span>uncTypeWords</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const char* uncTypeWords[]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Description as a word of each bit in <code>unc_type</code>, using enum unc_types. </p>
-
-<p class="definition">Definition at line <a class="el" href="unc_8ipp_source.html#l00112">112</a> of file <a class="el" href="unc_8ipp_source.html">unc.ipp</a>.</p>
-
-</div>
-</div>
-<a id="a886bb517d4f002810556894e0f4536da"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a886bb517d4f002810556894e0f4536da">&#9670;&nbsp;</a></span>VALUE_EXACT</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const unsigned short int VALUE_EXACT = (<a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a5d47c395882673b486113eb7de38a73f">UNC_NOMINUS</a> | <a class="el" href="unc_8hpp.html#a4bfdeee65812d9cc73f9ee7c4c1ca387a10120ed09bb2013a9640635f2a799fbc">UNC_NOPLUS</a>)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Both set. </p>
-
-<p class="definition">Definition at line <a class="el" href="unc_8hpp_source.html#l00247">247</a> of file <a class="el" href="unc_8hpp_source.html">unc.hpp</a>.</p>
 
 </div>
 </div>
@@ -1016,7 +438,7 @@ template&lt;class T1 , class T2 &gt; </div>
       <!-- 2021 becomes the current year, for example 2010, so claims copyright for a range of years, 2009 - 2010. -->
      <p>Doxygen Documentation generated by&nbsp;<a href="https://www.doxygen.org/index.html"> 
      <img src="https://www.doxygen.nl/images/doxygen.png"   width="100" height="20"
-     alt="Doxygen logo" align="middle" border="1"/>&nbsp; 1.9.1</a>, Revised at Fri Feb 12 2021 12:57:05</p>
+     alt="Doxygen logo" align="middle" border="1"/>&nbsp; 1.9.1</a>, Revised at Tue Mar 9 2021 11:58:57</p>
   </address>
   </tr>
 </tbody>
