@@ -43,7 +43,7 @@
 
 [def __preface [link svg_plot.preface]]
 [def __howtouse [link svg_plot.howtouse  Document conventions]]
-
+[def __chaining_functions[@https://isocpp.org/wiki/faq/references#method-chaining chaining of functions]]
 [def __rationale [link quan.implementation Implementation]]
 
 [def __uniform_distrib [@https://www.boost.org/doc/libs/1_75_0/libs/math/doc/html/math_toolkit/dist_ref/dists/uniform_dist.html uniform distribution]]
@@ -51,11 +51,12 @@
 [def __triangular_distrib [@https://www.boost.org/doc/libs/1_75_0/libs/math/doc/html/math_toolkit/dist_ref/dists/triangular_dist.html triangular distribution]]
 
 [def __quan_github [@https://github.com/pabristow/quan Github repository Quan library]]  
-[def __quan_github_doc [@https://github.com/pabristow/quan Quan library documentation]]  
-[def __svg_plot_github [@https://github.com/pabristow/quan Github repository SVG_plot library]]  
-[def __svg_plot_doc [@https://github.com/pabristow/quan SVG_plot library documentation]]  
+[def __quan_github_doc [@https://pabristow.github.io/doc/html/index.html Quan library documentation]]  
 
-[def __b2bjam_github  [@https://github.com/bfgroup/b2  B2/bjam GigHub]]
+[def __svg_plot_github [@https://github.com/pabristow/quan Github repository SVG_plot library]]  
+[def __svg_plot_doc [@https://pabristow.github.io/svg_plot SVG_plot library documentation]]  
+
+[def __b2bjam_github  [@https://github.com/bfgroup/b2  B2/bjam GitHub]]
 [def __b2bjam_doc  [@https://www.bfgroup.xyz/b2/manual/release/index.html  B2/bjam documentation]]
 
 [section:preface Preface]
@@ -225,6 +226,9 @@ and output using `operator<<` adding uncertainty, +/- confidence interval <in an
 to display
 
   URealCorr u(1.23, 0.45F, 9) = 1.2 +/-0.45 <0.94, 1.52> (9)
+  
+[tip Nearly all examples use  __chaining_functions to set options and to chain `operator<<` and `operator>>`.]
+
 
 The extensive output features have been informed by
 "Uncertainty as Applied to Measurements and Calculations", John Denker, [@http://www.av8n.com/physics/uncertainty.htm#sec-crank3].
