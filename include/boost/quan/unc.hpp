@@ -621,23 +621,23 @@ public:
   // Member functions to get mean value, stdDev, degfree & uncTypes.
   //! Get central estimate of value of uncertain type.
   //! \return Central 'best' estimate of value of uncertain type.
-  double value()
+  double value() const
   {
     return value_;
   }
   //! Get estimate of uncertainty of value of uncertain type.
   //! \return Estimate of uncertainty as standard deviation of value of uncertain type.
-  float std_dev()
+  float std_dev() const
   {
     return uncertainty_;
   }
   //! \return Estimate of number of degrees of freedom, usually = number of observations -1.
-  unsigned short int deg_free()
+  unsigned short int deg_free() const
   {
     return degFree_;
   }
   //! \return Types of uncertain real, encoded as a bitmap.
-  unsigned short int types()
+  unsigned short int types() const
   {
     return unctypes_;
   }
