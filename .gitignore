@@ -3,7 +3,7 @@
 doc/autodoc
 doc/autodoc.xml
 doc/*.pdf
-doc/html/
+# doc/html/
 doc/doxygen/html/
 **/*.bat
 **/*.bak

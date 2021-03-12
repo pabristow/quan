@@ -1,0 +1,150 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Uncertain Classes for Propagation of Uncertainties according to a pure Gaussian model.</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Quantitation - a library of Uncertain classes">
+<link rel="up" href="../index.html" title="Quantitation - a library of Uncertain classes">
+<link rel="prev" href="Starting.html" title="Getting started">
+<link rel="next" href="../boost_quan_plot_c___reference.html" title="Boost.Quan plot C++ Reference">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="200" height="90" src=".././images/proposed_for_boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="Starting.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../boost_quan_plot_c___reference.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="quan.Uncertains"></a><a class="link" href="Uncertains.html" title="Uncertain Classes for Propagation of Uncertainties according to a pure Gaussian model.">Uncertain Classes for Propagation of Uncertainties
+    according to a pure Gaussian model.</a>
+</h2></div></div></div>
+<p>
+      This library was originally based on code by Evan Manning (manning@alumni.caltech.edu)
+      Evan Marshal Manning, C/C++ Users Journal, March 1996 page 29 to 38. original
+      downloaded from <a href="ftp://beowulf.jpl.nasa.gov/pub/manning" target="_top">ftp://beowulf.jpl.nasa.gov/pub/manning</a>.
+    </p>
+<p>
+      This is a simple model of uncertainties, designed to accompany an article published
+      in C/C++ Users Journal March 1996 at <a href="http://www.ddj.com/cpp/184403147" target="_top">C/C++
+      Users Journal March 1996</a>.
+    </p>
+<p>
+      (A fuller collection of even fancier classes also given in Evan Marshal Manning's
+      code in <code class="computeroutput"><span class="identifier">unc</span><span class="special">.</span><span class="identifier">h</span></code>).
+    </p>
+<p>
+      <span class="bold"><strong>The key benefit of using an uncertain class is that all
+      uncertainties are properly propagated through calculations</strong></span>.
+    </p>
+<p>
+      Other information about the observation or measurement standard deviation &amp;
+      its uncertainty, for example, degrees of freedom, were added by Paul A. Bristow
+      in Mar 1998, and have been refined further since then.
+    </p>
+<p>
+      A simple example is construction of an uncertain value with a best estimated
+      value of 1.23, and uncertainty (standard deviation) of 0.45, being the result
+      of 10 observations (so 9 degrees of freedom):
+    </p>
+<pre class="programlisting"><span class="identifier">uncun</span> <span class="identifier">u</span><span class="special">(</span><span class="number">1.23</span><span class="special">,</span> <span class="number">0.45F</span><span class="special">,</span> <span class="number">9</span><span class="special">);</span>
+</pre>
+<p>
+      and output using <code class="computeroutput"><span class="keyword">operator</span><span class="special">&lt;&lt;</span></code>
+      adding uncertainty, +/- confidence interval &lt;in angle brackets&gt; and degrees
+      of freedom (in round brackets):
+    </p>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"URealCorr u(1.23, 0.45, 9); = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">plusminus</span> <span class="special">&lt;&lt;</span> <span class="identifier">addlimits</span> <span class="special">&lt;&lt;</span> <span class="identifier">adddegfree</span> <span class="special">&lt;&lt;</span> <span class="identifier">u</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+</pre>
+<p>
+      to display
+    </p>
+<pre class="programlisting"><span class="identifier">URealCorr</span> <span class="identifier">u</span><span class="special">(</span><span class="number">1.23</span><span class="special">,</span> <span class="number">0.45F</span><span class="special">,</span> <span class="number">9</span><span class="special">)</span> <span class="special">=</span> <span class="number">1.2</span> <span class="special">+/-</span><span class="number">0.45</span> <span class="special">&lt;</span><span class="number">0.94</span><span class="special">,</span> <span class="number">1.52</span><span class="special">&gt;</span> <span class="special">(</span><span class="number">9</span><span class="special">)</span>
+</pre>
+<p>
+      The extensive output features have been informed by "Uncertainty as Applied
+      to Measurements and Calculations", John Denker, <a href="http://www.av8n.com/physics/uncertainty.htm#sec-crank3" target="_top">http://www.av8n.com/physics/uncertainty.htm#sec-crank3</a>.
+    </p>
+<p>
+      Some simple rules that apply whenever displaying a number:
+    </p>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+          Use many enough digits to avoid unintended loss of information.
+        </li>
+<li class="listitem">
+          Use few enough digits to be reasonably convenient.
+        </li>
+<li class="listitem">
+          Avoid excessive 'noisy' digits that imply unwarranted precision.
+        </li>
+<li class="listitem">
+          For other calculations, keep all potentially significant digits (C++ std::numeric_limits&lt;&gt;::max_digits10,
+          17 for type double).
+        </li>
+</ol></div>
+<p>
+      An additional objective was to avoid using <span class="bold"><strong>more</strong></span>
+      than enough digits to avoid clutter, and more importantly, to avoid giving
+      an impression of more precision or accuracy than the underlying data implies.
+    </p>
+<p>
+      There are far too many examples in real life of entirely unwarranted decimal
+      digits, for example, quoting a value of 94% when in fact, there is an uncertainty
+      of 10%, an important uncertainty obscured by the digit 4, when the 'true' value
+      might lie anywhere between 80% and 100%. A more informative representation
+      would be 90%.
+    </p>
+<p>
+      The term 'uncertainty' has been used in preference to the more common word
+      'error' and 'error bars' to express confidence intervals. <span class="bold"><strong>This
+      chosen mainly because there are no errors involved! - only a lack of certainty.</strong></span>
+      There are many possible values that approximate the 'true' value (if such a
+      'true' thing exists).
+    </p>
+<p>
+      So the software provides options to display not only the 'best' or 'mean' or
+      'central' estimate, but also the uncertainty, degrees of freedom and confidence
+      intervals taking the distribution of the observations. Distributions of types
+      'normal' or Gaussian (common noisy observations), triangular, and uniform are
+      considered.
+    </p>
+<p>
+      Values that are <span class="bold"><strong>exact</strong></span> by definition, for example,
+      the inch-mm conversion factor is exactly 2.54. A value like 2.54 cannot be
+      represented exactly as a floating-point type <code class="computeroutput"><span class="keyword">double</span></code>,
+      so it is useful to be able to distinguish any computational uncertainty <a href="https://en.wikipedia.org/wiki/Machine_epsilon" target="_top">machine epsilon</a>
+      (2[super -53] ≅ 1.1e-16) from real uncertainty. Conversely exact integral values
+      should be distinguishable from real observations that happen to have a integral
+      value. To achieve this, specialized constructors are provided for both <code class="computeroutput"><span class="keyword">int</span></code> and <code class="computeroutput"><span class="keyword">double</span></code>.
+    </p>
+<p>
+      Many measurements suffer from quantization (uncertainty from analog-to-digital
+      convertors that have too few bits of resolution above the random noise level).
+      To avoid quantization of values read in by other system, it is also possible
+      to ensure that potentially noisy random digits can be output adding at least
+      one extra digit for the mean value.
+    </p>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright © 2007 to 2021 Paul A. Bristow<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="Starting.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../boost_quan_plot_c___reference.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
