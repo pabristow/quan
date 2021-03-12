@@ -6,15 +6,18 @@
 # (See accompanying file LICENSE_1_0.txt
 # or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+# \boost\libs\quan\doc\Jamfile.v2
+
 # Reminder: whitespace MUST terminate variable name!
 # so spaces or newlines BEFORE ; and : and AFTER too.
 # (because : and ; are keywords!)
 
-# SVG plot documentation as html and pdf from Quickbook, using Doxygen.
+# Quan documentation as html and pdf from Quickbook, using Doxygen.
 # AND auto-indexing.
 
-# cd /doc
-# b2 -a --enable-index > quan_doc_16feb2021_1725.log
+# Build using b2/bjam
+# cd /doc  # to get to \boost\libs\quan\doc\Jamfile.v2
+# b2 -a --enable-index > quan_doc_16feb2021_1725.log 
 
 # project boost/doc ;
 
@@ -23,7 +26,9 @@ using doxygen ;
 
 import os ; # Needed to get environment variables.
 path-constant nav_images :  html/images/ ; # png and svg images for home, next, note, tip...
-path-constant images_location : html ; # location of SVG and PNG images referenced by Quickbook.
+
+path-constant images_location : . ; # location of SVG and PNG images referenced by Quickbook.
+#  \boost\libs\quan\doc\images
 
 path-constant parent : .. ;  # Beman Dawes - so that inspect.exe will start in boost-root/libs/timer
                              # when run from another directory, such as boost-root/status
@@ -76,11 +81,10 @@ xml quan
 ;
 
 doxygen autodoc
-  :
+  : # Input all *.*pp files and sub-folders recursively.
     [ glob ../../../boost/quan/*.*pp ]
   :
-    #<doxygen:param>INPUT="filename1 directoryname2" # Separate with spaces.
-    # But also see paths specified above.
+    # or can use <doxygen:param>INPUT="filename1 directoryname2" # Separate with spaces. But also see paths specified above.
     <doxygen:param>RECURSIVE=YES # Search subdirectories as well.
     # <doxygen:param>STRIP_FROM_PATH=I:/ # Strip this from full path name.
     <doxygen:param>TAB_SIZE=2
@@ -133,10 +137,10 @@ doxygen autodoc
     # Exclude to avoid warnings about file(s) undocumented.
     # Note: no commas required but need quotes if more than one file.
 
-    <xsl:param>"boost.doxygen.reftitle=Boost.Quan plot C++ Reference"
+    <xsl:param>"boost.doxygen.reftitle=Boost.Quan library C++ Reference"
 ;
     #<doxygen:param>"PREDEFINED=\"BOOST_DEDUCED_TYPENAME=typename\" "
-# See Doxygen configuration for detailed explanation of these options
+# See Doxygen configuration for detailed explanation of these options.
 
 # import boostbook : boostbook ;
 
