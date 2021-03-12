@@ -153,7 +153,7 @@ boostbook standalone
   <xsl:param>boost.root=../../../..
 
   # Path for libraries index:
-  <xsl:param>boost.libraries=../../../../libs/libraries.htm
+  #<xsl:param>boost.libraries=../../../../libs/libraries.htm
   # Use the main Boost stylesheet:
   #<xsl:param>html.stylesheet=../../../doc/html/boostbook.css
   # Or a local preference Boost stylesheet with different syntax colors:

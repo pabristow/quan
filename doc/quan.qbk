@@ -70,23 +70,16 @@ propagated through calculations using the uncertain type,
 and are input and output including the uncertainty estimates typically from standard deviation and degrees of freedom,
 usually the number of observations less one.
 
-See Boost.Quan HTML Manual at
+See Boost.Quan HTML Manual at: [@https://pabristow.github.io/quan/index.html]
 
- [@https://pabristow.github.io/quan/index.html]
-
-and/or equivalent PDF Manual at:
-
-  [@quan/libs/quan/doc/quan.pdf quan.pdf]
+and/or equivalent PDF Manual at: [@quan/libs/quan/doc/quan.pdf]
 
 Examples are in folder (and subfolders):
-
- [@https://github.com/pabristow/quan/tree/refactor1/example /example]
+[@https://github.com/pabristow/quan/tree/refactor1/example]
 
 and C++ include files are in folder (and subfolders):
 
-[@https://github.com/pabristow/quan/tree/refactor1/include/boost/quan /include]
-
-  /quan/include/
+[@https://github.com/pabristow/quan/tree/refactor1/include]
 
 [endsect] [/section:preface Preface]
 
