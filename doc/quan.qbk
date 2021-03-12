@@ -72,17 +72,19 @@ usually the number of observations less one.
 
 See Boost.Quan HTML Manual at
 
- https://pabristow.github.io/quan/index.html
+ [@https://pabristow.github.io/quan/index.html]
 
 and/or equivalent PDF Manual at:
 
-  quan/libs/quan/doc/quan.pdf
+  [@quan/libs/quan/doc/quan.pdf quan.pdf]
 
 Examples are in folder (and subfolders):
 
- /quan/example/
+ [@https://github.com/pabristow/quan/tree/refactor1/example /example]
 
 and C++ include files are in folder (and subfolders):
+
+[@https://github.com/pabristow/quan/tree/refactor1/include/boost/quan /include]
 
   /quan/include/
 
