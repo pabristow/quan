@@ -25,7 +25,8 @@ using quickbook ;
 using doxygen ;
 
 import os ; # Needed to get environment variables.
-path-constant nav_images :  html/images/ ; # png and svg images for home, next, note, tip...
+# path-constant nav_images :  html/images/ ; # png and svg images for home, next, note, tip...
+path-constant nav_images :  ./images/ ; # png and svg images for home, next, note, tip...
 
 path-constant images_location : . ; # location of SVG and PNG images referenced by Quickbook.
 #  \boost\libs\quan\doc\images
@@ -235,7 +236,6 @@ boostbook standalone
 install html : boostbook.css : <location>html ;  # Copy custom Boostbook style sheet from /doc folder to /doc/html.
 explicit html ;
 
-#install images : [ glob $(BOOST_ROOT)/doc/src/images/*.png ] : <location>html/images ; # Boost standard navigation PNG images.
 install images : [ glob images/*.png ] : <location>html/images ; # All PNG images, including navigation and SVG version.
 explicit images ;
 

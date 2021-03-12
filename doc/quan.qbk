@@ -32,15 +32,6 @@
 [def __inkscape [@http://www.inkscape.org/ Inkscape]]
 [def __boost [@http://www.boost.org Boost]]
 
-[/ Generating docs for compound boost::svg::svg]
-[/ Generating XML output for class boost::svg::svg]
-
-[def __svg [^[classref boost::svg::svg svg<>]]]
-[def __svg_1d_plot [^[classref boost::svg::svg_1d_plot svg_1d_plot<>]]]
-[def __svg_1d_plot_series [^[classref boost::svg::svg_1d_plot_series<>]]]
-[def __svg_2d_plot [^[classref boost::svg::svg_2d_plot svg_2d_plot<>]]]
-[def __svg_2d_plot_series [^[classref boost::svg::svg_2d_plot_series<>]]]
-
 [def __preface [link svg_plot.preface]]
 [def __howtouse [link svg_plot.howtouse  Document conventions]]
 [def __chaining_functions[@https://isocpp.org/wiki/faq/references#method-chaining chaining of functions]]
