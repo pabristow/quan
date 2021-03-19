@@ -19,24 +19,7 @@
 # cd /doc  # to get to \boost\libs\quan\doc\Jamfile.v2
 # b2 -a --enable-index > quan_doc_16feb2021_1725.log 
 
-# project boost/doc ;
-using boostbook ;
-using quickbook ;
-using doxygen ;
-
-import os ; # Needed to get environment variables.
-
-path-constant nav_images :  html/images/ ; # png and svg images for home, next, note, tip...
-# path-constant nav_images :  ./images/ ; # png and svg images for home, next, note, tip...
-
-path-constant images_location : . ; # location of SVG and PNG images referenced by Quickbook.
-#  \boost\libs\quan\doc\images
-
-path-constant parent : .. ;  # Beman Dawes - so that inspect.exe will start in boost-root/libs/timer
-                             # when run from another directory, such as boost-root/status
-
-echo "nav_images" $(nav_images) ;
-echo "images_location" $(images_location) ;
+# project quan ;
 
 if --enable-index in  [ modules.peek : ARGV ]
 {
@@ -75,11 +58,15 @@ else
    ECHO "Building the Quan docs with automatic index generation disabled. To get an AutoIndex, try building with --enable-index." ;
 }
 
+using quickbook ;
+
 xml quan
   :
     quan.qbk
   :
 ;
+
+using doxygen ;
 
 doxygen autodoc
   : # Input all *.*pp files and sub-folders recursively.
@@ -143,7 +130,25 @@ doxygen autodoc
     #<doxygen:param>"PREDEFINED=\"BOOST_DEDUCED_TYPENAME=typename\" "
 # See Doxygen configuration for detailed explanation of these options.
 
-# import boostbook : boostbook ;
+
+path-constant admon_images :  html/images/ ; # png and svg images for home, next, Note, Tip, Important, Warning...
+# path-constant admon_images :  ./images/ ; # png and svg images for home, next, note, tip...
+ECHO "admon_images = " $(admon_images) ;
+
+path-constant images_location : . ; # location of admonition SVG and PNG images referenced by Boostbook.
+#  \boost\libs\quan\doc\images
+ECHO "images_location = " $(images_location) 
+# images_location \boost\libs\quan\doc;
+
+path-constant parent : .. ;  # Beman Dawes - so that inspect.exe will start in boost-root/libs/timer
+                             # when run from another directory, such as boost-root/status
+ECHO "parent = " $(parent) 
+#                 
+path-constant here : . ;       # Current file location, \boost\libs\quan\doc\Jamfile.v2                        
+ECHO "here = " $(here) 
+#
+ 
+using boostbook ;
 
 boostbook standalone
   :
@@ -160,7 +165,8 @@ boostbook standalone
   # Or a local preference Boost stylesheet with different syntax colors at /doc.boostbook.css:
   <xsl:param>html.stylesheet=boostbook.css
 
-  <xsl:param>nav.layout=horizontal # to get a horizontal navigation bar (you probably DO want this).
+  # <xsl:param>nav.layout=horizontal # to get a horizontal navigation bar Home_libraires_people_...
+  # (you probably DO want this unless standalone).
   <xsl:param>boost.image=Boost # Options are: none (no logo), Boost (for boost.png), or your own logo.
   <xsl:param>boost.image.src=./images/proposed_for_boost.png 
   # I:\boost\libs\quan\doc\images\proposed_for_boost.png
@@ -174,6 +180,11 @@ boostbook standalone
   # HTML options first:
   # Use graphics not text for navigation:
   <xsl:param>navig.graphics=1
+  # Yes, we want graphics for admonishments:
+  <xsl:param>admon.graphics=1
+  <xsl:param>admon.graphics.extension=".svg"
+
+
   # How far down we chunk nested sections, basically all of them:
   <xsl:param>chunk.section.depth=10
   # Don't put the first section on the same page as the TOC:
@@ -183,16 +194,15 @@ boostbook standalone
   # Max depth in each TOC:
   <xsl:param>toc.max.depth=4
   # How far down we go with TOC's
-  #<xsl:param>generate.section.toc.level=10
+  <xsl:param>generate.section.toc.level=10
   #<xsl:param>root.filename="quan"
-
-  # <xsl:param>project.root=http://beta.boost.org/development
   # <xsl:param>annotation.support=1
   # <xsl:param>quickbook.source.style.show="'true'"
 
   # PDF Options:
-  # problem here with xslt-xsltproc.windows ..\..\..\bin.v2\libs\quan\doc\pdf\quan.docbook "too many params increase MAX_PARAMETERS" - see below for workaround.
-  # TOC Generation
+  # Potential problem here with xslt-xsltproc.windows ..\..\..\bin.v2\libs\quan\doc\pdf\quan.docbook 
+  #   "too many params increase MAX_PARAMETERS" - see below for workaround.
+  # TOC Generation.
   <xsl:param>fop1.extensions=0
   <format>pdf:<xsl:param>xep.extensions=1
   #<format>pdf:<xsl:param>fop.extensions=0
@@ -206,14 +216,14 @@ boostbook standalone
   # Paper type = A4
   <format>pdf:<xsl:param>paper.type=A4
   # Yes, we want graphics for admonishments:
-  <xsl:param>admon.graphics=1
+  #<xsl:param>admon.graphics=1
   # Set this one for PDF generation *only*:
-  # default PNG graphics are awful in PDF format,
+  # default PNG admonition graphics (Tip, Note, Warning, Import...) are awful in PDF format,
   # better to use SVGs instead:
   <format>pdf:<xsl:param>admon.graphics.extension=".svg"
+  <format>pdf:<xsl:param>admon.graphics.path=$(admon_images)/
   <format>pdf:<xsl:param>use.role.for.mediaobject=1
   <format>pdf:<xsl:param>preferred.mediaobject.role=print
-  <format>pdf:<xsl:param>admon.graphics.path=$(nav_images)/
   <format>pdf:<xsl:param>img.src.path=$(images_location)/
   # <format>pdf:<xsl:param>draft.mode="no"
   # http://www.sagehill.net/docbookxsl/AddFont.html
@@ -230,7 +240,7 @@ boostbook standalone
   <dependency>css
   <dependency>images
   <dependency>svg-images
- ;
+ ; # boostbook
 
 # install html : ../../../doc/html/boostbook.css ; # Boost standard style sheet.
 
