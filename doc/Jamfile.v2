@@ -216,6 +216,7 @@ boostbook standalone
   # Paper type = A4
   <format>pdf:<xsl:param>paper.type=A4
   # Yes, we want graphics for admonishments:
+  # http://www.sagehill.net/docbookxsl/PrintIcons.html
   #<xsl:param>admon.graphics=1
   # Set this one for PDF generation *only*:
   # default PNG admonition graphics (Tip, Note, Warning, Import...) are awful in PDF format,
