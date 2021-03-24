@@ -1,4 +1,4 @@
-/*! \file/*! \file
+/*!
    \brief Class for simple Propagation of Uncertainties according to a pure Gaussian model.
 
     \details Based on code by Evan Manning (manning@alumni.caltech.edu)
@@ -19,7 +19,7 @@
     2. Use few enough digits to be reasonably convenient.
     3. For other calculations, keep a potentially significant digits (std::numeric_limits<>::max_digits10), 17 for double.
 
-  \mainpage
+  Possible Doxygen main page for uncertain classes, but will clash with svg_plot and rounding main pages.
 
   \n
   \b Boost.Quan
@@ -47,7 +47,9 @@ Examples are in folder:
 and C++ include files are in folder:
 
   /boost/boost/quan/
-*/
+
+ \file
+ */
 
 // unc.hpp
 
@@ -239,12 +241,12 @@ const unsigned short int UNC_DEF = (UNC_KNOWN | UNC_NOMINUS | UNC_NOPLUS | //!< 
                                     | UNC_UNIFORM | UNC_TRIANGULAR);  // default Guassian distribution.
 const unsigned short int DEG_FREE_DEF = (DEG_FREE_EXACT | DEG_FREE_KNOWN);
 
-//! \enum uncIOflags 
-//! @brief Control of printing uncertain values, similar to @c std::ios flags. 
+//! \enum uncIOflags
+//! @brief Control of printing uncertain values, similar to @c std::ios flags.
 //! \details Can be output for diagnostic use, for example:
 //! \code outUncIOFlags(std::cout.flags(), std::cerr); // uncFlags (0x201) firm adddegfree.  \endcode
 enum uncIOflags
-{  
+{
   defaults = 0, //!< Default.
   firm = 1  << 0,  //!< bit 0: == 0 == false means flexible layout, or firm == 1 means true.
   setScaled = 1 << 1, //!< bit 1 Set scaled == 1 or not scaled == 0.
@@ -377,7 +379,7 @@ std::istream& operator>> (std::istream& is, const setAllUncFlags& sf)
 //! \details  Usage: \code out << setUncFlags(0x7) ... \endcode
 //! \param flags Flags to set.
 //! Used by @c std::stream operators << and >>.
-class setUncFlags 
+class setUncFlags
 {
   friend std::ostream& operator<< (std::ostream&, const setUncFlags&);
   friend std::istream& operator>> (std::istream&, const setUncFlags&);
@@ -405,7 +407,7 @@ std::istream& operator>> (std::istream& is, const setUncFlags& sf)
 //! \details Example: \code std::cout << setMaskedUncFlags(0x7, 0x3) ... \endcode
 //! \sa setUncFlags if no mask is required.
 //! \param flags Bits to set = 1 in uncflag stored in std::stream.
-//! \param mask 
+//! \param mask
 class setMaskedUncFlags
 {
   friend std::ostream& operator<< (std::ostream&, const setMaskedUncFlags&);
@@ -419,7 +421,7 @@ public:
 //! Reset (clear = 0) selected uncertain class flags for a std::stream.
 //! \details Usage: \code std::cout << resetUncFlags(0x7) ... \endcode
 //! \sa @c setUncFlags to set uncertain class flags.
-class resetUncFlags 
+class resetUncFlags
 {
   friend std::ostream& operator<< (std::ostream&, const resetUncFlags&);
   friend std::istream& operator>> (std::istream&, const resetUncFlags&);
@@ -1624,7 +1626,7 @@ std::istream& operator>> (std::istream& is, unc<false>& ud)
 //! Example: \code uncun u(1.23, 0.05, 9); std::cout << u << std::endl;  \endcode
 //! (Should cover both correlated and uncorrelated cases?)\n
 //! boost::quan::unc::operator<<(std::ostream& os, const unc<false>& val)
-//! boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated>& val) 
+//! boost::quan::unc::operator<<(std::ostream& os, const unc<is_correlated>& val)
 std::ostream& operator<< (std::ostream& os, const unc<false>& val)
 {
   boost::io::ios_precision_saver precision_saver(os);
@@ -2255,7 +2257,7 @@ void outUncIOFlags(std::ostream& os = std::cout, std::ostream& osout = std::cerr
 //! Parameterless manipulators to switch format by changing uncFlag bits,
 //! flex - adjust width just enough to display, suitable for in-line display of non-tables,
 //! or firm to fit into a set width, suitable for tables.
-//! 
+//!
 //! Similarly for scale and autoscale flag bits which use either a preset scaling factor or autoscaled, or the default noscaling.
 //! Note names use all lowercase to match convention of std::hex, std::oct, std::showpos ...[br]
 //! Usage:  \code std::cout << scale << noscale << autoscale << noautoscale ... \endcode
@@ -2273,7 +2275,7 @@ std::ios_base& firmform(std::ios_base& iostr)
 }
 
 //! @brief Set @c std::ostream so that scaling of output values to a preset factor takes place
-//! for output of @b value (mean) of class @c unc. 
+//! for output of @b value (mean) of class @c unc.
 //! This is NOT the default.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << scale << u ... \endcode
 //! @param iostr @c std::ostream for which values should be scaled by the preset factor.
@@ -2285,7 +2287,7 @@ std::ios_base& scale(std::ios_base& iostr)
 }
 
 //! @brief Set @c std::ostream so that NO scaling of output values to a preset factor takes place
-//! for output of @b value (mean) of class @c unc. 
+//! for output of @b value (mean) of class @c unc.
 //! This is the default.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << noscale << u ... \endcode
 //! @param iostr @c std::ostream for which values should be scaled.
@@ -2297,7 +2299,7 @@ std::ios_base& noscale(std::ios_base& iostr)
 }
 
 //! @brief Set @c std::ostream so that autoscaling of output values takes place
-//! for output of @b value (mean) of class @c unc. 
+//! for output of @b value (mean) of class @c unc.
 //! This is NOT the default.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << autoscale << u ... \endcode
 //! @param iostr @c std::ostream for which values should be autoscaled.
@@ -2310,7 +2312,7 @@ std::ios_base& autoscale(std::ios_base& iostr)
 }
 
 //! @brief Set @c std::ostream so that no autoscaling of output values takes place
-//! for output of @b value (mean) of class @c unc. 
+//! for output of @b value (mean) of class @c unc.
 //! This is the default.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << noautoscale << u ... \endcode
 //! @param iostr @c std::ostream for which values should not be autoscaled.
@@ -2321,8 +2323,8 @@ std::ios_base& noautoscale(std::ios_base& iostr)
   return iostr;
 }
 
-//! @brief Set @c std::ostream so that  uncertainty estimate, usually standard deviation, is added when 
-//! for output of @b value (mean) of class @c unc. 
+//! @brief Set @c std::ostream so that  uncertainty estimate, usually standard deviation, is added when
+//! for output of @b value (mean) of class @c unc.
 //! This is NOT the default.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << plusminus << u ... \endcode
 //! outputs a mean value and standard deviation : "1.23 +/- 0.05"
@@ -2334,8 +2336,8 @@ std::ios_base& plusminus(std::ios_base& iostr)
   return iostr;
 }
 
-//! @brief Set @c std::ostream so that NO  uncertainty estimate, usually standard deviation, is added when 
-//! for output of @b value (mean) of class @c unc. 
+//! @brief Set @c std::ostream so that NO  uncertainty estimate, usually standard deviation, is added when
+//! for output of @b value (mean) of class @c unc.
 //! This is the default.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << noplusminus << u ... \endcode
 //! outputs a mean value only.
@@ -2347,8 +2349,8 @@ std::ios_base& noplusminus(std::ios_base& iostr)
   return iostr;
 }
 
-//! @brief Set @c std::ostream so that an appropriate SI symbol is added when 
-//! for output of @b value (mean) of class @c unc. 
+//! @brief Set @c std::ostream so that an appropriate SI symbol is added when
+//! for output of @b value (mean) of class @c unc.
 //! This is NOT the default.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << addsisymbol << u ... \endcode
 //! @param iostr @c std::ostream for which values should add an SI prefix.
@@ -2359,8 +2361,8 @@ std::ios_base& addsisymbol(std::ios_base& iostr)
   return iostr;
 }
 
-//! @brief Set @c std::ostream so that no SI symbol is added when 
-//! for output of @b value (mean) of class @c unc. 
+//! @brief Set @c std::ostream so that no SI symbol is added when
+//! for output of @b value (mean) of class @c unc.
 //! This is the default.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << nosisymbol << u ... \endcode
 //! @param iostr @c std::ostream for which values should add an SI prefix.
@@ -2371,8 +2373,8 @@ std::ios_base& nosisymbol(std::ios_base& iostr)
   return iostr;
 }
 
-//! @brief Set @c std::ostream so that an appropriate SI prefix is added when 
-//! for output of @b value (mean) of class @c unc. 
+//! @brief Set @c std::ostream so that an appropriate SI prefix is added when
+//! for output of @b value (mean) of class @c unc.
 //! This is NOT the default.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << addsiprefix << u ... \endcode
 //! @param iostr @c std::ostream for which values should add an SI prefix.
@@ -2383,8 +2385,8 @@ std::ios_base& addsiprefix(std::ios_base& iostr)
   return iostr;
 }
 
-//! @brief Set @c std::ostream so that no SI prefix is added when 
-//! for output of @b value (mean) of class @c unc. 
+//! @brief Set @c std::ostream so that no SI prefix is added when
+//! for output of @b value (mean) of class @c unc.
 //! This is the default.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << addnoisyDigit << u ... \endcode
 //! @param iostr @c std::ostream for which values should add a noisy digit.
@@ -2395,8 +2397,8 @@ std::ios_base& nosiprefix(std::ios_base& iostr)
   return iostr;
 }
 
-//! @brief Set @c std::ostream so that an extra probably 'noisy' digit is added when 
-//! for output of @b value (mean) of class @c unc.  This is useful if the value 
+//! @brief Set @c std::ostream so that an extra probably 'noisy' digit is added when
+//! for output of @b value (mean) of class @c unc.  This is useful if the value
 //! is being read into some other system thus avoiding digital quantization errors.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << addnoisyDigit << u ... \endcode
 //! @param iostr @c std::ostream for which values should add a noisy digit.
@@ -2407,8 +2409,8 @@ std::ios_base& addnoisyDigit(std::ios_base& iostr)
   return iostr;
 }
 
-//! @brief Set @c std::ostream so that an extra probably 'noisy' digit is NOT added when 
-//! for output of @b value (mean) of class @c unc.  (This is only useful if the value 
+//! @brief Set @c std::ostream so that an extra probably 'noisy' digit is NOT added when
+//! for output of @b value (mean) of class @c unc.  (This is only useful if the value
 //! is being read into some other system thus avoiding digital quantization errors).
 //! No noisy digit is the default.
 //!\details  Example: Using @c std::ostream manipulator:  \code std::cout << addnoisyDigit << u ... \endcode

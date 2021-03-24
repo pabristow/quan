@@ -55,12 +55,69 @@ $(function() {
 <div class="title">unc.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><div class="dynheader">
+
+<p>Class for simple Propagation of Uncertainties according to a pure Gaussian model.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &lt;boost/math/special_functions/fpclassify.hpp&gt;</code><br />
+<code>#include &lt;cstdlib&gt;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;iomanip&gt;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
+<code>#include &lt;limits&gt;</code><br />
+<code>#include &lt;exception&gt;</code><br />
+<code>#include &lt;<a class="el" href="xiostream_8hpp_source.html">boost/quan/xiostream.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="unc__init_8hpp_source.html">boost/quan/unc_init.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="rounding_8hpp_source.html">boost/quan/rounding.hpp</a>&gt;</code><br />
+<code>#include &lt;boost/lexical_cast.hpp&gt;</code><br />
+<code>#include &lt;boost/static_assert.hpp&gt;</code><br />
+<code>#include &lt;boost/io/ios_state.hpp&gt;</code><br />
+<code>#include &lt;boost/units/io.hpp&gt;</code><br />
+<code>#include &lt;boost/units/static_rational.hpp&gt;</code><br />
+<code>#include &lt;boost/type_traits.hpp&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for unc.hpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="unc_8hpp__incl.png" border="0" usemap="#a_i_1_2boost_2boost_2quan_2unc_8hpp" alt=""/></div>
+<map name="a_i_1_2boost_2boost_2quan_2unc_8hpp" id="a_i_1_2boost_2boost_2quan_2unc_8hpp">
+<area shape="rect" title="Class for simple Propagation of Uncertainties according to a pure Gaussian model." alt="" coords="930,5,1063,47"/>
+<area shape="rect" title=" " alt="" coords="5,184,169,225"/>
+<area shape="rect" title=" " alt="" coords="1001,102,1061,129"/>
+<area shape="rect" title=" " alt="" coords="194,191,253,218"/>
+<area shape="rect" title=" " alt="" coords="566,273,638,300"/>
+<area shape="rect" title=" " alt="" coords="277,191,343,218"/>
+<area shape="rect" title=" " alt="" coords="1086,102,1161,129"/>
+<area shape="rect" title=" " alt="" coords="418,191,487,218"/>
+<area shape="rect" title=" " alt="" coords="511,191,565,218"/>
+<area shape="rect" title=" " alt="" coords="1185,102,1264,129"/>
+<area shape="rect" href="xiostream_8hpp.html" title="Extra iostream manipulators and output of stream state descriptions." alt="" coords="2236,191,2408,218"/>
+<area shape="rect" href="unc__init_8hpp.html" title="Initialisation of std::stream iword to store uncertainty information." alt="" coords="1289,102,1449,129"/>
+<area shape="rect" href="rounding_8hpp.html" title="Common rounding and &#39;proper&#39; rounding." alt="" coords="711,102,875,129"/>
+<area shape="rect" title=" " alt="" coords="2053,191,2212,218"/>
+<area shape="rect" title=" " alt="" coords="1473,102,1625,129"/>
+<area shape="rect" title=" " alt="" coords="1649,102,1800,129"/>
+<area shape="rect" title=" " alt="" coords="1825,102,1950,129"/>
+<area shape="rect" title=" " alt="" coords="1974,95,2097,136"/>
+<area shape="rect" title=" " alt="" coords="2121,102,2265,129"/>
+<area shape="rect" title=" " alt="" coords="2432,191,2471,218"/>
+<area shape="rect" title=" " alt="" coords="995,184,1129,225"/>
+<area shape="rect" title=" " alt="" coords="1153,184,1315,225"/>
+<area shape="rect" title=" " alt="" coords="1339,184,1500,225"/>
+<area shape="rect" title=" " alt="" coords="1524,184,1685,225"/>
+<area shape="rect" title=" " alt="" coords="1709,184,1871,225"/>
+<area shape="rect" title=" " alt="" coords="1895,184,2029,225"/>
+<area shape="rect" title=" " alt="" coords="639,191,810,218"/>
+<area shape="rect" title=" " alt="" coords="835,191,889,218"/>
+<area shape="rect" title=" " alt="" coords="914,191,970,218"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="unc_8hpp__dep__incl.png" border="0" usemap="#a_i_1_2boost_2boost_2quan_2unc_8hppdep" alt=""/></div>
 <map name="a_i_1_2boost_2boost_2quan_2unc_8hppdep" id="a_i_1_2boost_2boost_2quan_2unc_8hppdep">
-<area shape="rect" title=" " alt="" coords="5,5,139,47"/>
+<area shape="rect" title="Class for simple Propagation of Uncertainties according to a pure Gaussian model." alt="" coords="5,5,139,47"/>
 <area shape="rect" href="meas_8hpp.html" title="Class Meas for measurements using an uncertain class unc." alt="" coords="5,95,139,136"/>
 </map>
 </div>
@@ -75,16 +132,12 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function for <code><a class="el" href="classboost_1_1quan_1_1show_unc_types.html" title="Helper function for showUncTypes friend std::ostream operator&lt;&lt;.">showUncTypes</a></code> friend <code>std::ostream</code> operator&lt;&lt;.  <a href="classboost_1_1quan_1_1show_unc_types.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_all_unc_flags.html">boost::quan::setAllUncFlags</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">setAllUncflags(int flags);  <a href="classboost_1_1quan_1_1set_all_unc_flags.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_unc_flags.html">boost::quan::setUncFlags</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set selected uncertain flags.  <a href="classboost_1_1quan_1_1set_unc_flags.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_masked_unc_flags.html">boost::quan::setMaskedUncFlags</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">setMaskedUncflags(int flags, int mask);  <a href="classboost_1_1quan_1_1set_masked_unc_flags.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1reset_unc_flags.html">boost::quan::resetUncFlags</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset (clear = 0) selected uncertain class flags for a std::stream.  <a href="classboost_1_1quan_1_1reset_unc_flags.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1reset_masked_unc_flags.html">boost::quan::resetMaskedUncFlags</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -97,15 +150,13 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_unc_sig_digits.html">boost::quan::setUncSigDigits</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_rounding_loss.html">boost::quan::setRoundingLoss</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">setRoundingLoss(int setRoundingLoss); to control the acceptable rounding loss. Usage: `out &lt;&lt; <a class="el" href="classboost_1_1quan_1_1set_rounding_loss.html" title="setRoundingLoss(int setRoundingLoss); to control the acceptable rounding loss. Usage: `out &lt;&lt; setRoun...">setRoundingLoss</a>(0.01)` ...  <a href="classboost_1_1quan_1_1set_rounding_loss.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1set_confidence.html">boost::quan::setConfidence</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">setConfidence(int setConfidence); to control the confidence interval. Usage: `out &lt;&lt; <a class="el" href="classboost_1_1quan_1_1set_confidence.html" title="setConfidence(int setConfidence); to control the confidence interval. Usage: `out &lt;&lt; setConfidence(0....">setConfidence</a>(0.01)` ...  <a href="classboost_1_1quan_1_1set_confidence.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classboost_1_1quan_1_1unc.html">boost::quan::unc&lt; is_correlated &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboost_1_1quan_1_1less_abs.html">boost::quan::lessAbs&lt; Type &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Predicate comparison operators for use by sort etc. Functors are _preferred_ to functions for STL algorithms: Scott Meyers, ESTL, item 46, page 201...  <a href="structboost_1_1quan_1_1less_abs.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used below by min_element, etc.  <a href="structboost_1_1quan_1_1less_abs.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -120,7 +171,7 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a6dd711cf8113866a5c2bf0b48255056e"><td class="memItemLeft" align="right" valign="top">typedef unc&lt; false &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a6dd711cf8113866a5c2bf0b48255056e">boost::quan::uncun</a></td></tr>
 <tr class="separator:a6dd711cf8113866a5c2bf0b48255056e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acca6f05d21ad8cba1761bacbab7b7a53"><td class="memItemLeft" align="right" valign="top">typedef unc&lt; true &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#acca6f05d21ad8cba1761bacbab7b7a53">boost::quan::unccorr</a></td></tr>
-<tr class="memdesc:acca6f05d21ad8cba1761bacbab7b7a53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uncertainties are NOT correlated. Uncorrelated is the normal case when uncertainties add.  <a href="namespaceboost_1_1quan.html#acca6f05d21ad8cba1761bacbab7b7a53">More...</a><br /></td></tr>
+<tr class="memdesc:acca6f05d21ad8cba1761bacbab7b7a53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uncorrelated is the normal case when uncertainties add.  <a href="namespaceboost_1_1quan.html#acca6f05d21ad8cba1761bacbab7b7a53">More...</a><br /></td></tr>
 <tr class="separator:acca6f05d21ad8cba1761bacbab7b7a53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -147,7 +198,6 @@ Enumerations</h2></td></tr>
 , <a class="el" href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cbad176f7f851b04183d21beb2193dad29d">boost::quan::SPARE</a> = 1 &lt;&lt; 15
 <br />
  }</td></tr>
-<tr class="memdesc:a6501d4271a4bac72773682ce981ed6cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">16 type bits used by unc class uncTypes. Bit set = 1 means a positive attribute. Unctypes are  <a href="namespaceboost_1_1quan.html#a6501d4271a4bac72773682ce981ed6cb">More...</a><br /></td></tr>
 <tr class="separator:a6501d4271a4bac72773682ce981ed6cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a998aae9ae06af93365c48a8ff1eabe49"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49">boost::quan::uncIOflags</a> { <br />
 &#160;&#160;<a class="el" href="namespaceboost_1_1quan.html#a998aae9ae06af93365c48a8ff1eabe49a90a240dddb6bf9dc272919fdacb03d66">boost::quan::defaults</a> = 0
@@ -176,11 +226,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ad8206ee286a5c7483d0dfcbc8a8e7122"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unc_8hpp.html#ad8206ee286a5c7483d0dfcbc8a8e7122">BOOST_STATIC_ASSERT</a> (std::numeric_limits&lt; double &gt;::is_iec559)</td></tr>
 <tr class="separator:ad8206ee286a5c7483d0dfcbc8a8e7122"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebcaf3a92e6c8be9c774b1ed6b84c239"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aebcaf3a92e6c8be9c774b1ed6b84c239">boost::quan::unc_input</a> (double &amp;mean, double &amp;stdDev, unsigned short int &amp;degreesOfFreedom, unsigned short int &amp;uncTypes, std::istream &amp;is)</td></tr>
-<tr class="memdesc:aebcaf3a92e6c8be9c774b1ed6b84c239"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uncertainties ARE correlated. This is the unusual case where the sum must be exact, so the uncertainties are subtracted. Example: two blocks which fit into a box perfectly. So if both have an uncertainties, they must cancel when the uncertainties are added. Also applies to items like concentrations which must add up to 100% or unity.  <a href="namespaceboost_1_1quan.html#aebcaf3a92e6c8be9c774b1ed6b84c239">More...</a><br /></td></tr>
 <tr class="separator:aebcaf3a92e6c8be9c774b1ed6b84c239"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afaa8acafded6d9b3669084126ce0114e"><td class="memTemplParams" colspan="2">template&lt;typename Type &gt; </td></tr>
 <tr class="memitem:afaa8acafded6d9b3669084126ce0114e"><td class="memTemplItemLeft" align="right" valign="top">Type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#afaa8acafded6d9b3669084126ce0114e">boost::quan::pow4</a> (const Type &amp;a)</td></tr>
-<tr class="memdesc:afaa8acafded6d9b3669084126ce0114e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Quaded function, notationally convenient for x^4, but overflow possible? Used by Welch-Satterthwaite formula.  <a href="namespaceboost_1_1quan.html#afaa8acafded6d9b3669084126ce0114e">More...</a><br /></td></tr>
 <tr class="separator:afaa8acafded6d9b3669084126ce0114e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a580af4a675227f3784636fc806c52c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a5a580af4a675227f3784636fc806c52c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a5a580af4a675227f3784636fc806c52c">boost::quan::outFpClass</a> (T, std::ostream &amp;)</td></tr>
@@ -207,15 +255,14 @@ Functions</h2></td></tr>
 <tr class="memdesc:a416ffcff06eb51d06caadd376d2ecf63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract operator&lt;&lt; for unc type.  <a href="namespaceboost_1_1quan.html#a416ffcff06eb51d06caadd376d2ecf63">More...</a><br /></td></tr>
 <tr class="separator:a416ffcff06eb51d06caadd376d2ecf63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5ab04fc0ffceb72abe8daeb8c2472a6"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ae5ab04fc0ffceb72abe8daeb8c2472a6">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const unc&lt; false &gt; &amp;val)</td></tr>
-<tr class="memdesc:ae5ab04fc0ffceb72abe8daeb8c2472a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract <code>operator&lt;&lt;</code> for uncertain types. Example:  <a href="namespaceboost_1_1quan.html#ae5ab04fc0ffceb72abe8daeb8c2472a6">More...</a><br /></td></tr>
 <tr class="separator:ae5ab04fc0ffceb72abe8daeb8c2472a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed864b416f2b73bf7d506430e61e8ab8"><td class="memTemplParams" colspan="2">template&lt;bool correlated&gt; </td></tr>
 <tr class="memitem:aed864b416f2b73bf7d506430e61e8ab8"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aed864b416f2b73bf7d506430e61e8ab8">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const std::pair&lt; unc&lt; correlated &gt;, unc&lt; correlated &gt; &gt; &amp;up)</td></tr>
 <tr class="separator:aed864b416f2b73bf7d506430e61e8ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ce80ee18589e4770b7e7b9640e69ecc"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a9ce80ee18589e4770b7e7b9640e69ecc"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a9ce80ee18589e4770b7e7b9640e69ecc">boost::quan::value_of</a> (T)</td></tr>
-<tr class="memdesc:a9ce80ee18589e4770b7e7b9640e69ecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Two helper functions to provide values and uncertainties as pairs.  <a href="namespaceboost_1_1quan.html#a9ce80ee18589e4770b7e7b9640e69ecc">More...</a><br /></td></tr>
-<tr class="separator:a9ce80ee18589e4770b7e7b9640e69ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f9761b44f5afc0fea90878605c4dd56"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a2f9761b44f5afc0fea90878605c4dd56"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a2f9761b44f5afc0fea90878605c4dd56">boost::quan::value_of</a> (T v)</td></tr>
+<tr class="memdesc:a2f9761b44f5afc0fea90878605c4dd56"><td class="mdescLeft">&#160;</td><td class="mdescRight">&lt;  <a href="namespaceboost_1_1quan.html#a2f9761b44f5afc0fea90878605c4dd56">More...</a><br /></td></tr>
+<tr class="separator:a2f9761b44f5afc0fea90878605c4dd56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2129103efec2f2bf8507576e56287240"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a2129103efec2f2bf8507576e56287240"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a2129103efec2f2bf8507576e56287240">boost::quan::unc_of</a> (T)</td></tr>
 <tr class="separator:a2129103efec2f2bf8507576e56287240"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -243,7 +290,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a0ffed5d1647ffffdcd0a7bff8d298138"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a0ffed5d1647ffffdcd0a7bff8d298138">boost::quan::outUncIOFlags</a> (std::ostream &amp;os=std::cout, std::ostream &amp;osout=std::cerr, std::string terminator=&quot;.\n&quot;)</td></tr>
 <tr class="separator:a0ffed5d1647ffffdcd0a7bff8d298138"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aefd45ac0473bbf0ecd3dc32e5f6bb9f7"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#aefd45ac0473bbf0ecd3dc32e5f6bb9f7">boost::quan::flexform</a> (std::ios_base &amp;iostr)</td></tr>
-<tr class="memdesc:aefd45ac0473bbf0ecd3dc32e5f6bb9f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameterless manipulators to switch format by changing uncFlag bits, flex - adjust width just enough to display, suitable for in-line display of non-tables, or firm to fit into a set width, suitable for tables.  <a href="namespaceboost_1_1quan.html#aefd45ac0473bbf0ecd3dc32e5f6bb9f7">More...</a><br /></td></tr>
 <tr class="separator:aefd45ac0473bbf0ecd3dc32e5f6bb9f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69b801bd38cb8d8361c1c722c191a010"><td class="memItemLeft" align="right" valign="top">std::ios_base &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a69b801bd38cb8d8361c1c722c191a010">boost::quan::firmform</a> (std::ios_base &amp;iostr)</td></tr>
 <tr class="separator:a69b801bd38cb8d8361c1c722c191a010"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -325,7 +371,6 @@ Functions</h2></td></tr>
 <tr class="memitem:ac6c2b23f16804ee269e9ef4487f01e6d"><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#ac6c2b23f16804ee269e9ef4487f01e6d">boost::quan::operator&gt;&gt;</a> (std::istream &amp;is, const setMaskedUncFlags &amp;sf)</td></tr>
 <tr class="separator:ac6c2b23f16804ee269e9ef4487f01e6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97c3d8f27efcd29b33ceb7759c5eec1b"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a97c3d8f27efcd29b33ceb7759c5eec1b">boost::quan::operator&lt;&lt;</a> (std::ostream &amp;os, const resetMaskedUncFlags &amp;sf)</td></tr>
-<tr class="memdesc:a97c3d8f27efcd29b33ceb7759c5eec1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset (clear) the bits specified in the <code>uncFlagsIndex</code>.  <a href="namespaceboost_1_1quan.html#a97c3d8f27efcd29b33ceb7759c5eec1b">More...</a><br /></td></tr>
 <tr class="separator:a97c3d8f27efcd29b33ceb7759c5eec1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ed9d9920835d5f451ce8418edd80c5e"><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1quan.html#a2ed9d9920835d5f451ce8418edd80c5e">boost::quan::operator&gt;&gt;</a> (std::istream &amp;is, const resetMaskedUncFlags &amp;sf)</td></tr>
 <tr class="separator:a2ed9d9920835d5f451ce8418edd80c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -400,7 +445,29 @@ Variables</h2></td></tr>
 <tr class="memdesc:a803b189355f9344b79914c95bf14ad35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Description as a word of each bit in <code>unc_type</code>, using enum unc_types.[br].  <a href="namespaceboost_1_1quan.html#a803b189355f9344b79914c95bf14ad35">More...</a><br /></td></tr>
 <tr class="separator:a803b189355f9344b79914c95bf14ad35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class for simple Propagation of Uncertainties according to a pure Gaussian model. </p>
+<p>Based on code by Evan Manning (<a href="#" onclick="location.href='mai'+'lto:'+'man'+'ni'+'ng@'+'al'+'umn'+'i.'+'cal'+'te'+'ch.'+'ed'+'u'; return false;">manni<span style="display: none;">.nosp@m.</span>ng@a<span style="display: none;">.nosp@m.</span>lumni<span style="display: none;">.nosp@m.</span>.cal<span style="display: none;">.nosp@m.</span>tech.<span style="display: none;">.nosp@m.</span>edu</a>) Evan Marshal Manning, C/C++ Users Journal, March 1996 page 29 to 38. original downloaded from <a href="ftp://beowulf.jpl.nasa.gov/pub/manning">ftp://beowulf.jpl.nasa.gov/pub/manning</a>. This is a simple model of uncertainties, designed to accompany an article published in C/C++ Users Journal March 1996 at <a href="http://www.ddj.com/cpp/184403147">http://www.ddj.com/cpp/184403147</a> . A fuller collection of even fancier classes also given in Evan Marshal Manning's unc.h.</p>
+<p>Standard deviation &amp; its uncertainty added Paul A Bristow 31 Mar 98 ... .</p>
+<p>Uncertainty as Applied to Measurements and Calculations John Denker <a href="http://www.av8n.com/physics/uncertainty.htm#sec-crank3">http://www.av8n.com/physics/uncertainty.htm#sec-crank3</a> Here are some simple rules that apply whenever you are writing down a number:</p>
+<p>1. Use many enough digits to avoid unintended loss of information. 2. Use few enough digits to be reasonably convenient. 3. For other calculations, keep a potentially significant digits (std::numeric_limits&lt;&gt;::max_digits10), 17 for double.</p>
+<p>Possible Doxygen main page for uncertain classes, but will clash with svg_plot and rounding main pages.</p>
+<p><br  />
+ <b>Boost.Quan</b> </p>
+<p>This is the standalone Doxygen main page of the proposed Boost.Quan library.</p>
+<p>This library provides a collection of classes and functions for handling uncertain reals.</p>
+<p>Uncertainty as standard deviation and degrees of freedom are propagated through calculations using the uncertain type, and are input and output including the uncertainty estimates.</p>
+<p>See Boost.Quan HTML Manual at</p>
+<p>quan/libs/quan/doc/html/index.html</p>
+<p>and/or equivalent PDF Manual at:</p>
+<p>quan/libs/quan/doc/quan.pdf</p>
+<p>Examples are in folder:</p>
+<p>/boost/libs/quan/example/</p>
+<p>and C++ include files are in folder:</p>
+<p>/boost/boost/quan/ </p>
+
+<p class="definition">Definition in file <a class="el" href="unc_8hpp_source.html">unc.hpp</a>.</p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="ad8206ee286a5c7483d0dfcbc8a8e7122"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8206ee286a5c7483d0dfcbc8a8e7122">&#9670;&nbsp;</a></span>BOOST_STATIC_ASSERT()</h2>
 
@@ -438,7 +505,7 @@ Variables</h2></td></tr>
       <!-- 2021 becomes the current year, for example 2010, so claims copyright for a range of years, 2009 - 2010. -->
      <p>Doxygen Documentation generated by&nbsp;<a href="https://www.doxygen.org/index.html"> 
      <img src="https://www.doxygen.nl/images/doxygen.png"   width="100" height="20"
-     alt="Doxygen logo" align="middle" border="1"/>&nbsp; 1.9.1</a>, Revised at Tue Mar 9 2021 11:58:57</p>
+     alt="Doxygen logo" align="middle" border="1"/>&nbsp; 1.9.1</a>, Revised at Wed Mar 24 2021 17:27:36</p>
   </address>
   </tr>
 </tbody>

@@ -165,7 +165,7 @@ boostbook standalone
   # Or a local preference Boost stylesheet with different syntax colors at /doc.boostbook.css:
   <xsl:param>html.stylesheet=boostbook.css
 
-  # <xsl:param>nav.layout=horizontal # to get a horizontal navigation bar Home_libraires_people_...
+  # <xsl:param>nav.layout=horizontal # to get a horizontal navigation bar Home_libraries_people_...
   # (you probably DO want this unless standalone).
   <xsl:param>boost.image=Boost # Options are: none (no logo), Boost (for boost.png), or your own logo.
   <xsl:param>boost.image.src=./images/proposed_for_boost.png 

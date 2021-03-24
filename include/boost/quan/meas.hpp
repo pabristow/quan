@@ -1,9 +1,12 @@
 /*! \file
    \brief Class @c Meas for measurements using an uncertain class @c unc.
-   \details @c class @c meas with uncertain type Unc and also measurement order, &/or time-stamp.
+   \details Uses a measurement or observation with information about uncertainty, mainly as a standard deviation,
+   recorded in an uncertain type Unc
+   and also including measurement details order number, &/or time-stamp.
 */
 
 // meas.hpp
+// 
 // Copyright Paul A. Bristow 2012, 2021
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -19,7 +22,7 @@
 //using namespace boost::posix_time;
 
 #include <functional> // for binary_function min
-//using std::binary_function; // <functional>
+//using std::binary_function;
 
 #include <boost/quan/unc.hpp> // Uncertain class types, nomally class unc when uncertainties are not correlated.
 // typedef unc<false> uncun; // Uncertain Uncorrelated (convenient as the normal case).

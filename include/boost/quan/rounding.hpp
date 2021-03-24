@@ -20,9 +20,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-/*! mainpage <b> Proper rounding testbed documentation. </b>
- *
- * \section intro_sec Introduction to proper rounding.
+/*!  <b> Proper rounding testbed documentation. </b>
+
+   \section intro_sec Introduction to proper rounding.
 
    This is a testbed for the rounding_loss-Proper rounding for a few distributions
    assumed to be appropriate for the data observations.\n\n
@@ -36,7 +36,7 @@
     Measurement Science Review, Vol 2, section 1, (2002), pages 1 - 7.\n\n
     Gejza Wimmer, Viktor Witkovsky, Proper rounding of the measurement result
     under the assumption of triangular distribution, \n
-    Measurement Science Review, Vol 2, section 1, (2002), pages 21 to 31.\n
+    Measurement Science Review, Vol 2, section 1, (2002), pages 21 to 31.
  */
 
 #ifndef BOOST_QUAN_ROUNDING_HPP
@@ -466,7 +466,7 @@ std::string round_ms(FPT v, signed int m)
     //! 'sign' of NaNs cannot reliably and portably be tested using "x < 0"
     //! because ALL comparisons using NaN are false - by definition.
     return (is_neg) ? "-NaN" : "NaN";
-  } else if (std::isinf(v)) 
+  } else if (std::isinf(v))
   {
     return (is_neg) ? "-inf" : "inf";
   }
@@ -519,7 +519,7 @@ std::string round_ms(FPT v, signed int m)
     s.erase(is); // is++;
   }
   // std::cout <<'|' << s <<'|' << ' ' << s.size() << std::endl; // For example: |1.797693134862316e+308| 22
-  
+
   // Format varies with size of exponent part that may use either two or three digits: +e99 or +e300.
   if ((s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 4) // e+00
           && (s.size() != std::numeric_limits<FPT>::digits10 + 1 + 1 + 5)) // e+308
@@ -560,7 +560,7 @@ std::string round_ms(FPT v, signed int m)
     exp = -exp;
   } else if (*se == '+') {
     exp = +exp;
-  } else 
+  } else
   {
     std::cout << "Function round_ms expected digit or sign!" << *se << std::endl;
   }
@@ -671,7 +671,7 @@ bool scaled = true; // want to scale and use prefix to avoid >1000 or < 1.
     A check is_floating_point == true is provided.
   */
 template <typename FPT>
-std::string round_f(FPT v, int sigdigits) { 
+std::string round_f(FPT v, int sigdigits) {
 
   // Will fail if FPT is not a floating-point type (because will not output in scientific format!).
   BOOST_STATIC_ASSERT(boost::is_floating_point<FPT>::value);
@@ -1388,7 +1388,7 @@ void out_value_limits(double mean, double unc, std::pair<double, double> ci, int
   // TODO Would be useful to be able to increase here if a noisydigit wanted,
   // and/or if degrees of freedom > 100.
   os << round_ms(mean, m) << " +/- " << unc_rounded;
-  os.precision(6); //  
+  os.precision(6); //
   using boost::lexical_cast;
   os << " <" << lexical_cast<double>(round_ms(ci.first, m - 1)) << ", "
           << lexical_cast<double>(round_ms(ci.second, m - 1)) << ">";
