@@ -9,7 +9,10 @@ doc/doxygen/html/
 **/*.bak
 **/*.old
 **/*.tmp
-
+test/testQuan1.txt
+test/*.sav
+test/*.lnk
+test/draft git issue boost message.txt
 
 #################
 ## Visual Studio
