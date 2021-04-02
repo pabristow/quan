@@ -254,7 +254,7 @@ explicit images ;
 install svg-images : [ glob images/*.svg ] : <location>html/images ; # All SVG images, including navigation and SVG examples.
 explicit svg-images ;
 
-# install pdf-install : standalone : <install-type>PDF <location>. <name>quan.pdf ;
+install pdf-install : standalone : <install-type>PDF <location>. <name>quan.pdf ; # Copy and rename final pdf to doc/quan.pdf
 
 # Seems to rebuild every time, so run inspect.exe by hand.
 

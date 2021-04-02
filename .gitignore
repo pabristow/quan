@@ -1,8 +1,9 @@
-# boost\libs\quan\.gitignore
+# This file is boost\libs\quan\.gitignore
+#  for project quan.
 
 doc/autodoc
 doc/autodoc.xml
-doc/*.pdf
+#doc/*.pdf
 # doc/html/
 doc/doxygen/html/
 **/*.bat
