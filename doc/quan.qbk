@@ -52,8 +52,6 @@
 
 [section:preface Preface]
 
-[heading Preface]
-
 This Quan library provides a collection of classes and functions for handling [*uncertain quantities - real values and measurements].
 
 Uncertainties stored as notional standard deviation and degrees of freedom are
@@ -70,7 +68,10 @@ Examples are in folder (and subfolders):
 [@https://github.com/pabristow/quan/tree/main/example examples]
 and C++ include files are in folder (and subfolders):
 
-[@https://github.com/pabristow/quan/tree/main/include/boost/quan]
+[@https://github.com/pabristow/quan/tree/main/include/boost/quan  Quan library include files].
+
+This library is used by __svg_plot_github to provide display of uncertain values and their uncertainty estimates.
+See __svg_plot_github_doc for examples and documentation.
 
 [endsect] [/section:preface Preface]
 
