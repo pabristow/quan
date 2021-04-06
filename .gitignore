@@ -1,9 +1,11 @@
 # This file is boost\libs\quan\.gitignore
-#  for project quan.
+# for project quan.
 
 doc/autodoc
 doc/autodoc.xml
+# Don't save pdf builds (nor upload them) yes.
 #doc/*.pdf
+#  Do save and push docs build
 # doc/html/
 doc/doxygen/html/
 **/*.bat

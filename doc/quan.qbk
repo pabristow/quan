@@ -41,11 +41,11 @@
 [def __normal_distrib [@https://www.boost.org/doc/libs/1_75_0/libs/math/doc/html/math_toolkit/dist_ref/dists/normal_dist.html normal_distribution]]  
 [def __triangular_distrib [@https://www.boost.org/doc/libs/1_75_0/libs/math/doc/html/math_toolkit/dist_ref/dists/triangular_dist.html triangular distribution]]
 
-[def __quan_github [@https://github.com/pabristow/quan Github repository Quan library]]  
-[def __quan_github_doc [@https://pabristow.github.io/doc/html/index.html Quan library documentation]]  
+[def __svg_plot_github_doc [@https://pabristow.github.io/svg_plot/doc/html/index.html  SVG_plot library documentation]]  
+[def __svg_plot_github [@https://github.com/pabristow/svg_plot SVG_plot library at GitHub]]  
 
-[def __svg_plot_github [@https://github.com/pabristow/quan Github repository SVG_plot library]]  
-[def __svg_plot_doc [@https://pabristow.github.io/svg_plot SVG_plot library documentation]]  
+[def __quan_github [@https://github.com/pabristow/quan   Quan uncertain classes library at Github]]
+[def __quan_github_doc [@https://pabristow.github.io/quan/doc/html/index.html  Quan uncertain classes library documentation]]
 
 [def __b2bjam_github  [@https://github.com/bfgroup/b2  B2/bjam GitHub]]
 [def __b2bjam_doc  [@https://www.bfgroup.xyz/b2/manual/release/index.html  B2/bjam documentation]]
@@ -54,16 +54,16 @@
 
 [heading Preface]
 
-This library provides a collection of classes and functions for handling uncertain reals and measurements.
+This Quan library provides a collection of classes and functions for handling [*uncertain quantities - real values and measurements].
 
-Uncertainty as standard deviation and degrees of freedom are
-propagated through calculations using the uncertain type,
-and are input and output including the uncertainty estimates typically from standard deviation and degrees of freedom,
+Uncertainties stored as notional standard deviation and degrees of freedom are
+propagated through calculations using the uncertain class type.
+Uncertainties are input and output including the uncertainty estimates typically from standard deviation and degrees of freedom,
 usually the number of observations less one.
 
-See [@https://pabristow.github.io/quan/doc/html/index.html Boost.Quan HTML Manual].
+See __quan_github_doc.
 
-and/or equivalent [@https://pabristow.github.io/quan/doc/quan.pdf PDF Manual]
+And/or equivalent [@https://github.com/pabristow/quan/tree/main/doc/quan.pdf Quan PDF Manual].
 [/[@https://github.com/pabristow/quan/tree/main/doc/quan.pdf] ]
 
 Examples are in folder (and subfolders):
