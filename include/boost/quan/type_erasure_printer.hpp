@@ -27,9 +27,11 @@
 
 using namespace boost::type_erasure;
 
-//! Placeholder used by the abstract printer during specification of requirements.
-struct _t : boost::type_erasure::placeholder {};
+//! type ostreamable to be output placeholder used by the abstract printer during specification of requirements.
+struct _t : boost::type_erasure::placeholder {}; 
+//! iterator for ostream output placeholder used by the abstract printer during specification of requirements.
 struct _iter : boost::type_erasure::placeholder {};
+//! ostream placeholder used by the abstract printer during specification of requirements.
 struct _os : boost::type_erasure::placeholder {};
 // This is more readable than using the 'out of the box' _a, ... _g placeholders.
 // See placeholder.hpp.
