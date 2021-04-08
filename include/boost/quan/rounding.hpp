@@ -11,7 +11,7 @@
      that most accurately conveys the uncertainty in the measurement."
  */
 
-// \file rounding.hpp
+//   \file rounding.hpp
 
 // Copyright Paul A. Bristow 2009, 2012, 2021
 
@@ -43,7 +43,6 @@
 #define BOOST_QUAN_ROUNDING_HPP
 
 #include <cmath>
-// using std::ceil;
 // using std::floor;
 // using std::pow;
 // using std::log10;
@@ -116,8 +115,11 @@
 namespace boost {
   namespace quan {
 
+
 BOOST_STATIC_ASSERT(std::numeric_limits<double>::is_iec559); // Assume IEEE 754 ONLY.
-// Might also still work by checking that just std::numeric_limits is specialized?
+// _STATIC_ASSERT (numeric_limits<double>::is_iec559); // and MS STATIC assert.
+
+// Might also work by checking that just std::numeric_limits is specialized?
 // This might allow some embedded systems to use this software.
 BOOST_STATIC_ASSERT(std::numeric_limits<double>::is_specialized); //
 
@@ -126,20 +128,19 @@ BOOST_STATIC_ASSERT(std::numeric_limits<double>::is_specialized); //
 const unsigned int maxdigits10 = 2 + std::numeric_limits<double>::digits * 3010 / 10000;
 #else
 // std::numeric_limits<double>::max_digits10; IS supported.
-// Any noisy or guard digits needed to display a one-bit difference in value are included in max_digits10.
-constexpr int maxdigits10 = std::numeric_limits<double>::max_digits10;
+// Any noisy or guard digits needed to display a one-bit difference are included in max_digits10.
+const unsigned int maxdigits10 = std::numeric_limits<double>::max_digits10;
 #endif
 
-/*! \brief Output a pair of @c doubles, 
-   enclosed in < > angle brackets and with a comma separator, using current @c ostream's precision.
+// Explicit specialization for output of a pair of doubles.
+std::ostream& operator<<(std::ostream& os, std::pair<double, double>& p)
+{ /*! Output a pair of `double`s, using < > angle brackets and comma separator, using current stream's precision.
   \details Explicit specialization for @c std::pair for @c double s.\n
     For example: \verbatim <97.8725, 157.798> \endverbatim
   \param p Pair of @c double s.
   \param os @c std::ostream for string output.
-*/
-std::ostream& operator<<(std::ostream& os, std::pair<double, double>& p)
-{
-  return os << "<" << p.first << ", " << p.second << '>'; // Angle bracketed, separated by comma & space: "<1.23, 1.45>".
+  */
+  return os << "<" << p.first << ", " << p.second << '>'; // Angle bracketed, separated by comma & space.
 }
 
 // Two rounding algorithms returning double values (not strings).
@@ -160,14 +161,16 @@ template<typename FPT> FPT round_to_n(FPT v, int p); // Round value v to p decim
    (int)(x < 0 ? x - 0.5 : x + 0.5))
    So do we need to do something different for negative doubles?
    The difference between symmetric and asymmetric rounding?
-   \tparam FPT Floating-point type, for example, fundamental types float, double, long double.
    \param v Floating-point value to be rounded.
-   \param n Number of digificant digits to round to.
+   \param n number of digificant digits to round to.
    \returns Binary representation of decimal rounded value.
+
+   \tparam FPT Floating-point type, for example, fundamental float, double, long
 */
 template<typename FPT>
 FPT round_sig(FPT v, int n)
 {
+
   // Will fail if FPT is not a floating-point type (because will not output in scientific format!).
   BOOST_STATIC_ASSERT(boost::is_floating_point<FPT>::value);
 
@@ -179,9 +182,8 @@ FPT round_sig(FPT v, int n)
   if (n < 0)
   { // Probably a program error, so might throw?
     return 0;
-  } 
-  else if (n == 0)
-  { // Might also be an error, but makes some sense, so ignore value v and return a zero?
+  } else if (n == 0)
+  { // Might also be an error, but make some sense, so ignore value v and return a zero.
     return static_cast<FPT>(0);
   } else if (n > std::numeric_limits<FPT>::digits10)
   { // We might use max_digits10, but only digits10 are guaranteed.
@@ -190,7 +192,7 @@ FPT round_sig(FPT v, int n)
   }
   if (v == 0)
   {
-    return static_cast<FPT>(0);  //  No rounding needed, or possible, so return a suitable zero of the appropriate type.
+    return static_cast<FPT>(0);  //  No rounding needed, or possible, so return a suitable zero.
   }
   FPT l10 = log10(v);
   int l = static_cast<int> (ceil(l10));
@@ -444,7 +446,7 @@ std::string round_ms(FPT v, signed int m)
     Uncertainty of measurement -- Part 3: Guide to the expression of uncertainty in measurement (GUM:1995)\n
     ISO Guide 98 (1995) and updated version 2008.\n\n
 
-    \note `m` is the index of the roundER digit, that is the just insignificant digit
+    \note `m` is the index of the rounder digit, that is the just insignificant digit
     used to decide if the m+1th digit is to be rounded up or left as is.
     So `m == 0` means that the roundER digit is the units digits, used to round the tens digit,
     `m == +1` the roundER is the tens digit, and the rounded digit is the hundreds digit
@@ -1050,13 +1052,12 @@ int round_m(double rounding_loss = 0.01, double sigma = 0., unsigned int sigma_s
   \param distrib Type of distribution (default gaussian, or triangular or uniform).
 
    \return m Signed position of the digit to be used for rounding,
-    \code m == 0 \endcode means use the units digit for rounding the tens digit.
+    `m == 0` means use the units digit for rounding the tens digit.
   */
 
   if (sigma <= (std::numeric_limits<float>::min)())
   {
     std::cout << "round_m sigma = " << sigma << ", sigma_sigdigits = " << sigma_sigdigits << " must be >= 1! " << std::endl;
-    sigma_sigdigits = 1; // or throw?
     return -9999;
   }
   if (sigma_sigdigits <= 0)
@@ -1159,35 +1160,30 @@ int round_m(double rounding_loss = 0.01, double sigma = 0., unsigned int sigma_s
 
 std::string round_ue(double v, double sigma, double loss_risk = 0.01, unsigned int sigdigits = 2U)
 {  /*!
-  \brief Properly round double value v with uncertainty estimate sigma to a decimal-digit @c std::string.
+  \brief Properly round value to a decimal-digit @c std::string.
   \details Measurement Science and Technolology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X.\n
     Gejza Wimmer, Viktor Witkovsky, Tomas Duby,
-    Proper rounding of the measurement results under normality assumptions. Page 1661, equation 12.
+    Proper rounding of the measurement results under normality assumptions.
+    page 1661, equation 12.
 
     \param v Central value, often estimate of mean.
-    \param sigma Uncertainty estimate of value, nominally standard deviation.
+    \param sigma Uncertainty of value, usually standard deviation.
     \param loss_risk Fraction of loss of accuracy from rounding permitted (default 1%).
     \param sigdigits Number of digits that are significant (default 2).
 
     \return Decimal digit @c std::string containing properly rounded value as decimal-digits.
   */
   if (sigma <= 0)
-  { // No uncertainty estimate so no rounding.
+  {
     std::ostringstream oss;
- //   oss << std::setprecision(std::numeric_limits<double>::digits10) << v;  //  Show all digits?
+ //   oss << std::setprecision(std::numeric_limits<double>::digits10) << v;  //
     oss << std::setprecision(sigdigits) << v;  //
     return oss.str();
   }
   //int round_m(double rounding_loss, double unc, unsigned int sigdigits, distribution_type t);
-  int m = round_m(loss_risk, sigma, sigdigits, gaussian); // Get rounder digit m.
-  if (m <= 0)
-  { // round_m failed because loss from rounding would be too great, so no rounding.
-    std::ostringstream oss;
-    //   oss << std::setprecision(std::numeric_limits<double>::digits10) << v;  // Show all digits?
-    oss << std::setprecision(sigdigits) << v;  
-    return oss.str();
-  }
-  return round_ms(v, m); // Use Wimmer rounding.
+  int m = round_m(loss_risk, sigma, sigdigits, gaussian);
+  std::string r = round_ms(v, m);
+  return r;
 } // string round_ue(double v, double unc, double rounding_loss = 0.01, unsigned int sigdigits = 2U)
 
 std::pair<double, double> conf_interval(double mean, double sigma, double df = 1., double alpha = 0.05, distribution_type distrib = gaussian) { /*!
