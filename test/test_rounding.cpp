@@ -9,8 +9,6 @@
      than is consistent with the uncertainty in the measurement."\n
      "Observed values should be rounded off to the number of digits
      that most accurately conveys the uncertainty in the measurement."
-  \date Oct 09, May 12
-  \author Paul A. Bristow
 */
 
 //  \file test_rounding_cout.hpp
@@ -23,7 +21,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)  // Boost.Test
 
 #define BOOST_TEST_MAIN
-#define BOOST_LIB_DIAGNOSTIC "on" // Report Boost.Test library file details.
+#define BOOST_LIB_DIAGNOSTIC "on" // Report Boost.Test library file details, unless using included version.
 //#include <boost/test/unit_test.hpp>
 #include <boost/test/included/unit_test.hpp>
 
@@ -38,43 +36,43 @@
 #include <boost/quan/rounding.hpp>  // Proper rounding implementation under test.
 
 #include <iostream>
-  using std::cout;
-  using std::cerr;
-  using std::cin;
-  using std::endl;
-  using std::ends;
-  using std::dec;
-  using std::hex;
-  using std::fixed;
-  using std::left;
-  using std::right;
-  using std::showpoint;
-  using std::defaultfloat;
-  using std::scientific;
-  using std::boolalpha;
-  using std::showpos;
-  using std::noshowpos;
+  //using std::cout;
+  //using std::cerr;
+  //using std::cin;
+  //using std::endl;
+  //using std::ends;
+  //using std::dec;
+  //using std::hex;
+  //using std::fixed;
+  //using std::left;
+  //using std::right;
+  //using std::showpoint;
+  //using std::defaultfloat;
+  //using std::scientific;
+  //using std::boolalpha;
+  //using std::showpos;
+  //using std::noshowpos;
 
 #include <iomanip>
-  using std::setprecision;
-  using std::setw;
+  //using std::setprecision;
+  //using std::setw;
 #include <string>
-  using std::string;
+  // using std::string;
 
 #include <fstream>  // for fstream
-  using std::fstream;
-  using std::ofstream;
+  //using std::fstream;
+  //using std::ofstream;
 
 #include <sstream> // stream
-  using std::ostringstream;
-  using std::string;
-  using std::basic_string;
-  using std::ios_base;
+  //using std::ostringstream;
+  //using std::string;
+  //using std::basic_string;
+  //using std::ios_base;
 
 #include <limits>
-  using std::numeric_limits;
+ // using std::numeric_limits;
 
-BOOST_STATIC_ASSERT (std::numeric_limits<double>::is_iec559); // Assume IEEE 754 ONLY.
+BOOST_STATIC_ASSERT_MSG (std::numeric_limits<double>::is_iec559, "double must using IEEE754!"); // Assume IEEE 754 ONLY.
 
 //constexpr int maxdigits10 = 2 + std::numeric_limits<double>::digits * 3010/10000;
 constexpr double eps = std::numeric_limits<double>::epsilon();
@@ -91,7 +89,7 @@ BOOST_AUTO_TEST_CASE(round_test_0)
 BOOST_AUTO_TEST_CASE(round_test_1)
 { // Round to std::cout tests.
 
-  string message("Round test: " __FILE__ );
+  std::string message("Round test: " __FILE__ );
 #ifdef __TIMESTAMP__
   message += " at " BOOST_STRINGIZE(__TIMESTAMP__);
 #endif
@@ -696,7 +694,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_5_1)
   BOOST_CHECK_EQUAL(round_ms(x, round_m(0.01, 15.287, 2U, gaussian)),"128.");
 
 // void out_value_df_limits(double mean, double unc, int degfree = 1, std::ostream& os = std::cout )
-  ostringstream oss;
+  std::ostringstream oss;
   out_value_df_limits(127.835, 15.287, 1, oss);
   // out_value_df_limits(123.835, 15.287); 128. +/- 15 <97.9, 157.8>
   // std::cout  << oss.str() << std::endl;
@@ -705,9 +703,9 @@ BOOST_AUTO_TEST_CASE(Wimmer_5_1)
 
  BOOST_AUTO_TEST_CASE(Wimmer_5_2)
  { // Wimmer example 5(ii)
-
    double sigma = 0.0232;
    double sigma_star = round_sig(sigma, 1); // Why only one significant digit for rounding?
+   //double sigma_star = round_sig(sigma, 2); // Use two significant digits for rounding? Many comparisons with Wimmer fail
    BOOST_CHECK_CLOSE_FRACTION(sigma_star, 0.02, tol);
 
    double g = rounded_div_value(sigma_star, sigma);
@@ -729,7 +727,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_5_1)
 
    double x = 1.23875;  // Final part of example.
    loss_risk = 0.1;  // Should be OK.
-   string s = round_ms(x, m);
+   std::string s = round_ms(x, m);
    BOOST_CHECK_EQUAL(s, "1.24");
    std::pair<double, double> ci =
      conf_interval(x, sigma_star, 1., 0.05);
@@ -744,7 +742,7 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
   // Round using value and uncertainty (and controlling sigdigits of uncertainty).
   // std::string round_ue(double v, double unc, double epsilon = 0.01, unsigned int sigdigits = 2U)
   BOOST_CHECK_EQUAL(round_ue(127.835, 15.287, 0.01, 2U),"128.");  // explicit 2 uncertain digits.
-  BOOST_CHECK_EQUAL(round_ue(127.835, 15.287, 0.01),"128."); // Default unc sigdigit (2)s.
+  BOOST_CHECK_EQUAL(round_ue(127.835, 15.287, 0.01),"128."); // Default unc sigdigits (2).
   BOOST_CHECK_EQUAL(round_ue(127.835, 15.287),"128."); // Default unc sigdigits and default loss_risk.
 
   // Wimmer example 5(i b) e = 0.04
@@ -825,8 +823,8 @@ BOOST_AUTO_TEST_CASE(round_ue_test)
     // std::cout  << "unc_rounded " << unc_rounded << std::endl; // unc_rounded 0.2
     BOOST_CHECK_CLOSE_FRACTION(sigma_rounded, 0.2, tol); //
     BOOST_CHECK_EQUAL(sigma_rounded, 0.2); // unc 0.1 properly rounded.
-    ostringstream oss;
-    oss << setprecision(3) << sigma_rounded; // expect 0.2 whatever precision (< digits10)
+    std::ostringstream oss;
+    oss << std::setprecision(3) << sigma_rounded; // expect 0.2 whatever precision (< digits10)
     BOOST_CHECK_EQUAL(oss.str(), "0.2"); // sigma 0.1_properly rounded.
 
     double gam = sigma_rounded / sigma_star; // 0.2 / 0.223606797 = 0.89442
@@ -926,8 +924,8 @@ BOOST_AUTO_TEST_CASE(Wimmer_triangular_test)
   double unc_rounded = round_sig(unc, 2); // round to 2 sig digit - ISO rule.
   // std::cout  << "unc_rounded " << unc_rounded << std::endl; // unc_rounded 15
   BOOST_CHECK_CLOSE_FRACTION(unc_rounded, 15., 0.01);
-  ostringstream oss;
-  oss << setprecision(3) << unc_rounded; // expect 0.2 whatever precision (< digits10)
+  std::ostringstream oss;
+  oss << std::setprecision(3) << unc_rounded; // expect 0.2 whatever precision (< digits10)
   BOOST_CHECK_EQUAL(oss.str(), "15"); // unc 15. properly rounded.
   double gam = unc_rounded / unc;
   BOOST_CHECK_CLOSE_FRACTION(gam, 0.98123, 0.01);
@@ -941,7 +939,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_triangular_test)
   // ostringstream oss2; // Maybe quicker to construct a new string than erase old one?
   oss.clear(); // Clears only clear stream fail or error bits!
   oss.str(""); // Erases the previous str (oss.str().erase() does NOT change std::string - because it only acts on a copy C string?)
-  oss << setprecision(3) << unc_rounded; // expect 15 whatever precision (< digits10)
+  oss << std::setprecision(3) << unc_rounded; // expect 15 whatever precision (< digits10)
   BOOST_CHECK_EQUAL(oss.str(), "15"); // unc 15. properly rounded.
   std::pair<double, double> ci;
   //std::pair<double, double> conf_interval(double value, double unc, double df = 1., double alpha = 0.05, distribution_type distrib);
@@ -998,28 +996,28 @@ BOOST_AUTO_TEST_CASE(Wimmer_triangular_test)
   //cout << "conf_interval(x, unc, 1, 0.01, triangular); " << ci << std::endl;
   oss.clear(); // Clears only clear stream fail or error bits!
   oss.str(""); // Erases the previous str (oss.str().erase() does NOT change std::string - because it only acts on a copy C string?)
-  oss << setprecision(6) << ci;
+  oss << std::setprecision(6) << ci;
   BOOST_CHECK_EQUAL(oss.str(), "<94.1342, 161.536>");
 
   ci = conf_interval(x, unc, 1, 0.02, triangular);
   //cout << "conf_interval(x, unc, 1, 0.02, triangular); " << ci << std::endl;
   oss.clear(); // Clears only clear stream fail or error bits!
   oss.str(""); // Erases the previous str (oss.str().erase() does NOT change std::string - because it only acts on a copy C string?)
-  oss << setprecision(6) << ci;
+  oss << std::setprecision(6) << ci;
   BOOST_CHECK_EQUAL(oss.str(), "<95.6852, 159.985>");
 
   ci = conf_interval(x, unc, 1, 0.05, triangular);
   //cout << "conf_interval(x, unc, 1, 0.05, triangular); " << ci << std::endl;
   oss.clear(); // Clears only clear stream fail or error bits!
   oss.str(""); // Erases the previous str (oss.str().erase() does NOT change std::string - because it only acts on a copy C string?)
-  oss << setprecision(6) << ci;
+  oss << std::setprecision(6) << ci;
   BOOST_CHECK_EQUAL(oss.str(), "<98.7627, 156.907>");
 
   ci = conf_interval(x, unc, 1, 0.1, triangular);
   //cout << "conf_interval(x, unc, 1, 0.1, triangular); " << ci << std::endl;
   oss.clear(); // Clears only clear stream fail or error bits!
   oss.str(""); // Erases the previous str (oss.str().erase() does NOT change std::string - because it only acts on a copy C string?)
-  oss << setprecision(6) << ci;
+  oss << std::setprecision(6) << ci;
   BOOST_CHECK_EQUAL(oss.str(), "<102.231, 153.439>");
 
   //conf_interval(x, unc, 1, 0.01, triangular); <94.1342, 161.536>
@@ -1043,8 +1041,8 @@ BOOST_AUTO_TEST_CASE(Wimmer_uniform_test)
   double unc_rounded = round_sig(unc, 2); // round to 2 sig digit - why?
   // std::cout  << "unc_rounded " << unc_rounded << std::endl; // 15
   BOOST_CHECK_CLOSE_FRACTION(unc_rounded, 15., tol);
-  ostringstream oss;
-  oss << setprecision(3) << unc_rounded; // expect 0.2 whatever precision (< digits10)
+  std::ostringstream oss;
+  oss << std::setprecision(3) << unc_rounded; // expect 0.2 whatever precision (< digits10)
   BOOST_CHECK_EQUAL(oss.str(), "15"); // unc 15. properly rounded.
   double gam = unc_rounded / unc;
   BOOST_CHECK_CLOSE_FRACTION(gam, 0.98123, 0.01);
@@ -1066,7 +1064,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_uniform_test)
   // ostringstream oss2; // Maybe quicker to construct a new string than erase old one?
   oss.clear(); // Clears only clear stream fail or error bits!
   oss.str(""); // Erases the previous str (oss.str().erase() does NOT change std::string - because it only acts on a copy C string?)
-  oss << setprecision(3) << unc_rounded; // expect 15 whatever precision (< digits10)
+  oss << std::setprecision(3) << unc_rounded; // expect 15 whatever precision (< digits10)
   BOOST_CHECK_EQUAL(oss.str(), "15"); // unc 15. properly rounded.
   //std::pair<double, double> conf_interval(double value, double unc, double df = 1., double alpha = 0.05, distribution_type distrib);
   // value should be the rounded value 130, not the 'exact' double value 127.835.
@@ -1100,8 +1098,8 @@ BOOST_AUTO_TEST_CASE(Wimmer_uniform_test)
 BOOST_AUTO_TEST_CASE(Sephton_C_rounding_test)
 {  // Sephton's example of counter-intuitive C/C++ rounding.
     double d = 0.15;
-    //cout << setprecision(17) << "0.15 precision 17 is " << d << std::endl; // Double is 0.14999999999999999
-    //cout << setprecision(1) << "0.15 precision 1 is " << d << std::endl; // 0.15 precision 1 is 0.1
+    //std::cout << std::setprecision(17) << "0.15 precision 17 is " << d << std::endl; // Double is 0.14999999999999999
+    //std::cout << std::setprecision(1) << "0.15 precision 1 is " << d << std::endl; // 0.15 precision 1 is 0.1
     // so internally stored value is nearer to 1., so rounds down to 0.1, perhaps to viewers' surprise!
     BOOST_CHECK_EQUAL(round_e(d, 0),""); // No significant digits! might decide to throw an exception?
     BOOST_CHECK_EQUAL(round_e(d, 1),"2.e-1"); // 1 significant digit.
@@ -1272,7 +1270,7 @@ BOOST_AUTO_TEST_CASE(Wimmer_gamma_test)   // Test Wimmer gamma = rounded /unroun
 
 BOOST_AUTO_TEST_CASE(round_m_test2)
 { // Tests of the round_m function.
-    ostringstream oss;
+    std::ostringstream oss;
     double u = 15.287;
     //std::cout << round_1(u) << ' ' << round_2(u) << ' ' << round_3(u) << ' ' << round_nth(u, 4) << std::endl;
     // 15.3 15.29 15.287 15.287

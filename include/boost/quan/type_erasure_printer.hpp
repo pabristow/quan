@@ -1,11 +1,11 @@
 // Boost.TypeErasure decor printer
 //
 // Copyright 2011 Steven Watanabe
-// Copyright 2012 Paul A. Bristow
+// Copyright 2012, 2021 Paul A. Bristow
 //
-// Distributed under the Boost Software License Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt 
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 // from \boost\type_erasure\libs\type_erasure\example\print_sequence.cpp
 
@@ -22,7 +22,7 @@
 #include <boost/range/end.hpp>
 #include <boost/range/iterator.hpp>
 
-#include<iostream>
+#include <iostream>
 #include <iomanip>
 
 using namespace boost::type_erasure;
