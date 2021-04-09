@@ -56,7 +56,7 @@ namespace quan
     //Meas::Meas(uncun u);  // Constructor from uncertain uncun with default id, time and order#.
     //  Meas(int const);   // Constructor from int - use automatic conversion int to double.
     // Meas(uncun u, string id = "", boost::posix_time::ptime ti = boost::posix_time::not_a_date_time);
-    Meas(uncun u, // Uncertain value including uncertainty (standard deviation and degress of freedom etc).
+    Meas(uncun u, // Uncertain value including uncertainty (nominally standard deviation) and degrees of freedom etc.
       std::string id = "",  // identification (default null string).
       boost::posix_time::ptime ti = (boost::posix_time::not_a_date_time), // Time of measurement (default @cboost::posix_time::not_a_date_time).
       int o = -1); // Order of this measurement in a sequence.

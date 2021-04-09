@@ -441,7 +441,7 @@ std::string round_ms(FPT v, signed int m)
   \brief Round floating-point v (not-exponential) to order m.  (m is the index of the roundER digit).
     This is variously called 'common rounding', 'round_5_up'.
     \details Gejza Wimmer, Viktor Witkovsky, Tomas Duby\n
-    Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X\n
+    Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X\ngit
     Proper rounding of the measurement results under normality assumptions.\n
     Uncertainty of measurement -- Part 3: Guide to the expression of uncertainty in measurement (GUM:1995)\n
     ISO Guide 98 (1995) and updated version 2008.\n\n
@@ -573,10 +573,10 @@ std::string round_ms(FPT v, signed int m)
   // std::cout << "digits string = " << s << std::endl;
   // Now round the string at m.
   int p = exp - m; // Offset.
-  if (p <= 0) {
+  if (p <= 0)
+  {
     return "0.";
   }
-
   std::string::iterator sr = s.begin(); //
   int o = (exp - m);
   assert(o > 0);
@@ -672,14 +672,12 @@ bool scaled = true; // want to scale and use prefix to avoid >1000 or < 1.
   */
 template <typename FPT>
 std::string round_f(FPT v, int sigdigits) {
-
   // Will fail if FPT is not a floating-point type (because will not output in scientific format!).
   BOOST_STATIC_ASSERT(boost::is_floating_point<FPT>::value);
+    int is_neg = std::signbit(v);
 
-  int is_neg = std::signbit(v);
-
-
-  if (std::isnan(v)) { // Note that the most significant sign bit of NaN is recognized by using function signbit.
+  if (std::isnan(v)) 
+  { // Note that the most significant sign bit of NaN is recognized by using function signbit.
     return (is_neg) ? "-NaN" : "NaN";
     // 'sign' of NaNs cannot reliably and portably be tested using "x < 0"
     // because all comparisons using NaN are false - by definition.
@@ -967,11 +965,10 @@ double delta(double loss_risk, double rounded_div_value, distribution_type distr
   double threshold;
 
   switch (distrib) {
-    case gaussian: // equation 24, p 1664.
+    case gaussian: // Proper rounding of the measurement results under normality assumptions, 
       // Gejza Wimmer, Viktor Witkovsky, Tomas Duby
       // Measurement Science and Technology, 11 (2000) 1659-1665. ISSN 0957-0233 S0957-233(00)13838-X.
-
-      d = (1.348 + 0.9886 * loss_risk + 0.2288 * sqrt(loss_risk));
+      d = (1.348 + 0.9886 * loss_risk + 0.2288 * sqrt(loss_risk)); // Equation 24, p 1664.
       x = rounded_div_value - 1.0001 + 2.058 * loss_risk - 1.93 * loss_risk * loss_risk;
       if (x < (std::numeric_limits<double>::min)() * 100.) // Small value allows for approximation uncertainty.
       { // Not possible to have rounding_loss this small!
@@ -1058,12 +1055,12 @@ int round_m(double rounding_loss = 0.01, double sigma = 0., unsigned int sigma_s
   if (sigma <= (std::numeric_limits<float>::min)())
   {
     std::cout << "round_m sigma = " << sigma << ", sigma_sigdigits = " << sigma_sigdigits << " must be >= 1! " << std::endl;
-    return -9999;
+    return -9999;  // negative or throw? 
   }
   if (sigma_sigdigits <= 0)
   { // sigma_sigdigits is too small to be plausible from the confidence interval of uncertainty.
      std::cout << "round_m sigma = " << sigma << ", sigma_sigdigits = " << sigma_sigdigits << " must be >= 1! " << std::endl;
-   sigma_sigdigits = 1; // or throw?
+   sigma_sigdigits = 1U; // or 2U - both mean that BOOST_AUTO_TEST_CASE(Wimmer_5_1) pass.
   }
   else if (sigma_sigdigits > 4)
   { // sigma_sigdigits is too big to be plausible from the confidence interval of uncertainty.
