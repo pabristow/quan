@@ -706,9 +706,7 @@ public:
   unc(
     // Default values: exact zero? with no uncertainty, 1 observation.
     const double val,  //  = 0., // also const int = 0.
-    // Ignore warning C4520: 'unc<1>' : multiple default constructors specified
-    // (because they will be the same default values).
-    const float unc = 0.0f,  // Default value exact.
+    const float unc = 0.0f,  // Default value means that val or mean is exact and flag DEG_FREE_EXACT is set = true/1.
     const short unsigned int df = 0,  // df = 0 means number of observations = 1.
     const short unsigned int uncTypeFlags = UNC_KNOWN | UNC_EXPLICIT| DEG_FREE_EXACT | DEG_FREE_KNOWN) // unc type flags.
     : value_(val), uncertainty_(unc), degFree_(df), unctypes_(uncTypeFlags)
