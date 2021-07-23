@@ -152,6 +152,20 @@ void unc_input(double& mean,  // mean (central or most probable) value.
                    unsigned short int& uncTypes,
                    std::istream& is);
 
+//static constexpr float plusminus_sds = 1.0F;  // Number of standard deviations (uncertainty) to output with plusminus option.
+// static constexpr float plusminus_sds = 1.96F;  // Number of standard deviations (uncertainty) to output with plusminus option.
+//   const long plusminus_sds = std::ios_base::xalloc(); // plusminus_sds = iword(21)
+// 
+// For example: 1.2 +/-0.56
+// Conventionally, one standard deviation, showing the to 68% probability 
+// // or two (1.96) standard deviations are used to correspond to 95% probability that the 'true' result lies in the region shown.
+// (one standard deviation is to ~68.27%, and three for 99.73% ).
+// This is numerically the standard error for one observation.
+// See https://en.wikipedia.org/wiki/Standard_error. 
+// The output option to show a confidence interval is more useful,
+// taking account of the number of degrees of freedom,
+// perhaps derived from repeated observations, and also the assumed distribution function.
+
 //void outIosFmtFlags(long, std::ostream&); // Output std::ios flags.
 //void outUncTypes(unsigned short int, std::ostream&); // Output uncertain types.
 
@@ -594,6 +608,8 @@ public:
   double value_; //!< aka mean, estimate, central or most likely value.
 
   //! Measure of uncertainty, typically, standard deviation, if known.
+  //! 68% probability of being + or - one standard deviation or @c uncertainty_.
+  //! 
   //! \note Reduced precision (float guarantees 6 decimal digits not 15) and range e38 not E304
   //! should not be a problem unless value is (near) less than 1e38.
   //! Can be zero, meaning exact, and can be negative or anti-correlated,
@@ -1653,8 +1669,8 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
   bool isNoisyDigit;    //!< Add an extra 'noisy' guard digit to reduce risk of information loss.
   bool isDegFree;    //!< Append degrees of freedom.
   bool isPlusMinus;  //!< Uncertainty as +/- is required too (but ignore if value is exact or integer).
-  bool isUppercase;  //! Exponential format is, for example, 1E6 else 1e6.
-  bool isScientificFormat;  //!  Taken to mean that exponential format wanted (always possible).
+  bool isUppercase;  //!< Exponential format is, for example, 1E6 else 1e6.
+  bool isScientificFormat;  //!<  Taken to mean that exponential format wanted (always possible).
   bool isShowPoint;    //!<  Means decimal point is always shown, for example 900. even if not needed.
   bool isShowPos;   //!< Show + sign always because @c std::ios flag was set with @c << showpoint.
   bool isFixed; //!< \code os << fixed ... \endcode ios decimal fixed d.dddd format (rather than scientific).
@@ -1948,7 +1964,9 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
         //double unc_rounded = round_sig(uncertainty, uncSigDigits);
         //oss << unc_rounded;
          //std::string round_f<FPT>(FPT v, int sigdigits);
-        std::string s = round_f<float>(uncertainty, uncSigDigits);
+        // Pick up multiplier of uncertainty or std_dev to display after +-, default one = 68% probablity.
+        float pm_sds = static_cast<float>(oss.iword(plusminusSds));
+        std::string s = round_f<float>(uncertainty * pm_sds, uncSigDigits);
         oss << s;
       }
     }
@@ -2125,7 +2143,8 @@ void setUncDefaults(std::ios_base& os)
   os.iword(oldWidthIndex) = -1; // previous ios setwidth
   os.iword(roundingLossIndex) = 50; // 0.01 * 1000; // == 0.01
   os.iword(confidenceIndex) = 50000; // == 0.05 * 1e6
-
+  os.iword(plusminusSds) = 1; // One sd == 68% probability that lies in this range.  (2, or 3 are also reasonable choices).
+  // Converted to a float 
   os.iword(topIndex) = indexID;  // last .iword(16) == iword(0)
   // marking that all have been set to defaults.
   if (os.iword(zeroIndex) != indexID)
@@ -2144,8 +2163,6 @@ void setUncDefaults(std::ios_base& os)
   \verbatim
         "UncValues: uncFlags 0, setSigDigits 3, uncWidth 10, uncSetWidth -1, uncScale 0, uncSetScale 0, uncUsed 0, uncOldFlags 0, uncOldUncWidth -1, uncOldScale -1, uncSigDigits 2, uncoldSigDigits -1, oldUncUsed -1, oldStdDevSigDigits -1, setUncSigDigits 2, roundingLossIndex 0.05, confidenceIndex 0.05.\n";
   \endverbatim
-
-
 */
 void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
 {
@@ -3100,23 +3117,6 @@ void unc_input(
     { // Implicit.
       stdDev = static_cast<float>(stdDev);  //
     }
-
-#ifdef BOOST_QUAN_UNC_TRACE
-    {
-      std::cerr << "    Explicit uncertainty ";
-      if (isPlusMinus)
-      {
-        std::cerr << " +/- ";
-      }
-      else
-      {
-        std::cerr << ((isPlus) ? "+ " : "");
-        std::cerr << ((isMinus) ? "- " : "");
-      }
-      std::cerr  << expUnc << ", stdDev " << stdDev << endl;
-
-    } // trace
-#endif // BOOST_QUAN_UNC_TRACE
     // Degrees of freedom?
     is >> std::ws; // Eat any whitespace before "(99)".
     if (!is.eof())

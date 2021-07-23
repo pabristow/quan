@@ -54,8 +54,9 @@ namespace quan {
   const long oldWidthIndex = std::ios_base::xalloc(); // oldWidth = iword(18)
   const long roundingLossIndex = std::ios_base::xalloc(); // roundingLoss = iword(19)
   const long confidenceIndex = std::ios_base::xalloc(); // roundingLoss = iword(20)
+  const long plusminusSds = std::ios_base::xalloc(); // plusminus_sds = iword(21)
 
-  const long topIndex = std::ios_base::xalloc(); // long& topIndex = iword(21] == iword(0] check!
+  const long topIndex = std::ios_base::xalloc(); // long& topIndex = iword(22] == iword(0] check!
   //const long indexID;  //!< 'Magic' value defined in unc_init.hpp.
   bool isIndexed = true; //!< Above indexes have been initialised.
   // This is tested to on each use of @c std::ostream to check that it has been initialised.
