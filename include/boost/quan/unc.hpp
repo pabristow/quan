@@ -557,6 +557,20 @@ public:
   double confidence_; // Set by constructor.
 }; // class setConfidence
 
+//!  setPlusminusSds(int pmsds) to control multiplier of standard deviation or uncertainty shown using plusminus otion.
+//! `out << setPlusminusSds(2)` ... for two standard deviation or twice estimate of uncertainty (rather than default of one)
+//! This corresponds to ~95% confidence interval (rather than default one sd of ~68%).
+class setPlusminusSds
+{
+  friend std::ostream& operator<< (std::ostream&, const setPlusminusSds&); // Declarations
+  friend std::istream& operator>> (std::istream&, const setPlusminusSds&);
+public:
+  setPlusminusSds(int);// alpha) : setPlusminusSds(sds) {}  // Constructor
+  // Initialisation means setPlusminusSds = 1
+  //protected:
+  int plusminussds_; // Set by constructor.
+}; // class setPlusminusSds
+
 //  template std::ostream& operator<< (std::ostream&, const std::pair< unc<false>, unc<false> >&);
 //  template std::ostream& operator<< (std::ostream&, const std::pair< unc<true>, unc<true> >&);
 
@@ -1965,7 +1979,7 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
         //oss << unc_rounded;
          //std::string round_f<FPT>(FPT v, int sigdigits);
         // Pick up multiplier of uncertainty or std_dev to display after +-, default one = 68% probablity.
-        float pm_sds = static_cast<float>(oss.iword(plusminusSds));
+        long& pm_sds = os.iword(plusminusSdsIndex);
         std::string s = round_f<float>(uncertainty * pm_sds, uncSigDigits);
         oss << s;
       }
@@ -2115,7 +2129,7 @@ autoprefix_norm(const unc<false> & arg)
      Function @c setUncDefaults() sets some defaults
      Can set individual value, for example, for 3 sig Digits, os.iword(sigDigitsIndex) = 3;
      \note Index values must have been initialised by xalloc calls.
-    \note Might be best to make @c setUncDefaults also set @c std::ios_base defaults  with @c setiosDefaults(ostream&);?\n
+    \note Might be best to make @c setUncDefaults also set @c std::ios_base defaults with @c setiosDefaults(ostream&);?\n
 */
 void setUncDefaults(std::ios_base& os)
 {
@@ -2143,7 +2157,7 @@ void setUncDefaults(std::ios_base& os)
   os.iword(oldWidthIndex) = -1; // previous ios setwidth
   os.iword(roundingLossIndex) = 50; // 0.01 * 1000; // == 0.01
   os.iword(confidenceIndex) = 50000; // == 0.05 * 1e6
-  os.iword(plusminusSds) = 1; // One sd == 68% probability that lies in this range.  (2, or 3 are also reasonable choices).
+  os.iword(plusminusSdsIndex) = 1; // One sd == 68% probability that lies in this range.  (2, or 3 are also reasonable choices).
   // Converted to a float 
   os.iword(topIndex) = indexID;  // last .iword(16) == iword(0)
   // marking that all have been set to defaults.
@@ -2194,8 +2208,9 @@ void outUncValues(std::ostream& os = std::cout, std::ostream& log = std::cerr)
     << ", oldUncUsed " << os.iword(oldUncUsedIndex) // = 0;  //  No previous value.
     << ", oldStdDevSigDigits " << os.iword(oldUncSigDigitsIndex) // = 0;  // No previous value for unc stdDev.
     << ", setUncSigDigits " << os.iword(setUncSigDigitsIndex)
-    << ", roundingLossIndex " << os.iword(roundingLossIndex) / 1.e3
-    << ", confidenceIndex " << os.iword(confidenceIndex) / 1.e6
+    << ", roundingLossIndex " << os.iword(roundingLossIndex) / 1.e3 // Scaled
+    << ", confidenceIndex " << os.iword(confidenceIndex) / 1.e6 // Scaled
+    << ", plusminusSdsIndex " << os.iword(plusminusSdsIndex)
     << std::dec << "." << std::endl; //
 
 } // void outUncValues()
@@ -2219,8 +2234,6 @@ void outUncTypes(unsigned short int uncTypes, std::ostream& os = std::cerr)
   } // for
   os << ".";
 }  // void outUncTypes(unsigned short int uncTypes, std::ostream& os = std::cerr)
-
-
 
 /*! Show the set uncertain class io stream& flags settings as words, for examples: add_/-, set_scaled, addlimits.\n
   \param uncFlags Output unc class uncertain IO flags value to be displayed as words.
@@ -2786,6 +2799,7 @@ setRoundingLoss::setRoundingLoss(double eps)
 
   roundingloss_= eps;
 }
+
 std::ostream& operator<< (std::ostream& os, const setRoundingLoss& sl)
 { //! \note Can't store `double` in a `long`, so scale up to an integer.
   os.iword(roundingLossIndex) = static_cast<long>(sl.roundingloss_ * 1.e3);
@@ -2793,10 +2807,23 @@ std::ostream& operator<< (std::ostream& os, const setRoundingLoss& sl)
 }
 
 //! setConfidence(double alpha);
-//! Usage: out << setConfidence(0.01) ... = cout.iword[confidence] = 0.01;
+//! Usage: out << setConfidence(0.01) ... == cout.iword[confidence] = 0.01;
 setConfidence::setConfidence(double alpha)
 {  // Constructor sets confidence = parameter alpha (scaled by operator<<).
   confidence_= alpha;
+}
+
+//! setPlusminusSds(int sds);
+//! Usage: out << setPlusminusSds(2) ... == cout.iword[PlusminusSdsIndex] = 2;
+setPlusminusSds::setPlusminusSds(int pmsds)
+{  // Constructor sets plusminussds = parameter pmsds (scaled by operator<<).
+  plusminussds_= pmsds;
+}
+
+std::ostream& operator<< (std::ostream& os, const setPlusminusSds& setpmsds)
+{ //! 
+  os.iword(plusminusSdsIndex) = setpmsds.plusminussds_;
+  return os;
 }
 
 std::ostream& operator<< (std::ostream& os, const setConfidence& sl)

@@ -25,7 +25,7 @@ namespace boost {
 namespace quan {
 
   //! This block of definitions MUST be positioned before function main() is called.
-  //! 14 indexes of long iwords allocated by calls of std::ios_base::xalloc();
+  //! 14 (22?) indexes of long iwords allocated by calls of std::ios_base::xalloc();
   //! 1st call of xalloc() returns 0 so std::ios_base.iword(0) used for magic ID,
   //! 2nd call of xalloc() returns 1 so std::ios_base.iword(1) used for uncFlags,
   //! 3rd calls returns 2, so iosword(2) used for sigDigits ...
@@ -54,7 +54,7 @@ namespace quan {
   const long oldWidthIndex = std::ios_base::xalloc(); // oldWidth = iword(18)
   const long roundingLossIndex = std::ios_base::xalloc(); // roundingLoss = iword(19)
   const long confidenceIndex = std::ios_base::xalloc(); // roundingLoss = iword(20)
-  const long plusminusSds = std::ios_base::xalloc(); // plusminus_sds = iword(21)
+  const long plusminusSdsIndex = std::ios_base::xalloc(); // plusminus_sds = iword(21)
 
   const long topIndex = std::ios_base::xalloc(); // long& topIndex = iword(22] == iword(0] check!
   //const long indexID;  //!< 'Magic' value defined in unc_init.hpp.
