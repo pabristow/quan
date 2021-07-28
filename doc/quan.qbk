@@ -15,6 +15,12 @@
 [/ auto_index_helpers.qbk MUST be FIRST included file!]
 
 [import html4_symbols.qbk] [/ Unicode math symbols etc]
+[template super[x]'''<superscript>'''[x]'''</superscript>''']
+[template sub[x]'''<subscript>'''[x]'''</subscript>''']
+[template floor[x]'''&#x230A;'''[x]'''&#x230B;''']
+[template floorlr[x][lfloor][x][rfloor]]
+[template ceil[x] '''&#x2308;'''[x]'''&#x2309;''']
+
 
 [/ Images]
 [/ $images is reference to a folder where images are held.]
@@ -88,7 +94,7 @@ may still be changed without notice.
 or preferably raise a Github issue __quan_github.
 ]
 
-It was proposed for __boost as a partner of the __svg_plot_github , but rejected before review as being out-of-scope for __boost.
+It was proposed for __boost as a partner of the __svg_plot_github, but rejected before review as being out-of-scope for __boost.
 
 [h4:history History]
 
@@ -100,7 +106,7 @@ but plots showing uncertainties, boxplots and confidence intervals or confidence
 
 In 2021, a major refactoring and reburbishment of both documentation and the code has been undertaken.
 Numerous bugs have been squashed, new features added and more examples added. 
-This has permitted improvements in the __svg_plot_github that uses __quan_github to label data-points.
+This has permitted improvements in the __svg_plot_github that uses __quan_github to label data-points, optionally including uncertainty and confidence internals.
 
 [endsect] [/section:history History and status]
 
@@ -114,7 +120,7 @@ If you not have __boost installed already, start with
 [@https://www.boost.org/doc/libs/release/more/getting_started/windows.html Getting started on Windows (and Mingw, Mingw-w64, Msys, Cygwin)]
 but stop at the end of section 3: Header-Only Libraries.  
 
-In order to use uncertain and measure classes, there are NO libraries to be built - it is header-only.
+In order to use Quan's uncertain and measure classes, there are NO libraries to be built - it is header-only.
 
 But you do need to identify your __boost root location. Something like X:my_boost/ as explained in section 2.
 You might have this saved in a variable $BOOST_ROOT.
@@ -201,12 +207,12 @@ Other information about the observation or measurement standard deviation & its 
 for example, degrees of freedom, were added by Paul A. Bristow in Mar 1998,
 and have been refined further since then.
 
-A simple example is construction of an uncertain value with a best estimated value of 1.23, and uncertainty (standard deviation) of 0.45,
+A simple example is construction of an uncertain value with a best estimated value of 1.23, and estimated uncertainty (nominally standard deviation) of 0.45,
 being the result of 10 observations (so 9 degrees of freedom):
 
   uncun u(1.23, 0.45F, 9);
   
-and output using `operator<<` adding uncertainty, +/- confidence interval <in angle brackets> and degrees of freedom (in round brackets):
+and output using `operator<<` adding uncertainty estimate as +/-, confidence interval <in angle brackets> and degrees of freedom (in round brackets):
 
   std::cout << "URealCorr u(1.23, 0.45, 9); = " << plusminus << addlimits << adddegfree << u << std::endl;
   
@@ -219,8 +225,7 @@ to display
 
 The extensive output features have been informed by
 "Uncertainty as Applied to Measurements and Calculations", John Denker, [@http://www.av8n.com/physics/uncertainty.htm#sec-crank3].
-
-Some simple rules that apply whenever displaying a number:
+Some guidance whenever displaying a number:
 
 # Use many enough digits to avoid unintended loss of information.
 # Use few enough digits to be reasonably convenient.
@@ -232,7 +237,7 @@ to avoid giving an impression of more precision or accuracy than the underlying 
 
 There are far too many examples in real life of entirely unwarranted decimal digits, for example, 
 quoting a value of 94% when in fact, there is an uncertainty of 10%, an important uncertainty obscured by the digit 4, 
-when the 'true' value might  lie anywhere between 80% and 100%.
+when the 'true' value might lie anywhere between 80% and 100%.
 A more informative representation would be 90%.
 
 The term 'uncertainty' has been used in preference to the more common word 'error' and 'error bars' to express confidence intervals.
@@ -246,7 +251,7 @@ Distributions of types 'normal' or Gaussian (common noisy observations), triangu
 Values that are [*exact] by definition, for example, the inch-mm conversion factor is exactly 2.54.
 A value like 2.54 cannot be represented exactly as a floating-point type `double`, so it is useful to be able to
 distinguish any computational uncertainty [@https://en.wikipedia.org/wiki/Machine_epsilon machine epsilon]
-(2[super -53] [cong] 1.1e-16) from real uncertainty.
+(2 [super -53] [cong] 1.1e-16) from real uncertainty.
 Conversely exact integral values should be distinguishable from real observations that happen to have a integral value.
 To achieve this, specialized constructors are provided for both `int` and `double`.
 

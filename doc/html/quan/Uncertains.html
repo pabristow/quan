@@ -45,15 +45,15 @@
     </p>
 <p>
       A simple example is construction of an uncertain value with a best estimated
-      value of 1.23, and uncertainty (standard deviation) of 0.45, being the result
-      of 10 observations (so 9 degrees of freedom):
+      value of 1.23, and estimated uncertainty (nominally standard deviation) of
+      0.45, being the result of 10 observations (so 9 degrees of freedom):
     </p>
 <pre class="programlisting"><span class="identifier">uncun</span> <span class="identifier">u</span><span class="special">(</span><span class="number">1.23</span><span class="special">,</span> <span class="number">0.45F</span><span class="special">,</span> <span class="number">9</span><span class="special">);</span>
 </pre>
 <p>
       and output using <code class="computeroutput"><span class="keyword">operator</span><span class="special">&lt;&lt;</span></code>
-      adding uncertainty, +/- confidence interval &lt;in angle brackets&gt; and degrees
-      of freedom (in round brackets):
+      adding uncertainty estimate as +/-, confidence interval &lt;in angle brackets&gt;
+      and degrees of freedom (in round brackets):
     </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"URealCorr u(1.23, 0.45, 9); = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">plusminus</span> <span class="special">&lt;&lt;</span> <span class="identifier">addlimits</span> <span class="special">&lt;&lt;</span> <span class="identifier">adddegfree</span> <span class="special">&lt;&lt;</span> <span class="identifier">u</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
@@ -75,9 +75,7 @@
 <p>
       The extensive output features have been informed by "Uncertainty as Applied
       to Measurements and Calculations", John Denker, <a href="http://www.av8n.com/physics/uncertainty.htm#sec-crank3" target="_top">http://www.av8n.com/physics/uncertainty.htm#sec-crank3</a>.
-    </p>
-<p>
-      Some simple rules that apply whenever displaying a number:
+      Some guidance whenever displaying a number:
     </p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
@@ -125,9 +123,9 @@
       the inch-mm conversion factor is exactly 2.54. A value like 2.54 cannot be
       represented exactly as a floating-point type <code class="computeroutput"><span class="keyword">double</span></code>,
       so it is useful to be able to distinguish any computational uncertainty <a href="https://en.wikipedia.org/wiki/Machine_epsilon" target="_top">machine epsilon</a>
-      (2[super -53] ≅ 1.1e-16) from real uncertainty. Conversely exact integral values
-      should be distinguishable from real observations that happen to have a integral
-      value. To achieve this, specialized constructors are provided for both <code class="computeroutput"><span class="keyword">int</span></code> and <code class="computeroutput"><span class="keyword">double</span></code>.
+      (2 <sup>-53</sup> ≅ 1.1e-16) from real uncertainty. Conversely exact integral values should
+      be distinguishable from real observations that happen to have a integral value.
+      To achieve this, specialized constructors are provided for both <code class="computeroutput"><span class="keyword">int</span></code> and <code class="computeroutput"><span class="keyword">double</span></code>.
     </p>
 <p>
       Many measurements suffer from quantization (uncertainty from analog-to-digital

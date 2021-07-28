@@ -152,19 +152,13 @@ void unc_input(double& mean,  // mean (central or most probable) value.
                    unsigned short int& uncTypes,
                    std::istream& is);
 
-//static constexpr float plusminus_sds = 1.0F;  // Number of standard deviations (uncertainty) to output with plusminus option.
-// static constexpr float plusminus_sds = 1.96F;  // Number of standard deviations (uncertainty) to output with plusminus option.
-//   const long plusminus_sds = std::ios_base::xalloc(); // plusminus_sds = iword(21)
-// 
-// For example: 1.2 +/-0.56
-// Conventionally, one standard deviation, showing the to 68% probability 
-// // or two (1.96) standard deviations are used to correspond to 95% probability that the 'true' result lies in the region shown.
-// (one standard deviation is to ~68.27%, and three for 99.73% ).
-// This is numerically the standard error for one observation.
-// See https://en.wikipedia.org/wiki/Standard_error. 
-// The output option to show a confidence interval is more useful,
-// taking account of the number of degrees of freedom,
-// perhaps derived from repeated observations, and also the assumed distribution function.
+//! For example: 1.2 +/-0.56 where the +/- value holds (and reports) the estimate of uncertainty,
+//!  nominally one standard deviation is to ~68.27%, (by default but optionally a multiple of two for 95% or three for 99.73%).
+//! This is numerically the standard error for one observation.
+//! See https://en.wikipedia.org/wiki/Standard_error.
+//! The output option to show a confidence interval is more useful,
+//! taking account of the number of degrees of freedom,
+//! perhaps derived from repeated observations, and also the assumed distribution function.
 
 //void outIosFmtFlags(long, std::ostream&); // Output std::ios flags.
 //void outUncTypes(unsigned short int, std::ostream&); // Output uncertain types.
@@ -623,7 +617,7 @@ public:
 
   //! Measure of uncertainty, typically, standard deviation, if known.
   //! 68% probability of being + or - one standard deviation or @c uncertainty_.
-  //! 
+  //!
   //! \note Reduced precision (float guarantees 6 decimal digits not 15) and range e38 not E304
   //! should not be a problem unless value is (near) less than 1e38.
   //! Can be zero, meaning exact, and can be negative or anti-correlated,
@@ -1911,7 +1905,7 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
   } // Mean
 
   if (isPlusMinus && !(unc_flags & VALUE_INTEGER))
-  { // Want estimate of uncertainty.
+  { // Want display of estimate of uncertainty.
     if (isfinite(uncertainty))
     {
       if (uncertainty == 0.F)
@@ -1998,7 +1992,7 @@ std::ostream& operator<< (std::ostream& os, const unc<false>& val)
   } // uncertainty.
 
   if (isConfidenceInterval)
-  { // Want to append confidence interval as <1.23, 2.34>.
+  { // Want to append confidence interval as, for example: <1.23, 2.34>.
     if (boost::math::isfinite(mean) && boost::math::isfinite(uncertainty) && degFree >= 0)
     { // degfree 1 means 2 observations, so possible to compute confidence limits or interval in < > angle brackets.
      // std::streamsize osprec = os.precision(); // Save precision. TODO but don't seem to restore?
@@ -2158,7 +2152,7 @@ void setUncDefaults(std::ios_base& os)
   os.iword(roundingLossIndex) = 50; // 0.01 * 1000; // == 0.01
   os.iword(confidenceIndex) = 50000; // == 0.05 * 1e6
   os.iword(plusminusSdsIndex) = 1; // One sd == 68% probability that lies in this range.  (2, or 3 are also reasonable choices).
-  // Converted to a float 
+  // Converted to a float
   os.iword(topIndex) = indexID;  // last .iword(16) == iword(0)
   // marking that all have been set to defaults.
   if (os.iword(zeroIndex) != indexID)
@@ -2821,7 +2815,7 @@ setPlusminusSds::setPlusminusSds(int pmsds)
 }
 
 std::ostream& operator<< (std::ostream& os, const setPlusminusSds& setpmsds)
-{ //! 
+{ //!
   os.iword(plusminusSdsIndex) = setpmsds.plusminussds_;
   return os;
 }
